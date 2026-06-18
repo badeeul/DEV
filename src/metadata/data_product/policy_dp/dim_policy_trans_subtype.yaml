@@ -1,0 +1,32 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_policy_trans_subtype # target table
+  load_strategy: type_two # scd type
+  key_columns: # is merge key
+    - policy_trans_subtype_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: policy_trans_subtype_key # sharepoint first row
+
+source:
+  - name: mgnotrans_types # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: mgnotrans_types # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_policy_trans_subtype # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: select
+          typeid as policy_trans_subtype_bus_key
+        , transcode as policy_trans_cd
+        , descrip as policy_trans_subtype_desc
+        , typetext as policy_trans_subtype_desc_short
+        , True as dl_is_current_flag
+        ,CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        ,CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        ,False as dl_is_deleted_flag
+
+        from mgnotrans_types

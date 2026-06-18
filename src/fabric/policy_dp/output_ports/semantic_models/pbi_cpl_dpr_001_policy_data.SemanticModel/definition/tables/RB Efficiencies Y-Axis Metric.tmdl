@@ -1,0 +1,48 @@
+table 'RB Efficiencies Y-Axis Metric'
+	lineageTag: 665155c8-b3c7-4c66-9296-1be184b0610f
+
+	column 'RB Efficiencies Y-Axis Metric'
+		lineageTag: c0935215-352f-4b96-b37c-7154ed7cbbd7
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'RB Efficiencies Y-Axis Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'RB Efficiencies Y-Axis Metric Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'RB Efficiencies Y-Axis Metric Fields'
+		isHidden
+		lineageTag: b47591ce-9e53-427b-9980-449a7aaaac8f
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'RB Efficiencies Y-Axis Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'RB Efficiencies Y-Axis Metric Order'
+		isHidden
+		formatString: 0
+		lineageTag: caa89b6a-4a69-4856-9353-8e55541c5eae
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'RB Efficiencies Y-Axis Metric' = calculated
+		mode: import
+		source =
+				{
+				    ("Expiring Count", NAMEOF('Metrics'[Expiring Count]), 0),
+				    ("Expiring Premium", NAMEOF('Metrics'[Expiring Premium]), 1)
+				}
+
+	annotation PBI_Id = 9ee5a8cd2bf542d4ae32d7b608dea489
+

@@ -1,0 +1,164 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+parameters:
+  - name: sqlFile
+    displayName: Path to local SQL File to run in Fabric
+    type: string
+  - name: newNotebookName
+    displayName: Name of the new notebook
+    type: string
+  - name: lakehouseId
+    displayName: Lakehouse ID
+    type: string
+
+variables:
+# Required variables:
+# - tenantId
+# - fabricWorkspaceId
+# - servicePrincipalId
+# - servicePrincipalKey
+# - userPassword
+# - userName
+  - group: FabricPipelineVariables
+
+steps:
+  - task: PowerShell@2
+    inputs:
+      displayName: 'Create notebook'
+      targetType: 'inline'
+      script: |
+        # -------------------------------------------------
+        # Reads file and creates a notebook payload from it
+        # -------------------------------------------------
+
+        $FileContents = gc ${{ parameters.sqlFile }} | Out-String
+
+        $NotebookCellArray = @(@{cell_type = "code"; source = @("$FileContents")})
+
+        $NotebookMetadata = @{
+        language_info = @{name = "sql"}
+        dependencies = @{ lakehouse = @{ default_lakehouse = "${{ parameters.lakehouseId }}" } }
+        }
+
+        $NotebookContents = @{
+        cells = $NotebookCellArray
+        metadata = $NotebookMetadata
+        nbformat = 4
+        nbformat_minor = 5
+        }
+
+        $NotebookContentsString = $NotebookContents | ConvertTo-Json -Compress -Depth 10
+
+        $NotebookContentBytes = [System.Text.Encoding]::UTF8.GetBytes($NotebookContentsString)
+        $EncodedNotebookContent = [Convert]::ToBase64String($NotebookContentBytes)
+
+        # --------------------------------------------------------
+        # Gets Fabric authentication token using Service Principal
+        # --------------------------------------------------------
+
+        Install-Module -Name Az.Accounts -AllowClobber -Force
+        
+        $SecureStringPwd = ConvertTo-SecureString $(servicePrincipalKey) -AsPlainText -Force
+        $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $(servicePrincipalId), $SecureStringPwd
+                    
+        Connect-AzAccount -ServicePrincipal -Credential $Credential -Tenant $(tenantId)
+
+        $FabricToken = (Get-AzAccessToken -ResourceUrl https://api.fabric.microsoft.com/).Token
+
+
+        # -------------------------------------------
+        # Sends a POST request to create the notebook
+        # -------------------------------------------
+
+        $NotebookPart = @{
+        "path" = "content.ipynb"
+        "payload" = $EncodedNotebookContent
+        "payloadType" = "InlineBase64"
+        }
+
+        $RequestBody = @{
+        "displayName" = "${{ parameters.newNotebookName }}"
+        "definition" = @{"format" = "ipynb"; "parts" = @($NotebookPart)}
+        }
+
+        $NotebookApiUrl = "https://api.fabric.microsoft.com/v1/workspaces/$(fabricWorkspaceId)/notebooks"
+        $AuthHeaders = @{
+        "Authorization" = "Bearer $FabricToken"
+        }
+
+        $RequestBodyJson = $RequestBody | ConvertTo-Json -Compress -Depth 10
+        Write-Output $RequestBodyJson
+
+        $NotebookCreationResponse = Invoke-WebRequest -Uri $NotebookApiUrl -Headers $AuthHeaders -ContentType 'application/json' -Body $RequestBodyJson -Method POST
+
+        # -------------------------------------------
+        # Waits until notebook is created successfully
+        # -------------------------------------------
+
+        $NotebookCreationOperationId = $NotebookCreationResponse.Headers["x-ms-operation-id"]
+        $NotebookCreationStatusUrl = "https://api.fabric.microsoft.com/v1/operations/$NotebookCreationOperationId"
+
+        for ($i=1; $i -le 10; $i++)
+        {
+        Write-Output "Waiting for notebook creation to finish"
+        Start-Sleep 2
+        $StatusResponse = Invoke-RestMethod -Uri $NotebookCreationStatusUrl -Headers $AuthHeaders -Method GET
+
+        if ($StatusResponse.status -ne "Running") {
+        Write-Output $StatusResponse.status
+        if ($StatusResponse.status -ne "Succeeded") { throw "Notebook creation failed: $(StatusResponse.error)" }
+        break
+        }
+        
+        }
+
+
+        # -----------------------------------------
+        # Gets and saves the id of the new notebook
+        # -----------------------------------------
+
+        $NotebookCreationResultUrl = "https://api.fabric.microsoft.com/v1/operations/$NotebookCreationOperationId/result"
+        $ResultResponse = Invoke-RestMethod -Uri $NotebookCreationResultUrl -Headers $AuthHeaders -Method GET
+        $NewNotebookId = $ResultResponse.id
+
+        Write-Output "Created notebook id: $NewNotebookId"
+        Write-Host "##vso[task.setvariable variable=NewNotebookId;]$NewNotebookId"
+  - task: PowerShell@2
+    inputs:
+      displayName: 'Run the notebook'
+      targetType: 'inline'
+      script: |
+        # -------------------------------------------------------------------------
+        # Gets authentication token using the user account
+        # (Service Principal authentication is not supported for running notebooks:
+        # https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/run-on-demand-item-job?tabs=HTTP#microsoft-entra-supported-identities)
+        # -------------------------------------------------------------------------
+
+        $SecureStringPwd = ConvertTo-SecureString '$(userPassword)' -AsPlainText -Force
+        $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $(userName), $SecureStringPwd
+                    
+        Connect-AzAccount -Credential $Credential -Tenant $(tenantId)
+
+        # Get authentication
+        $FabricToken = (Get-AzAccessToken -ResourceUrl https://api.fabric.microsoft.com/).Token
+
+
+        # ------------------------------------------
+        # Sends a POST request to start the notebook
+        # ------------------------------------------
+
+        $StartNotebookUrl = "https://api.fabric.microsoft.com/v1/workspaces/$(fabricWorkspaceId)/items/$(NewNotebookId)/jobs/instances?jobType=RunNotebook"
+                    
+        $Headers = @{
+        "Authorization" = "Bearer $FabricToken"
+        }
+
+        $StartNotebookResponse = Invoke-WebRequest -Uri $StartNotebookUrl -Headers $Headers -Method POST
+        $NotebookJobUrl = $StartNotebookResponse.Headers["Location"]
+
+        $NotebookStatusResponse = Invoke-RestMethod -Uri $NotebookJobUrl -Headers $Headers -Method GET
+        Write-Output "Started a new notebook run"
+        $NotebookStatusResponse

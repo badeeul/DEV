@@ -1,0 +1,83 @@
+{
+    "feedName": "wc_dp",
+    "feedDescription": "This is a feed for WC DP",
+    "workLoadType": "dp-spark",
+    "skipProductLoad": false,
+    "dataDeduplicationAlert": false,
+    "deduplicationAlertTemplate": "deduplication_msg",
+    "datasetsConfig": [
+        {
+            "datasetType": "database",
+            "datasets": [
+                {
+                    "fileName": "archive_question_responses",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "archive_transaction_wcpayrol",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "archive_uwrating",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "archive_uwstates",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "autouw_currentcarrierpricing",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "autouw_proposals",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "dnb_policylookups",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "dnb_transactions",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "mgtrans_wcpayrol",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "policydatapoints",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "question_questions",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "question_responses",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "transaction_wcpayrol",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "uwrating",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "uwstates",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "wcautopricing",
+                    "sourceConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "wcrating",
+                    "sourceConfigFolderName": "wc_dp"
+                }
+            ]
+        }
+    ]
+}

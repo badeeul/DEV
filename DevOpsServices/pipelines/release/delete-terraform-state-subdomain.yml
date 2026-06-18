@@ -1,0 +1,49 @@
+
+parameters:
+
+- name: variableGroup
+  displayName: 'Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+trigger: none # Manual trigger only
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+ 
+stages:
+
+- stage: DeleteTerraformState
+  displayName: 'Delete Terraform State'
+
+  jobs:
+  - job: delete_state
+    steps:
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'filePath'
+        filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Remove-TerraformState.ps1'
+        arguments: >
+          -StateFileName "$(ENVIRONMENT).tfstate"
+          -StorageAccount "$(STORAGE_ACCOUNT)"
+          -ContainerName "$(CONTAINER_NAME)"
+          -ResourceGroupName "$(BACKEND_RG)"
+          -SubscriptionId "$(SUBSCRIPTION_ID)"
+          -TenantId "$(TENANT_ID)"
+          -ClientId "$(CLIENT_ID)"
+          -ClientSecret "$(CLIENT_SECRET)"
+          -ParentDomainName "$(PARENT_DOMAIN_NAME)"
+          -ChildDomainName "$(CHILD_DOMAIN_NAME)"
+          -Environment "$(ENVIRONMENT)"
+        workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+      displayName: 'Remove Terraform State File from Blob Storage'

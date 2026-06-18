@@ -1,0 +1,108 @@
+name: Backlogs-Deployment-To-Superdomain
+
+parameters:
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: sourceOrganization
+  displayName: 'Source Organization'
+  type: string
+  default: 'BHGDataAndAnalytics'
+
+- name: backlogSourceProject
+  displayName: 'Backlog Source Project'
+  type: string
+  default: 'GDAP-Fluidity-FoundationEnablement'
+
+- name: backlogSourceTeamName
+  displayName: 'Backlog Source Team Name'  
+  type: string
+  default: 'GDAP-Fluidity-FoundationEnablement Team'
+
+- name: backlogDestinationProject
+  displayName: 'Backlog Destination Project'
+  type: string
+  default: ''
+
+- name: backlogDestinationTeamName
+  displayName: 'Backlog Destination Team Name'
+  type: string
+  default: ''
+
+- name: backlogParentWorkItemTitle
+  displayName: 'Backlog Parent Work Item Title'
+  type: string
+  default: ''
+
+- name: workItemTitle
+  displayName: 'Copy Backlog Work Item Title'
+  type: string
+  default: ''
+
+- name: renameWorkItemTitle
+  type: string
+  default: ' '
+  displayName: 'Rename Copied Work Item Title (optional)'
+
+# Change type string to a common box list: 'Goal', 'Epic', 'Feature', 'Canvas'.
+- name: workItemType
+  displayName: 'Copy Work Item Type'
+  default: 'GOAL'
+  type: string
+  values:
+    - 'GOAL'
+    - 'Value Hypothesis'
+    - 'Use Case'
+    - 'Canvas'
+    - 'Data Product'
+    - 'Feature'
+    - 'DP Enhancement'
+    - 'Quick Win'
+    - 'Ad Hoc Request'
+
+trigger: none
+
+variables:
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+  - group: ${{ parameters.variableGroup }}
+  
+  - name: workingDirectory
+    value: $(System.DefaultWorkingDirectory)
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+steps:
+ 
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+  clean: true # Add this to ensure clean checkout
+
+- task: PowerShell@2
+  name: CopyBacklogs 
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Copy Backlogs'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Copy-Backlogs-To-Superdomain.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -SourceProjectName "${{ parameters.backlogSourceProject }}"
+      -SourceTeamName "${{ parameters.backlogSourceTeamName }}"
+      -DestinationProjectName "${{ parameters.backlogDestinationProject }}"
+      -DestinationTeamName "${{ parameters.backlogDestinationTeamName }}"
+      -ParentWorkItemTitle "${{ parameters.backlogParentWorkItemTitle }}"
+      -WorkItemTitle "${{ parameters.workItemTitle }}"
+      -WorkItemType "${{ parameters.workItemType }}"
+      -RenameWorkItemTitle "${{ parameters.renameWorkItemTitle }}"

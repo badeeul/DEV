@@ -1,0 +1,80 @@
+{
+    "datasetName": "uwstates",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "code",
+            "state",
+            "stbegin",
+            "stexpir",
+            "poanniv",
+            "per1low",
+            "per1high",
+            "per2low",
+            "per2high",
+            "takeout",
+            "takeonumyr",
+            "st_tin",
+            "minprem",
+            "ismodifiers",
+            "isexposures",
+            "stytdprem",
+            "stfrshstrt",
+            "stpoassess",
+            "stfee3",
+            "stfee4",
+            "stfee5",
+            "stfee6",
+            "triacode",
+            "triaamt1",
+            "triaamt2",
+            "hazard1",
+            "hazard2",
+            "mcprovider",
+            "stfee7",
+            "riskid",
+            "priorrateeffdate",
+            "manualpremium",
+            "subjectpremium",
+            "modifiedpremium",
+            "standardpremium",
+            "estimatedpremium",
+            "estimatedcost"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "wc",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "code",
+            "state"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

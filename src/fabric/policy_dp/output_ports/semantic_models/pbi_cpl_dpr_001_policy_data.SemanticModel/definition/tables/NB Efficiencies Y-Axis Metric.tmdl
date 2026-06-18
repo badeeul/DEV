@@ -1,0 +1,48 @@
+table 'NB Efficiencies Y-Axis Metric'
+	lineageTag: f4931e3d-fe82-430c-904a-8977a7e236da
+
+	column 'NB Efficiencies Y-Axis Metric'
+		lineageTag: 5adff226-fa9d-44a9-99ad-4c4b7c27c4f5
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'NB Efficiencies Y-Axis Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'NB Efficiencies Y-Axis Metric Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NB Efficiencies Y-Axis Metric Fields'
+		isHidden
+		lineageTag: d21de127-0056-407c-aa73-dd0fa178b13a
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'NB Efficiencies Y-Axis Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NB Efficiencies Y-Axis Metric Order'
+		isHidden
+		formatString: 0
+		lineageTag: 7707b3c3-0fd3-4318-a686-e15f19abdc4b
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'NB Efficiencies Y-Axis Metric' = calculated
+		mode: import
+		source =
+				{
+				    ("Submitted Count", NAMEOF('Metrics'[NB Submitted Count]), 0),
+				    ("Submitted Premium", NAMEOF('Metrics'[NB Submitted Premium]), 1)
+				}
+
+	annotation PBI_Id = 4a8966f7b5734ea8ace1a5cb7e5f751f
+

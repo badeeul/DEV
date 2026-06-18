@@ -1,0 +1,146 @@
+table dim_insured_legal_entity_type
+	lineageTag: e21404ba-d24a-4b61-ada2-130668512855
+	sourceLineageTag: [policy].[dim_insured_legal_entity_type]
+
+	column insd_leg_ent_type_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: e9fa0071-8267-4d6f-a86e-a69939501452
+		sourceLineageTag: insd_leg_ent_type_key
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column insd_leg_ent_type_cd_bus_key
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 8042ede3-ca98-4d59-a304-31cf1bd918fa
+		sourceLineageTag: insd_leg_ent_type_cd_bus_key
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column insd_leg_ent_type_desc
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 421ba673-84a2-4110-80de-f4152dde3f6e
+		sourceLineageTag: insd_leg_ent_type_desc
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9b51f1a3-5aef-4d52-a736-d4572ab86deb
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: eb741c65-f68e-4b4c-8d7e-be4a5150599f
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f34e11a1-5530-4ac8-b908-d372c9a4ee78
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6d47bd49-749c-49a3-8bc5-cec7efa0daf0
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 43c191d8-be21-42b6-8631-10fa0f798557
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0b6134fe-5ba6-4bdb-ad5a-d9e0cb2d2425
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 02d4f5e4-535e-4eb3-85a2-ef4334918676
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: ca2bbb80-7d2a-4036-b0a5-ec7655b3cfc6
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: d12077c5-02bf-4f32-9d99-dec731edbabb
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 4ab22cbd-f343-49fa-ab15-50b6ab9e2239
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_insured_legal_entity_type = entity
+		mode: directLake
+		source
+			entityName: dim_insured_legal_entity_type
+			schemaName: policy
+			expressionSource: DatabaseQuery
+

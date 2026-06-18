@@ -1,0 +1,1981 @@
+/// Container table to organize measures (no data).
+table Metrics
+	lineageTag: bf4fdee2-015a-4e35-933f-756afa62f3d6
+
+	/// Commission amount
+	measure 'Commission Amount' = SUM('Policy Transactions'[Commission Amount])
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		displayFolder: Policy Transactions\Commission
+		lineageTag: f3166495-8c1b-4486-99bf-a33eb4d45a71
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Data As Of Date' = MAX(Policy[dl_row_insert_timestamp]) - 1
+		formatString: mm/dd/yyyy
+		displayFolder: For Report Displays\Report Dates
+		lineageTag: aad38175-926d-4219-b3b5-6ec93659416c
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// New business hit ratio. Calculated as:
+	/// new business total issued count / new business total quoted count
+	measure 'NB Hit Ratio' = DIVIDE([NB Issued Count], [NB Quoted Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: b5330c72-7815-4af3-b63d-71dc9b13a300
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	/// New Business Issued Count
+	measure 'NB Issued Count' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Issued Count] ),
+			
+			    KEEPFILTERS(
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: fc362f92-e14c-4cca-a0e3-da55d0bde8b8
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	/// New business quote ratio. Calculated as:
+	/// new business quoted count / new business submitted count
+	measure 'NB Quote Ratio' = DIVIDE([NB Quoted Count], [NB Submitted Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: 423692de-b32b-4111-9935-f081019bb062
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// New business quoted count
+	measure 'NB Quoted Count' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Quoted Count] ),
+			
+			    KEEPFILTERS(
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 32270ca2-73a8-48a1-944f-c8d5414ddeae
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// New business submitted count
+	measure 'NB Submitted Count' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Submitted Count] ),
+			
+			    KEEPFILTERS(
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 9fdee002-9291-42c3-a58f-233c086347bb
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// New business submitted premium
+	measure 'NB Submitted Premium' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Submitted Premium] ),
+			
+			    KEEPFILTERS (
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: c0f2d120-25aa-4b60-970a-c24e997ee9f9
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// New business yield ratio, calculated as:
+	/// new business issued count / new business submitted count
+	measure 'NB Yield Ratio' = DIVIDE([NB Issued Count], [NB Submitted Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: 3d1d9f7c-236c-4d38-ad53-3830fb99e497
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// New Business Policy - Abandoned Before Premium Estimate
+	measure 'Policy NB - Abandoned Before Premium Estimate' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Abandoned Before Prem Est" || 'Policy Status'[Policy Status L1 Level] = "NB - Abandoned Before Prem Est" || 'Policy Status'[Policy Status L2 Level] = "NB - Abandoned Before Prem Est" || 'Policy Status'[Policy Status L3 Level] = "NB - Abandoned Before Prem Est" || 'Policy Status'[Policy Status L4 Level] = "NB - Abandoned Before Prem Est")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 8145e554-e3fc-4275-8e37-63486d3a5094
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Agency Withdrawal
+	/// 
+	measure 'Policy NB - Agency Withdrawal' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Agency Withdrawal" || 'Policy Status'[Policy Status L1 Level] = "NB - Agency Withdrawal" || 'Policy Status'[Policy Status L2 Level] = "NB - Agency Withdrawal" || 'Policy Status'[Policy Status L3 Level] = "NB - Agency Withdrawal" || 'Policy Status'[Policy Status L4 Level] = "NB - Agency Withdrawal")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: c05debb8-710a-4bbd-9774-bb35d2e44a1e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Agent Withdraw Before Quote
+	/// 
+	measure 'Policy NB - Agent Withdraw Before Quote' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Agent Withdraw Before Quote" || 'Policy Status'[Policy Status L1 Level] = "NB - Agent Withdraw Before Quote" || 'Policy Status'[Policy Status L2 Level] = "NB - Agent Withdraw Before Quote" || 'Policy Status'[Policy Status L3 Level] = "NB - Agent Withdraw Before Quote" || 'Policy Status'[Policy Status L4 Level] = "NB - Agent Withdraw Before Quote")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 4a460c33-005a-4bc9-be8e-6209181beb85
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Agent Withdrew After Initial Premium Estimate
+	/// 
+	measure 'Policy NB - Agent Withdrew After Initial Premium Estimate' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Agent Withdrew After Initial Prem Estimate" || 'Policy Status'[Policy Status L1 Level] = "NB - Agent Withdrew After Initial Prem Estimate" || 'Policy Status'[Policy Status L2 Level] = "NB - Agent Withdrew After Initial Prem Estimate" || 'Policy Status'[Policy Status L3 Level] = "NB - Agent Withdrew After Initial Prem Estimate" || 'Policy Status'[Policy Status L4 Level] = "NB - Agent Withdrew After Initial Prem Estimate")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 8d92db3d-b62f-4706-811c-dd010e2e1a52
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Cancel
+	measure 'Policy NB - Cancel' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Cancel" || 'Policy Status'[Policy Status L1 Level] = "NB - Cancel" || 'Policy Status'[Policy Status L2 Level] = "NB - Cancel" || 'Policy Status'[Policy Status L3 Level] = "NB - Cancel" || 'Policy Status'[Policy Status L4 Level] = "NB - Cancel")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 22a60936-a88c-43b7-8178-fe7450a665d3
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Canceled Flat
+	/// 
+	measure 'Policy NB - Canceled Flat' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Canceled Flat" || 'Policy Status'[Policy Status L1 Level] = "NB - Canceled Flat" || 'Policy Status'[Policy Status L2 Level] = "NB - Canceled Flat" || 'Policy Status'[Policy Status L3 Level] = "NB - Canceled Flat" || 'Policy Status'[Policy Status L4 Level] = "NB - Canceled Flat")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 9f99dc1c-572f-4240-93c6-f7bd5e59ebbf
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Canceled Pro-rata
+	/// 
+	measure 'Policy NB - Canceled Pro-rata' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Canceled Pro-rata" || 'Policy Status'[Policy Status L1 Level] = "NB - Canceled Pro-rata" || 'Policy Status'[Policy Status L2 Level] = "NB - Canceled Pro-rata" || 'Policy Status'[Policy Status L3 Level] = "NB - Canceled Pro-rata" || 'Policy Status'[Policy Status L4 Level] = "NB - Canceled Pro-rata")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: c7196c8d-a10b-4899-8bc6-d6d8b48768a6
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Canceled Short Rate
+	/// 
+	measure 'Policy NB - Canceled Short Rate' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Canceled Short Rate" || 'Policy Status'[Policy Status L1 Level] = "NB - Canceled Short Rate" || 'Policy Status'[Policy Status L2 Level] = "NB - Canceled Short Rate" || 'Policy Status'[Policy Status L3 Level] = "NB - Canceled Short Rate" || 'Policy Status'[Policy Status L4 Level] = "NB - Canceled Short Rate")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 5c21ad46-e51f-4c9d-9406-18d1bf53dd17
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Completed Submission
+	/// 
+	measure 'Policy NB - Completed Submission' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Completed Submission" || 'Policy Status'[Policy Status L1 Level] = "NB - Completed Submission" || 'Policy Status'[Policy Status L2 Level] = "NB - Completed Submission" || 'Policy Status'[Policy Status L3 Level] = "NB - Completed Submission" || 'Policy Status'[Policy Status L4 Level] = "NB - Completed Submission")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 9f6c3c30-1201-4365-8a87-7f303f1b65b4
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Decline - Broker of Record
+	/// 
+	measure 'Policy NB - Decline - Broker of Record' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Decline - Broker of Record" || 'Policy Status'[Policy Status L1 Level] = "NB - Decline - Broker of Record" || 'Policy Status'[Policy Status L2 Level] = "NB - Decline - Broker of Record" || 'Policy Status'[Policy Status L3 Level] = "NB - Decline - Broker of Record" || 'Policy Status'[Policy Status L4 Level] = "NB - Decline - Broker of Record")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: a07702f6-48ae-4b35-9c4d-f2b257c21376
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Decline - Class of Exposure
+	measure 'Policy NB - Decline - Class of Exposure' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Decline - Class of Exposure" || 'Policy Status'[Policy Status L1 Level] = "NB - Decline - Class of Exposure" || 'Policy Status'[Policy Status L2 Level] = "NB - Decline - Class of Exposure" || 'Policy Status'[Policy Status L3 Level] = "NB - Decline - Class of Exposure" || 'Policy Status'[Policy Status L4 Level] = "NB - Decline - Class of Exposure")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: a7f04ebe-7c7f-4519-9921-2b13e318f8f2
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Decline - Questions
+	measure 'Policy NB - Decline - Questions' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Decline - Questions" || 'Policy Status'[Policy Status L1 Level] = "NB - Decline - Questions" || 'Policy Status'[Policy Status L2 Level] = "NB - Decline - Questions" || 'Policy Status'[Policy Status L3 Level] = "NB - Decline - Questions" || 'Policy Status'[Policy Status L4 Level] = "NB - Decline - Questions")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: b63b54ed-6c3e-4e64-a7fe-3b6189d41d10
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Decline - Under Wri
+	/// ter
+	/// 
+	measure 'Policy NB - Decline - UW' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Decline - UW" || 'Policy Status'[Policy Status L1 Level] = "NB - Decline - UW" || 'Policy Status'[Policy Status L2 Level] = "NB - Decline - UW" || 'Policy Status'[Policy Status L3 Level] = "NB - Decline - UW" || 'Policy Status'[Policy Status L4 Level] = "NB - Decline - UW")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 827b1703-a1a6-4ce8-b584-8f65e1bf3268
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Guard Declined
+	measure 'Policy NB - Guard Declined' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Guard Declined" || 'Policy Status'[Policy Status L1 Level] = "NB - Guard Declined" || 'Policy Status'[Policy Status L2 Level] = "NB - Guard Declined" || 'Policy Status'[Policy Status L3 Level] = "NB - Guard Declined" || 'Policy Status'[Policy Status L4 Level] = "NB - Guard Declined")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: f01cfd06-c94e-4fac-b124-42469d6426e5
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Issued
+	measure 'Policy NB - Issued' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Issued" || 'Policy Status'[Policy Status L1 Level] = "NB - Issued" || 'Policy Status'[Policy Status L2 Level] = "NB - Issued" || 'Policy Status'[Policy Status L3 Level] = "NB - Issued" || 'Policy Status'[Policy Status L4 Level] = "NB - Issued")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 3aa95c87-439a-4db0-a653-ec90660c8c1f
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy New Submission
+	measure 'Policy NB - New Submission' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - New Submission" || 'Policy Status'[Policy Status L1 Level] = "NB - New Submission" || 'Policy Status'[Policy Status L2 Level] = "NB - New Submission" || 'Policy Status'[Policy Status L3 Level] = "NB - New Submission" || 'Policy Status'[Policy Status L4 Level] = "NB - New Submission")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 2899d666-5e5f-4834-8cbc-96151f453cff
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Not Responding to Under Writer
+	measure 'Policy NB - Not Responding to UW' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Not Responding to UW" || 'Policy Status'[Policy Status L1 Level] = "NB - Not Responding to UW" || 'Policy Status'[Policy Status L2 Level] = "NB - Not Responding to UW" || 'Policy Status'[Policy Status L3 Level] = "NB - Not Responding to UW" || 'Policy Status'[Policy Status L4 Level] = "NB - Not Responding to UW")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 72f9f0e5-8138-4ca1-8812-a12f8f369ff1
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Open Completed Submission
+	/// 
+	measure 'Policy NB - Open Completed Submission' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Open Completed Submission" || 'Policy Status'[Policy Status L1 Level] = "NB - Open Completed Submission" || 'Policy Status'[Policy Status L2 Level] = "NB - Open Completed Submission" || 'Policy Status'[Policy Status L3 Level] = "NB - Open Completed Submission" || 'Policy Status'[Policy Status L4 Level] = "NB - Open Completed Submission")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: b4c96910-e405-4489-bc4b-c5269e9d7e18
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Open Quote
+	measure 'Policy NB - Open Quote' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Open Quote" || 'Policy Status'[Policy Status L1 Level] = "NB - Open Quote" || 'Policy Status'[Policy Status L2 Level] = "NB - Open Quote" || 'Policy Status'[Policy Status L3 Level] = "NB - Open Quote" || 'Policy Status'[Policy Status L4 Level] = "NB - Open Quote")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 9bda359f-225e-4f56-8c0a-0c7dcaf57416
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Open Submission
+	measure 'Policy NB - Open Submission' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Open Submission" || 'Policy Status'[Policy Status L1 Level] = "NB - Open Submission" || 'Policy Status'[Policy Status L2 Level] = "NB - Open Submission" || 'Policy Status'[Policy Status L3 Level] = "NB - Open Submission" || 'Policy Status'[Policy Status L4 Level] = "NB - Open Submission")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 3b4df233-e0ed-4ca3-935d-354a2ec5ca3d
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Other Exception
+	measure 'Policy NB - Other Exception' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Other Exception" || 'Policy Status'[Policy Status L1 Level] = "NB - Other Exception" || 'Policy Status'[Policy Status L2 Level] = "NB - Other Exception" || 'Policy Status'[Policy Status L3 Level] = "NB - Other Exception" || 'Policy Status'[Policy Status L4 Level] = "NB - Other Exception")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: c1941076-0477-4a33-aa3c-e8fdaa29c841
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Quote Not Taken
+	measure 'Policy NB - Quote Not Taken' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Quote Not Taken" || 'Policy Status'[Policy Status L1 Level] = "NB - Quote Not Taken" || 'Policy Status'[Policy Status L2 Level] = "NB - Quote Not Taken" || 'Policy Status'[Policy Status L3 Level] = "NB - Quote Not Taken" || 'Policy Status'[Policy Status L4 Level] = "NB - Quote Not Taken")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 16147b71-b170-4b2d-a5f9-822a9c8e50e6
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Quoted
+	measure 'Policy NB - Quoted' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Quoted" || 'Policy Status'[Policy Status L1 Level] = "NB - Quoted" || 'Policy Status'[Policy Status L2 Level] = "NB - Quoted" || 'Policy Status'[Policy Status L3 Level] = "NB - Quoted" || 'Policy Status'[Policy Status L4 Level] = "NB - Quoted")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 33fd41ca-5587-472a-93be-a57880bbafbe
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// New Business Policy Total Written
+	measure 'Policy NB - Total Written' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "NB - Total Written" || 'Policy Status'[Policy Status L1 Level] = "NB - Total Written" || 'Policy Status'[Policy Status L2 Level] = "NB - Total Written" || 'Policy Status'[Policy Status L3 Level] = "NB - Total Written" || 'Policy Status'[Policy Status L4 Level] = "NB - Total Written")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 948bfe19-f468-48f2-9f1e-7431892065f1
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	measure 'Policy Other Exception' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status] = "Other - Exception")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts
+		lineageTag: 09992d27-1029-4bc2-b099-c2b176e31531
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'Policy Re-issue' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status] = "Re-issue")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts
+		lineageTag: d2faf9c9-e7c8-4afd-9ff6-f0c56f1f575b
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'Retention Ratio' = DIVIDE([RN Issued Count], [Renewable Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: 620235a0-eece-4515-9b93-7af6d79fe20c
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	measure 'Policy Re-write' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status] = "Re-write")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts
+		lineageTag: 7c6972e1-ea5c-4486-970e-cf2b35f74bc3
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	/// Renewal Policy Cancel
+	measure 'Policy RN - Cancel' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Cancel" || 'Policy Status'[Policy Status L1 Level] = "RN - Cancel" || 'Policy Status'[Policy Status L2 Level] = "RN - Cancel" || 'Policy Status'[Policy Status L3 Level] = "RN - Cancel" || 'Policy Status'[Policy Status L4 Level] = "RN - Cancel")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 4c5f9b2a-487c-46a7-a1b2-401c02b7fbc8
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Canceled Pro-rata
+	measure 'Policy RN - Canceled Pro-rata' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Canceled Pro-rata" || 'Policy Status'[Policy Status L1 Level] = "RN - Canceled Pro-rata" || 'Policy Status'[Policy Status L2 Level] = "RN - Canceled Pro-rata" || 'Policy Status'[Policy Status L3 Level] = "RN - Canceled Pro-rata" || 'Policy Status'[Policy Status L4 Level] = "RN - Canceled Pro-rata")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 9475f748-795c-413e-9362-f08b767e21df
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Canceled Short Rate
+	measure 'Policy RN - Canceled Short Rate' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Canceled Short Rate" || 'Policy Status'[Policy Status L1 Level] = "RN - Canceled Short Rate" || 'Policy Status'[Policy Status L2 Level] = "RN - Canceled Short Rate" || 'Policy Status'[Policy Status L3 Level] = "RN - Canceled Short Rate" || 'Policy Status'[Policy Status L4 Level] = "RN - Canceled Short Rate")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 4a703bfa-6563-48a6-a360-646b2256e90f
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Guard Declined
+	measure 'Policy RN - Guard Declined' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Guard Declined" || 'Policy Status'[Policy Status L1 Level] = "RN - Guard Declined" || 'Policy Status'[Policy Status L2 Level] = "RN - Guard Declined" || 'Policy Status'[Policy Status L3 Level] = "RN - Guard Declined" || 'Policy Status'[Policy Status L4 Level] = "RN - Guard Declined")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: a2032b19-cfb8-4073-b315-b8273ade186e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Issued
+	measure 'Policy RN - Issued' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Issued" || 'Policy Status'[Policy Status L1 Level] = "RN - Issued" || 'Policy Status'[Policy Status L2 Level] = "RN - Issued" || 'Policy Status'[Policy Status L3 Level] = "RN - Issued" || 'Policy Status'[Policy Status L4 Level] = "RN - Issued")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 1eacc44c-c519-4d00-b10b-7e62b46d781e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Issued Not Paid
+	measure 'Policy RN - Issued Not Paid' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Issued Not Paid" || 'Policy Status'[Policy Status L1 Level] = "RN - Issued Not Paid" || 'Policy Status'[Policy Status L2 Level] = "RN - Issued Not Paid" || 'Policy Status'[Policy Status L3 Level] = "RN - Issued Not Paid" || 'Policy Status'[Policy Status L4 Level] = "RN - Issued Not Paid")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 61bacc34-6e40-4c7f-aced-8d54998d28d0
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Issued Paid
+	measure 'Policy RN - Issued Paid' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Issued Paid" || 'Policy Status'[Policy Status L1 Level] = "RN - Issued Paid" || 'Policy Status'[Policy Status L2 Level] = "RN - Issued Paid" || 'Policy Status'[Policy Status L3 Level] = "RN - Issued Paid" || 'Policy Status'[Policy Status L4 Level] = "RN - Issued Paid")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 62227c49-7692-49cb-8ec5-afbe94247ef2
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Open Quote
+	measure 'Policy RN - Open Quote' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Open Quote" || 'Policy Status'[Policy Status L1 Level] = "RN - Open Quote" || 'Policy Status'[Policy Status L2 Level] = "RN - Open Quote" || 'Policy Status'[Policy Status L3 Level] = "RN - Open Quote" || 'Policy Status'[Policy Status L4 Level] = "RN - Open Quote")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 6d3987a4-622e-48be-be62-a88dd1350807
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Open Renewal
+	measure 'Policy RN - Open Renewal' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Open Renewal" || 'Policy Status'[Policy Status L1 Level] = "RN - Open Renewal" || 'Policy Status'[Policy Status L2 Level] = "RN - Open Renewal" || 'Policy Status'[Policy Status L3 Level] = "RN - Open Renewal" || 'Policy Status'[Policy Status L4 Level] = "RN - Open Renewal")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: a4a49ba2-fee6-4f87-95a1-bf73dc02e81a
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Other Exception
+	measure 'Policy RN - Other Exception' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Other Exception" || 'Policy Status'[Policy Status L1 Level] = "RN - Other Exception" || 'Policy Status'[Policy Status L2 Level] = "RN - Other Exception" || 'Policy Status'[Policy Status L3 Level] = "RN - Other Exception" || 'Policy Status'[Policy Status L4 Level] = "RN - Other Exception")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: cb928727-af6e-45ae-bca8-8de6d351c612
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Quote Not Taken
+	measure 'Policy RN - Quote Not Taken' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Quote Not Taken" || 'Policy Status'[Policy Status L1 Level] = "RN - Quote Not Taken" || 'Policy Status'[Policy Status L2 Level] = "RN - Quote Not Taken" || 'Policy Status'[Policy Status L3 Level] = "RN - Quote Not Taken" || 'Policy Status'[Policy Status L4 Level] = "RN - Quote Not Taken")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: e028e757-3358-42f5-a678-875e5fd97246
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Quoted
+	measure 'Policy RN - Quoted' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Quoted" || 'Policy Status'[Policy Status L1 Level] = "RN - Quoted" || 'Policy Status'[Policy Status L2 Level] = "RN - Quoted" || 'Policy Status'[Policy Status L3 Level] = "RN - Quoted" || 'Policy Status'[Policy Status L4 Level] = "RN - Quoted")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: fbd14e76-e99f-4934-b5b4-186b9e226b3a
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Renewal
+	measure 'Policy RN - Renewal' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Renewal" || 'Policy Status'[Policy Status L1 Level] = "RN - Renewal" || 'Policy Status'[Policy Status L2 Level] = "RN - Renewal" || 'Policy Status'[Policy Status L3 Level] = "RN - Renewal" || 'Policy Status'[Policy Status L4 Level] = "RN - Renewal")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: 971d67a2-c1f2-41f8-88cf-c6db84c0066a
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Renewal Policy Total Written
+	measure 'Policy RN - Total Written' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status L0 Level] = "RN - Total Written" || 'Policy Status'[Policy Status L1 Level] = "RN - Total Written" || 'Policy Status'[Policy Status L2 Level] = "RN - Total Written" || 'Policy Status'[Policy Status L3 Level] = "RN - Total Written" || 'Policy Status'[Policy Status L4 Level] = "RN - Total Written")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\Renewal Business
+		lineageTag: d2fdb50a-be79-463e-858a-7e10e90adda5
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+	/// Policy Transaction Detail Count
+	measure 'Policy Transaction Detail Count' = COUNTROWS('Policy Transaction Detail')
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Transactions Detail\Count
+		lineageTag: 0c2ec430-339b-4265-a41b-aa81c51dbbac
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+		changedProperty = DisplayFolder
+
+	/// Policy Transactions Count
+	measure 'Policy Transactions Count' = COUNTROWS('Policy Transactions')
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Transactions\Count
+		lineageTag: 05a9a1ab-3636-476f-94ae-a50dbdbec102
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// Premium Amount
+	measure 'Premium Amount' = SUM('Policy Transactions'[Direct Written Premium])
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		displayFolder: Policy Transactions\Premium
+		lineageTag: dcc61ace-df3f-4e13-b1b3-6cc49e9ee2e5
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// Premium Excluding Commission Amount
+	measure 'Premium Excluding Commission Amount' = SUM('Policy Transactions'[Premium Excl from Commission])
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		displayFolder: Policy Transactions\Premium
+		lineageTag: d1f0ea6b-1a61-46d2-aed1-61f123a0da60
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// policy count with status 'NB - Quoted' BUT NOT 'NB - Total Written'
+	measure 'Quoted Not Sold Policies' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status] = "NB - Quoted" && 'Policy Status'[Policy Status] <> "Total Written")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: b3b26bd9-253e-4ed8-9c09-02408eea3779
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// policy count with status "NB - Quoted" and "NB - Total Written"
+	measure 'Quoted Sold Policies' = CALCULATE(COUNTROWS('Policy Measures'), 'Policy Status'[Policy Status] = "NB - Quoted" && 'Policy Status'[Policy Status] = "NB - Total Written")
+		formatString: #,0
+		isHidden
+		displayFolder: Policy Measures\Status Counts\New Business
+		lineageTag: 42a74ae2-0a36-4c5b-b3ce-226799737751
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+	/// State Fees
+	measure 'State Fees' = SUM('Policy Transactions'[Fresh Start Fee]) + SUM('Policy Transactions'[Policy Assessment Fee]) + SUM('Policy Transactions'[State Fee 3]) + SUM('Policy Transactions'[State Fee 4]) + SUM('Policy Transactions'[State Fee 5]) + SUM('Policy Transactions'[State Fee 6]) + SUM('Policy Transactions'[State Fee 7])
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		displayFolder: Policy Transactions\Fees
+		lineageTag: 61dcd729-cac8-4856-bb4c-ec172f162e5b
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Percent_Applicable to Digital Decisioning' =
+			
+			DIVIDE([Applicable to Digital Decisioning],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: ea191f72-2a94-4178-b30c-4a928b70275f
+
+		changedProperty = Name
+
+	measure 'Percent_Completed Digital Decision Journey' =
+			
+			DIVIDE([Completed Digital Decision Journey],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 68a9792f-bac4-40a7-b83c-364602853b34
+
+	measure Percent_Incomplete =
+			
+			DIVIDE([Incomplete],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 43188f4c-184e-4fc3-b498-46036f1773e3
+
+	measure 'Percent_Incomplete with Premium Indication' =
+			
+			DIVIDE([Incomplete with Premium Indication],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: c2cd2d6f-e909-4f3f-9984-05dd4186a064
+
+	measure 'Percent_Incomplete without Premium Indication' =
+			
+			DIVIDE([Incomplete without Premium Indication],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 2d6e7cd7-ec89-4eb9-bafe-cd639ebac1eb
+
+	measure 'Percent_System Can Make First Decision (Qualifies)' =
+			
+			DIVIDE([System Can Make First Decision (Qualifies)],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 72043d40-d4c7-4dcc-ae1c-221ab9c8df36
+
+	measure 'Percent_UW Is Required For First Decision (Not Qualified)' =
+			
+			DIVIDE([UW Is Required For First Decision (Not Qualified)],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 96c3b1f9-ec11-4063-90f9-35490fecff10
+
+	measure 'Percent_Digitally Decisioned' =
+			
+			DIVIDE([Digitally Decisioned],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 42a99716-7f2f-48fa-8a53-3b152f5469fc
+
+	measure 'Percent_Mitigating Circumstances' =
+			
+			DIVIDE([Mitigating Circumstances],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: cebe2b8d-6269-46a1-bb16-9351861b3295
+
+	measure 'Percent_Digitally Assisted' =
+			
+			DIVIDE([Digitally Assisted],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 3bcf81a0-745e-4342-828d-d46f2c525762
+
+	measure Percent_Manual/Supplemental =
+			
+			DIVIDE([Manual/Supplemental],[Applicable to Digital Decisioning])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Percentages
+		lineageTag: 9f3e2205-b3d2-49a1-b693-2d065cb2bbf9
+
+		changedProperty = Name
+
+	measure 'Display_Applicable to Digital Decisioning' = ```
+			
+			FORMAT([Applicable to Digital Decisioning],"#,##0") & " (" & 
+			FORMAT([Percent_Applicable to Digital Decisioning],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: 88f529c3-be37-4219-8707-22cda45d2a64
+
+		changedProperty = Name
+
+	measure Display_Incomplete = ```
+			
+			FORMAT([Incomplete],"#,##0") & " (" & 
+			FORMAT([Percent_Incomplete],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: c0173f80-b84e-4788-a326-312c2d2469a2
+
+		changedProperty = Name
+
+	measure 'Display_Incomplete with Premium Indication' = ```
+			
+			FORMAT([Incomplete with Premium Indication],"#,##0") & " (" & 
+			FORMAT([Percent_Incomplete with Premium Indication],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: ef7db58c-8b0c-4531-a5cc-38567fc67d11
+
+	measure 'Display_Incomplete without Premium Indication' = ```
+			
+			FORMAT([Incomplete without Premium Indication],"#,##0") & " (" & 
+			FORMAT([Percent_Incomplete without Premium Indication],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: b73c1a80-bbdb-49af-8755-9c9a51f5e275
+
+	measure 'Display_System Can Make First Decision (Qualifies)' = ```
+			
+			FORMAT([System Can Make First Decision (Qualifies)],"#,##0") & " (" & 
+			FORMAT([Percent_System Can Make First Decision (Qualifies)],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: 5318681b-f244-4deb-b6cc-7e06e3f7c644
+
+	measure 'Display_UW Is Required For First Decision (Not Qualified)' = ```
+			
+			FORMAT([UW Is Required For First Decision (Not Qualified)],"#,##0") & " (" & 
+			FORMAT([Percent_UW Is Required For First Decision (Not Qualified)],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: bed5751e-3b92-4a50-8631-26d1af2c7ab5
+
+	measure 'Display_Digitally Decisioned' = ```
+			
+			FORMAT([Digitally Decisioned],"#,##0") & " (" & 
+			FORMAT([Percent_Digitally Decisioned],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: 78a16940-3b14-4732-9808-266f86532bae
+
+	measure 'Display_Mitigating Circumstances' = ```
+			
+			FORMAT([Mitigating Circumstances],"#,##0") & " (" & 
+			FORMAT([Percent_Mitigating Circumstances],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: 9569f73b-681d-41a8-8090-5efc1cca821b
+
+	measure 'Display_Digitally Assisted' = ```
+			
+			FORMAT([Digitally Assisted],"#,##0") & " (" & 
+			FORMAT([Percent_Digitally Assisted],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: c3f360bb-3177-4fa6-9f28-438a5d7f06e2
+
+	measure Display_Manual/Supplemental = ```
+			
+			FORMAT([Manual/Supplemental],"#,##0") & " (" & 
+			FORMAT([Percent_Manual/Supplemental],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: 1d1e2cc7-ef86-4e48-9358-e053c946807c
+
+	measure 'Display_Completed Digital Decisioning Journey' = ```
+			
+			FORMAT([Completed Digital Decision Journey],"#,##0") & " (" & 
+			FORMAT([Percent_Completed Digital Decision Journey],"0.0%") &")"
+			```
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: 218c1635-aba1-4f33-817d-1fb755cfabf6
+
+	measure 'Display_Excluded From Digital Decisioning' =
+			
+			FORMAT([Excluded From Digital Decisioning],"#,##0")
+		displayFolder: For Report Displays\Digital Decisioning\Card Displays
+		lineageTag: f3d2d372-86cf-4c80-a97d-11c5385ca2b4
+
+	measure 'Is Date In Scope' =
+			
+			VAR SelectedPeriod =
+			    SELECTEDVALUE ( 'Report Date Periods'[Period Key], "DEFAULT" )
+			
+			VAR IsDefaultPeriod =
+			    SelectedPeriod = "DEFAULT"
+			
+			VAR AsOfDate =
+			    [Data As Of Date]
+			
+			-- First day of the month represented by the row
+			VAR MonthStartDate =
+			    MIN ( 'Date'[date] )
+			
+			VAR IsPriorYear =
+			    MAX ( 'Date'[Prior Year] ) = 1
+			
+			VAR IsCurrentYearUpToAsOfMonth =
+			    YEAR ( MonthStartDate ) = YEAR ( AsOfDate )
+			        && MonthStartDate <= AsOfDate
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			
+			    -- Default: all 2025 + 2026 through As‑Of month
+			    IsDefaultPeriod
+			        && ( IsPriorYear || IsCurrentYearUpToAsOfMonth ),
+			        1,
+			
+			    -- Custom: allow everything
+			    NOT IsDefaultPeriod,
+			        1,
+			
+			    0
+			)
+		formatString: 0
+		displayFolder: For Report Displays\Report Dates
+		lineageTag: c417a466-31f7-4996-a9b6-7e63754aa3b6
+
+		changedProperty = Name
+
+	measure 'Report Date Range' =
+			
+			VAR SelectedPeriod =
+			    SELECTEDVALUE ( 'Report Date Periods'[Period Key], "DEFAULT" )
+			
+			VAR StartDate =
+			    IF (
+			        SelectedPeriod = "DEFAULT",
+			        DATE ( YEAR ( [Data As Of Date] ) - 1, 1, 1 ),
+			        MIN ( 'Date'[date] )
+			    )
+			
+			VAR EndDate =
+			    IF (
+			        SelectedPeriod = "DEFAULT",
+			        [Data As Of Date],
+			        MAX ( 'Date'[date] )
+			    )
+			
+			RETURN
+			"Showing results from "
+			    & FORMAT ( StartDate, "M/d/yyyy" )
+			    & " to "
+			    & FORMAT ( EndDate, "M/d/yyyy" )
+		displayFolder: For Report Displays\Report Dates
+		lineageTag: d5b7e50f-ee83-47f3-8994-dfc4e4612709
+
+	measure 'Average NB Issued Premium' =
+			
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[NB Issued Premium]
+			    ),
+			
+			    -- Only rows where a policy was issued
+			    'Policy Measures'[NB Issued Count] = 1,
+			
+			    -- Important: remove role-playing date interference
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: f6846970-6bcf-454f-972d-b71dd6932e4a
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Average NB Quoted Premium' =
+			
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[NB Quoted Premium]
+			    ),
+			
+			    -- Only rows where a policy was issued
+			    'Policy Measures'[NB Quoted Count] = 1,
+			
+			    -- Important: remove role-playing date interference
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 3154bab3-528f-4cde-82de-d5439cd7c8e6
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Average NB Submitted Premium' =
+			
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[NB Submitted Premium]
+			    ),
+			
+			    -- Only rows where a policy was issued
+			    'Policy Measures'[NB Submitted Count] = 1,
+			
+			    -- Important: remove role-playing date interference
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: f2fbd497-b577-451f-8e36-7c433e970b8c
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'NB Efficiencies Metric Label' = ```
+			
+			VAR MetricName =
+			    MAX ( 'NB Efficiencies Y-Axis Metric'[NB Efficiencies Y-Axis Metric] )
+			RETURN
+			SWITCH (
+			    MetricName,
+			    "Submitted Count",       "Submitted Count",
+			    "Submitted Premium",     "Submitted Premium",
+			    "Submitted Count"
+			)
+			
+			```
+		displayFolder: For Report Displays\NB Efficiencies
+		lineageTag: 20d84b74-8962-4b24-90c6-ec17d9b304bd
+
+	measure 'NB Efficiencies Date Role Label' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( 'NB Efficiencies Date Role'[Date Role] ),
+			    "Policy Submitted Date", "Policy Submitted Date",
+			    "Policy Effective Date", "Policy Effective Date",
+			    "Policy Effective Date"
+			)
+		displayFolder: For Report Displays\NB Efficiencies
+		lineageTag: 758a26e0-61f0-49a9-b671-2163c8686f13
+
+	measure 'NB Efficiencies Trend Chart Title' =
+			
+			VAR MetricLabel =
+			    COALESCE ( [NB Efficiencies Metric Label], "Submitted Count" )
+			
+			VAR DateRoleLabel =
+			    COALESCE ( [NB Efficiencies Date Role Label], "Policy Effective Date" )
+			
+			RETURN
+			"New Business " & MetricLabel & " By " & DateRoleLabel
+		displayFolder: For Report Displays\NB Efficiencies
+		lineageTag: b703f5aa-b6ae-44fd-a05a-029ca04002d2
+
+	measure 'RN Issued Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Issued Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 16cdcf2a-2c88-492e-b534-dbd322243c4e
+
+	measure 'Expiring Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[Expiring Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 8c92b781-8caa-46d7-97e6-f7c4b32a9313
+
+	measure 'Renewable Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[Expiring Renewable Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 72c0299e-676b-4d42-b393-e3b8417686be
+
+	measure 'RN Issued with Down Pmt Recvd Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Issued with Down Pmt Recvd Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: f7d6e751-8f9d-47b5-887d-813247a0d5df
+
+	measure 'Renewable Ratio' = DIVIDE([Renewable Count], [Expiring Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: 2edf6c32-67ce-4d0f-8a1f-ca292e668374
+
+	measure 'Retention Ratio (with Down Pmt Recvd)' = DIVIDE([RN Issued with Down Pmt Recvd Count], [Renewable Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: f895b44e-db22-4013-bda0-f7d9af5cab79
+
+	measure 'RN Quoted Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Quoted Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 1e8c77be-777f-414d-be52-be02554b6939
+
+	measure 'Avg Expiring Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[Expiring Premium]
+			    ),
+			
+			    'Policy Measures'[Expiring Count] = 1,
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 61e940ab-b005-4dbd-a25e-5fe0cc540485
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg Renewable Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[Expiring Renewable Premium]
+			    ),
+			
+			    'Policy Measures'[Expiring Renewable Count] = 1,
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 25c958ee-ac11-400a-89cc-5e28a6ddac39
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg RN Issued Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[RN Issued Premium]
+			    ),
+			
+			    'Policy Measures'[RN Issued Count] = 1,
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 811f4d35-d582-4aac-8a47-316d7caa3c1a
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg RN Quoted Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    AVERAGEX (
+			        'Policy Measures',
+			        'Policy Measures'[RN Quoted Premium]
+			    ),
+			
+			    'Policy Measures'[RN Quoted Count] = 1,
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: f3c75209-ef0d-4ad8-92c9-749cdf503d10
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Expiring Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[Expiring Premium] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: a747a4d1-72ba-4934-a150-854d1426a4c7
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'RN Issued Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Issued Premium] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 22e7095b-7949-4162-b983-e9dd0b353fb8
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Renewable to Expiring Premium Ratio' = DIVIDE([Renewable Premium], [Expiring Premium])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: 87fc4e21-c104-4036-8ded-5bb335a3ecd2
+
+	measure 'Renewable Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[Expiring Renewable Premium] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: c18041a1-f468-4c3a-9ce8-994c2dc981ea
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'RB Efficiencies Metric Label' =
+			
+			VAR MetricName =
+			    MAX ( 'RB Efficiencies Y-Axis Metric'[RB Efficiencies Y-Axis Metric] )
+			RETURN
+			SWITCH (
+			    MetricName,
+			    "Expiring Count",       "Expiring Count",
+			    "Expiring Premium",     "Expiring Premium",
+			    "Expiring Count"
+			)
+		displayFolder: For Report Displays\RB Efficiencies
+		lineageTag: 6c964312-26df-482b-929e-5739cce8515d
+
+	measure 'RB Efficiencies Trend Chart Title' =
+			
+			VAR MetricLabel =
+			    COALESCE ( [RB Efficiencies Metric Label], "Submitted Count" )
+			
+			RETURN
+			MetricLabel
+		displayFolder: For Report Displays\RB Efficiencies
+		lineageTag: a9ccc636-961e-4b4f-a876-52e260b3afb9
+
+	measure 'Applicable to Digital Decisioning' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level]
+			            IN {
+			                "Completed Digital Decisioned Journey",
+			                "Incomplete"
+			            }
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 1f7cbce8-dfb1-40f7-921c-72edd0bc92a3
+
+	measure 'Completed Digital Decision Journey' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Completed Digital Decisioned Journey"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: aebfbca7-bd1e-4402-b3cc-9b3eb757f42f
+
+	measure 'Excluded From Digital Decisioning' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Excluded From Digital Decisioning"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 93f04a20-e910-4920-8017-fe41dd00cc40
+
+	measure Incomplete =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Incomplete"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 79e5c699-60ff-47f1-95d2-d99c016371b8
+
+	measure 'Incomplete with Premium Indication' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Incomplete"
+			    ),
+			    FILTER(
+			        'Policy Measures',
+			        'Policy Measures'[NB Submitted Premium] <> 0
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 5717b1e8-2c0f-48ea-a199-d1841e2da033
+
+	measure 'Incomplete without Premium Indication' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Incomplete"
+			    ),
+			    FILTER(
+			        'Policy Measures',
+			        'Policy Measures'[NB Submitted Premium] = 0
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: e0e922c7-ebac-4041-b9ee-73a35dd7ce43
+
+	measure 'System Can Make First Decision (Qualifies)' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l1_level] = "System Can Make First Decision (Qualifies For Digital Decision)"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 379a995d-4287-4786-a52e-fbf8f9d213a0
+
+	measure 'UW Is Required For First Decision (Not Qualified)' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l1_level] = "UW Is Required For First Decision (Not Qualified For Digital Decision)"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 6ab0bfb4-3a59-41dd-bb4f-6a268fdf9732
+
+	measure 'Digitally Decisioned' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Digitally Decisioned"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 480ab921-8d31-42fa-a41b-fa2193bfc3b1
+
+	measure 'Digitally Assisted' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Digitally Assisted"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: e0f3f666-1271-4fee-8921-5679a4c941ab
+
+	measure 'Mitigating Circumstances' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Mitigating Circumstances"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 5b45c130-f09f-4ac4-aa44-3566dde06fbc
+
+	measure Manual/Supplemental =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Manual / Supplemental"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: b82d6231-c3da-4741-8c1b-240c87de17a0
+
+	measure 'Assisted-or-Incomplete Ratio' =
+			
+			DIVIDE(
+			    ([Mitigating Circumstances] + [Digitally Assisted] + [Incomplete]),
+			    [Applicable to Digital Decisioning]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Ratios
+		lineageTag: 799132b6-986f-4a98-947b-d956af5e6c74
+
+	measure 'Digitally Decisioned Ratio' =
+			
+			DIVIDE(
+			    [Digitally Decisioned],
+			    [Applicable to Digital Decisioning]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Ratios
+		lineageTag: 18be836e-01b2-4d6f-83f3-bfd4e981e3b3
+
+	measure 'Manual-or-Supplemental Ratio' =
+			
+			DIVIDE(
+			    [Manual/Supplemental],
+			    [Applicable to Digital Decisioning]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Ratios
+		lineageTag: 655aa511-85c9-4233-b370-9db666ecb1b2
+
+	measure 'Retention of Renewable Premium' = DIVIDE([RN Issued Premium], [Renewable Premium])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Ratios
+		lineageTag: c46153ec-ade1-4556-a3ae-81b830d5648b
+
+	measure Tooltip_Blank = BLANK()
+		formatString: 0
+		displayFolder: For Report Displays
+		lineageTag: 70f3c4c9-e0a8-42a2-9b1f-c6f76dfcacf3
+
+		changedProperty = Name
+
+	measure 'NB Quoted Premium' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Quoted Premium] ),
+			
+			    KEEPFILTERS (
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 3989eb9d-b901-48b8-98e5-de00dc5af53b
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'NB Issued Premium' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Issued Premium] ),
+			
+			    KEEPFILTERS (
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 86f22da7-552a-4fc1-b29e-6a52dc95891e
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'RN Quoted Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Quoted Premium] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 6b4505d6-17dc-4b8a-b5b3-7f9b9a9010b8
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column _key
+		isHidden
+		lineageTag: 466cb839-726a-4ec8-b7df-9a44792d901f
+		isNameInferred
+		sourceColumn: [_key]
+
+	partition Metrics = calculated
+		mode: import
+		source = DATATABLE("_key", STRING, {{"Placeholder"}})
+

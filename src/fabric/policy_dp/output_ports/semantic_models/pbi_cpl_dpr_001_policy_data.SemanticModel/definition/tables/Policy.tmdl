@@ -1,0 +1,471 @@
+table Policy
+	lineageTag: e7426cbb-54d3-4fd6-a172-a283830bda73
+	sourceLineageTag: [policy].[dim_policy]
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a3e6f2d2-0dba-407c-8f05-ec8e9f3e8fb6
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 7b9a65ae-b96e-43dd-83a9-8202cca64c26
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: cd8735a6-d81f-480d-8fa8-483f55e0218a
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 046617d3-3f16-4d1d-803d-52a38b8da8bb
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: c57fa6dc-6831-421d-95d7-1c87409b8db1
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 684b96ee-f194-4012-ba04-3e46633f89a8
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: da4423e2-7e35-4e08-a32f-9318d0cb11da
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 95103dfa-abd6-47ec-aa8b-6366b7c0bd6e
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c59ffd61-7de0-44d9-9cb8-b39e33cfd076
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 04d502d8-4320-4ceb-a495-9a04e101d0e8
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Chain ID
+	column 'Chain ID'
+		dataType: string
+		lineageTag: 5359563e-9ab0-418a-a073-f9edce68dd03
+		sourceLineageTag: chain_id
+		summarizeBy: none
+		sourceColumn: chain_id
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First Downpayment Recd Date
+	column 'First Downpayment Recd Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6eebf8e3-54cd-47b3-af85-b7796f88ed33
+		sourceLineageTag: first_dwnpymnt_recd_dt
+		summarizeBy: none
+		sourceColumn: first_dwnpymnt_recd_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column latest_policy_status_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e5eddde8-5230-4880-a25a-b87f1022e9c7
+		sourceLineageTag: latest_policy_status_key
+		summarizeBy: none
+		sourceColumn: latest_policy_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Cancel Date
+	column 'Policy Cancel Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6c95bbab-1fc4-422d-a8c7-e6a99d364912
+		sourceLineageTag: policy_cancel_dt
+		summarizeBy: none
+		sourceColumn: policy_cancel_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Issue Date
+	column 'Policy Issue Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9d28bb11-b25a-43f5-b8a1-76e0518bc67c
+		sourceLineageTag: policy_issue_dt
+		summarizeBy: none
+		sourceColumn: policy_issue_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Audit Date
+	column 'Policy Audit Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6dc4635d-9a2a-45eb-9d91-b8e9153bb0b8
+		sourceLineageTag: policy_audit_dt
+		summarizeBy: none
+		sourceColumn: policy_audit_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Offered Renewal
+	column 'Offered Renewal'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4642cd11-646d-4a68-8aee-fb11caab6ca9
+		sourceLineageTag: offer_rn
+		summarizeBy: none
+		sourceColumn: offer_rn
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Business Type
+	column 'Policy Business Type'
+		dataType: string
+		lineageTag: ad192227-2075-4611-90a2-092d08e34e04
+		sourceLineageTag: policy_bus_type
+		summarizeBy: none
+		sourceColumn: policy_bus_type
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Governing State
+	column 'Governing State'
+		dataType: string
+		lineageTag: 6b324bb9-5a33-4742-82dd-37e5df544dd5
+		sourceLineageTag: gov_state
+		summarizeBy: none
+		sourceColumn: gov_state
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Submission Date
+	column 'Policy Submission Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bf3129b4-71ba-4ec8-9bce-c45d7c953e46
+		sourceLineageTag: policy_sub_dt
+		summarizeBy: none
+		sourceColumn: policy_sub_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Effective Start Date
+	column 'Policy Effective Start Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 97192ef9-3d8d-4172-959e-f12fa60565a0
+		sourceLineageTag: policy_effec_start_dt
+		summarizeBy: none
+		sourceColumn: policy_effec_start_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Effective End Date
+	column 'Policy Effective End Date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8ae41e76-898d-499a-b95a-eaa871866e50
+		sourceLineageTag: policy_effec_end_dt
+		summarizeBy: none
+		sourceColumn: policy_effec_end_dt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f99c2bf0-d3d3-4e42-8321-3040c68b703c
+		sourceLineageTag: policy_key
+		summarizeBy: none
+		sourceColumn: policy_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Code
+	column 'Policy Code'
+		dataType: string
+		lineageTag: 31237af6-c56f-4d79-9fee-060af9184a5a
+		sourceLineageTag: policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: policy_num_bus_key
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_coverage_start_dt
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: a3ab45b8-7229-482d-b26f-e10a10efea46
+		sourceLineageTag: policy_coverage_start_dt
+		summarizeBy: none
+		sourceColumn: policy_coverage_start_dt
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_coverage_end_dt
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 4f482fb9-4668-4f0c-9cef-845aeaa8d212
+		sourceLineageTag: policy_coverage_end_dt
+		summarizeBy: none
+		sourceColumn: policy_coverage_end_dt
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_cancel_trans_dt
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 691e0eff-aa8d-4390-b92b-4955eef959d9
+		sourceLineageTag: policy_cancel_trans_dt
+		summarizeBy: none
+		sourceColumn: policy_cancel_trans_dt
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column previous_policy_num_bus_key
+		dataType: string
+		lineageTag: 0db1c2aa-8a79-468d-9732-9e8e3d8d78b5
+		sourceLineageTag: previous_policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: previous_policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column next_policy_num_bus_key
+		dataType: string
+		lineageTag: 7748a9e3-0859-47cb-9818-2b3e585e92b5
+		sourceLineageTag: next_policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: next_policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column rewritten_reissued_ind
+		dataType: string
+		lineageTag: 6f725161-7bb3-4fd3-b430-e0fe53bf3774
+		sourceLineageTag: rewritten_reissued_ind
+		summarizeBy: none
+		sourceColumn: rewritten_reissued_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Is policy counted as expiring policy
+	column 'Is Policy Expiring'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 069ccfaa-413a-4591-b8cb-53093f1e6766
+		sourceLineageTag: is_expiring_flag
+		summarizeBy: none
+		sourceColumn: is_expiring_flag
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Is policy counted as renewable - flag.
+	column 'Is Policy Renewable'
+		dataType: string
+		lineageTag: 3fa0cb50-0ea0-4c5c-8c51-0a3176b446f2
+		sourceLineageTag: is_renewable_flag
+		summarizeBy: none
+		sourceColumn: is_renewable_flag
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Is the previous policy tagged for UBE
+	column 'Is Prev Policy UBE Tagged'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 068627a1-74bb-4140-8361-96edd10928a6
+		sourceLineageTag: is_prev_policy_ubetag_flag
+		summarizeBy: none
+		sourceColumn: is_prev_policy_ubetag_flag
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Is the policy cloned for upcoming renewal
+	column 'Is Policy Cloned for Renewal'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8d6cf4fd-4022-404f-a9a6-2145ef69a0f3
+		sourceLineageTag: is_cloned_flag
+		summarizeBy: none
+		sourceColumn: is_cloned_flag
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source status policy description
+	column 'Source Status Description'
+		dataType: string
+		lineageTag: e26ceb85-270a-48de-9eee-01e5ab511f8c
+		sourceLineageTag: src_policy_status_descrip
+		summarizeBy: none
+		sourceColumn: src_policy_status_descrip
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column digital_decision_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e2e9b25-f30f-4308-abe2-468e4749218c
+		sourceLineageTag: digital_decision_status_key
+		summarizeBy: none
+		sourceColumn: digital_decision_status_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column autouw_status_desc
+		dataType: string
+		lineageTag: 74efbe8b-24eb-40ca-8cfb-8e0e879410b2
+		sourceLineageTag: autouw_status_desc
+		summarizeBy: none
+		sourceColumn: autouw_status_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Submission Point of Origin'
+		dataType: string
+		lineageTag: ab55b9c8-02df-41ae-a37c-51404c3a1491
+		sourceLineageTag: sub_point_of_origin_desc
+		summarizeBy: none
+		sourceColumn: sub_point_of_origin_desc
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column rewrite_reissue_ind
+		dataType: string
+		lineageTag: 872adbef-12ae-4484-a236-d7092f73fc74
+		sourceLineageTag: rewrite_reissue_ind
+		summarizeBy: none
+		sourceColumn: rewrite_reissue_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_policy = entity
+		mode: directLake
+		source
+			entityName: dim_policy
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

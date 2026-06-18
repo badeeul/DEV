@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "4ecc61344e20a6cb7a31",
+  "position": {
+    "x": 524.96202531645565,
+    "y": 679.42616033755269,
+    "z": 37500,
+    "height": 30.244725738396625,
+    "width": 750.717299578059,
+    "tabOrder": 35000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Percentages displayed reflect the number in each bucket relative to the number of all new business submissions applicable to Digital Decisioning.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "9pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "right"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

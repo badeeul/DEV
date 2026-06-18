@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_initiate_run",
+    "description": "This pipeline ensures the existence of all necessary tables within the Observability Lakehouse and records feed run with a 'Running' status. It operates asynchronously, allowing for efficient and non-blocking execution."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2aa722ea-93bd-a872-44ac-52fb6d064565"
+  }
+}

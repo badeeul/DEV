@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-DataProductMgmt-MTR",
+    "targetWorkspaceName": "Fluidity-DataProductMgmt-MTR",
+    "targetSuperDomain": "Fluidity",
+    "targetSubDomain": "Data Product Mgmt",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",   
+    "keyvaultName": "bhg-hub-fabric01-eus-kv",     
+    "adminGroupPrincipalIds": "2ac69476-4830-443e-af09-1589a170f200,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+    "contributorGroupPrincipalIds": "12d058e7-e71e-4172-9e6e-83f21b6c7a7d"
+}

@@ -1,0 +1,476 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "batchCount": 5,
+          "items": {
+            "value": "@pipeline().parameters.Datasets_List",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@greater(length(activity('Invoke load_database_to_curated_worker').output.pipelineReturnValue.data_directory),0)",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "1a1f48eb-7279-4b92-81fe-c2cfb6000f2a",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "feed_name": {
+                          "value": {
+                            "value": "@pipeline().parameters.Feed_Name",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "run_id": {
+                          "value": {
+                            "value": "@pipeline().RunId",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "elt_id": {
+                          "value": {
+                            "value": "@pipeline().parameters.ELT_Id",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "elt_start_date_time": {
+                          "value": {
+                            "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "product_name": {
+                          "value": {
+                            "value": "@pipeline().parameters.Product_Name",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "raw_directory": {
+                          "value": {
+                            "value": "@activity('Invoke load_database_to_curated_worker').output.pipelineReturnValue.data_directory",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "dataset_config_folder_name": {
+                          "value": {
+                            "value": "@item().sourceConfigFolderName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "dataset_file_name": {
+                          "value": {
+                            "value": "@item().fileName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "dataset_config_json": {
+                          "value": {
+                            "value": "@string(activity('GetDatasetMetadataFile').output.value[0])",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "source_system": {
+                          "value": {
+                            "value": "@activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sourceSystemName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "invocation_id": {
+                          "value": {
+                            "value": "@pipeline().RunId",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "workspace_id": {
+                          "value": {
+                            "value": "@pipeline().parameters.workspace_id",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "lh_observability_id": {
+                          "value": {
+                            "value": "@pipeline().parameters.lh_observability_id",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "lh_raw_id": {
+                          "value": {
+                            "value": "@pipeline().parameters.lh_raw_id",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Ingest Curated",
+                    "description": "takes location of a data folder in Raw Lakehouse and ingests Delta Table in Curated zone",
+                    "dependsOn": [
+                      {
+                        "activity": "GetDatasetMetadataFile",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Lookup",
+                    "typeProperties": {
+                      "source": {
+                        "type": "JsonSource",
+                        "formatSettings": {
+                          "type": "JsonReadSettings"
+                        },
+                        "storeSettings": {
+                          "type": "LakehouseReadSettings",
+                          "recursive": false,
+                          "wildcardFolderPath": {
+                            "value": "@concat('datasets/',item().sourceConfigFolderName)",
+                            "type": "Expression"
+                          },
+                          "wildcardFileName": {
+                            "value": "@concat(item().fileName,'.json')",
+                            "type": "Expression"
+                          },
+                          "enablePartitionDiscovery": false
+                        }
+                      },
+                      "datasetSettings": {
+                        "type": "Json",
+                        "typeProperties": {
+                          "location": {
+                            "type": "LakehouseLocation"
+                          }
+                        },
+                        "schema": {},
+                        "linkedService": {
+                          "name": "e73b8991_c031_4845_a742_26000eaf5137",
+                          "properties": {
+                            "type": "Lakehouse",
+                            "typeProperties": {
+                              "artifactId": "@pipeline().parameters.lh_metadata_id",
+                              "workspaceId": "@pipeline().parameters.workspace_id",
+                              "rootFolder": "Files"
+                            },
+                            "annotations": []
+                          }
+                        },
+                        "annotations": []
+                      },
+                      "firstRowOnly": false
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "GetDatasetMetadataFile",
+                    "dependsOn": []
+                  },
+                  {
+                    "type": "Copy",
+                    "typeProperties": {
+                      "source": {
+                        "type": "JsonSource",
+                        "formatSettings": {
+                          "type": "JsonReadSettings"
+                        },
+                        "additionalColumns": [
+                          {
+                            "name": "QueueMessage",
+                            "value": {
+                              "value": "{\"zoneCuratedUpdates\": true}",
+                              "type": "Expression"
+                            }
+                          }
+                        ],
+                        "storeSettings": {
+                          "type": "LakehouseReadSettings",
+                          "recursive": false,
+                          "enablePartitionDiscovery": false
+                        },
+                        "datasetSettings": {
+                          "type": "Json",
+                          "typeProperties": {
+                            "location": {
+                              "type": "LakehouseLocation",
+                              "folderPath": "templates/logs",
+                              "fileName": "QueueMessage.json"
+                            }
+                          },
+                          "schema": {},
+                          "linkedService": {
+                            "name": "6ed7bfc4_4c01_4d5e_8f16_5fe3311e0117",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "@pipeline().parameters.lh_metadata_id",
+                                "workspaceId": "@pipeline().parameters.workspace_id",
+                                "rootFolder": "Files"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "sink": {
+                        "type": "DelimitedTextSink",
+                        "formatSettings": {
+                          "type": "DelimitedTextWriteSettings",
+                          "quoteAllText": true,
+                          "fileExtension": ".json"
+                        },
+                        "storeSettings": {
+                          "type": "LakehouseWriteSettings",
+                          "copyBehavior": "PreserveHierarchy"
+                        },
+                        "datasetSettings": {
+                          "type": "DelimitedText",
+                          "typeProperties": {
+                            "location": {
+                              "type": "LakehouseLocation",
+                              "folderPath": {
+                                "value": "@concat(pipeline().parameters.feed_name,'_',pipeline().parameters.ELT_Id)",
+                                "type": "Expression"
+                              },
+                              "fileName": {
+                                "value": "@item().fileName",
+                                "type": "Expression"
+                              }
+                            },
+                            "columnDelimiter": ",",
+                            "quoteChar": "",
+                            "escapeChar": "",
+                            "firstRowAsHeader": false
+                          },
+                          "schema": [],
+                          "linkedService": {
+                            "name": "d7ae41c6_307d_4b33_9b0b_6ed9c0235ec2",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "@pipeline().parameters.lh_observability_id",
+                                "workspaceId": "@pipeline().parameters.workspace_id",
+                                "rootFolder": "Files"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                          "allowDataTruncation": true,
+                          "treatBooleanAsNumber": false
+                        },
+                        "columnFlattenSettings": {
+                          "treatArrayAsString": false,
+                          "treatStructAsString": false,
+                          "flattenColumnDelimiter": "."
+                        }
+                      },
+                      "enableStaging": false
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Create Dummy File",
+                    "description": "Creates dummy file to indicate that new file was ingested to curated. This is a signal for upstream workflow to trigger data product run.",
+                    "dependsOn": [
+                      {
+                        "activity": "Ingest Curated",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "ifFalseActivities": []
+              },
+              "name": "If New Data",
+              "description": "Call Notebook if new data in Raw",
+              "dependsOn": [
+                {
+                  "activity": "Invoke load_database_to_curated_worker",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "ExecutePipeline",
+              "typeProperties": {
+                "pipeline": {
+                  "referenceName": "4d518f39-f1ac-44f7-a6b5-bab9da78a57f",
+                  "type": "PipelineReference"
+                },
+                "parameters": {
+                  "ELT_Id": {
+                    "value": "@pipeline().parameters.ELT_Id",
+                    "type": "Expression"
+                  },
+                  "Feed_Name": {
+                    "value": "@pipeline().parameters.Feed_Name",
+                    "type": "Expression"
+                  },
+                  "Product_Name": {
+                    "value": "@pipeline().parameters.Product_Name",
+                    "type": "Expression"
+                  },
+                  "Elt_Start_Date_Time": {
+                    "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                    "type": "Expression"
+                  },
+                  "lh_metadata_id": {
+                    "value": "@pipeline().parameters.lh_metadata_id",
+                    "type": "Expression"
+                  },
+                  "workspace_id": {
+                    "value": "@pipeline().parameters.workspace_id",
+                    "type": "Expression"
+                  },
+                  "lh_raw_id": {
+                    "value": "@pipeline().parameters.lh_raw_id",
+                    "type": "Expression"
+                  },
+                  "source_config_folder_name": {
+                    "value": "@item().sourceConfigFolderName",
+                    "type": "Expression"
+                  },
+                  "source_config_file_name": {
+                    "value": "@item().fileName",
+                    "type": "Expression"
+                  },
+                  "invocation_id": {
+                    "value": "@pipeline().RunId",
+                    "type": "Expression"
+                  },
+                  "lh_observability_id": {
+                    "value": "@pipeline().parameters.lh_observability_id",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true
+              },
+              "policy": {
+                "secureInput": false
+              },
+              "name": "Invoke load_database_to_curated_worker",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "ForEachDataset",
+        "description": "Loop through the passed parameter Datasets_List array and invoke worker's pipelines",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "31b8565a-de09-4f88-9ebd-092979b0f760",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Start Session",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "Datasets_List": {
+        "type": "array",
+        "defaultValue": [
+          {
+            "fileName": "dbo_wcclaim",
+            "sourceConfigFolderName": "demo_sqldb"
+          }
+        ]
+      },
+      "ELT_Id": {
+        "type": "string",
+        "defaultValue": "60ee9ba3-8f82-418f-ac72-b0cea3c978f4"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "claims_bop"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "BOP"
+      },
+      "Elt_Start_Date_Time": {
+        "type": "string",
+        "defaultValue": "10/23/2024"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "fb48654f-171e-424a-8d53-8220b2da94e1"
+      },
+      "lh_observability_id": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "raw_directory": {
+        "type": "String"
+      },
+      "curated_ingest_json": {
+        "type": "Array"
+      }
+    }
+  }
+}

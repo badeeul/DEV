@@ -1,0 +1,187 @@
+table dim_business_class
+	lineageTag: 1c2ca753-0dbf-41d9-b21c-2d5e540176c4
+	sourceLineageTag: [policy].[dim_business_class]
+
+	column bus_class_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 5d6c61ac-45b6-4aa8-9f8b-70fd76d32ad7
+		sourceLineageTag: bus_class_key
+		summarizeBy: none
+		sourceColumn: bus_class_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_class_cd_bus_key
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 3159e6c0-2829-4dda-ab99-625d30a82e9e
+		sourceLineageTag: bus_class_cd_bus_key
+		summarizeBy: none
+		sourceColumn: bus_class_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_class_suffix_bus_key
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c3768ce4-17e3-4b48-98f8-72ffe30a4865
+		sourceLineageTag: bus_class_suffix_bus_key
+		summarizeBy: none
+		sourceColumn: bus_class_suffix_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_class_src_id_bus_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 42e25c47-ec4a-4ddd-9752-1f7fbc879d42
+		sourceLineageTag: bus_class_src_id_bus_key
+		summarizeBy: sum
+		sourceColumn: bus_class_src_id_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_class_desc
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c4166bd9-9280-40f8-b515-b9aea964c72e
+		sourceLineageTag: bus_class_desc
+		summarizeBy: none
+		sourceColumn: bus_class_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_naics_cd
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: a4c0f0e7-a734-427b-8900-62337e3cd9d4
+		sourceLineageTag: bus_naics_cd
+		summarizeBy: none
+		sourceColumn: bus_naics_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_lob
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 3d2f2018-9f93-4b15-a861-1af2e12e6b6e
+		sourceLineageTag: bus_lob
+		summarizeBy: none
+		sourceColumn: bus_lob
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f6ddece8-50d5-4877-bcc9-24b3e5184291
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2c210f0d-6fb0-4799-95f0-fed57882fd77
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6951b2bf-7f0f-40df-9e20-6be9725c71e4
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 1d6b5916-9581-44fd-9188-8ed0d8d1b2ec
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 6e2c7e41-437c-44a5-837b-2a29f269466c
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 73b46591-293c-4497-b002-2ce4008cca13
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 339bd177-355e-498c-96fe-a1e0a8b9d925
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: a659e37c-b177-43b5-8cb4-0d15da8627f8
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 0ce26567-6137-41b7-9e81-3cfb87e1de99
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: ac8497cb-da30-484d-b642-8d29c126bacb
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_business_class = entity
+		mode: directLake
+		source
+			entityName: dim_business_class
+			schemaName: policy
+			expressionSource: DatabaseQuery
+

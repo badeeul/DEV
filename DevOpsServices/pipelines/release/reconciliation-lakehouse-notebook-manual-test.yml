@@ -1,0 +1,464 @@
+parameters:
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: workspaceId
+  displayName: 'Workspace ID'
+  type: string
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool 
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+stages:
+- stage: reconcile_terraform_state
+  displayName: 'Reconcile Terraform State'
+  jobs:
+  - job: reconciling_terraform_state
+    steps:
+    
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true # Add this to ensure clean checkout
+
+    - template: ../templates/auth-setup.yml
+    - template: ../templates/convert-notebooks.yml
+    - template: ../templates/login-setup.yml
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+
+              # Check if Az modules are already installed
+              $requiredModules = @(
+                  'Az.Accounts' 
+              )
+
+              foreach ($module in $requiredModules) {
+                  if (!(Get-Module -Name $module -ListAvailable)) {
+                      Write-Host "Installing $module..."
+                      Install-PackageProvider -Name NuGet -Force -Scope CurrentUser -ErrorAction SilentlyContinue
+                      Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+                      Install-Module -Name $module -Force -AllowClobber -Scope CurrentUser -Confirm:$false
+                  } else {
+                      Write-Host "$module already installed"
+                  }
+              }
+                
+              # Import only needed modules
+              Import-Module Az.Accounts -DisableNameChecking
+
+              Clear-AzContext -Force
+            
+              Update-AzConfig -LoginExperienceV2 off
+              Update-AzConfig -EnableLoginByWam $false
+
+              $username = '$(SERVICE_ACCOUNT_NAME)'
+              $userPwd = '$(SERVICE_ACCOUNT_SECRET)' | ConvertTo-SecureString -AsPlainText -Force
+              $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $userPwd
+
+              Connect-AzAccount -Tenant $(ARM_TENANT_ID) -Credential $credential -AuthScope 'api://spn-gdap-fabricpview-usercontext'
+
+              $secureFabricToken = (Get-AzAccessToken -ResourceUrl 'https://api.fabric.microsoft.com' -AsSecureString).Token
+
+              $Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureFabricToken) 
+              $fabricToken = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($Ptr)
+              $env:FABRIC_TOKEN = $fabricToken
+              Write-Host "##vso[task.setvariable variable=FABRIC_TOKEN]$fabricToken" 
+
+      displayName: 'Service Account Fabric Token'    
+
+    - task: PowerShell@2
+      name: prepShortcutVars
+      displayName: 'Prepare Lakehouse Shortcut Variables'
+      inputs:
+        targetType: 'inline'
+        script: |
+          try {
+              # Initialize empty array for formatted shortcuts
+              $detailedShortcuts = @()
+              $shortcutGroups = @{}
+            
+              Write-Host "##[debug]Processing shortcut variables from environment..."
+            
+              # Iterate through all environment variables
+              foreach ($item in (Get-Item env:*)) {
+                  # Check if it's a shortcut variable (starts with 'shortcut.')
+
+                  if ($item.Name.ToLower().StartsWith('shortcut_')) {
+                      $item.Name = $item.Name.ToLower().Replace('shortcut_', 'shortcut.').Replace('_', '.')
+                  }
+                  if ($item.Name -like "shortcut.*") {
+                      Write-Host "##[debug]Found shortcut variable: $($item.Name) = $($item.Value)"
+                    
+                      # Parse the variable name: shortcut.{name}.{property}
+                      $nameParts = $item.Name -split "\."
+                    
+                      # Skip if the format is incorrect
+                      if ($nameParts.Length -ne 3) {
+                          Write-Host "##[warning]Invalid shortcut variable format: $($item.Name). Expected format: shortcut.{name}.{property}"
+                          continue
+                      }
+                    
+                      $shortcutName = $nameParts[1]
+                      $propertyName = $nameParts[2]
+                      $propertyValue = $item.Value
+                    
+                      # Initialize the shortcut object if it doesn't exist
+                      if (-not $shortcutGroups.ContainsKey($shortcutName)) {
+                          $shortcutGroups[$shortcutName] = @{}
+                      }
+                    
+                      # Add the property to the shortcut
+                      $shortcutGroups[$shortcutName][$propertyName] = $propertyValue
+                  }
+              }
+            
+              # Transform the grouped shortcuts into an array of objects
+              foreach ($name in $shortcutGroups.Keys) {
+                  $properties = $shortcutGroups[$name]
+                
+                  # Only add shortcuts that have both required properties
+                  if ($properties.ContainsKey("lakehouse") -and $properties.ContainsKey("workspace")) {
+                      $detailedShortcuts += [PSCustomObject]@{
+                          name = $name
+                          lakehouse = $properties["lakehouse"]
+                          workspace = $properties["workspace"]
+                      }
+                    
+                      Write-Host "##[debug]Added shortcut: $name (Lakehouse: $($properties["lakehouse"]), Workspace: $($properties["workspace"]))"
+                  }
+                  else {
+                      Write-Host "##[warning]Shortcut $name is missing required properties (lakehouse and/or workspace)"
+                  }
+              }
+            
+              # Check if any valid shortcuts were found
+              if ($detailedShortcuts.Count -eq 0) {
+                  Write-Host "##[warning]No valid shortcut variables found with both lakehouse and workspace properties"
+              } else {
+                  Write-Host "##[debug]Processed $($detailedShortcuts.Count) valid shortcut definitions"              
+
+                  # Convert to JSON
+                  $detailedShortcutsJson = $detailedShortcuts | ConvertTo-Json -Depth 5 -Compress
+                
+                  if ($detailedShortcuts.Count -eq 1) {
+                    # prepend and append brackets to make it a JSON array
+                    $detailedShortcutsJson = "[$detailedShortcutsJson]"
+                  }
+                    
+                  # Log the JSON for debugging
+                  Write-Host "##[debug]Detailed Shortcuts JSON: $detailedShortcutsJson"
+                
+                  # Set as pipeline variable
+                  Write-Host "##vso[task.setvariable variable=FABRIC_SHORTCUTS_DETAILED]$detailedShortcutsJson"
+              }
+          } catch {
+              Write-Error "Error processing shortcut variables: $_"
+              Write-Error $_.ScriptStackTrace
+              exit 1
+          }
+
+    - task: PowerShell@2
+      name: prepPrivateEndpointsVars
+      displayName: 'Prepare Private Endpoints Variables (PEP)'
+      inputs:
+        targetType: 'inline'
+        script: |
+          try {
+              # Initialize empty array for formatted PEP
+              $detailedPEPs = @()
+              $PEPGroups = @{}
+            
+              Write-Host "##[debug]Processing PEP variables from environment..."
+            
+              # Iterate through all environment variables
+              foreach ($item in (Get-Item env:*)) {
+                  # Check if it's a pep variable (starts with 'pep.')
+
+                  if ($item.Name.ToLower().StartsWith('pep_')) {
+                      $item.Name = $item.Name.ToLower().Replace('pep_', 'pep.').Replace('_', '.')
+                  }
+                  if ($item.Name -like "pep.*") {
+                      Write-Host "##[debug]Found PEP variable: $($item.Name) = $($item.Value)"
+                    
+                      # Parse the variable name: pep.{name}.{property}
+                      $nameParts = $item.Name -split "\."
+                    
+                      # Skip if the format is incorrect
+                      if ($nameParts.Length -ne 3) {
+                          Write-Host "##[warning]Invalid pep variable format: $($item.Name). Expected format: pep.{name}.{property}"
+                          continue
+                      }
+                    
+                      $pepName = $nameParts[1]
+                      $propertyName = $nameParts[2]
+                      $propertyValue = $item.Value
+                    
+                      # Initialize the PEP object if it doesn't exist
+                      if (-not $PEPGroups.ContainsKey($pepName)) {
+                          $PEPGroups[$pepName] = @{}
+                      }
+                    
+                      # Add the property to the PEP
+                      $PEPGroups[$pepName][$propertyName] = $propertyValue
+                  }
+              }
+            
+              # Transform the grouped PEPs into an array of objects
+              foreach ($name in $PEPGroups.Keys) {
+                  $properties = $PEPGroups[$name]
+
+                  $detailedPEPs += [PSCustomObject]@{
+                        allowed = $properties["allowed"]
+                        resourceId = $properties["resourceId"]
+                        subresourceType = $properties["subresourceType"]
+                    }
+                  
+                  Write-Host "##[debug]Added PEP: $name (Allowed: $($properties["allowed"]), resourceId: $($properties["resourceId"]), subresourceType: $($properties["subresourceType"]))"
+              }
+            
+              # Check if any valid PEP were found
+              if ($detailedPEPs.Count -eq 0) {
+                  Write-Host "##[warning]No valid PEP variables found with both allowed and resourceId properties"
+              } else {
+                  Write-Host "##[debug]Processed $($detailedPEPs.Count) valid PEP definitions"              
+
+                  # Convert to JSON
+                  $detailedPEPJson = $detailedPEPs | ConvertTo-Json -Depth 5 -Compress
+                
+                  if ($detailedPEPs.Count -eq 1) {
+                    # prepend and append brackets to make it a JSON array
+                    $detailedPEPJson = "[$detailedPEPJson]"
+                  }
+                    
+                  # Log the JSON for debugging
+                  Write-Host "##[debug]Detailed PEPs JSON: $detailedPEPJson"
+                
+                  # Set as pipeline variable
+                  Write-Host "##vso[task.setvariable variable=FABRIC_PEP_DETAILED]$detailedPEPJson"
+              }
+          } catch {
+              Write-Error "Error processing PEP variables: $_"
+              Write-Error $_.ScriptStackTrace
+              exit 1
+          }
+
+    - task: PowerShell@2
+      name: terrformDriftLakehouseImport
+      displayName: 'Terraform State Drift - Import Lakehouse'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Set ErrorActionPreference to Stop so any errors will halt execution
+          $ErrorActionPreference = "Stop"
+        
+          try {
+              $admin_group_principal_ids = $env:TF_VAR_admin_group_principal_ids
+              $admin_sp_principal_ids = $env:TF_VAR_admin_sp_principal_ids
+              $contributor_group_principal_ids = $env:TF_VAR_contributor_group_principal_ids
+              $admin_user_principal_ids = $env:TF_VAR_admin_user_principal_ids
+              $workspace_names = $env:TF_VAR_workspace_names
+              $parent_domain_name = "$(PARENT_DOMAIN_NAME)"
+              $child_domain_name = "$(CHILD_DOMAIN_NAME)"
+          
+              Write-Host "workspace_names: $workspace_names"
+              Write-Host "##vso[task.setvariable variable=PARENT_DOMAIN_NAME]$parent_domain_name"
+              Write-Host "##vso[task.setvariable variable=CHILD_DOMAIN_NAME]$child_domain_name"
+            
+              # if empty array, leave as is no substitution needed
+              if ($admin_group_principal_ids -ne '[]') {
+                $admin_group_principal_ids = $admin_group_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+              }
+            
+              if ($contributor_group_principal_ids -ne '[]') {
+                $contributor_group_principal_ids = $contributor_group_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+              }
+            
+              write-host "##vso[task.setvariable variable=ADMIN_GROUP_PRINCIPAL_IDS]$admin_group_principal_ids"
+            
+              $admin_sp_principal_ids = $admin_sp_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+            
+              $admin_user_principal_ids = $admin_user_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+            
+              $workspace_names = $workspace_names.Replace('[', '["').Replace(']', '"]').Replace(',', '","') -replace '"\s+', '"'
+            
+              Write-Host "Admin Group Principal IDs: $admin_group_principal_ids"
+              Write-Host "Admin SP Principal IDs: $admin_sp_principal_ids"
+              Write-Host "Workspace Names: $workspace_names"
+          
+              $default_spark_environment_name = if ([string]::IsNullOrEmpty($env:TF_VAR_default_spark_environment_name)) {
+                "null"
+              } else {
+                "$env:TF_VAR_default_spark_environment_name"
+              }
+            
+              $default_spark_runtime = $env:TF_VAR_default_spark_runtime
+              $shortcuts = $env:FABRIC_SHORTCUTS_DETAILED -replace '"', '\"'
+              $peps = $env:FABRIC_PEP_DETAILED -replace '"', '\"'
+              $environment = $env:TF_VAR_environment
+              $keyvault_name = $env:TF_VAR_keyvault_name
+              $capacity_id = $env:TF_VAR_capacity_id
+            
+              # Create tfvars content - Use PowerShell variables instead of env variables in here-string
+              @"
+                admin_group_principal_ids = $admin_group_principal_ids
+                admin_sp_principal_ids = $admin_sp_principal_ids
+                contributor_group_principal_ids = $contributor_group_principal_ids
+                admin_user_principal_ids = $admin_user_principal_ids
+                environment = "$environment"
+                keyvault_name = "$keyvault_name"
+                workspace_names = $workspace_names
+                capacity_id = "$capacity_id"
+                default_spark_environment_name = "$default_spark_environment_name"
+                parent_domain_name = "$parent_domain_name"
+                child_domain_name = "$child_domain_name"        
+                shortcuts = "$shortcuts"
+                peps = "$peps"
+                default_spark_runtime = "$default_spark_runtime"
+          "@ | Out-File -FilePath "terraform.tfvars" -Encoding UTF8
+          
+              # Show tfvars content for debugging
+              Write-Host "`nCreated terraform.tfvars content:"
+              Get-Content "terraform.tfvars"
+
+              terraform import -var-file="terraform.tfvars" `
+                "module.environment.fabric_environment.this[\`"PlatformServices-Sandbox\`"]" `
+                "166c83ed-b130-4e7a-a7b2-e10906687223/1bc1d606-5dc6-437f-ba3b-5f0a2f1b05d8"
+
+              terraform import -var-file="terraform.tfvars" `
+                "module.lakehouse_names.fabric_lakehouse.this[\`"PlatformServices-Sandbox-den_lhw_dpr_001_data_product_tables\`"]" `
+                "166c83ed-b130-4e7a-a7b2-e10906687223/c37d0142-4762-4192-b3ad-cd7205834fcd"
+
+              terraform import -var-file="terraform.tfvars" `
+                "module.lakehouse_names.fabric_lakehouse.this[\`"PlatformServices-Sandbox-den_lhw_pdi_001_curated\`"]" `
+                "166c83ed-b130-4e7a-a7b2-e10906687223/41993883-1f1b-4bff-aff4-00efeca5bdd5"
+
+              terraform import -var-file="terraform.tfvars" `
+                "module.lakehouse_names.fabric_lakehouse.this[\`"PlatformServices-Sandbox-den_lhw_pdi_001_metadata\`"]" `
+                "166c83ed-b130-4e7a-a7b2-e10906687223/c531b7a3-570e-49ff-8c9b-6ba571fb7bf3"
+
+              terraform import -var-file="terraform.tfvars" `
+                "module.lakehouse_names.fabric_lakehouse.this[\`"PlatformServices-Sandbox-den_lhw_pdi_001_observability\`"]" `
+                "166c83ed-b130-4e7a-a7b2-e10906687223/980d46ce-807e-4698-a5a0-84a9589477e1"
+              # terraform import -var-file="terraform.tfvars" 
+
+              # omit this section
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_start_hc_session.Notebook\`"]" 
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pde_002_load_data_product.Notebook\`"]"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdq_001_dq_template_conversion.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/8521899632825433296"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_process_alerting_events.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/6160972481768629114"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdq_001_write_dq_rules.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/4933524113298200682"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pde_001_load_data_product.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/1964595314815503668"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_extract_source.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/577850960633250448"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_workspace_parameters.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/2124908109005714343"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_initiate_logging.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/653810770233468959"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_generate_watermarks.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/8360544376020125457"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_cicd_generate_watermarks.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/3438785228222763479"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_ingest_curated.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/7326994089065858609"
+              # terraform import -var-file="terraform.tfvars" `
+              #   "module.notebooks.null_resource.create_notebooks[\`"PlatformServices-Sandbox-den_nbk_pdi_001_process_logs.Notebook\`"] "166c83ed-b130-4e7a-a7b2-e10906687223/7245783835594872741"
+              
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_start_hc_session.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/ac2e6b33-6fb5-44ed-9992-909cb291184c"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pde_002_load_data_product.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/79fe8376-34eb-493d-9a57-f589913c9ae2"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdq_001_dq_template_conversion.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/d4f102b1-d339-4854-a497-09528cf233af"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_process_alerting_events.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/9c45320b-0e5d-449d-a129-3252a4465849"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdq_001_write_dq_rules.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/fbde92e3-7696-4ee4-be4c-97d3a01a19b1"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pde_001_load_data_product.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/54be1dbb-27ee-4f95-88a5-d156fd04369c"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_extract_source.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/8f0910fb-c850-40fd-a713-29c8b9a23eec"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_workspace_parameters.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/c1f36dbc-af71-48c0-9ac9-56730ec6cdd1"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_initiate_logging.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/8a22e201-ed26-4f43-b505-926d54400293"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_generate_watermarks.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/455f08c5-fb0a-4d5c-99d3-cb07304d66cb"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_cicd_generate_watermarks.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/63724b48-83c7-4c5e-a181-815d28020649"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_ingest_curated.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/449d5946-50b1-4c54-b99a-588f4766a538"
+              terraform import -var-file="terraform.tfvars" `
+                "module.notebooks.fabric_notebook.this[\`"PlatformServices-Sandbox-den_nbk_pdi_001_process_logs.Notebook\`"]" "166c83ed-b130-4e7a-a7b2-e10906687223/d2c54afa-d183-4e17-9fd0-12a617b95ec0"
+
+              terraform refresh
+
+          } catch {
+              Write-Error "Error processing PEP variables: $_"
+              Write-Error $_.ScriptStackTrace
+              exit 1
+          }
+        workingDirectory: $(System.DefaultWorkingDirectory)/DevOpsServices/terraform/PlatformServices
+
+    # - task: PowerShell@2
+    #   continueOnError: true
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       $env:TF_VAR_environment = '$(ENVIRONMENT)'
+    #       $env:TF_VAR_workspace_names = '$(WORKSPACE_NAMES)'
+    #       $env:TF_VAR_capacity_id = '$(CAPACITY_ID)'
+    #       $env:TF_VAR_admin_group_principal_ids = '$(ADMIN_GROUP_PRINCIPAL_IDS)'
+    #       $env:TF_VAR_admin_sp_principal_ids = '$(ADMIN_SP_PRINCIPAL_IDS)'
+    #       $env:TF_VAR_admin_user_principal_ids = '$(ADMIN_USER_PRINCIPAL_IDS)'
+    #       $env:TF_VAR_contributor_group_principal_ids = '$(CONTRIBUTOR_GROUP_PRINCIPAL_IDS)'
+    #       $env:TF_VAR_keyvault_name = '$(KEYVAULT_NAME)'
+    #       $env:TF_VAR_default_spark_environment_name = '$(DEFAULT_SPARK_ENVIRONMENT_NAME)'
+    #       $env:TF_VAR_default_spark_runtime = '$(DEFAULT_SPARK_RUNTIME)'
+
+    #       terraform import `
+    #         "module.lakehouse_names.fabric_lakehouse.this[\`"PlatformServices-Sandbox-den_lhw_dpr_001_data_product_tables\`"]" `
+    #         "c37d0142-4762-4192-b3ad-cd7205834fcd"
+        
+    #       if ($LASTEXITCODE -eq 0) {
+    #         Write-Host "##[section]✅ Lakehouse import successful"
+    #       } else {
+    #         Write-Host "##[warning]⚠️ Import failed with exit code: $LASTEXITCODE"
+    #       }          
+    #     workingDirectory: $(System.DefaultWorkingDirectory)/DevOpsServices/terraform/PlatformServices
+    #   displayName: 'Terraform Import Lakehouse with Variables'
+    # - task: PowerShell@2
+    #   name: TerraformStateDrift
+    #   displayName: 'Fixing Terraform State Drift'
+    #   inputs:
+    #     targetType: 'filePath'
+    #     filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Reconcile-LakehouseNotebooks.ps1'
+    #     workingDirectory: $(System.DefaultWorkingDirectory)/DevOpsServices/terraform/PlatformServices
+    #     arguments: >
+    #       -WorkspaceId "${{ parameters.workspaceId }}"
+    #       -Environment "$(ENVIRONMENT)"
+
+    #   env:
+    #     ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    #     ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    #     ARM_TENANT_ID: $(ARM_TENANT_ID)
+    #     FABRIC_TOKEN: $env:FABRIC_TOKEN
+    #     PARENT_DOMAIN_NAME: $env:PARENT_DOMAIN_NAME
+    #     CHILD_DOMAIN_NAME: $env:CHILD_DOMAIN_NAME

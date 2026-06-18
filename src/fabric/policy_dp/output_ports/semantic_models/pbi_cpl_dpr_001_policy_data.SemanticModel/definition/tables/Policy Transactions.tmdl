@@ -1,0 +1,584 @@
+table 'Policy Transactions'
+	lineageTag: 838ba707-3378-4704-bc76-41d94f5d2f26
+	sourceLineageTag: [policy].[fact_policy_transaction]
+
+	column policy_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f9461c5b-82a4-4d4d-8aa3-064a549811d5
+		sourceLineageTag: policy_key
+		summarizeBy: none
+		sourceColumn: policy_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_start_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8e29bbbe-4d57-45b1-91ac-bd6b5a2fcee2
+		sourceLineageTag: policy_effec_start_dt_key
+		summarizeBy: none
+		sourceColumn: policy_effec_start_dt_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_end_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9f8e9b64-aefe-4fb2-8402-abe784828064
+		sourceLineageTag: policy_effec_end_dt_key
+		summarizeBy: none
+		sourceColumn: policy_effec_end_dt_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column lob_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 43d1ca11-182a-4a79-9740-f6eab102d907
+		sourceLineageTag: lob_key
+		summarizeBy: none
+		sourceColumn: lob_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: eaafe8e9-235c-4062-b90c-44f8c22e62ab
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 0ce3851f-53d5-4414-acba-378b9b6f4e07
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: d3a1a79e-ba94-4dd1-be09-626fa154a570
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8a93dbef-491c-4881-9fc8-b61ab34dab6e
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: d4b1cdc0-6ff3-4dd6-8ddf-fbd83eacb0a2
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 04e5a019-561c-4c76-86cd-08c3549d8c24
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 778b6a62-713b-48ba-b70f-7be0ae5c4d3e
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 09f2cef7-c72f-4755-9358-d7696290fc31
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 769121d9-1a9f-409c-98c2-c1512eaa5a01
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3a145e1a-8da4-40da-995c-c8bac1a6cab2
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// SF5 Amount, State Fee 5
+	column 'State Fee 5'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c0ac41f4-3e76-4e1e-a5d0-16c604f07283
+		sourceLineageTag: sf5_amt
+		summarizeBy: sum
+		sourceColumn: sf5_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// SF6 Amount, State Fee 6
+	column 'State Fee 6'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b890d681-3271-4c15-b5a6-e7d9ef35b7bc
+		sourceLineageTag: sf6_amt
+		summarizeBy: sum
+		sourceColumn: sf6_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// SF7 Amount, State Fee 7
+	column 'State Fee 7'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 04e5bfdc-2bf5-4dfc-ae7e-a01192e48158
+		sourceLineageTag: sf7_amt
+		summarizeBy: sum
+		sourceColumn: sf7_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// Commission Amount
+	column 'Commission Amount'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3703c73c-30ec-4719-9f15-f3e179697c77
+		sourceLineageTag: comm_amt
+		summarizeBy: sum
+		sourceColumn: comm_amt
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// Premium Amount Excl Comm, Premium excluded from commission
+	column 'Premium Excl from Commission'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 8a005ef9-2495-4236-b678-ab29a0537e95
+		sourceLineageTag: non_comm_prem_amt
+		summarizeBy: sum
+		sourceColumn: non_comm_prem_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// Premium Amount, Direct Written Premium
+	column 'Direct Written Premium'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 9647d33a-f3b9-449f-b06d-b50d1880660d
+		sourceLineageTag: prem_amt
+		summarizeBy: sum
+		sourceColumn: prem_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// Trans Written On Date
+	column policy_trans_written_on_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 873c7fe8-f5fc-43bc-8242-07d4032bc6d3
+		sourceLineageTag: policy_trans_written_on_dt_key
+		summarizeBy: none
+		sourceColumn: policy_trans_written_on_dt_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	/// FSA Amount, Fresh Start Fee
+	column 'Fresh Start Fee'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: f2407582-22c9-4d22-9491-aff3441bc04c
+		sourceLineageTag: fsa_amt
+		summarizeBy: sum
+		sourceColumn: fsa_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// PAA Amount, Policy Assessment Fee
+	column 'Policy Assessment Fee'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c9f3c123-2a6d-4c26-b478-6565c41667be
+		sourceLineageTag: paa_amt
+		summarizeBy: sum
+		sourceColumn: paa_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// SF3 Amount, State Fee 3
+	column 'State Fee 3'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 32218e98-ee54-42bc-8b55-f2e6d135922d
+		sourceLineageTag: sf3_amt
+		summarizeBy: sum
+		sourceColumn: sf3_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// SF4 Amount, State Fee 4
+	column 'State Fee 4'
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 1d27a6d3-152a-44c5-b28c-1b3e54626ea0
+		sourceLineageTag: sf4_amt
+		summarizeBy: sum
+		sourceColumn: sf4_amt
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column carrier_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1cc63736-8f33-4348-80f5-d8e2f7dc72e1
+		sourceLineageTag: carrier_key
+		summarizeBy: none
+		sourceColumn: carrier_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_trans_type_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4783e756-0ab6-4082-8311-b96e1329fa14
+		sourceLineageTag: policy_trans_type_key
+		summarizeBy: none
+		sourceColumn: policy_trans_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_trans_effec_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5a3511f9-3855-4699-a922-9dcf7151d730
+		sourceLineageTag: policy_trans_effec_dt_key
+		summarizeBy: none
+		sourceColumn: policy_trans_effec_dt_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column policy_trans_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 74b98c14-960d-4964-b2b4-96f1ed44ce72
+		sourceLineageTag: policy_trans_dt_key
+		summarizeBy: none
+		sourceColumn: policy_trans_dt_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Policy Trans Sequence
+	column 'Policy Trans Sequence'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9c9d7c79-2bd9-41e5-ab3a-072edb70dd0e
+		sourceLineageTag: policy_trans_seq_num
+		summarizeBy: none
+		sourceColumn: policy_trans_seq_num
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column src_trans_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d5fc5072-9b74-4628-bd47-8756fa5ab4ba
+		sourceLineageTag: src_trans_id
+		summarizeBy: none
+		sourceColumn: src_trans_id
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column dist_chnl_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6522b440-81de-4a51-9ae9-5b8cc660c157
+		sourceLineageTag: dist_chnl_key
+		summarizeBy: none
+		sourceColumn: dist_chnl_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column insd_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 596d0006-9880-4948-8492-96bfe6651f7d
+		sourceLineageTag: insd_key
+		summarizeBy: none
+		sourceColumn: insd_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9d243c02-fbdc-4c1a-a8d6-4d87622a3e2c
+		sourceLineageTag: naics_key
+		summarizeBy: none
+		sourceColumn: naics_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dec_uw_emp_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 96e38f9e-8bd5-48ce-81cb-f466ca8367a3
+		sourceLineageTag: dec_uw_emp_key
+		summarizeBy: none
+		sourceColumn: dec_uw_emp_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column mkt_type_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1e5ba0d7-eb2c-4b6d-9576-36b49021e67c
+		sourceLineageTag: mkt_type_key
+		summarizeBy: none
+		sourceColumn: mkt_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column prod_src_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2945ce74-7fb5-4d76-a9c1-ca124eca1dfa
+		sourceLineageTag: prod_src_key
+		summarizeBy: none
+		sourceColumn: prod_src_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_coverage_start_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c51fa93b-61be-4510-a317-614a56e8a2f0
+		sourceLineageTag: policy_coverage_start_dt_key
+		summarizeBy: none
+		sourceColumn: policy_coverage_start_dt_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column policy_coverage_end_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a37e7b39-b196-4c2e-9305-d102b0569e4f
+		sourceLineageTag: policy_coverage_end_dt_key
+		summarizeBy: none
+		sourceColumn: policy_coverage_end_dt_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column src_trans_id_type
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 93b6bd4c-e3cd-4b9b-8f39-40c997dc7691
+		sourceLineageTag: src_trans_id_type
+		summarizeBy: none
+		sourceColumn: src_trans_id_type
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column gov_bus_class_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7597d808-e8dd-4d75-9c20-51c6c714b7d0
+		sourceLineageTag: gov_bus_class_key
+		summarizeBy: none
+		sourceColumn: gov_bus_class_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column lob_product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 78ceb5e9-6f0d-4464-ac09-128606223805
+		sourceLineageTag: lob_product_key
+		summarizeBy: none
+		sourceColumn: lob_product_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	/// Policy Transaction State
+	column 'Policy Transaction State'
+		dataType: string
+		lineageTag: 5960fe77-7669-4842-8b3e-ad4c6359784f
+		sourceLineageTag: policy_trans_state
+		summarizeBy: none
+		sourceColumn: policy_trans_state
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_policy_transaction = entity
+		mode: directLake
+		source
+			entityName: fact_policy_transaction
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

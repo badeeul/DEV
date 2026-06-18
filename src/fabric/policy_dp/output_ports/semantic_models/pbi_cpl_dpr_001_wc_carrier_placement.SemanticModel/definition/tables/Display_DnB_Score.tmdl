@@ -1,0 +1,48 @@
+table Display_DnB_Score
+	lineageTag: 9989d92c-8413-4e0f-9a65-3e5d62421fba
+
+	column dnb_score_segement_bus_key
+		lineageTag: 6f438963-a3a9-4256-b150-f37f2bddb439
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [dnb_score_segement_bus_key]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DnB_Score_Display
+		lineageTag: 78e4a5b1-b20d-4612-b793-175aa81669f4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DnB_Score_Display]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: d9a12c20-5d3c-4e78-9df5-a9023ae9968d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Display_DnB_Score = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "dnb_score_segement_bus_key", STRING,
+				    "DnB_Score_Display", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"0 - 249", "0 - 249", 1}, 
+				        {"250 - 299", "250 - 299", 2}, 
+				        {"300 - 999", "300 - 999", 3}, 
+				        {"not applicable", "N/A", 4}
+				    }
+				)
+				```
+
+	annotation PBI_Id = 8249d86ef0064e618ac2cc6511187917
+

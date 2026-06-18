@@ -1,0 +1,151 @@
+table 'Insured Legal Entity Type'
+	lineageTag: 93137ac9-3c02-449d-94f7-f091396a5006
+	sourceLineageTag: [policy].[dim_insured_legal_entity_type]
+
+	column insd_leg_ent_type_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 706016df-e3e9-4c7c-9c29-18d2af4fd5ef
+		sourceLineageTag: insd_leg_ent_type_key
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Legal Entity Type Code
+	column 'Insured Legal Entity Type Code'
+		dataType: string
+		lineageTag: 66d97530-a9a9-4e95-b2c8-fd67843e8e98
+		sourceLineageTag: insd_leg_ent_type_cd_bus_key
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_cd_bus_key
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Legal Entity Type Desc
+	column 'Insured Legal Entity Type Desc'
+		dataType: string
+		lineageTag: ed741a98-d03e-4646-965a-f167b38af4cc
+		sourceLineageTag: insd_leg_ent_type_desc
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_desc
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: c85fb503-9d44-474d-b17d-19020dd83d3a
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 81aa56e3-c2cd-47d5-8582-6a5e9e391091
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: ef42df7d-e7a2-4f3e-90fb-f16afcd25648
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 581f2603-684c-4173-bcfe-a7b63904c579
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 0c4397bc-c4d4-4bd3-aa85-46dd9451cec0
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 002ea499-eb29-41bb-b655-f0d1d58ffc7a
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 848032cb-9883-4313-9937-b4f055394ee6
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f6a8b5fc-4af0-4ca3-b991-c11114be55be
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 1928f488-cb86-411e-9785-444d60a328ed
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c81acd96-5ddb-488d-9e72-ff82380c3158
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_insured_legal_entity_type = entity
+		mode: directLake
+		source
+			entityName: dim_insured_legal_entity_type
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

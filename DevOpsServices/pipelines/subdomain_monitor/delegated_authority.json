@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-DelegatedAuthority-MTR",
+    "targetWorkspaceName": "Distribution-DelegatedAuthority-MTR",
+    "targetSuperDomain": "Distribution",
+    "targetSubDomain": "Delegated Authority",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "8EC86993-48EC-4FE7-B905-A74A0A192064",  
+    "keyvaultName": "bhg-prod-delauth-eus-kv",      
+    "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd,082ab9b1-0667-4a22-bd85-7bc14cc0e89d",
+    "contributorGroupPrincipalIds": "1badf6be-0ad4-48a0-8313-4a077a63f725"
+}

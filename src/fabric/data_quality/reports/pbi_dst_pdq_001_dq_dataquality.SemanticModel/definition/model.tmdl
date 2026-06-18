@@ -1,0 +1,34 @@
+model Model
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	directLakeBehavior: directLakeOnly
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DatabaseQuery"]
+
+annotation __PBIService_Versioning_SaveVersion = 912a2d4c-574c-4afb-af22-b4c194122e42
+
+annotation PBI_ProTooling = ["WebModelingEdit","RemoteModeling"]
+
+annotation __TEdtr = 1
+
+annotation __BNorm = 1
+
+ref table 'Date - Error Event'
+ref table 'Error Events'
+ref table 'Error Event Details'
+ref table 'ELT Log'
+ref table 'ELT Zone Log'
+ref table 'Quarantine Log'
+ref table Metrics
+ref table 'Source Ingestion Log'
+ref table 'Rule Master'
+
+ref cultureInfo en-US
+

@@ -1,0 +1,75 @@
+# there are three sections to the transformation config
+# 1. target (required) - define the target table.
+# 2. source (optional) - define the source tables. This is the only way to interact with tables in a lakehouse.
+# 3. query (required) - define the query where transformations occur. Use Spark SQL to create the dataset that will be written to the target table.
+
+target:
+  lakehouse: lakehouse # required
+  schema: schema # required
+  table: table # required
+  # load_strategy 
+  # available types:
+  # type_two - merges incoming records to the target table based on the key_columns defined. Matched records are expired and a new version is inserted.
+  # merge - merges incoming records to the target table based on the key_columns defined. Matched records are updated with the latest values
+  # overwrite - the incoming dataset will overwrite the target table
+  # append - the incoming dataset will be appended to the target table
+  # overwrite_by_key - the incoming records will be matched with the target table based on the key_columns. Any matches will be deleted from the target table and new records will be inserted.
+  load_strategy: merge
+  # key_columns - optional
+  # list of columns in target table
+  # required when using the type_two, merge, and overwrite_by_key load_strategy
+  key_columns:
+    - one
+    - two
+  # unknown_record - optional
+  # True, False (default)
+  # adds -1 unknown, and -2 not available records to the target table when writing
+  # useful for dimensions
+  # works for type_two and merge load_strategy
+  unknown_record: False
+  # identity - optional
+  # True, False (default)
+  # adds an incremental column to the target table by using the max + row_number
+  # Fabric Delta version doesn't support auto identity columns so this option was developed
+  # works for type_two, merge, overwrite_by_key, and overwrite load_strategy
+  identity: False
+  # identity_column_name - optional
+  # allows for naming the identity column instead of using the default.
+  identity_column_name: table_key
+  # partition_by - optional
+  # list of columns in target table
+  partition_by:
+    - three
+  # pii_columns - optional
+  # list of columns in target table
+  # if pii_columns are defined then they will be redacted in the target table and a secondary target table using the "_pii" suffix will be created with the values exposed.
+  # string values will become [REDACTED]
+  # date values will become 1900-1-1
+  # numeric values will become 0
+  pii_columns: # optional
+    - four
+  # quarantine_strategy - optional - defaults to merge
+  # available types: merge, append, overwrite
+  # give the ability to switch the way records are loaded to the quarantine table
+  quarantine_strategy: merge
+
+# Sources are tables that exist in a lakehouse and need to be references by a query. 
+# Sources are optional if the query doesn't need any such as a date table based on relative time.
+source:
+  - name: source_name # name of the source for it to be references by queries below
+    lakehouse: lakehouse
+    schema: schema
+    table: table
+    incremental: False # filters the source table where last modified >= last time the yaml was successfully executed based on source_ingestion_log
+
+# At least one query is required and the last query defined below will be written to the target table.
+# only sources defined in the sources section and named queries defined can be referenced in the select statement of the SQL
+# Do not use sql in-line comments. Use yaml comments if needed
+query:
+  - name: query_name # name of the query for it to be referenced by subsequent queries
+    sql: select col
+         from source_name
+    drop: # optional - drops columns from the query dataframe
+      - col
+    cache: True # optional - caches the query. If cache_type is not specified then the spark default is used.
+    cache_type: MEMORY_ONLY # optional - choose the storage levels for the query cache.

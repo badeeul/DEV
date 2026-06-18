@@ -1,0 +1,302 @@
+table Insured
+	lineageTag: 0269ee43-d271-4886-9841-371b87b67293
+	sourceLineageTag: [policy].[dim_insured]
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a79bfd90-4352-447c-9f45-a8cca81819ca
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bbf669f7-5cf1-4b69-a865-e39643768c81
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 044bf28d-d9ea-4541-98f8-459d99651ae7
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 77e897cf-0954-47a9-8c82-b32a91b1f285
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 737d2d7c-84e1-4f35-bd0c-0b5eebf4d907
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured CRM ID, Customer ID, Customer Number
+	column 'Customer ID'
+		dataType: string
+		lineageTag: d09ce183-455f-4ee4-a3fd-e151bfe8a392
+		sourceLineageTag: crmid
+		summarizeBy: none
+		sourceColumn: crmid
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: b6225cad-21e0-4d0c-85d6-296d560201d9
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 099d45b1-b292-43ea-a797-2a279723f3f8
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: cf4e8dd6-8602-4edf-85c3-f252dd312e96
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: a63547df-24a8-412d-8837-725474aacef4
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 08248a88-51e1-4cbe-822a-e0e5f82b43bf
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Mailing Location
+	/// State
+	column 'Mailing State'
+		dataType: string
+		lineageTag: b46cec12-81b0-4161-bec1-91840dbe3f43
+		sourceLineageTag: mail_state
+		summarizeBy: none
+		sourceColumn: mail_state
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Mailing Location ZIP Code
+	column 'Mailing ZIP Code'
+		dataType: string
+		lineageTag: 5b8b9dd6-755e-48ca-a7d4-62d2db573b81
+		sourceLineageTag: mail_zip
+		summarizeBy: none
+		sourceColumn: mail_zip
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Name
+	column 'Insured Name'
+		dataType: string
+		isHidden
+		lineageTag: b66db4ce-a1b9-4b51-a9ba-32a0b1ced5df
+		sourceLineageTag: insd_nm
+		summarizeBy: none
+		sourceColumn: insd_nm
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_ent_type_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5701cb93-3fbd-44a8-83d8-b53507c1fed3
+		sourceLineageTag: legal_ent_type_key
+		summarizeBy: none
+		sourceColumn: legal_ent_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Year Insured's Business Started - free text, not validated
+	column 'Year Business Started'
+		dataType: string
+		lineageTag: 894118be-6c4b-43b6-9bd3-1e0ec90d5d5f
+		sourceLineageTag: bus_start_year
+		summarizeBy: none
+		sourceColumn: bus_start_year
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Description of Operations
+	column 'Description of Operations'
+		dataType: string
+		isHidden
+		lineageTag: 3629daa5-d311-4432-ac4d-40963b922d58
+		sourceLineageTag: desc_of_ops
+		summarizeBy: none
+		sourceColumn: desc_of_ops
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column insd_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 58a8cff2-dc4f-4c1f-be3a-cd7eee65bd21
+		sourceLineageTag: insd_key
+		summarizeBy: none
+		sourceColumn: insd_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_num_bus_key
+		dataType: string
+		isHidden
+		lineageTag: ea6a7e00-2901-4b0d-9330-ccb0d5bead82
+		sourceLineageTag: policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Mailing Location Address1
+	column 'Mailing Address1'
+		dataType: string
+		isHidden
+		lineageTag: 312f060c-4c3e-4b27-bfc4-f27e22076e03
+		sourceLineageTag: mail_add1
+		summarizeBy: none
+		sourceColumn: mail_add1
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Mailing Location Address2
+	column 'Mailing Address2'
+		dataType: string
+		isHidden
+		lineageTag: 545f2cd6-f28d-45d8-b017-53c52a0a7471
+		sourceLineageTag: mail_add2
+		summarizeBy: none
+		sourceColumn: mail_add2
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Mailing Location City
+	column 'Mailing City'
+		dataType: string
+		isHidden
+		lineageTag: b9c6bb08-1a41-417b-adad-5925953447a2
+		sourceLineageTag: mail_city
+		summarizeBy: none
+		sourceColumn: mail_city
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Insured Mailing Location County
+	column 'Mailing County'
+		dataType: string
+		lineageTag: 3846fe54-9da1-475b-a72f-8c7509be5e9f
+		sourceLineageTag: mail_county
+		summarizeBy: none
+		sourceColumn: mail_county
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_insured = entity
+		mode: directLake
+		source
+			entityName: dim_insured
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

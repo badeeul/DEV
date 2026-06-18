@@ -1,0 +1,35 @@
+{
+  "fabric_connections": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        [
+          "object",
+          {
+            "displayName": "string",
+            "id": "string"
+          }
+        ]
+      ]
+    ],
+    "value": [
+      {
+        "displayName": "FabricDataPipelines-DevOps - DEV",
+        "id": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+      }
+    ]
+  },
+  "workspace_ids": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {
+        "GDAP-Fluidity-DevOps-Services-Dev": "string"
+      }
+    ],
+    "value": {
+      "GDAP-Fluidity-DevOps-Services-Dev": "c2ba129f-857b-40eb-9b9c-c6e89bb686db"
+    }
+  }
+}

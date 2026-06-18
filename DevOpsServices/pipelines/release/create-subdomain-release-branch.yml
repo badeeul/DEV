@@ -1,0 +1,105 @@
+
+parameters:
+
+- name: variableGroup
+  displayName: 'Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: sendTeamsNotification
+  type: boolean
+  displayName: 'Send Teams Notification'
+  default: false
+  
+- name: daysToLookBack
+  displayName: 'Days to Look Back for Release Notes'
+  type: number
+  default: 8
+
+- name: releaseVersion
+  type: string
+  displayName: 'Release Version i.e release/<subdomain>-<product-name>-<version>'
+
+- name: sourceBranch
+  type: string
+  default: 'main'
+  displayName: 'Source Branch'
+
+- name: organization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Azure DevOps Organization'
+
+- name: project
+  type: string
+  displayName: 'Azure DevOps Project'
+
+- name: repository
+  type: string
+  displayName: 'Repository Name'
+
+trigger: none # Manual trigger only
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+ 
+stages:
+
+- stage: CreateRelease
+  displayName: 'Create Release Branch'
+
+  jobs:
+  - job: create_branch
+    steps:
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+
+    - task: PowerShell@2
+      displayName: 'List All Files and Folders'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Current Directory: $(Get-Location)"
+          Write-Host "`nListing all files and folders:"
+          $currentPath = Get-Location
+          Write-Host "`nUsing path: $currentPath"
+          Get-ChildItem -Path $currentPath -Recurse | Select-Object FullName
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - template: ../templates/auth-setup.yml
+    - task: PowerShell@2
+      name: createBranch
+      inputs:
+        targetType: 'filePath'
+        filePath: '$(Build.SourcesDirectory)/DevOpsServices/pipelines/scripts/Create-SubdomainReleaseBranch.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: >
+          -ReleaseVersion "${{ parameters.releaseVersion }}"
+          -SourceBranch "${{ parameters.sourceBranch }}"
+          -Organization "${{ parameters.organization }}"
+          -Project "${{ parameters.project }}"
+          -Repository "${{ parameters.repository }}"
+          -DaysToLookBack ${{ parameters.daysToLookBack }}
+          -TeamsChannelWebUrl "$(TEAMS_CHANNEL_WEB_URL)"
+          -SendTeamsNotification $${{ parameters.sendTeamsNotification }}            
+      env:
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        TEAMS_CHANNEL_WEB_URL: $(TEAMS_CHANNEL_WEB_URL)
+        TEAMS_NOTIFICATION_USERNAME: $(TEAMS_NOTIFICATION_USERNAME)
+        TEAMS_NOTIFICATION_PASSWORD: $(TEAMS_NOTIFICATION_PASSWORD)
+        TEAMS_CLIENT_ID: $(TEAMS_CLIENT_ID)
+        TEAMS_CLIENT_SECRET: $(TEAMS_CLIENT_SECRET)
+        TEAMS_TAGS: $(TEAMS_TAGS)
+
+    - powershell: |
+        Write-Host "Created release branch: $(createBranch.ReleaseBranchName)"
+      displayName: 'Display Branch Name'

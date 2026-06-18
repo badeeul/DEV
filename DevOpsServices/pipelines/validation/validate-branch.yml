@@ -1,0 +1,19 @@
+jobs:
+- job: validation
+  displayName: 'Validation'
+  steps:
+  - checkout: self
+
+  - task: PowerShell@2
+    displayName:  'Validate Semantic Models'
+    inputs:
+      targetType: 'filePath'
+      filePath: $(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Validate-SemanticModels.ps1
+      workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+
+  - task: PowerShell@2
+    displayName:  'Validate Metadata Folders'
+    inputs:
+      targetType: 'filePath'
+      filePath: $(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Validate-MetadataFolders.ps1
+      workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'

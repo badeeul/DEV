@@ -1,0 +1,1059 @@
+table Date
+	lineageTag: 1ff430a9-2312-481d-9dfc-097faa96af7c
+	sourceLineageTag: [policy].[dim_date]
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1fd1883d-fbe1-4ba1-9264-359045c86898
+		sourceLineageTag: date_key
+		summarizeBy: sum
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Date
+	column Date
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: e2bcef19-448c-4d54-9970-4887a610b6a8
+		sourceLineageTag: date
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = FormatString
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Day
+	column Day
+		dataType: int64
+		formatString: 0
+		lineageTag: b4e57a9f-7d13-43e4-a671-b908694ad901
+		sourceLineageTag: day
+		summarizeBy: none
+		sourceColumn: day
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Day Suffix
+	column 'Day Suffix'
+		dataType: string
+		lineageTag: 1b57225e-a1ae-43a7-8e31-f30c6bc57118
+		sourceLineageTag: day_suffix
+		summarizeBy: none
+		sourceColumn: day_suffix
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Day Name
+	column 'Day Name'
+		dataType: string
+		lineageTag: adee5547-8760-4e32-a7b7-0ffa4bfa1bd0
+		sourceLineageTag: day_name
+		summarizeBy: none
+		sourceColumn: day_name
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Day Of Week
+	column 'Day Of Week'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8751f6f8-4f94-452b-9559-695e1fa5b68e
+		sourceLineageTag: day_of_week
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 31283a72-cb66-4d39-afa1-43a441f4dab1
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4c92977c-3320-4c81-a10d-709f8991a8a1
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e011bf29-eb94-4cc9-9dda-cbb131a1d13d
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f23e2488-96b4-406b-8583-c4c8aa99fa2c
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9814c8c1-6c0d-43b8-a8a1-8f971d8d2377
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6940844f-cbb7-40bd-b99c-83fcad404880
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Year Quarter
+	column 'Prior Year Quarter'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: c6f9000e-cbc4-4f76-9344-a813ed97b909
+		sourceLineageTag: prior_year_quarter
+		summarizeBy: sum
+		sourceColumn: prior_year_quarter
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Trailing 4 Quarter
+	column 'Prior Trailing 4 Quarter'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: e3cddcb0-4a52-4d40-bb9f-87bca49bc5e4
+		sourceLineageTag: prior_trailing_4_quarter
+		summarizeBy: sum
+		sourceColumn: prior_trailing_4_quarter
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		lineageTag: 114c4da4-4a05-4123-8337-60c8af5a1d5e
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		lineageTag: 4cd8a55f-72cb-4bf9-b1a9-df94acd089d4
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		lineageTag: 4c0a942f-4d2e-44b2-9c59-83f93b158629
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		lineageTag: 3c39bd6a-194a-434c-8de1-a26eb0a894ea
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Month Prior YTD
+	column 'Prior Month PYTD'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 91430f4b-3434-45f3-ae8e-6e73d3b926ea
+		sourceLineageTag: prior_month_pytd
+		summarizeBy: sum
+		sourceColumn: prior_month_pytd
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Month Trailing 12 Months
+	column 'Prior Month TTM'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: c59fe594-280c-4842-90d9-ce5e36cc5b33
+		sourceLineageTag: prior_month_ttm
+		summarizeBy: sum
+		sourceColumn: prior_month_ttm
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Inforce Date Year to Date, Inforce Date YTD
+	column 'Inforce Date YTD'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: d350e885-48ba-4ea5-b8a7-6bf8e8acc7f9
+		sourceLineageTag: inforce_date_ytd
+		summarizeBy: sum
+		sourceColumn: inforce_date_ytd
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Inforce Date Prior Year to Date, Inforce Date Prior YTD
+	column 'Inforce Date Prior YTD'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 63f2a23c-1424-4f8d-a9f2-2f5735b77f4b
+		sourceLineageTag: inforce_date_pytd
+		summarizeBy: sum
+		sourceColumn: inforce_date_pytd
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Month Prior Year Trailing 12 Months
+	column 'Prior Month PYTTM'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 963265e8-0ba7-450d-b1cc-52b1733bc3d5
+		sourceLineageTag: prior_month_py_ttm
+		summarizeBy: sum
+		sourceColumn: prior_month_py_ttm
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Current Quarter
+	column 'Current Quarter'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 1aed4873-4009-488b-b8cf-f662bd02846c
+		sourceLineageTag: current_quarter
+		summarizeBy: sum
+		sourceColumn: current_quarter
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = User
+
+	/// Year To Date, YTD
+	column YTD
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 57af62ee-76d5-4ee9-ba32-f686cb093138
+		sourceLineageTag: year_to_date
+		summarizeBy: sum
+		sourceColumn: year_to_date
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Year To Date
+	column 'Prior YTD'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 6fb28fd4-27cf-498c-b377-86ff513d2dfa
+		sourceLineageTag: prior_year_to_date
+		summarizeBy: sum
+		sourceColumn: prior_year_to_date
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Year
+	column 'Prior Year'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 94d75062-7da2-4c66-89d7-ebbe0e489756
+		sourceLineageTag: prior_year
+		summarizeBy: sum
+		sourceColumn: prior_year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior 2 Years
+	column 'Prior 2 Years'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 473a84d4-da97-4865-ba79-be4ebe52d29e
+		sourceLineageTag: prior_2_years
+		summarizeBy: sum
+		sourceColumn: prior_2_years
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// R-12 Months
+	column 'R-12 Months'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2df083e1-083c-49b7-aa8e-31c731fe6ff7
+		sourceLineageTag: trailing_12_months
+		summarizeBy: sum
+		sourceColumn: trailing_12_months
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Prior Month Year to Date
+	column 'Prior Month YTD'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 5dd93d66-6df6-456d-85d3-df575e0fa94c
+		sourceLineageTag: prior_month_ytd
+		summarizeBy: sum
+		sourceColumn: prior_month_ytd
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// ISO week date system defines 7-day week starting on Monday and ending on Sunday. The first week of any year (Week 01) is the one that contains the first Thursday of that year. This ensures every ISO week belongs entirely to one calendar year.
+	column 'Has 53 ISO Weeks'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 25052cb0-49c1-4867-b19d-6e103b422cc8
+		sourceLineageTag: has_53_iso_weeks
+		summarizeBy: sum
+		sourceColumn: has_53_iso_weeks
+
+		changedProperty = IsHidden
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// MMYYYY
+	column MMYYYY
+		dataType: string
+		lineageTag: 78e308ac-bc58-436b-afc8-bdaab540323b
+		sourceLineageTag: mmyyyy
+		summarizeBy: none
+		sourceColumn: mmyyyy
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Style101
+	column Style101
+		dataType: string
+		lineageTag: 47e9cbca-21f4-4745-9ac5-25e023f7ba09
+		sourceLineageTag: style101
+		summarizeBy: none
+		sourceColumn: style101
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Style103
+	column Style103
+		dataType: string
+		lineageTag: 71795e64-58c8-4e3e-bc30-4e19800fc24b
+		sourceLineageTag: style103
+		summarizeBy: none
+		sourceColumn: style103
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Style112
+	column Style112
+		dataType: string
+		lineageTag: 37063450-998f-4736-8d82-6c504fb1e9b3
+		sourceLineageTag: style112
+		summarizeBy: none
+		sourceColumn: style112
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Style120
+	column Style120
+		dataType: string
+		lineageTag: bab09245-fb32-400f-8774-fd84ca576eca
+		sourceLineageTag: style120
+		summarizeBy: none
+		sourceColumn: style120
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Year
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: fdcac247-583c-448c-8633-4ceda9b2f8e9
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// ISO week date system defines 7-day week starting on Monday and ending on Sunday. The first week of any year (Week 01) is the one that contains the first Thursday of that year. This ensures every ISO week belongs entirely to one calendar year.
+	column 'ISO Year'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: c337f961-2079-4c70-ba7b-109da024ce94
+		sourceLineageTag: iso_year
+		summarizeBy: sum
+		sourceColumn: iso_year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First Of Year
+	column 'First Of Year'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 991452dd-f009-4b22-81f4-d81fd735c6d3
+		sourceLineageTag: first_of_year
+		summarizeBy: none
+		sourceColumn: first_of_year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Last Of Year
+	column 'Last Of Year'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 6c67c8f7-56fb-4232-8473-67ee41ae4aca
+		sourceLineageTag: last_of_year
+		summarizeBy: none
+		sourceColumn: last_of_year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Is Leap Year
+	column 'Is Leap Year'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 6b0bee76-5211-4dbc-a3ae-35203a61cb1d
+		sourceLineageTag: is_leap_year
+		summarizeBy: sum
+		sourceColumn: is_leap_year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Has 53 Weeks
+	column 'Has 53 Weeks'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: f95f991e-2316-490b-9792-78f27bc68fdf
+		sourceLineageTag: has_53_weeks
+		summarizeBy: sum
+		sourceColumn: has_53_weeks
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First Of Next Month
+	column 'First Of Next Month'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 61b27465-0b88-4fdf-a297-f9bc2d2f5a05
+		sourceLineageTag: first_of_next_month
+		summarizeBy: none
+		sourceColumn: first_of_next_month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = FormatString
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Last Of Next Month
+	column 'Last Of Next Month'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: c8ada57d-747d-4b95-8e55-8e1529902cf5
+		sourceLineageTag: last_of_next_month
+		summarizeBy: none
+		sourceColumn: last_of_next_month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Quarter
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: c3b299b2-7373-4802-a382-c0fc71519686
+		sourceLineageTag: quarter
+		summarizeBy: none
+		sourceColumn: quarter
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Year-Quarter
+	column Year-Quarter
+		dataType: string
+		lineageTag: 70f4d189-9da7-4adb-81ec-6224bac573da
+		sourceLineageTag: year_quarter
+		summarizeBy: none
+		sourceColumn: year_quarter
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First Of Quarter
+	column 'First Of Quarter'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 0bf47246-b7f5-4460-b461-6250f897eec2
+		sourceLineageTag: first_of_quarter
+		summarizeBy: none
+		sourceColumn: first_of_quarter
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Last Of Quarter
+	column 'Last Of Quarter'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 9298a2ba-2e44-40de-8994-a3111c523166
+		sourceLineageTag: last_of_quarter
+		summarizeBy: none
+		sourceColumn: last_of_quarter
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Last Of Week
+	column 'Last Of Week'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: ee18b090-ce05-4b1d-885d-85da4ae7a03f
+		sourceLineageTag: last_of_week
+		summarizeBy: none
+		sourceColumn: last_of_week
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Week Of Month
+	column 'Week Of Month'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3fc8a906-62f7-427c-86c5-3c8d9e5e0051
+		sourceLineageTag: week_of_month
+		summarizeBy: none
+		sourceColumn: week_of_month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Month
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 40d47f2e-6459-4a95-b3c7-6a882af223f4
+		sourceLineageTag: month
+		summarizeBy: none
+		sourceColumn: month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Month Name
+	column 'Month Name'
+		dataType: string
+		lineageTag: a391204b-5cc5-48f7-97c2-95bbda9a6e8a
+		sourceLineageTag: month_name
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: Month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First Of Month
+	column 'First Of Month'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 098a85e3-4dd3-4854-a255-c6889e4f4203
+		sourceLineageTag: first_of_month
+		summarizeBy: none
+		sourceColumn: first_of_month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = FormatString
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Last Of Month
+	column 'Last Of Month'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 7d5d4950-d080-4938-ab46-3f089a3b48a9
+		sourceLineageTag: last_of_month
+		summarizeBy: none
+		sourceColumn: last_of_month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Day Of Week In Month
+	column 'Day Of Week In Month'
+		dataType: int64
+		formatString: 0
+		lineageTag: 48762643-d522-4b73-aefd-4cdca31e3d3a
+		sourceLineageTag: day_of_week_in_month
+		summarizeBy: none
+		sourceColumn: day_of_week_in_month
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Day Of Year
+	column 'Day Of Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: ac0ae345-763e-4411-ab65-b6f3bf7e7f3a
+		sourceLineageTag: day_of_year
+		summarizeBy: none
+		sourceColumn: day_of_year
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Is Weekend
+	column 'Is Weekend'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: 180821bf-5c13-45bf-a7e4-644e82e2c373
+		sourceLineageTag: is_weekend
+		summarizeBy: sum
+		sourceColumn: is_weekend
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Week
+	column Week
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a9221c0-c4af-4c08-9bde-a22f6ac06339
+		sourceLineageTag: week
+		summarizeBy: none
+		sourceColumn: week
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Iso WeekISO week date system defines 7-day week starting on Monday and ending on Sunday. The first week of any year (Week 01) is the one that contains the first Thursday of that year. This ensures every ISO week belongs entirely to one calendar year.
+	column 'ISO Week'
+		dataType: int64
+		formatString: 0
+		displayFolder: Date Indicators
+		lineageTag: b297d4b0-75a5-49ac-9ea8-03fba2c19905
+		sourceLineageTag: iso_week
+		summarizeBy: sum
+		sourceColumn: iso_week
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = Description
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First Of Week
+	column 'First Of Week'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 59f285eb-3ad8-4d5f-b8c3-86030d83d04d
+		sourceLineageTag: first_of_week
+		summarizeBy: none
+		sourceColumn: first_of_week
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition dim_date = entity
+		mode: directLake
+		source
+			entityName: dim_date
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+
+	changedProperty = IsHidden
+

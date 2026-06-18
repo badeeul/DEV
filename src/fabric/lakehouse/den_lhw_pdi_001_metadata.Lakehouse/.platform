@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "den_lhw_pdi_001_metadata",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "904c72b8-04ea-4443-8525-461809f7a8aa"
+  }
+}

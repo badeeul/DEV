@@ -1,0 +1,217 @@
+table Bins
+	lineageTag: de3f00f9-4653-46b9-9470-a6c274eadfbe
+
+	measure 'Selected Bin Size' =
+			
+			SWITCH(
+			    SELECTEDVALUE('Point Category'[Metric]),
+			    "Total", 10,
+			    "D&B Score", 5,
+			    "Experience Mod", 5,
+			    "Hazard Group", 5,
+			    "Prior WC Years", 5
+			)
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: 103f4bbc-340c-4594-845e-d1e9338cb6f8
+
+	measure 'Selected Min Bound' =
+			
+			SWITCH(
+			    SELECTEDVALUE('Point Category'[Metric]),
+			    "Total", -15,
+			    "Prior WC Years", -15,
+			    0
+			)
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: e8e71747-ca7e-4c40-83ba-657a03c31cdc
+
+	measure 'Selected Max Bound' =
+			
+			SWITCH(
+			    SELECTEDVALUE('Point Category'[Metric]),
+			    "Total", 100,
+			    25
+			)
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: 45125489-791e-4a2b-80d8-1b46eded1a64
+
+	measure 'Adjusted Bin Start' =
+			
+			VAR BinSize = [Selected Bin Size]
+			VAR MinBound = [Selected Min Bound]
+			VAR BinValue = SELECTEDVALUE(Bins[BaseMin])
+			
+			RETURN
+			IF(
+			    BinValue >= MinBound,
+			    MinBound + INT((BinValue - MinBound) / BinSize) * BinSize
+			)
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: 2e3d051c-a7f6-4546-a0fd-45b129205e07
+
+	measure 'Adjusted Bin End' =
+			
+			[Adjusted Bin Start] + [Selected Bin Size]
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: c36f1741-0c01-4b9d-aca6-265d1f476817
+
+	measure 'Count in Bin' =
+			
+			VAR MinBin = [Adjusted Bin Start]
+			VAR MaxBin = [Adjusted Bin End]
+			VAR Metric = SELECTEDVALUE('Point Category'[Metric])
+			
+			RETURN
+			IF(
+			    NOT ISBLANK(MinBin),
+			    CALCULATE(
+			        COUNTROWS(wc_carrier_placement_snapshot),
+			
+			        -- REQUIRED FILTER -- ONLY WANT TO INCLUDE POLICIES THAT WENT THROUGH CARRIER PLACEMENT
+			        wc_carrier_placement_snapshot[guardtech_enteredon] <> BLANK(),
+			
+			        FILTER(
+			            wc_carrier_placement_snapshot,
+			            VAR ValueToUse =
+			                SWITCH(
+			                    Metric,
+			                    "Hazard Group", wc_carrier_placement_snapshot[guardtech_hazard_group_points],
+			                    "Experience Mod", wc_carrier_placement_snapshot[guardtech_experience_mod_points],
+			                    "D&B Score", wc_carrier_placement_snapshot[guardtech_dnb_score_points],
+			                    "Prior WC Years", wc_carrier_placement_snapshot[guardtech_prior_wc_years_count_points],
+			                    "Total", wc_carrier_placement_snapshot[guardtech_total_points]
+			                )
+			            RETURN
+			                NOT ISBLANK(ValueToUse) &&
+			                ValueToUse >= MinBin &&
+			                ValueToUse < MaxBin
+			        ),
+			
+			        SWITCH(
+			            SELECTEDVALUE('Metric Group'[MetricGroup]),
+			            "Submitted Policies", wc_carrier_placement_snapshot[Policy_Submitted] = 1,
+			            "Quoted Policies", wc_carrier_placement_snapshot[Policy_Quoted] = 1,
+			            "Issued Policies", wc_carrier_placement_snapshot[Policy_Issued] = 1
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: _Bin Measures
+		lineageTag: dfb207ba-2a06-465a-9e97-1cad04864632
+
+	measure 'Selected Points' =
+			
+			VAR Metric =
+			    SELECTEDVALUE('Point Category'[Metric])
+			
+			RETURN
+			SWITCH(
+			    Metric,
+			    "Hazard Group", MAX(wc_carrier_placement_snapshot[guardtech_hazard_group_points]),
+			    "Experience Mod", MAX(wc_carrier_placement_snapshot[guardtech_experience_mod_points]),
+			    "D&B Score", MAX(wc_carrier_placement_snapshot[guardtech_dnb_score_points]),
+			    "Prior WC Years", MAX(wc_carrier_placement_snapshot[guardtech_prior_wc_years_count_points]),
+			    "Total", MAX(wc_carrier_placement_snapshot[guardtech_total_points])
+			)
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: 3f35b984-256f-432c-8611-22f7b203cf45
+
+	measure 'Bin Label' =
+			
+			VAR MinBin = [Adjusted Bin Start]
+			VAR MaxBin = [Adjusted Bin End]
+			
+			RETURN
+			IF(
+			    NOT ISBLANK(MinBin),
+			    FORMAT(MinBin, "0") & " to " & FORMAT(MaxBin, "0")
+			)
+		displayFolder: _Bin Measures
+		lineageTag: 2abe6b8a-c9d9-4dac-b47f-8951c0c60983
+
+	measure 'Use Bin' =
+			
+			VAR BinStart = [Adjusted Bin Start]
+			VAR BaseMin = MAX(Bins[BaseMin])
+			
+			RETURN
+			IF(BaseMin = BinStart, 1, 0)
+		formatString: 0
+		displayFolder: _Bin Measures
+		lineageTag: 415318ba-d8df-4b23-8f73-59af21de7751
+
+	measure 'Percent in Bin' =
+			
+			DIVIDE([Count in Bin],[Total Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: _Bin Measures
+		lineageTag: e192d015-7133-4fa8-b0f4-d69375c5815d
+
+	measure 'Total Count' =
+			
+			CALCULATE(
+			    COUNTROWS(wc_carrier_placement_snapshot),
+			
+			    -- keep your data rule
+			    wc_carrier_placement_snapshot[guardtech_enteredon] <> BLANK(),
+			
+			    -- keep Metric Group context
+			    SWITCH(
+			        SELECTEDVALUE('Metric Group'[MetricGroup]),
+			        "Submitted Policies", wc_carrier_placement_snapshot[Policy_Submitted] = 1,
+			        "Quoted Policies", wc_carrier_placement_snapshot[Policy_Quoted] = 1,
+			        "Issued Policies", wc_carrier_placement_snapshot[Policy_Issued] = 1
+			    ),
+			
+			    -- IMPORTANT: remove bin filtering
+			    REMOVEFILTERS(Bins)
+			)
+		formatString: #,0
+		displayFolder: _Bin Measures
+		lineageTag: 8fc6f7b2-f1b3-4a58-a3df-06cbde0bec7e
+
+	column Value
+		formatString: 0
+		lineageTag: 65cd9044-afe5-41b3-a59d-fc817703a95b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	column BaseMin
+		formatString: 0
+		lineageTag: a8416ca9-9d3f-425d-a904-b0de0b1946c8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [BaseMin]
+
+		annotation SummarizationSetBy = User
+
+	column BaseMax
+		formatString: 0
+		lineageTag: db9328aa-6e75-4539-b5f6-ee58794a0389
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [BaseMax]
+
+		annotation SummarizationSetBy = User
+
+	partition Bins = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    GENERATESERIES(-20, 100, 5),
+				    "BaseMin", [Value],
+				    "BaseMax", [Value] + 5
+				)
+
+	annotation PBI_Id = 4b422f65d32947988e8db34eb0e5e9ab
+

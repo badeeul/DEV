@@ -1,0 +1,141 @@
+table 'Quarantine Log'
+	lineageTag: 6a44f61c-0fa8-4e45-95e7-09553e576a10
+	sourceLineageTag: [audit].[quarantine_log]
+
+	column 'Source System'
+		dataType: string
+		sourceProviderType: varchar(2048)
+		lineageTag: 19c4ec27-c600-4458-93bc-fca12970d2ef
+		sourceLineageTag: source_system
+		summarizeBy: none
+		sourceColumn: source_system
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dataset Name'
+		dataType: string
+		sourceProviderType: varchar(2048)
+		lineageTag: cfec178e-ed28-478a-9b4c-aebb34b08c16
+		sourceLineageTag: dataset_name
+		summarizeBy: none
+		sourceColumn: dataset_name
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ELT ID'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5cd94154-4fa2-4b54-9822-3548c27cedbb
+		sourceLineageTag: elt_id
+		summarizeBy: none
+		sourceColumn: elt_id
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Run ID'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4233de35-401f-4613-8175-8f8273e9b6d4
+		sourceLineageTag: run_id
+		summarizeBy: none
+		sourceColumn: run_id
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Rows'
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 9a3946b6-f1f2-40db-850a-4329ae9f5ef8
+		sourceLineageTag: total_rows
+		summarizeBy: none
+		sourceColumn: total_rows
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Quarantine Type'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5fe7cf07-a542-4313-88e5-6b805541ae64
+		sourceLineageTag: quarantine_type
+		summarizeBy: none
+		sourceColumn: quarantine_type
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Log Datetime'
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 9e8332eb-cb23-4568-99d4-9072611c8165
+		sourceLineageTag: log_datetime
+		summarizeBy: none
+		sourceColumn: log_datetime
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Primary Key List'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 24781db3-6dfb-45fb-ad63-d1106c1aeb80
+		sourceLineageTag: primary_key_list
+		summarizeBy: none
+		sourceColumn: primary_key_list
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Notification Enabled'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 3b9d86c9-1b8b-4728-a6ae-188234a59d15
+		sourceLineageTag: is_notification_enabled
+		summarizeBy: none
+		sourceColumn: is_notification_enabled
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Notification Datetime'
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 102e6eeb-5c92-45be-91df-75b7893e5fd1
+		sourceLineageTag: notification_datetime
+		summarizeBy: none
+		sourceColumn: notification_datetime
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Quarantine Log' = entity
+		mode: directLake
+		source
+			entityName: quarantine_log
+			schemaName: audit
+			expressionSource: DatabaseQuery
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

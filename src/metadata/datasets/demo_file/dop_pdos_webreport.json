@@ -1,0 +1,49 @@
+{
+    "datasetName": "dop_pdos_webreport",
+    "enable": true,
+    "datasetTypeName": "file",
+    "fileType": "excel",
+    "isStaticFileName": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "demo_file",
+        "sourceSystemType": "lakehouse",
+        "ingestType": "watermark",
+        "sourceWatermarkIdentifier": "LastModifiedDateTime",
+        "lakehouseName": "den_lhw_pdi_001_raw",
+        "filesDirectoryName": "user_data/pdos_webreport"
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_pdi_001_raw",
+        "fileType": "excel",
+        "directoryName": "demo_file"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_pdi_001_curated",
+        "schemaName": "demo",
+        "schemaEvolutionMode": "none",
+        "schemaLocation": null,
+        "customFileOptions": [
+            {
+                "SheetName": "WebReport",
+                "SkipRows": 0
+            },
+            {
+                "SheetName": "Params",
+                "SkipRows": 0,
+                "Columns": [
+                    "Param",
+                    "Val"
+                ],
+                "Filter": "Param = 'ASOFDATE'",
+                "Pivot": {
+                    "Columns": "Param",
+                    "Values": "Val"
+                }
+            }
+        ],
+        "primaryKeyList": [],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

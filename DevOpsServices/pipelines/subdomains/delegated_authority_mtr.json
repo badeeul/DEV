@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-DelegatedAuthority-MTR",
+  "targetWorkspaceName": "Distribution-DelegatedAuthority-MTR",
+  "targetSuperDomain": "Distribution",
+  "targetSubDomain": "Delegated Authority",
+  "targetProject": "DnA Distribution",
+  "targetRepository": "DnA Distro - Del Auth",
+  "environment": "mtr",
+  "pep": [
+    {
+      "allowed": true,
+      "resourceId": "/subscriptions/b02af7bb-c562-43e8-baa1-e834ae4ef81e/resourceGroups/bhg-dev-dist-delauth-eus-rg/providers/Microsoft.KeyVault/vaults/bhg-dev-delauth-eus-kv",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": true,
+      "resourceId": "/subscriptions/b02af7bb-c562-43e8-baa1-e834ae4ef81e/resourceGroups/bhg-dev-fabric-eus-rg/providers/Microsoft.Storage/storageAccounts/bhgdevfabricsftpeussa",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "433E9E3E-1E1D-45E4-B1F3-46AE09DD3E92",
+  "keyvaultName": "bhg-prod-delauth-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "bb590c50-0ce1-40ac-b1f9-fc279745fe29,082ab9b1-0667-4a22-bd85-7bc14cc0e89d",
+  "viewerGroupPrincipalIds": "48c42220-954f-4ba6-acf7-3604900ef1a2,47b068d7-58df-43d1-87ef-5d95a5ec37aa,3a8f7955-311c-46dd-b98a-c7033b16420d,4a2b760b-7a21-4b66-a313-3ddfee32ec3f,d355aa26-922b-425d-a3d1-9bf0deb894bc,58afc97a-f609-4593-88c0-77d2018d637e,0908d950-3852-4576-bbff-d3653f9f44d7,2f5f9392-6978-414b-8565-ee5294ac9a9e,c84336f0-8681-4397-9ac9-2aab4ee65f12,974e8c7c-04ad-4ce5-9c2a-a01632f8e6f3,9083bfa8-03ff-4035-979e-c2e17d56ff0c"
+}

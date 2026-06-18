@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-RefDataProducts-MTR",
+    "targetWorkspaceName": "Fluidity-RefDataProducts-MTR",
+    "targetSuperDomain": "Fluidity",
+    "targetSubDomain": "Ref Data Product",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",   
+    "keyvaultName": "bhg-hub-fabric01-eus-kv",     
+    "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd,7169f01c-38f3-4e38-98fb-7eaca0db7b01",
+    "contributorGroupPrincipalIds": ""
+}

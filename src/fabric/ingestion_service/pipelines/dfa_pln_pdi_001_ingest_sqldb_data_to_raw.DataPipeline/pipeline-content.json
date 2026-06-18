@@ -1,0 +1,518 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Set zone_start_date_time",
+        "type": "SetVariable",
+        "dependsOn": [
+          {
+            "activity": "GetDatasetMetadataFile",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "zone_end_date_time",
+          "value": {
+            "value": "@utcNow()",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "GetDatasetMetadataFile",
+        "type": "Lookup",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "wildcardFolderPath": {
+                "value": "@concat('datasets/',pipeline().parameters.source_config_folder_name)",
+                "type": "Expression"
+              },
+              "wildcardFileName": {
+                "value": "@concat(pipeline().parameters.source_config_file_name,'.json')",
+                "type": "Expression"
+              },
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "firstRowOnly": false,
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "e73b8991_c031_4845_a742_26000eaf5137",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "artifactId": "@pipeline().parameters.lh_metadata_id",
+                  "rootFolder": "Files"
+                }
+              }
+            },
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation"
+              }
+            },
+            "schema": {}
+          }
+        }
+      },
+      {
+        "name": "Copy Metadata Logs",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "GetExtractionQuery",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          },
+          {
+            "activity": "Set zone_start_date_time",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Copy SQL Data",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "additionalColumns": [
+              {
+                "name": "QueueMessage",
+                "value": {
+                  "value": "@concat('{ \"product_name\":',' \"',pipeline().parameters.Product_Name,'\", \"feed_name\": ','\"',pipeline().parameters.Feed_Name,'\", \n\"run_id\": ','\"',pipeline().RunId,'\",\n    \"elt_id\": ','\"',pipeline().parameters.ELT_Id,'\",\n    \"invocation_id\": ','\"',pipeline().parameters.invocation_id,'\",\n    \"source_system\": ','\"',activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sourceSystemName,'\",\n\"metadata\": ', activity('Copy SQL Data').output,',\n\"zone_start_date_time\": ','\"',variables('zone_end_date_time'),'\",\n\"zone_end_date_time\": ','\"',utcNow(),'\",\n\"orchestration_tool\": \"data-pipeline\",\n\"zone\": \"Raw\",\n    \"stage\": \"Ingestion\",\n\"dataset_name\": ','\"', activity('GetDatasetMetadataFile').output.value[0].datasetName,'\"','}')",
+                  "type": "Expression"
+                }
+              }
+            ],
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "6ed7bfc4_4c01_4d5e_8f16_5fe3311e0117",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "@pipeline().parameters.workspace_id",
+                    "artifactId": "@pipeline().parameters.lh_metadata_id",
+                    "rootFolder": "Files"
+                  }
+                }
+              },
+              "type": "Json",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "fileName": "QueueMessage.json",
+                  "folderPath": "templates/logs"
+                }
+              },
+              "schema": {}
+            }
+          },
+          "sink": {
+            "type": "DelimitedTextSink",
+            "storeSettings": {
+              "type": "LakehouseWriteSettings",
+              "copyBehavior": "PreserveHierarchy"
+            },
+            "formatSettings": {
+              "type": "DelimitedTextWriteSettings",
+              "quoteAllText": true,
+              "fileExtension": ".txt"
+            },
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "d7ae41c6_307d_4b33_9b0b_6ed9c0235ec2",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "@pipeline().parameters.workspace_id",
+                    "artifactId": "@pipeline().parameters.lh_observability_id",
+                    "rootFolder": "Files"
+                  }
+                }
+              },
+              "type": "DelimitedText",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "fileName": {
+                    "value": "@concat(activity('GetDatasetMetadataFile').output.value[0].datasetName, '_', pipeline().RunId,'.json')",
+                    "type": "Expression"
+                  },
+                  "folderPath": "Metadata_Logs"
+                },
+                "columnDelimiter": ",",
+                "escapeChar": "",
+                "firstRowAsHeader": false,
+                "quoteChar": ""
+              },
+              "schema": []
+            }
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            },
+            "columnFlattenSettings": {
+              "treatArrayAsString": false,
+              "treatStructAsString": false,
+              "flattenColumnDelimiter": "."
+            }
+          }
+        }
+      },
+      {
+        "name": "Copy SQL Data",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "GetExtractionQuery",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "SqlServerSource",
+            "sqlReaderQuery": {
+              "value": "@activity('GetExtractionQuery').output.firstRow.query",
+              "type": "Expression"
+            },
+            "queryTimeout": "02:00:00",
+            "partitionOption": "None",
+            "datasetSettings": {
+              "annotations": [],
+              "type": "SqlServerTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "uwCoverage_Details",
+                "database": {
+                  "value": "@activity('GetDatasetMetadataFile').output.value[0].databaseName",
+                  "type": "Expression"
+                }
+              },
+              "externalReferences": {
+                "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+              }
+            }
+          },
+          "sink": {
+            "type": "ParquetSink",
+            "storeSettings": {
+              "type": "LakehouseWriteSettings",
+              "copyBehavior": "PreserveHierarchy"
+            },
+            "formatSettings": {
+              "type": "ParquetWriteSettings",
+              "enableVertiParquet": true
+            },
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "3c9be8d4_4bdd_4b89_8eaa_820188f3bad2",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "@pipeline().parameters.workspace_id",
+                    "artifactId": "@pipeline().parameters.lh_raw_id",
+                    "rootFolder": "Files"
+                  }
+                }
+              },
+              "type": "Parquet",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": {
+                    "value": "@variables('data_destination_directory')",
+                    "type": "Expression"
+                  }
+                },
+                "compressionCodec": "snappy"
+              },
+              "schema": []
+            }
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "GetExtractionQuery",
+        "type": "Lookup",
+        "dependsOn": [
+          {
+            "activity": "GetDatasetMetadataFile",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "wildcardFolderPath": {
+                "value": "@concat('datasets/',pipeline().parameters.source_config_folder_name,'/watermark')",
+                "type": "Expression"
+              },
+              "wildcardFileName": {
+                "value": "@concat(activity('GetDatasetMetadataFile').output.value[0].datasetName,'.json')",
+                "type": "Expression"
+              },
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "firstRowOnly": true,
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "e73b8991_c031_4845_a742_26000eaf5137",
+              "properties": {
+                "annotations": [],
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "artifactId": "@pipeline().parameters.lh_metadata_id",
+                  "rootFolder": "Files"
+                }
+              }
+            },
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation"
+              }
+            },
+            "schema": {}
+          }
+        }
+      },
+      {
+        "name": "If Data Written",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "Copy SQL Data",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@greater(activity('Copy SQL Data').output.rowsCopied,0)",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [
+            {
+              "name": "Set Ingest Curated False",
+              "type": "SetVariable",
+              "dependsOn": [],
+              "policy": {
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "pipelineReturnValue",
+                "value": [
+                  {
+                    "key": "data_directory",
+                    "value": {
+                      "type": "String",
+                      "content": ""
+                    }
+                  }
+                ],
+                "setSystemVariable": true
+              }
+            }
+          ],
+          "ifTrueActivities": [
+            {
+              "name": "Set Ingest Curated True",
+              "type": "SetVariable",
+              "dependsOn": [],
+              "policy": {
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "pipelineReturnValue",
+                "value": [
+                  {
+                    "key": "data_directory",
+                    "value": {
+                      "type": "Expression",
+                      "content": "@variables('data_destination_directory')"
+                    }
+                  }
+                ],
+                "setSystemVariable": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Set Copy Destination Directory",
+        "type": "SetVariable",
+        "dependsOn": [
+          {
+            "activity": "GetDatasetMetadataFile",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "data_destination_directory",
+          "value": {
+            "value": "@concat(activity('GetDatasetMetadataFile').output.value[0].rawProperties.directoryName,'/',activity('GetDatasetMetadataFile').output.value[0].datasetSchema,'_',activity('GetDatasetMetadataFile').output.value[0].datasetName,'/',pipeline().RunId)",
+            "type": "Expression"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "ELT_Id": {
+        "type": "string",
+        "defaultValue": "60ee9ba3-8f82-418f-ac72-b0cea3c978f4"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "demo_product"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "DEMO"
+      },
+      "Elt_Start_Date_Time": {
+        "type": "string",
+        "defaultValue": "10/23/2024"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "fb48654f-171e-424a-8d53-8220b2da94e1"
+      },
+      "source_config_folder_name": {
+        "type": "string",
+        "defaultValue": "demo_sqldb"
+      },
+      "source_config_file_name": {
+        "type": "string",
+        "defaultValue": "claims_catcodes"
+      },
+      "invocation_id": {
+        "type": "string",
+        "defaultValue": "f6377cb5-533f-4b6a-b923-3d937d170056"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "61a6df22-f73b-48bc-855f-55f41065eb20"
+      }
+    },
+    "variables": {
+      "data_destination_directory": {
+        "type": "String"
+      },
+      "zone_end_date_time": {
+        "type": "String"
+      }
+    }
+  }
+}

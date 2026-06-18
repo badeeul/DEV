@@ -1,0 +1,221 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "f67011d6f935a0b76258",
+  "position": {
+    "x": 63.842364532019708,
+    "y": 317.4384236453202,
+    "z": 5000,
+    "height": 370.64039408866995,
+    "width": 560.39408866995075,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Report Purpose:",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "To provide insights on the digital decisioning journey for new business submissions",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Version: ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt"
+                    }
+                  },
+                  {
+                    "value": "1.1",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Target Audience: ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt"
+                    }
+                  },
+                  {
+                    "value": "Home Office Underwriting",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Documentation: ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt"
+                    }
+                  },
+                  {
+                    "value": "Definitions",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    },
+                    "url": "https://loop.cloud.microsoft/p/eyJ3Ijp7InUiOiJodHRwczovL2d1YXJkaW5zdXJhbmNlZ3JvdXAuc2hhcmVwb2ludC5jb20vP25hdj1jejBsTWtZbVpEMWlJV2c1TkdSNGVXdzNiVEJQTW5wVGMwMVhSUzEzTUdWTFkxSmpjSEZLZG5oSGJ6SkRXVVIzTW1GdmVuSndUVTlITjFadExUUlROakppYm1WUFJqVlVhalltWmowd01VOURVbG95TlV4Uk5FUk9TVEpUVEROVE5VUkpRVTlTTWpWTVNrTXpWRXBaSm1NOUptWnNkV2xrUFRFJTNEIiwiciI6ZmFsc2V9LCJwIjp7InUiOiJodHRwczovL2d1YXJkaW5zdXJhbmNlZ3JvdXAuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2M3MWRkZTg3LTdiMjktNDM5Yi1iNmNkLTJiMGM1ODRmYjBkMS9Eb2N1bWVudCUyMExpYnJhcnkvTG9vcEFwcERhdGEvUG9saWN5JTIwU3RhdHVzJTIwMS5sb29wP25hdj1jejBsTWtaamIyNTBaVzUwYzNSdmNtRm5aU1V5UmtOVFVGOWpOekZrWkdVNE55MDNZakk1TFRRek9XSXRZalpqWkMweVlqQmpOVGcwWm1Jd1pERW1aRDFpSVdnNU5HUjRlV3czYlRCUE1ucFRjMDFYUlMxM01HVkxZMUpqY0hGS2RuaEhiekpEV1VSM01tRnZlbkp3VFU5SE4xWnRMVFJUTmpKaWJtVlBSalZVYWpZbVpqMHdNVTlEVWxveU5VOUdSRFpGVGpWUVZWazNRa05LUWxwUFJGaExOak5aTlZWRUptTTlKVEpHSm1ac2RXbGtQVEUlM0QiLCJyIjpmYWxzZX0sImkiOnsiaSI6IjNkMzc2NDA0LTdmMzgtNDM3Yy1hMDQ0LTNhN2UwZmYyYzQxOSJ9fQ%3D%3D?podId=T0RTUHxndWFyZGluc3VyYW5jZWdyb3VwLnNoYXJlcG9pbnQuY29tfGIhaDk0ZHh5bDdtME8yelNzTVdFLXcwZUtjUmNwcUp2eEdvMkNZRHcyYW96cnBNT0c3Vm0tNFM2MmJuZU9GNVRqNnwwMU9DUloyNUxRNEROSTJTTDNTNURJQU9SMjVMSkMzVEpZ"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\t\t\t\t\t\t\t "
+                  },
+                  {
+                    "value": "Analytical Requirements",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    },
+                    "url": "https://loop.cloud.microsoft/p/eyJ3Ijp7InUiOiJodHRwczovL2d1YXJkaW5zdXJhbmNlZ3JvdXAuc2hhcmVwb2ludC5jb20vP25hdj1jejBsTWtZbVpEMWlJV2c1TkdSNGVXdzNiVEJQTW5wVGMwMVhSUzEzTUdWTFkxSmpjSEZLZG5oSGJ6SkRXVVIzTW1GdmVuSndUVTlITjFadExUUlROakppYm1WUFJqVlVhalltWmowd01VOURVbG95TlV4Uk5FUk9TVEpUVEROVE5VUkpRVTlTTWpWTVNrTXpWRXBaSm1NOUptWnNkV2xrUFRFJTNEIiwiciI6ZmFsc2V9LCJwIjp7InUiOiJodHRwczovL2d1YXJkaW5zdXJhbmNlZ3JvdXAuc2hhcmVwb2ludC5jb20vOmZsOi9yL2NvbnRlbnRzdG9yYWdlL0NTUF9jNzFkZGU4Ny03YjI5LTQzOWItYjZjZC0yYjBjNTg0ZmIwZDEvRG9jdW1lbnQlMjBMaWJyYXJ5L0xvb3BBcHBEYXRhL1VudGl0bGVkLmxvb3A%2FZD13NGUzOGI3MWRiMzliNGM4NGIxNWQ2NGJhNjgyNjMyMjAmY3NmPTEmd2ViPTEmbmF2PWN6MGxNa1pqYjI1MFpXNTBjM1J2Y21GblpTVXlSa05UVUY5ak56RmtaR1U0TnkwM1lqSTVMVFF6T1dJdFlqWmpaQzB5WWpCak5UZzBabUl3WkRFbVpEMWlJV2c1TkdSNGVXdzNiVEJQTW5wVGMwMVhSUzEzTUdWTFkxSmpjSEZLZG5oSGJ6SkRXVVIzTW1GdmVuSndUVTlITjFadExUUlROakppYm1WUFJqVlVhalltWmowd01VOURVbG95TlVrMVZ6UTBSVFZITlZSUlVrZE1RMWhNUlZoS1ZVTk5UVkpCSm1NOUpUSkdKbVpzZFdsa1BURW1ZVDFNYjI5d1FYQndKbkE5SlRRd1pteDFhV1I0SlRKR2JHOXZjQzF3WVdkbExXTnZiblJoYVc1bGNpWjRQU1UzUWlVeU1uY2xNaklsTTBFbE1qSlVNRkpVVlVoNGJtUlhSbmxhUjJ4MVl6TldlVmxYTldwYVYyUjVZak5XZDB4dVRtOVpXRXBzWTBjNWNHSnVVWFZaTWpsMFprZEphR0ZFYXpCYVNHZzFZa1JrZEUxRk9IbGxiRTU2VkZaa1JreFlZM2RhVlhScVZXMU9kMk5WY0RKbFJXUjJUV3RPV2xKSVkzbFpWemsyWTI1Q1RsUXdZek5XYlRCMFRrWk5NazF0U25WYVZUbEhUbFpTY1U1dWQzZE5WVGxFVld4dmVVNVZlRkpPUlZKUFUxUktWRlJFVGxST1ZWSktVVlU1VTAxcVZrMVRhMDE2VmtWd1dpVXlNaVV5UXlVeU1ta2xNaklsTTBFbE1qSTBOREpoTnpBd1ppMHhNRGsxTFRRMFlXUXRZakpqTVMwMlpUa3dabVUwTVRKbE1URWxNaklsTjBRJTNEIiwiciI6ZmFsc2V9LCJpIjp7ImkiOiI0NDJhNzAwZi0xMDk1LTQ0YWQtYjJjMS02ZTkwZmU0MTJlMTEifX0%3D?podId=T0RTUHxndWFyZGluc3VyYW5jZWdyb3VwLnNoYXJlcG9pbnQuY29tfGIhaDk0ZHh5bDdtME8yelNzTVdFLXcwZUtjUmNwcUp2eEdvMkNZRHcyYW96cnBNT0c3Vm0tNFM2MmJuZU9GNVRqNnwwMU9DUloyNUxRNEROSTJTTDNTNURJQU9SMjVMSkMzVEpZ"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Contact Person: ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "11pt"
+                    }
+                  },
+                  {
+                    "value": "Philipp.Strietzel@GUARD.com",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    },
+                    "url": "mailto:Philipp.Strietzel@GUARD.com"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E8EAE9'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

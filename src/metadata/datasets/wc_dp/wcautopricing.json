@@ -1,0 +1,69 @@
+{
+    "datasetName": "wcautopricing",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "rowid",
+            "code",
+            "state",
+            "totaleligiblepct",
+            "employeespct",
+            "employeesmsg",
+            "equipmentpct",
+            "equipmentmsg",
+            "managementcooperationpct",
+            "managementcooperationmsg",
+            "medicalfacilitiespct",
+            "medicalfacilitiesmsg",
+            "policyexpensespct",
+            "policyexpensesmsg",
+            "premisespct",
+            "premisesmsg",
+            "riskcharacteristicspct",
+            "riskcharacteristicsmsg",
+            "safetypct",
+            "safetymsg",
+            "enteredon",
+            "enteredby",
+            "updatedon",
+            "updatedby",
+            "totalapplicablepct"
+        ],
+        "ingestType": "watermark",
+        "sourceWatermarkIdentifier": "isnull(updatedon, enteredon)",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "wc",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "RowId",
+            "Code"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "merge"
+    }
+}

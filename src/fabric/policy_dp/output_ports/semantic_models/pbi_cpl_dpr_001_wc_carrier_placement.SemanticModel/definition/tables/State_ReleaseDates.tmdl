@@ -1,0 +1,104 @@
+table State_ReleaseDates
+	lineageTag: a764a904-9d20-4576-8da8-cd6df504a672
+
+	column State
+		lineageTag: e07b90e0-8df0-4ffc-9bde-ac720a217892
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [State]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ImplementationDate
+		formatString: Short Date
+		lineageTag: fcd0922a-422c-4b9f-971a-a3b30e8c04e7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ImplementationDate]
+
+		variation Variation
+			isDefault
+			relationship: 7c927997-527f-47b0-b281-1da2af0b9bf2
+			defaultHierarchy: LocalDateTable_e6349edd-0729-4f3e-b9b6-413ee45985af.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cohort
+		lineageTag: a55adce1-bd61-4c37-ab4f-73a81a887bc1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort]
+		sortByColumn: Cohort_SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cohort_SortOrder
+		formatString: 0
+		lineageTag: 9f7945cb-90ae-4b2e-a4eb-9bfe43c6da83
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort_SortOrder]
+
+		annotation SummarizationSetBy = User
+
+	partition State_ReleaseDates = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "State", STRING,
+				    "ImplementationDate", DATETIME,
+				    "Cohort", STRING,
+				    "Cohort_SortOrder", INTEGER,
+				    {
+				{"NC", "02-06-2026", "Pilot States", 1},
+				{"PA", "02-06-2026", "Pilot States", 1},
+				{"VA", "02-06-2026", "Pilot States", 1},
+				{"AK", "03-20-2026", "Cohort 1 States", 2},
+				{"AL", "03-20-2026", "Cohort 1 States", 2},
+				{"AR", "03-20-2026", "Cohort 1 States", 2},
+				{"AZ", "03-20-2026", "Cohort 1 States", 2},
+				{"CO", "03-20-2026", "Cohort 1 States", 2},
+				{"CT", "03-20-2026", "Cohort 1 States", 2},
+				{"DC", "03-20-2026", "Cohort 1 States", 2},
+				{"DE", "03-20-2026", "Cohort 1 States", 2},
+				{"GA", "03-20-2026", "Cohort 1 States", 2},
+				{"HI", "03-20-2026", "Cohort 1 States", 2},
+				{"IA", "03-20-2026", "Cohort 1 States", 2},
+				{"ID", "03-20-2026", "Cohort 1 States", 2},
+				{"IL", "03-20-2026", "Cohort 1 States", 2},
+				{"IN", "03-20-2026", "Cohort 1 States", 2},
+				{"KS", "03-20-2026", "Cohort 1 States", 2},
+				{"KY", "03-20-2026", "Cohort 1 States", 2},
+				{"LA", "03-20-2026", "Cohort 1 States", 2},
+				{"MD", "03-20-2026", "Cohort 1 States", 2},
+				{"ME", "03-20-2026", "Cohort 1 States", 2},
+				{"MI", "03-20-2026", "Cohort 1 States", 2},
+				{"MN", "03-20-2026", "Cohort 1 States", 2},
+				{"MS", "03-20-2026", "Cohort 1 States", 2},
+				{"MT", "03-20-2026", "Cohort 1 States", 2},
+				{"NE", "03-20-2026", "Cohort 1 States", 2},
+				{"NH", "03-20-2026", "Cohort 1 States", 2},
+				{"NM", "03-20-2026", "Cohort 1 States", 2},
+				{"NV", "03-20-2026", "Cohort 1 States", 2},
+				{"OK", "03-20-2026", "Cohort 1 States", 2},
+				{"OR", "03-20-2026", "Cohort 1 States", 2},
+				{"RI", "03-20-2026", "Cohort 1 States", 2},
+				{"SC", "03-20-2026", "Cohort 1 States", 2},
+				{"SD", "03-20-2026", "Cohort 1 States", 2},
+				{"TN", "03-20-2026", "Cohort 1 States", 2},
+				{"UT", "03-20-2026", "Cohort 1 States", 2},
+				{"VT", "03-20-2026", "Cohort 1 States", 2},
+				{"WC", "03-20-2026", "Cohort 1 States", 2},
+				{"CA", "04-17-2026", "Cohort 2 States", 3},
+				{"FL", "04-17-2026", "Cohort 2 States", 3},
+				{"MA", "04-17-2026", "Cohort 2 States", 3},
+				{"MO", "04-17-2026", "Cohort 2 States", 3},
+				{"NJ", "04-17-2026", "Cohort 2 States", 3},
+				{"NY", "04-17-2026", "Cohort 2 States", 3},
+				{"WI", "04-17-2026", "Cohort 2 States", 3}
+				}
+				)
+
+	annotation PBI_Id = 24066065c44d40148624e7017cbd78b1
+

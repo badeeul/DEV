@@ -1,0 +1,126 @@
+
+parameters:
+
+- name: variableGroup
+  displayName: 'Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: daysToLookBack
+  displayName: 'Days to Look Back for Release Notes'
+  type: number
+  default: 30
+
+- name: majorVersion
+  type: string
+  default: '1'
+  displayName: 'Major Version'
+
+- name: minorVersion
+  type: string
+  default: '0'
+  displayName: 'Minor Version'
+
+- name: patchVersion
+  type: string
+  default: '0'
+  displayName: 'Patch Version'
+
+- name: sourceBranch
+  type: string
+  default: 'main'
+  displayName: 'Source Branch'
+
+- name: organization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Azure DevOps Organization'
+
+- name: project
+  type: string
+  default: 'GDAP-Fluidity-PlatformServices'
+  displayName: 'Azure DevOps Project'
+
+- name: repository
+  type: string
+  default: 'PlatformServices-Fabric'
+  displayName: 'Repository Name'
+
+trigger: none # Manual trigger only
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+ 
+stages:
+- stage: Validate
+  displayName: 'Validate Release Parameters'
+
+  jobs:
+  - job: validate_version
+    steps:
+    - powershell: |
+        # Validate version numbers
+        $major = "${{ parameters.majorVersion }}"
+        $minor = "${{ parameters.minorVersion }}"
+        $patch = "${{ parameters.patchVersion }}"
+
+        if (-not ($major -match '^\d+$' -and $minor -match '^\d+$' -and $patch -match '^\d+$')) {
+            Write-Error "Version numbers must be numeric values"
+            exit 1
+        }
+      displayName: 'Validate Parameters'
+
+- stage: CreateRelease
+  displayName: 'Create Release Branch'
+  dependsOn: Validate
+
+  jobs:
+  - job: create_branch
+    steps:
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+
+    - task: PowerShell@2
+      displayName: 'List All Files and Folders'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Current Directory: $(Get-Location)"
+          Write-Host "`nListing all files and folders:"
+          $currentPath = Get-Location
+          Write-Host "`nUsing path: $currentPath"
+          Get-ChildItem -Path $currentPath -Recurse | Select-Object FullName
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - template: ../templates/auth-setup.yml
+    - task: PowerShell@2
+      name: createBranch
+      inputs:
+        targetType: 'filePath'
+        filePath: '$(Build.SourcesDirectory)/DevOpsServices/pipelines/scripts/Create-ReleaseBranch-Monitor.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: >
+          -ReleaseMajorVersion "${{ parameters.majorVersion }}"
+          -ReleaseMinorVersion "${{ parameters.minorVersion }}"
+          -ReleasePatchVersion "${{ parameters.patchVersion }}"
+          -SourceBranch "${{ parameters.sourceBranch }}"
+          -Organization "${{ parameters.organization }}"
+          -Project "${{ parameters.project }}"
+          -Repository "${{ parameters.repository }}"
+          -DaysToLookBack ${{ parameters.daysToLookBack }}          
+      env:
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+
+    - powershell: |
+        Write-Host "Created release branch: $(createBranch.ReleaseBranchName)"
+      displayName: 'Display Branch Name'

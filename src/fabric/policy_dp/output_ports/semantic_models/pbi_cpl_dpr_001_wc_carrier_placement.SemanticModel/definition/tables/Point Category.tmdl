@@ -1,0 +1,39 @@
+table 'Point Category'
+	lineageTag: ce5cdbbb-7b00-4be9-ba5f-4bf77dbc318a
+
+	column Metric
+		lineageTag: 186f9881-b2b1-48c7-9784-003a2f37b2d4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Metric]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: d5dbd9f2-2ad4-4cc9-8f47-f0fe412e140d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Point Category' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Metric", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"Total", 1},
+				        {"Hazard Group", 2},
+				        {"Experience Mod", 3},
+				        {"D&B Score", 4},
+				        {"Prior WC Years", 5}
+				    }
+				)
+
+	annotation PBI_Id = 22ca27e5ef5b420a9e4d0c2a7a765600
+

@@ -1,0 +1,58 @@
+table 'NB Efficiencies Date Role'
+	lineageTag: d41440a7-136f-4de6-bfbc-58c0a8146044
+
+	calculationGroup
+
+		calculationItem 'Policy Effective Date' = ```
+				
+				CALCULATE (
+				    SELECTEDMEASURE(),
+				    
+				    TREATAS (
+				        CALCULATETABLE (
+				            VALUES ( 'Date'[date_key] ),
+				            FILTER (
+				                VALUES('Date'[Date]),
+				                [Is Date In Scope] = 1
+				            )
+				        ),
+				        'Policy Measures'[policy_effec_start_dt_key]
+				    )
+				)
+				```
+
+		calculationItem 'Policy Submitted Date' =
+				
+				CALCULATE (
+				    SELECTEDMEASURE(),
+				
+				    TREATAS (
+				        CALCULATETABLE (
+				            VALUES ( 'Date'[date_key] ),
+				            FILTER (
+				                VALUES('Date'[Date]),
+				                [Is Date In Scope] = 1
+				            )
+				        ),
+				        'Policy Measures'[policy_sub_dt_key]
+				    )
+				)
+
+	column 'Date Role'
+		dataType: string
+		lineageTag: 3533e5f8-b55e-47fe-b3e4-e0922265f690
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: ffad909d-bb4f-4f3a-9b4d-f717587cb1f0
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

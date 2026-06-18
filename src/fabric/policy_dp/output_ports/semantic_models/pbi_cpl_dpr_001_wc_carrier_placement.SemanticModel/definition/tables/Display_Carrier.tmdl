@@ -1,0 +1,39 @@
+table Display_Carrier
+	lineageTag: 4053f699-e409-4684-bc9f-0963a5c5ab2e
+
+	column carrier_nm
+		lineageTag: 09ced3b3-27b1-4fdf-ad2c-2f6330cecbd1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [carrier_nm]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: a19ca288-7c50-46a4-9e38-495a9dd610d1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Display_Carrier = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "carrier_nm", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"EastGUARD", 1}, 
+				        {"AmGUARD", 2}, 
+				        {"NorGUARD", 3}, 
+				        {"WestGUARD", 4}
+				    }
+				)
+				```
+
+	annotation PBI_Id = 1ca415235aff4e65817e0e5fb6fc4973
+

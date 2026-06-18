@@ -1,0 +1,277 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product
+  schema: wc
+  table: dim_policy_extension_wc
+  load_strategy: merge
+  key_columns:
+    - policy_num_bus_key
+  unknown_record: True
+  identity: False
+
+source:
+  - name: insured
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: insured
+    incremental: True
+
+  - name: wcinfo
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: wcinfo
+    incremental: True
+
+  - name: wcpayrol
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: wcpayrol
+    incremental: True
+
+  - name: archive_wcpayrol
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: archive_wcpayrol
+    incremental: True
+
+  - name: uwstates
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: uwstates
+    incremental: True
+
+  - name: archive_uwstates
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: archive_uwstates
+    incremental: True
+
+  - name: question_responses
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: question_responses
+    incremental: True
+
+  - name: archive_question_responses
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: archive_question_responses
+    incremental: True
+
+  - name: question_questions
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: question_questions
+    incremental: False
+
+  - name: dnb_transactions
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: dnb_transactions
+    incremental: True
+
+  - name: dnb_policylookups
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: dnb_policylookups
+    incremental: True
+  
+  - name: dim_policy
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_policy
+    incremental: True
+
+query:
+  - name: cte_wcpolicylist
+    sql: |
+      SELECT
+          i.code,
+          i.name,
+          n.govstate,
+          n.govclass
+      FROM insured i
+      JOIN wcinfo n
+        ON lower(trim(i.code)) = lower(trim(n.code))
+      WHERE lower(trim(i.lob)) = 'wc'
+        AND lower(trim(i.agency)) <> 'pafake10'
+        AND lower(trim(i.code)) = lower(trim(i.basemgacode))
+
+  - name: cte_wcpayrol_unioned
+    sql: |
+      SELECT
+          w.code,
+          p.state,
+          p.classcode,
+          p.hazard,
+          p.exposure,
+          p.premium,
+          p.primeseq,
+          p.seqcode,
+          p.rateeffdate
+      FROM cte_wcpolicylist w
+      JOIN wcpayrol p
+        ON lower(trim(w.code)) = lower(trim(p.code))
+      WHERE lower(trim(w.name)) <> 'redacted'
+        AND p.primeseq = '1'
+        AND p.seqcode = '000'
+
+      UNION ALL
+
+      SELECT
+          w.code,
+          ap.state,
+          ap.classcode,
+          ap.hazard,
+          ap.exposure,
+          ap.premium,
+          ap.primeseq,
+          ap.seqcode,
+          ap.rateeffdate
+      FROM cte_wcpolicylist w
+      JOIN archive_wcpayrol ap
+        ON lower(trim(w.code)) = lower(trim(ap.code))
+      WHERE lower(trim(w.name)) = 'redacted'
+        AND lower(trim(ap.primeseq)) = '1'
+        AND lower(trim(ap.seqcode)) = '000'
+
+  - name: cte_fullgovclass
+    sql: |
+       SELECT  w.code , 
+       p.classcode, 
+       p.hazard, 
+       row_number() over(partition by p.code order by sum(p.exposure) desc, sum(p.premium) desc, p.state asc,         
+        (case 
+            when p.hazard in ('A','1') then 2
+        	  when p.hazard in ('B','2') then 3
+        	  when p.hazard in ('C','3') then 4
+        	  when p.hazard in ('D','4') then 5
+        	  when p.hazard in ('E','5') then 6
+        	  when p.hazard in ('F','6') then 7
+        	  when p.hazard in ('G','7') then 8
+        	  else 1 end) desc
+        )  AS  rcount
+          FROM  cte_wcpolicylist  w
+          JOIN  cte_wcpayrol_unioned  p 
+            ON  w.code  =  p.code  AND  w.govclass  =  p.classcode  AND  p.primeseq  =  '1'  AND  p.seqcode  =  '000'
+        GROUP BY w.code, p.classcode, p.hazard, p.code, p.state      
+
+  - name: cte_uwstates_unioned
+    sql: |
+      SELECT w.code, us.state
+      FROM cte_wcpolicylist w
+      JOIN uwstates us
+        ON lower(trim(w.code)) = lower(trim(us.code))
+      WHERE lower(trim(w.name)) <> 'redacted'
+
+      UNION ALL
+
+      SELECT w.code, aus.state
+      FROM cte_wcpolicylist w
+      JOIN archive_uwstates aus
+        ON lower(trim(w.code)) = lower(trim(aus.code))
+      WHERE lower(trim(w.name)) = 'redacted'
+
+  - name: cte_priorwcyrs_question_unioned
+    sql: |
+      SELECT
+          w.code,
+          REGEXP_REPLACE(TRIM(qr.response), '[\\r\\n,\\,]', '') AS priorwcyrs,
+          qr.updateon,
+          qq.question_id
+      FROM cte_wcpolicylist w
+      JOIN question_responses qr
+        ON lower(trim(w.code)) = lower(trim(qr.keyident))
+      JOIN question_questions qq
+        ON trim(qq.question_id) = trim(qr.question_id)
+       AND lower(qq.questiontext) LIKE 'how many years of prior, consecutive workers%comp%applicant%'
+      WHERE lower(trim(w.name)) <> 'redacted'
+        AND qr.response IS NOT NULL
+        AND REPLACE(REPLACE(TRIM(qr.response),',', ''), '.') RLIKE '^[0-9]+$'
+
+      UNION ALL
+
+      SELECT
+          w.code,
+          REGEXP_REPLACE(TRIM(aqr.response), '[\\r\\n,\\,]', '') AS priorwcyrs,
+          aqr.updateon,
+          qq.question_id
+      FROM cte_wcpolicylist w
+      JOIN archive_question_responses aqr
+        ON lower(trim(w.code)) = lower(trim(aqr.keyident))
+      JOIN question_questions qq
+        ON trim(qq.question_id) = trim(aqr.question_id)
+       AND lower(qq.questiontext) LIKE 'how many years of prior, consecutive workers%comp%applicant%'
+      WHERE lower(trim(w.name)) = 'redacted'
+        AND aqr.response IS NOT NULL
+        AND REPLACE(REPLACE(TRIM(aqr.response),',', ''), '.') RLIKE '^[0-9]+$'
+
+  - name: dim_policy_extension_wc
+    sql: |
+      SELECT
+          dp.policy_key as policy_key,
+          w.code AS policy_num_bus_key,
+          CASE
+            WHEN COALESCE(s.stcnt, 0) > 1 THEN 1
+            ELSE 0
+          END AS is_multi_state_flag,
+          CASE 
+            WHEN g.hazard in ('A','1') then 'A/1'
+            WHEN g.hazard in ('B','2') then 'B/2'
+            WHEN g.hazard in ('C','3') then 'C/3'
+            WHEN g.hazard in ('D','4') then 'D/4'
+            WHEN g.hazard in ('E','5') then 'E/5'
+            WHEN g.hazard in ('F','6') then 'F/6'
+            WHEN g.hazard in ('G','7') then 'G/7'
+          ELSE g.hazard
+          END	AS  gov_hazard_group,
+          CAST(dnb.creditscore AS INT) AS dnb_score,
+          CAST(pwc.priorwcyrs AS DECIMAL(8,3)) AS prior_wc_years_count,
+          True as dl_is_current_flag,
+          CAST('1901-01-01' AS DATE) as dl_row_effective_date,
+          CAST('9999-12-31' AS DATE) as dl_row_expiration_date,
+          False as dl_is_deleted_flag
+
+      FROM cte_wcpolicylist w
+
+      LEFT JOIN cte_fullgovclass g
+        ON lower(trim(w.code)) = lower(trim(g.code))
+       AND g.rcount = 1
+
+      LEFT JOIN (
+          SELECT code, COUNT(DISTINCT state) AS stcnt
+          FROM cte_uwstates_unioned
+          GROUP BY code
+      ) s
+        ON lower(trim(w.code)) = lower(trim(s.code))
+
+      LEFT JOIN (
+          SELECT
+              p.policynumber,
+              t.creditscore,
+              ROW_NUMBER() OVER (
+                PARTITION BY p.policynumber
+                ORDER BY t.enteredon DESC
+              ) AS rcount
+          FROM dnb_transactions t
+          JOIN dnb_policylookups p
+            ON trim(t.id) = trim(p.cs_id)
+      ) dnb
+        ON lower(trim(dnb.policynumber)) = lower(trim(w.code))
+       AND dnb.rcount = 1
+
+      LEFT JOIN (
+          SELECT
+              q.code,
+              q.priorwcyrs,
+              ROW_NUMBER() OVER (
+                PARTITION BY q.code
+                ORDER BY q.updateon DESC, q.question_id DESC
+              ) AS rcount
+          FROM cte_priorwcyrs_question_unioned q
+      ) pwc
+        ON lower(trim(pwc.code)) = lower(trim(w.code))
+       AND pwc.rcount = 1
+
+      INNER JOIN dim_policy dp
+        ON lower(trim(w.code)) = lower(trim(dp.policy_num_bus_key))
+        AND dp.dl_is_current_flag = 1

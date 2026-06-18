@@ -1,0 +1,59 @@
+{
+    "datasetName": "claimant",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGEOMDATA",
+    "datasetSchema": "dbo",
+    "sourceSystemProperties": {
+        "sourceSystemName": "demo_sqldb",
+        "includeSpecificColumns": [
+            "code",
+            "claim",
+            "claimantid",
+            "claimantnumber",
+            "wcclaimid",
+            "enteredon",
+            "status",
+            "reopened",
+            "closed",
+            "reserves0",
+            "reserves1",
+            "reserves2",
+            "paid0",
+            "paid1",
+            "paid2",
+            "lob"
+        ],
+        "filterExpression": "AND ssn IS NOT NULL",
+        "ingestType": "watermark",
+        "sourceWatermarkIdentifier": "UPDATEON",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_pdi_001_raw",
+        "fileType": "parquet",
+        "directoryName": "demo_sqldb"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_pdi_001_curated",
+        "schemaName": "demo",
+        "schemaEvolutionMode": "addNewColumns",
+        "schemaLocation": null,
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": ["*"],
+        "primaryKeyList": [
+            "claimantid"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "merge"
+    }
+}

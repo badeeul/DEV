@@ -1,0 +1,216 @@
+table dim_naics
+	lineageTag: 65e03c6d-00d8-4efd-a300-13aae81741fb
+	sourceLineageTag: [policy].[dim_naics]
+
+	column naics_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 6d9bd132-3ea3-4693-b3ad-79b43b0dd06d
+		sourceLineageTag: naics_key
+		summarizeBy: none
+		sourceColumn: naics_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_bus_key
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 0b6ff617-e38d-4d6c-8349-3e31c9cc1180
+		sourceLineageTag: naics_bus_key
+		summarizeBy: none
+		sourceColumn: naics_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_desc
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: bd5f3cf3-2bac-418a-b68f-a109907e838a
+		sourceLineageTag: naics_desc
+		summarizeBy: none
+		sourceColumn: naics_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_industry
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 1b8c21d4-889a-4cc1-8fc7-2935a7734f49
+		sourceLineageTag: naics_industry
+		summarizeBy: none
+		sourceColumn: naics_industry
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_sub_industry
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9f67fdc5-4578-4954-b6c5-b301875d5ff8
+		sourceLineageTag: naics_sub_industry
+		summarizeBy: none
+		sourceColumn: naics_sub_industry
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_bus_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: eccc7cc5-1469-490d-a6df-bda71f60e1e3
+		sourceLineageTag: naics_bus_type
+		summarizeBy: none
+		sourceColumn: naics_bus_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_two_digit
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 239e3af3-cc47-4377-bae2-614de74bf905
+		sourceLineageTag: naics_two_digit
+		summarizeBy: none
+		sourceColumn: naics_two_digit
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_three_digit
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4f640392-388d-4074-a5c9-b0655ee995fe
+		sourceLineageTag: naics_three_digit
+		summarizeBy: none
+		sourceColumn: naics_three_digit
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_four_digit
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4a0b7075-f759-4db6-9170-7987eb2762e3
+		sourceLineageTag: naics_four_digit
+		summarizeBy: none
+		sourceColumn: naics_four_digit
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_five_digit
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: bbed48bc-e6b4-4779-8151-22c8475c0398
+		sourceLineageTag: naics_five_digit
+		summarizeBy: none
+		sourceColumn: naics_five_digit
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: dfdc8ec9-88ad-42ab-b219-65fa0293de44
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 3103ac20-5aed-4bc1-b454-af38875a2903
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 57a6a6a6-d8bc-4d0b-8189-e9e73a8941e8
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2fb91d63-1f9f-4367-97dc-59d7e496a61e
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 66d75368-8254-4804-b2e4-ca1dc8c848b4
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 85a22697-2460-4da2-bd58-8f54b6383bb3
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e498b1fe-d3ef-4e3b-adf1-dce9a102ff09
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 3c08a9bb-9e6f-4a08-8391-3d93bb8518e6
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 49bd7fc7-ff3e-4a3d-8fa4-69cb28583cd3
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: cb2f10a6-b258-45df-9eeb-385f2302af6d
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_naics = entity
+		mode: directLake
+		source
+			entityName: dim_naics
+			schemaName: policy
+			expressionSource: DatabaseQuery
+

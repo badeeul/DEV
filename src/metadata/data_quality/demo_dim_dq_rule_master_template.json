@@ -1,0 +1,32 @@
+[
+    {
+        "dq_rule_master_key": 1,
+        "dq_rule_id": "Policy Format",
+        "data_product_name": "HOP",
+        "sub_domain_name": "Delegated Authority",
+        "dq_rule_description": "Check policy number matches the format.",
+        "dq_rule_constraint": {
+            "type": "expect_column_values_to_match_regex",
+            "kwargs": {
+                "column": "policy_number",
+                "regex": "[A-Z]\\d[A-Z]{2}\\d{6}$"
+            },
+            "meta": {
+                "action": {
+                    "fail_threshold": 0.0,
+                    "warn_threshold": 0.0,
+                    "quarantine": false
+                }
+            }
+        },
+        "dq_rule_dimension": "Dimension",
+        "dq_screen_type": "Column Screen",
+        "dq_rule_applicable_object": "ho_policy_data",
+        "dq_rule_applicable_attribute": "",
+        "dq_rule_failure_action": "",
+        "dq_rule_severity_score": 0.0,
+        "is_current_flag": true,
+        "row_effective_date": "1900-01-01T00:00:00.000Z",
+        "row_expiration_date": "9999-12-31T00:00:00.000Z"
+    }
+]

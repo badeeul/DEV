@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-RefDataProducts-MTR",
+  "targetWorkspaceName": "Fluidity-RefDataProducts-MTR",
+  "targetSuperDomain": "Fluidity",
+  "targetSubDomain": "Ref Data Products",
+  "targetProject": "DnA Fluidity",
+  "targetRepository": "DnA Fluidity - Ref Data Products",
+  "environment": "mtr",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Fluidity Ref Data Products - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "132071e2-a13c-434b-833a-a0a7985b81e9,7169f01c-38f3-4e38-98fb-7eaca0db7b01",
+  "viewerGroupPrincipalIds": "f704181a-be87-4c8f-985b-2f22dc96bcfa,8daac761-42d2-41c1-bbab-ce9858f55bb0,f286e369-4268-46c1-906a-0efa7f130f26,94c014b5-3511-403d-a1a0-aa89e4a3ec87,39763814-4752-4958-addc-2aacf416eecc,90441e55-a693-4a33-b2fb-f41ee73e2798,2bb4345b-06da-4f2c-bdfb-b3886002c392,848fc8ae-db87-45c6-9732-68393151f96c,028cc277-9cf3-4af9-8a70-61cc0674f3ce,5b157dcd-e447-42d3-8fa6-22830dc2a731,81515322-ed36-4428-bb89-2ec283b3667a"
+}

@@ -1,0 +1,987 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "batchCount": 10,
+          "items": {
+            "value": "@pipeline().parameters.Sftp_Folder_List",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "BinarySource",
+                  "formatSettings": {
+                    "type": "BinaryReadSettings"
+                  },
+                  "storeSettings": {
+                    "type": "SftpReadSettings",
+                    "disableChunking": false,
+                    "recursive": false,
+                    "wildcardFolderPath": {
+                      "value": "@item()",
+                      "type": "Expression"
+                    },
+                    "wildcardFileName": {
+                      "value": "@concat('*.',pipeline().parameters.file_type)",
+                      "type": "Expression"
+                    },
+                    "deleteFilesAfterCompletion": true,
+                    "modifiedDatetimeStart": {
+                      "value": "@variables('start_modified_end_datetime')",
+                      "type": "Expression"
+                    },
+                    "modifiedDatetimeEnd": {
+                      "value": "@variables('end_modified_end_datetime')",
+                      "type": "Expression"
+                    }
+                  },
+                  "datasetSettings": {
+                    "type": "Binary",
+                    "typeProperties": {
+                      "location": {
+                        "type": "SftpLocation"
+                      }
+                    },
+                    "externalReferences": {
+                      "connection": "123826c0-8cb1-4d49-924c-9e253fb9f62c"
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "BinarySink",
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings"
+                  },
+                  "datasetSettings": {
+                    "type": "Binary",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "@concat(pipeline().parameters.copy_destination_folder,'/',item())",
+                          "type": "Expression"
+                        }
+                      }
+                    },
+                    "linkedService": {
+                      "name": "cee1df66_2837_44e7_af06_d7e55ee43e26",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_raw_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Copy SFTP Files",
+              "dependsOn": []
+            },
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "JsonSource",
+                  "formatSettings": {
+                    "type": "JsonReadSettings"
+                  },
+                  "additionalColumns": [
+                    {
+                      "name": "QueueMessage",
+                      "value": {
+                        "value": "@concat('{ \"product_name\":',' \"',pipeline().parameters.product_name,'\", \"feed_name\": ','\"',pipeline().parameters.feed_name,'\", \n\"run_id\": ','\"',pipeline().RunId,'\",\n    \"elt_id\": ','\"',pipeline().parameters.ELT_Id,'\",\n    \"source_system\": ','\"',pipeline().parameters.source_system,'\",\n\"metadata\": ',activity('Copy SFTP Files').output,',\n\"zone_start_date_time\": ','\"',variables('end_modified_end_datetime'),'\",\n\"zone_end_date_time\": ','\"',utcNow(),'\",\n\"orchestration_tool\": \"data-pipeline\",\n\"zone\": \"Raw\",\n    \"stage\": \"Ingestion\",\n\"dataset_name\": ','\"',pipeline().parameters.dataset_name,'\"','}')",
+                        "type": "Expression"
+                      }
+                    }
+                  ],
+                  "storeSettings": {
+                    "type": "LakehouseReadSettings",
+                    "recursive": false,
+                    "enablePartitionDiscovery": false
+                  },
+                  "datasetSettings": {
+                    "type": "Json",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": "templates/logs",
+                        "fileName": "QueueMessage.json"
+                      }
+                    },
+                    "schema": {},
+                    "linkedService": {
+                      "name": "6ed7bfc4_4c01_4d5e_8f16_5fe3311e0117",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_metadata_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "DelimitedTextSink",
+                  "formatSettings": {
+                    "type": "DelimitedTextWriteSettings",
+                    "quoteAllText": true,
+                    "fileExtension": ".json"
+                  },
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings",
+                    "copyBehavior": "PreserveHierarchy"
+                  },
+                  "datasetSettings": {
+                    "type": "DelimitedText",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": "Metadata_Logs",
+                        "fileName": {
+                          "value": "@concat(pipeline().parameters.dataset_name, '_', pipeline().RunId,'.json')",
+                          "type": "Expression"
+                        }
+                      },
+                      "columnDelimiter": ",",
+                      "quoteChar": "",
+                      "escapeChar": "",
+                      "firstRowAsHeader": false
+                    },
+                    "schema": [],
+                    "linkedService": {
+                      "name": "d7ae41c6_307d_4b33_9b0b_6ed9c0235ec2",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_observability_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  },
+                  "columnFlattenSettings": {
+                    "treatArrayAsString": false,
+                    "treatStructAsString": false,
+                    "flattenColumnDelimiter": "."
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Copy Metadata Logs",
+              "dependsOn": [
+                {
+                  "activity": "Copy SFTP Files",
+                  "dependencyConditions": [
+                    "Completed"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "ForEach Sftp Folder",
+        "dependsOn": [
+          {
+            "activity": "Set EndTimeModified",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Set StartTimeModified",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "wildcardFolderPath": {
+                "value": "@concat('datasets/',pipeline().parameters.dataset_config_folder_name,'/watermark')",
+                "type": "Expression"
+              },
+              "wildcardFileName": {
+                "value": "@concat(pipeline().parameters.dataset_name,'.json')",
+                "type": "Expression"
+              },
+              "enablePartitionDiscovery": false
+            }
+          },
+          "datasetSettings": {
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation"
+              }
+            },
+            "schema": {},
+            "linkedService": {
+              "name": "847fa3ca_e88d_40f0_b230_bda866c2acd0",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "@pipeline().parameters.lh_metadata_id",
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Watermark",
+        "dependsOn": []
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "end_modified_end_datetime",
+          "value": {
+            "value": "@utcNow()",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Set EndTimeModified",
+        "dependsOn": []
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "start_modified_end_datetime",
+          "value": {
+            "value": "@activity('Get Watermark').output.value[0].watermarkValue",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Set StartTimeModified",
+        "dependsOn": [
+          {
+            "activity": "Get Watermark",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "GetMetadata",
+        "typeProperties": {
+          "datasetSettings": {
+            "type": "Binary",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": {
+                  "value": "@pipeline().parameters.copy_destination_folder",
+                  "type": "Expression"
+                }
+              }
+            },
+            "linkedService": {
+              "name": "43ad599b_8d71_4ab9_a647_142aa2731002",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "@pipeline().parameters.lh_raw_id",
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "fieldList": [
+            "exists"
+          ],
+          "storeSettings": {
+            "type": "LakehouseReadSettings",
+            "recursive": true,
+            "enablePartitionDiscovery": false
+          },
+          "formatSettings": {
+            "type": "BinaryReadSettings"
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Copy Destination Folder",
+        "dependsOn": [
+          {
+            "activity": "ForEach Sftp Folder",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@activity('Get Copy Destination Folder').output.exists",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "1a1f48eb-7279-4b92-81fe-c2cfb6000f2a",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "feed_name": {
+                    "value": {
+                      "value": "@pipeline().parameters.Feed_Name",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "run_id": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "elt_id": {
+                    "value": {
+                      "value": "@pipeline().parameters.ELT_Id",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "elt_start_date_time": {
+                    "value": {
+                      "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "product_name": {
+                    "value": {
+                      "value": "@pipeline().parameters.Product_Name",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "raw_directory": {
+                    "value": {
+                      "value": "@pipeline().parameters.copy_destination_folder",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "dataset_config_folder_name": {
+                    "value": {
+                      "value": "@pipeline().parameters.dataset_config_folder_name",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "dataset_file_name": {
+                    "value": {
+                      "value": "@pipeline().parameters.dataset_name",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "dataset_config_json": {
+                    "value": {
+                      "value": "@string(pipeline().parameters.dataset_config_json)",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "source_system": {
+                    "value": {
+                      "value": "@pipeline().parameters.source_system",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "invocation_id": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "workspace_id": {
+                    "value": {
+                      "value": "@pipeline().parameters.workspace_id",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "lh_observability_id": {
+                    "value": {
+                      "value": "@pipeline().parameters.lh_observability_id",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "lh_raw_id": {
+                    "value": {
+                      "value": "@pipeline().parameters.lh_raw_id",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "LoadRawToCurated",
+              "dependsOn": []
+            },
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "JsonSource",
+                  "formatSettings": {
+                    "type": "JsonReadSettings"
+                  },
+                  "additionalColumns": [
+                    {
+                      "name": "QueueMessage",
+                      "value": {
+                        "value": "@concat('{\"sourceWatermarkIdentifier\" :',' \"',activity('Get Watermark').output.value[0].sourceWatermarkIdentifier,'\",\n        \"watermarkValue\" : ','\"', variables('end_modified_end_datetime'),'\"','}')\n\n",
+                        "type": "Expression"
+                      }
+                    }
+                  ],
+                  "storeSettings": {
+                    "type": "LakehouseReadSettings",
+                    "recursive": false,
+                    "enablePartitionDiscovery": false
+                  },
+                  "datasetSettings": {
+                    "type": "Json",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "templates/logs",
+                          "type": "Expression"
+                        },
+                        "fileName": {
+                          "value": "QueueMessage.json",
+                          "type": "Expression"
+                        }
+                      }
+                    },
+                    "schema": {},
+                    "linkedService": {
+                      "name": "d2339315_74f4_4c6d_b51b_e4798e0beceb",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_metadata_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "DelimitedTextSink",
+                  "formatSettings": {
+                    "type": "DelimitedTextWriteSettings",
+                    "quoteAllText": true,
+                    "fileExtension": ".txt"
+                  },
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings",
+                    "copyBehavior": "PreserveHierarchy"
+                  },
+                  "datasetSettings": {
+                    "type": "DelimitedText",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "@concat('datasets/',pipeline().parameters.dataset_config_folder_name,'/watermark')",
+                          "type": "Expression"
+                        },
+                        "fileName": {
+                          "value": "@concat(pipeline().parameters.dataset_name,'.json')",
+                          "type": "Expression"
+                        }
+                      },
+                      "columnDelimiter": ",",
+                      "quoteChar": "",
+                      "escapeChar": "",
+                      "firstRowAsHeader": false
+                    },
+                    "schema": [],
+                    "linkedService": {
+                      "name": "f9b51e31_c944_47fc_b430_2c288bb7fdee",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_metadata_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  },
+                  "columnFlattenSettings": {
+                    "treatArrayAsString": false,
+                    "treatStructAsString": false,
+                    "flattenColumnDelimiter": "."
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Update Watermark",
+              "dependsOn": [
+                {
+                  "activity": "LoadRawToCurated",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "JsonSource",
+                  "formatSettings": {
+                    "type": "JsonReadSettings"
+                  },
+                  "additionalColumns": [
+                    {
+                      "name": "QueueMessage",
+                      "value": {
+                        "value": "{\"zoneCuratedUpdates\": true}",
+                        "type": "Expression"
+                      }
+                    }
+                  ],
+                  "storeSettings": {
+                    "type": "LakehouseReadSettings",
+                    "recursive": false,
+                    "enablePartitionDiscovery": false
+                  },
+                  "datasetSettings": {
+                    "type": "Json",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": "templates/logs",
+                        "fileName": "QueueMessage.json"
+                      }
+                    },
+                    "schema": {},
+                    "linkedService": {
+                      "name": "6ed7bfc4_4c01_4d5e_8f16_5fe3311e0117",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_metadata_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "DelimitedTextSink",
+                  "formatSettings": {
+                    "type": "DelimitedTextWriteSettings",
+                    "quoteAllText": true,
+                    "fileExtension": ".json"
+                  },
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings",
+                    "copyBehavior": "PreserveHierarchy"
+                  },
+                  "datasetSettings": {
+                    "type": "DelimitedText",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "@concat(pipeline().parameters.feed_name,'_',pipeline().parameters.ELT_Id)",
+                          "type": "Expression"
+                        },
+                        "fileName": {
+                          "value": "@concat(pipeline().parameters.dataset_name,'.json')",
+                          "type": "Expression"
+                        }
+                      },
+                      "columnDelimiter": ",",
+                      "quoteChar": "",
+                      "escapeChar": "",
+                      "firstRowAsHeader": false
+                    },
+                    "schema": [],
+                    "linkedService": {
+                      "name": "d7ae41c6_307d_4b33_9b0b_6ed9c0235ec2",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_observability_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  },
+                  "columnFlattenSettings": {
+                    "treatArrayAsString": false,
+                    "treatStructAsString": false,
+                    "flattenColumnDelimiter": "."
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Create Dummy File",
+              "description": "Creates dummy file to indicate that new file was ingested to curated. This is a signal for upstream workflow to trigger data product run.",
+              "dependsOn": [
+                {
+                  "activity": "LoadRawToCurated",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ],
+          "ifFalseActivities": [
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "JsonSource",
+                  "formatSettings": {
+                    "type": "JsonReadSettings"
+                  },
+                  "additionalColumns": [
+                    {
+                      "name": "QueueMessage",
+                      "value": {
+                        "value": "@concat('{\"sourceWatermarkIdentifier\" :',' \"',activity('Get Watermark').output.value[0].sourceWatermarkIdentifier,'\",\n        \"watermarkValue\" : ','\"', variables('end_modified_end_datetime'),'\"','}')\n\n",
+                        "type": "Expression"
+                      }
+                    }
+                  ],
+                  "storeSettings": {
+                    "type": "LakehouseReadSettings",
+                    "recursive": false,
+                    "enablePartitionDiscovery": false
+                  },
+                  "datasetSettings": {
+                    "type": "Json",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "templates/logs",
+                          "type": "Expression"
+                        },
+                        "fileName": {
+                          "value": "QueueMessage.json",
+                          "type": "Expression"
+                        }
+                      }
+                    },
+                    "schema": {},
+                    "linkedService": {
+                      "name": "d2339315_74f4_4c6d_b51b_e4798e0beceb",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_metadata_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "DelimitedTextSink",
+                  "formatSettings": {
+                    "type": "DelimitedTextWriteSettings",
+                    "quoteAllText": true,
+                    "fileExtension": ".txt"
+                  },
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings",
+                    "copyBehavior": "PreserveHierarchy"
+                  },
+                  "datasetSettings": {
+                    "type": "DelimitedText",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "@concat('datasets/',pipeline().parameters.dataset_config_folder_name,'/watermark')",
+                          "type": "Expression"
+                        },
+                        "fileName": {
+                          "value": "@concat(pipeline().parameters.dataset_name,'.json')",
+                          "type": "Expression"
+                        }
+                      },
+                      "columnDelimiter": ",",
+                      "quoteChar": "",
+                      "escapeChar": "",
+                      "firstRowAsHeader": false
+                    },
+                    "schema": [],
+                    "linkedService": {
+                      "name": "f9b51e31_c944_47fc_b430_2c288bb7fdee",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "@pipeline().parameters.lh_metadata_id",
+                          "workspaceId": "@pipeline().parameters.workspace_id",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  },
+                  "columnFlattenSettings": {
+                    "treatArrayAsString": false,
+                    "treatStructAsString": false,
+                    "flattenColumnDelimiter": "."
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "No File Update Watermark",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "If Exists",
+        "dependsOn": [
+          {
+            "activity": "Get Copy Destination Folder",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "Sftp_Folder_List": {
+        "type": "array",
+        "defaultValue": [
+          "Amwins"
+        ]
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "fb48654f-171e-424a-8d53-8220b2da94e1"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "copy_destination_folder": {
+        "type": "string",
+        "defaultValue": "MGAHOP/homeowner_policy"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "dataset_config_folder_name": {
+        "type": "string",
+        "defaultValue": "mgahop"
+      },
+      "file_type": {
+        "type": "string",
+        "defaultValue": "csv"
+      },
+      "product_name": {
+        "type": "string",
+        "defaultValue": "HOP"
+      },
+      "feed_name": {
+        "type": "string",
+        "defaultValue": "mga_hop"
+      },
+      "dataset_name": {
+        "type": "string",
+        "defaultValue": "homeowner_policy"
+      },
+      "ELT_Id": {
+        "type": "string",
+        "defaultValue": "60ee9ba3-8f82-418f-ac72-b0cea3c978f4"
+      },
+      "source_system": {
+        "type": "string",
+        "defaultValue": "MGA"
+      },
+      "elt_start_date_time": {
+        "type": "string",
+        "defaultValue": "10/23/2024"
+      },
+      "dataset_config_json": {
+        "type": "string",
+        "defaultValue": "homeowner_policy"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "61a6df22-f73b-48bc-855f-55f41065eb20"
+      }
+    },
+    "variables": {
+      "folder_list": {
+        "type": "Array"
+      },
+      "end_modified_end_datetime": {
+        "type": "String"
+      },
+      "start_modified_end_datetime": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "subject": "🚨 Data Quality Rule Failures Detected - {workspace_name}",
+    "body": {
+        "contentType": "text/html",
+        "content": "<p>🚨 <strong>Dear Team,</strong></p><p>We are notifying you that Data Quality rule failures have been detected in the latest processing batch.</p><p><strong>Details:</strong></p><ul><li><strong>Workspace:</strong> {workspace_name}</li><li><strong>Run Date:</strong> {run_date}</li></ul><p>Please review the failed DQ rules below and take appropriate corrective action:</p>"
+    },
+    "emailRecipient": "simran.padam@guard.com;badeeul.visakhapatnam@guard.com;philipp.strietzel@guard.com;meghan.shinert@guard.com;komal.bhardwaj@guard.com",
+    "emailCc": "",
+    "emailSender": "GUARD_DnA_Teams_Notification@guard.com",
+    "enabled": true
+}

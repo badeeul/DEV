@@ -1,0 +1,39 @@
+table 'Metric Group'
+	lineageTag: dd9322b6-715f-4a27-b978-faff5acf551c
+
+	column MetricGroup
+		lineageTag: 70151332-3052-4f3a-87a2-e5b742367cd5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MetricGroup]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: fcfcce8d-3d40-46cc-bc06-a5fb68e0a44b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Metric Group' = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "MetricGroup", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"Submitted Policies", 1},
+				        {"Quoted Policies", 2},
+				        {"Issued Policies", 3}
+				    }
+				)
+				
+				```
+
+	annotation PBI_Id = f47a5540b93746869f23a066a175da4b
+

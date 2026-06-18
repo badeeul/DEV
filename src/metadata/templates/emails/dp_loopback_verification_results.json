@@ -1,0 +1,11 @@
+{
+    "subject": "Common Product and Pricing Source Loopback Verification Results - {workspace_name}",
+    "body": {
+        "contentType": "text/html",
+        "content": ""
+    },
+    "emailRecipient": "simran.padam@guard.com;badeeul.visakhapatnam@guard.com;philipp.strietzel@guard.com;meghan.shinert@guard.com;komal.bhardwaj@guard.com",
+    "emailCc": "",
+    "emailSender": "GUARD_DnA_Teams_Notification@guard.com",
+    "enabled": true
+}

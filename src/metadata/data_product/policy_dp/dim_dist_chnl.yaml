@@ -1,0 +1,62 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_dist_chnl # target table
+  load_strategy: merge # scd type
+  key_columns: # is merge key
+    - agcy_cd_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: dist_chnl_key # sharepoint first row
+
+source:
+  - name: agency # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: agency # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+  - name: dim_employee # source table names
+    lakehouse: den_lhw_dpr_001_policy_product # keep
+    schema: policy # keep
+    table: dim_employee # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_dist_chnl # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: 
+      select 
+          a.agency as agcy_cd_bus_key,
+          a.name as agcy_desc,
+          a.sagency as super_agcy_cd,
+          b.name as super_agcy_desc,
+          COALESCE(terr.emp_key, -1) as terr_mngr_emp_key,
+          COALESCE(prod.emp_key, -1) as prod_rel_adv_emp_key,
+          case 
+              when lower(trim(a.agyrate)) = 'i5' then 'Inactive'
+              when lower(trim(a.agyrate)) = 'c4' then 'Closed'
+              when lower(trim(a.agyrate)) = 's2' then 'Active'
+              when lower(trim(a.agyrate)) = 'b6' then 'Prospect'
+              when lower(trim(a.agyrate)) = 'p1' then 'Preferred Broker'
+              when lower(trim(a.agyrate)) = 'v1' then 'VCAP'
+              else 'No Status'
+          end as agcy_status,
+          a.closed as agcy_closed_date,
+          True as dl_is_current_flag,
+          CAST('1901-01-01' AS DATE) as dl_row_effective_date,
+          CAST('9999-12-31' AS DATE) as dl_row_expiration_date,
+          False as dl_is_deleted_flag,
+          case
+              when lower(trim(a.agyrate)) = 's2' and lower(trim(agcy_status)) <> 'active' then 0
+              when lower(trim(a.agyrate)) = 'c4' and lower(trim(agcy_status)) <> 'closed' then 0
+              when lower(trim(a.agyrate)) = 'i5' and lower(trim(agcy_status)) <> 'inactive' then 0
+              when lower(trim(a.agyrate)) = 'p1' and lower(trim(agcy_status)) <> 'preferred broker' then 0
+              when lower(trim(a.agyrate)) = 'v1' and lower(trim(agcy_status)) <> 'vcap' then 0
+              else 1
+          end as dq_agyrate_agcy_status_check
+          
+
+      from agency a
+      inner join agency b on lower(trim(a.sagency)) = lower(trim(b.agency))
+      left join dim_employee terr on lower(trim(a.fieldrep)) = lower(trim(terr.emp_cd_bus_key)) and terr.dl_is_current_flag = 1
+      left join dim_employee prod on lower(trim(a.rosr)) = lower(trim(prod.emp_cd_bus_key)) and prod.dl_is_current_flag = 1

@@ -1,0 +1,59 @@
+# Alerts Processing Notebook
+
+## Overview
+This notebook is designed to process alerts and send email notifications for data pipeline events in a Microsoft Fabric environment. It handles the retrieval of notification templates, token replacement in JSON templates, and email sending using predefined parameters.
+
+
+## Prerequisites
+- **Microsoft Fabric Environment**: Ensure access to a Fabric workspace with necessary permissions.
+- **Synapse PySpark Kernel**: The notebook uses the `synapse_pyspark` kernel for execution.
+- **Dependencies**:
+  - Python libraries: `json`, `os`, `logging`, `typing`, `datetime`
+  - Custom modules: `spark_engine.common.email_util`, `spark_engine.common.lakehouse`
+- **Configuration**:
+  - Access to a Key Vault for secrets management.
+  - A lakehouse (e.g., `den_lhw_pdi_001_metadata`) containing notification templates.
+  - Properly configured workspace parameters in `den_nbk_pdi_001_workspace_parameters`.
+
+## Functionality
+The notebook performs the following tasks:
+1. **Imports and Setup**:
+   - Imports required Python libraries and custom modules.
+   - Configures logging for debugging and error tracking.
+2. **Parameter Definitions**:
+   - Defines pipeline parameters such as `elt_id`, `template_name`, `trigger_time`, `pipeline_name`, `data_product`, `database_names`, `workspace_id`, `metadata_lakehouse_id`, `pipeline_id`, `run_id`, and `feed_name`.
+3. **Utility Functions**:
+   - `get_template_location_url`: Retrieves the URL for a notification template stored in the lakehouse.
+   - `replace_tokens_in_json_object`: Replaces tokens in a JSON object with provided parameter values.
+   - `read_json_file`: Reads and parses a JSON file from the lakehouse.
+   - `process_alerts`: Main function to orchestrate alert processing and email sending.
+4. **Execution**:
+   - Calls `process_alerts` with predefined parameters.
+   - Sends an email notification using the processed template if successful.
+   - Logs errors and exits with a failure code if processing fails.
+
+## Usage
+1. **Configure Parameters**:
+   - Update the parameters in the notebook (e.g., `elt_id`, `template_name`, etc.) to match your pipeline and notification requirements.
+2. **Run the Notebook**:
+   - Execute the notebook in a Microsoft Fabric environment with the `synapse_pyspark` kernel.
+   - Ensure the referenced workspace parameters notebook (`den_nbk_pdi_001_workspace_parameters`) is available and correctly configured.
+3. **Monitor Output**:
+   - Check the logs for processing details and errors.
+   - Verify that the email notification is sent successfully.
+
+## Error Handling
+- The notebook includes comprehensive error handling with logging to capture issues such as:
+  - Missing required parameters.
+  - Failure to retrieve workspace details or template files.
+  - JSON parsing or token replacement errors.
+  - Email sending failures.
+- If an error occurs, the notebook logs the issue and exits with a status code of `1`.
+
+## Notes
+- The notebook assumes the template file (e.g., `dp_pipeline_completed.json`) exists in the lakehouse under `Files/templates/emails/`.
+- The `secretsScope` variable is expected to be defined in the `den_nbk_pdi_001_workspace_parameters` notebook.
+- Ensure the `LakehouseManager` and `send_email` utilities are properly implemented and accessible.
+
+## Example Output
+Upon successful execution, the notebook logs the workspace name, template location, and a confirmation message (`Mail Sent`). If an error occurs, it logs the error details and exits.

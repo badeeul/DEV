@@ -1,0 +1,628 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "enablePartitionDiscovery": false
+            }
+          },
+          "datasetSettings": {
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": "feeds",
+                "fileName": {
+                  "value": "@concat(pipeline().parameters.Feed_Name,'.json')",
+                  "type": "Expression"
+                }
+              }
+            },
+            "schema": {},
+            "linkedService": {
+              "name": "1b130b7d_37a0_465f_b1ff_5fa21b6c9ed7",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "@pipeline().parameters.lh_metadata_id",
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Feed Metadata",
+        "description": "Gets feed file from the metadata store",
+        "dependsOn": []
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "batchCount": 15,
+          "items": {
+            "value": "@activity('Get Feed Metadata').output.value[0].datasetsConfig",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Switch",
+              "typeProperties": {
+                "on": {
+                  "value": "@item().datasetType",
+                  "type": "Expression"
+                },
+                "cases": [
+                  {
+                    "value": "file",
+                    "activities": [
+                      {
+                        "type": "InvokePipeline",
+                        "typeProperties": {
+                          "parameters": {
+                            "Datasets_List": {
+                              "value": "@item().datasets",
+                              "type": "Expression"
+                            },
+                            "ELT_Id": {
+                              "value": "@pipeline().parameters.ELT_Id",
+                              "type": "Expression"
+                            },
+                            "Feed_Name": {
+                              "value": "@pipeline().parameters.Feed_Name",
+                              "type": "Expression"
+                            },
+                            "Product_Name": {
+                              "value": "@pipeline().parameters.Product_Name",
+                              "type": "Expression"
+                            },
+                            "Elt_Start_Date_Time": {
+                              "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                              "type": "Expression"
+                            },
+                            "lh_metadata_id": {
+                              "value": "@pipeline().parameters.lh_metadata_id",
+                              "type": "Expression"
+                            },
+                            "workspace_id": {
+                              "value": "@pipeline().parameters.workspace_id",
+                              "type": "Expression"
+                            },
+                            "lh_raw_id": {
+                              "value": "@pipeline().parameters.lh_raw_id",
+                              "type": "Expression"
+                            },
+                            "lh_observability_id": {
+                              "value": "@pipeline().parameters.lh_observability_id",
+                              "type": "Expression"
+                            }
+                          },
+                          "waitOnCompletion": true,
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "pipelineId": "9ec89220-9f98-4f30-aba3-313899c92206",
+                          "operationType": "InvokeFabricPipeline"
+                        },
+                        "externalReferences": {
+                          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "Invoke Load File to Curated",
+                        "description": "Invokes orchestrator to ingest source files into Raw and load into Curated LHW",
+                        "dependsOn": []
+                      }
+                    ]
+                  },
+                  {
+                    "value": "database",
+                    "activities": [
+                      {
+                        "type": "InvokePipeline",
+                        "typeProperties": {
+                          "parameters": {
+                            "Datasets_List": {
+                              "value": "@item().datasets",
+                              "type": "Expression"
+                            },
+                            "ELT_Id": {
+                              "value": "@pipeline().parameters.ELT_Id",
+                              "type": "Expression"
+                            },
+                            "Feed_Name": {
+                              "value": "@pipeline().parameters.Feed_Name",
+                              "type": "Expression"
+                            },
+                            "Product_Name": {
+                              "value": "@pipeline().parameters.Product_Name",
+                              "type": "Expression"
+                            },
+                            "Elt_Start_Date_Time": {
+                              "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                              "type": "Expression"
+                            },
+                            "lh_metadata_id": {
+                              "value": "@pipeline().parameters.lh_metadata_id",
+                              "type": "Expression"
+                            },
+                            "workspace_id": {
+                              "value": "@pipeline().parameters.workspace_id",
+                              "type": "Expression"
+                            },
+                            "lh_raw_id": {
+                              "value": "@pipeline().parameters.lh_raw_id",
+                              "type": "Expression"
+                            },
+                            "lh_observability_id": {
+                              "value": "@pipeline().parameters.lh_observability_id",
+                              "type": "Expression"
+                            }
+                          },
+                          "waitOnCompletion": true,
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "pipelineId": "f93f100a-1d58-46bd-a470-971d2054ed6c",
+                          "operationType": "InvokeFabricPipeline"
+                        },
+                        "externalReferences": {
+                          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "Invoke Load Database to Curated Driver",
+                        "description": "Invokes an orchestrator to ingest database sore into Raw and process Curated in one Spark session.",
+                        "dependsOn": []
+                      }
+                    ]
+                  }
+                ],
+                "defaultActivities": [
+                  {
+                    "type": "Fail",
+                    "typeProperties": {
+                      "message": {
+                        "value": "Invalid Dataset type passed!",
+                        "type": "Expression"
+                      },
+                      "errorCode": "100"
+                    },
+                    "name": "Fail Uknown Type",
+                    "dependsOn": []
+                  }
+                ]
+              },
+              "name": "Switch to Invoke Pipeline",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "ForEach Dataset Type",
+        "description": "Iterate for file and database separately",
+        "dependsOn": [
+          {
+            "activity": "Get Feed Metadata",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {
+            "ELT_Id": {
+              "value": "@pipeline().parameters.ELT_Id",
+              "type": "Expression"
+            },
+            "update_elt_log": {
+              "value": "false",
+              "type": "Expression"
+            }
+          },
+          "waitOnCompletion": false,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "2a9e070f-499f-4495-99fd-1265f1ab07f1",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Failed Invoke Process Logs",
+        "description": "Notebook to process metadata logs and send alert",
+        "dependsOn": [
+          {
+            "activity": "ForEach Dataset Type",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@activity('Get Feed Metadata').output.value[0].dataDeduplicationAlert",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "2018d21c-598a-437e-9697-6412da9b6271",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "elt_id": {
+                    "value": {
+                      "value": "@pipeline().parameters.ELT_Id",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "template_name": {
+                    "value": {
+                      "value": "@activity('Get Feed Metadata').output.value[0].deduplicationAlertTemplate",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Send Alerts",
+              "dependsOn": []
+            }
+          ],
+          "ifFalseActivities": []
+        },
+        "name": "If Alerts Enabled",
+        "dependsOn": [
+          {
+            "activity": "ForEach Dataset Type",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@and(activity('Get Copy Destination Folder').output.exists, not(activity('Get Feed Metadata').output.value[0].skipProductLoad))",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "Delete",
+              "typeProperties": {
+                "enableLogging": false,
+                "datasetSettings": {
+                  "type": "Binary",
+                  "typeProperties": {
+                    "location": {
+                      "type": "LakehouseLocation",
+                      "folderPath": {
+                        "value": "@concat(pipeline().parameters.Feed_Name,'_',pipeline().parameters.ELT_Id)",
+                        "type": "Expression"
+                      }
+                    }
+                  },
+                  "linkedService": {
+                    "name": "fd96dd6e_0740_4352_aeb0_94fe11a0acef",
+                    "properties": {
+                      "type": "Lakehouse",
+                      "typeProperties": {
+                        "artifactId": "@pipeline().parameters.lh_observability_id",
+                        "workspaceId": "@pipeline().parameters.workspace_id",
+                        "rootFolder": "Files"
+                      },
+                      "annotations": []
+                    }
+                  },
+                  "annotations": []
+                },
+                "storeSettings": {
+                  "type": "LakehouseReadSettings",
+                  "recursive": true,
+                  "enablePartitionDiscovery": false
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Delete Dummy Files",
+              "description": "This deletes entire folder of dummy files used to orchestrate the data product load when new data was ingested in curated zone.",
+              "dependsOn": [
+                {
+                  "activity": "Invoke Load Curated to Modeled",
+                  "dependencyConditions": [
+                    "Completed"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "ELT_Id": {
+                    "value": "@pipeline().parameters.ELT_Id",
+                    "type": "Expression"
+                  },
+                  "Feed_Name": {
+                    "value": "@pipeline().parameters.Feed_Name",
+                    "type": "Expression"
+                  },
+                  "Product_Name": {
+                    "value": "@pipeline().parameters.Product_Name",
+                    "type": "Expression"
+                  },
+                  "Elt_Start_Date_Time": {
+                    "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                    "type": "Expression"
+                  },
+                  "lh_metadata_id": {
+                    "value": "@pipeline().parameters.lh_metadata_id",
+                    "type": "Expression"
+                  },
+                  "workspace_id": {
+                    "value": "@pipeline().parameters.workspace_id",
+                    "type": "Expression"
+                  },
+                  "lh_observability_id": {
+                    "value": "@pipeline().parameters.lh_observability_id",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "99342187-b86f-44d0-8b92-2235c1cc9041",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Invoke Load Curated to Modeled",
+              "description": "To enable downstream data integration zone, optional, this pipeline should not be triggered in async mode. \nSet \"waitOnCompletion\": true\n",
+              "dependsOn": []
+            },
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "ELT_Id": {
+                    "value": "@pipeline().parameters.ELT_Id",
+                    "type": "Expression"
+                  },
+                  "update_elt_log": {
+                    "value": "false",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": false,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "2a9e070f-499f-4495-99fd-1265f1ab07f1",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Invoke Process Logs",
+              "description": "Notebook to process metadata logs and send alert",
+              "dependsOn": []
+            },
+            {
+              "type": "Fail",
+              "typeProperties": {
+                "message": {
+                  "value": "@concat('Invoke Load Curated to Modeled activity failure for runID: ', pipeline().RunId)",
+                  "type": "Expression"
+                },
+                "errorCode": {
+                  "value": "401",
+                  "type": "Expression"
+                }
+              },
+              "name": "Fail Pipeline",
+              "dependsOn": [
+                {
+                  "activity": "Invoke Load Curated to Modeled",
+                  "dependencyConditions": [
+                    "Failed"
+                  ]
+                }
+              ]
+            }
+          ],
+          "ifFalseActivities": [
+            {
+              "type": "InvokePipeline",
+              "typeProperties": {
+                "parameters": {
+                  "ELT_Id": {
+                    "value": "@pipeline().parameters.ELT_Id",
+                    "type": "Expression"
+                  },
+                  "update_elt_log": {
+                    "value": "true",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": false,
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "pipelineId": "2a9e070f-499f-4495-99fd-1265f1ab07f1",
+                "operationType": "InvokeFabricPipeline"
+              },
+              "externalReferences": {
+                "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Done Invoke Process Logs",
+              "description": "Notebook to process metadata logs and send alert",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "If New Data in Curated Zone",
+        "description": "Check if dummy file(s) exist, indication of new data in curated zone.",
+        "dependsOn": [
+          {
+            "activity": "Get Copy Destination Folder",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "GetMetadata",
+        "typeProperties": {
+          "datasetSettings": {
+            "type": "Binary",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": {
+                  "value": "@concat(pipeline().parameters.Feed_Name,'_',pipeline().parameters.ELT_Id)",
+                  "type": "Expression"
+                }
+              }
+            },
+            "linkedService": {
+              "name": "c8349de1_2836_40cb_b98a_31aaa74df357",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "@pipeline().parameters.lh_observability_id",
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "fieldList": [
+            "exists"
+          ],
+          "storeSettings": {
+            "type": "LakehouseReadSettings",
+            "recursive": true,
+            "enablePartitionDiscovery": false
+          },
+          "formatSettings": {
+            "type": "BinaryReadSettings"
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Copy Destination Folder",
+        "dependsOn": [
+          {
+            "activity": "ForEach Dataset Type",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "ELT_Id": {
+        "type": "string"
+      },
+      "Feed_Name": {
+        "type": "string"
+      },
+      "Product_Name": {
+        "type": "string"
+      },
+      "Elt_Start_Date_Time": {
+        "type": "string"
+      },
+      "lh_metadata_id": {
+        "type": "string"
+      },
+      "workspace_id": {
+        "type": "string"
+      },
+      "lh_raw_id": {
+        "type": "string"
+      },
+      "lh_observability_id": {
+        "type": "string"
+      }
+    }
+  }
+}

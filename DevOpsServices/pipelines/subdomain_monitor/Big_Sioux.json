@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-BigSioux-MTR",
+    "targetWorkspaceName": "Missouri-BigSioux-MTR",
+    "targetSuperDomain": "Missouri",
+    "targetSubDomain": "Big Sioux",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],   
+    "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+    "keyvaultName": "bhg-hub-fabric01-eus-kv",
+    "adminGroupPrincipalIds": "e447be2e-5c77-4b7d-a102-8a9d71d59d16",
+    "contributorGroupPrincipalIds": "98eccd74-0a7e-4b2a-862b-cc2ea0b82587"
+}

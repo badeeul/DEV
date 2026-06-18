@@ -1,0 +1,44 @@
+{
+    "loadGroupA": [
+        {
+            "files": [
+                {
+                    "fileName": "ho_policy_data",
+                    "modelConfigFolderName": "mgahop"
+                }
+            ]
+        }
+    ],
+    "loadGroupB": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_address",
+                    "modelConfigFolderName": "mgahop"
+                },
+                {
+                    "fileName": "dim_broker",
+                    "modelConfigFolderName": "mgahop"
+                },
+                {
+                    "fileName": "dim_city",
+                    "modelConfigFolderName": "mgahop"
+                }
+            ]
+        }
+    ],
+    "loadGroupC": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_policy_coverage",
+                    "modelConfigFolderName": "mgahop"
+                },
+                {
+                    "fileName": "fact_policy",
+                    "modelConfigFolderName": "mgahop"
+                }
+            ]
+        }
+    ]
+}

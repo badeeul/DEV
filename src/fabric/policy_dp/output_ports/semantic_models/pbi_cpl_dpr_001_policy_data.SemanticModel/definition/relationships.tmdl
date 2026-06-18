@@ -1,0 +1,224 @@
+relationship 66315f45-7974-a346-8705-01b88e85af12
+	fromColumn: 'Distribution Channel / Agency'.prod_rel_adv_emp_key
+	toColumn: 'Producer Relations Advisor'.emp_key
+
+relationship ab6e91b9-e1f2-9f32-dfdb-84eb0d50700a
+	fromColumn: 'Distribution Channel / Agency'.terr_mngr_emp_key
+	toColumn: 'Territory Manager'.emp_key
+
+relationship e03ad2dd-5e0c-9614-0de2-a9ecf8dde0d4
+	fromColumn: Insured.legal_ent_type_key
+	toColumn: 'Insured Legal Entity Type'.insd_leg_ent_type_key
+
+relationship e5ee8e88-f2c4-d193-48d5-095fa4540693
+	fromColumn: Policy.digital_decision_status_key
+	toColumn: 'Digital Decision Status'.digital_decision_status_key
+
+relationship 9941972c-8b2a-164e-d143-e5e1dbdcdb1c
+	fromColumn: Policy.latest_policy_status_key
+	toColumn: 'Policy Status'.policy_status_key
+
+relationship 5e4887e8-548b-a2bb-e38d-2bae5c924645
+	fromColumn: 'Policy Measures'.carrier_key
+	toColumn: Carrier.carrier_key
+
+relationship 3629468f-37ec-5113-26d2-4a6ed2c4f76a
+	fromColumn: 'Policy Measures'.dec_uw_emp_key
+	toColumn: 'Decision Underwriter'.emp_key
+
+relationship c77515b9-ef97-5bda-5967-92a50f3cc79a
+	fromColumn: 'Policy Measures'.dist_chnl_key
+	toColumn: 'Distribution Channel / Agency'.dist_chnl_key
+
+relationship a9a280ce-e47d-933c-c6de-be797dddfdde
+	fromColumn: 'Policy Measures'.gov_bus_class_key
+	toColumn: 'Governing Class'.bus_class_key
+
+relationship 41bdb79a-fa9a-5b7e-fd04-3d9458529469
+	fromColumn: 'Policy Measures'.insd_key
+	toColumn: Insured.insd_key
+
+relationship 1b3a3626-cbbf-65d8-7a34-1aded48f6a26
+	fromColumn: 'Policy Measures'.lob_key
+	toColumn: 'Line of Business'.lob_key
+
+relationship 37998661-3e64-5aaf-f135-cace5e585d6d
+	fromColumn: 'Policy Measures'.mkt_type_key
+	toColumn: 'Market Type'.mkt_type_key
+
+relationship 862e521e-a678-7766-9dd0-5397b9980843
+	fromColumn: 'Policy Measures'.naics_key
+	toColumn: NAICS.naics_key
+
+relationship 20cde093-b152-56c4-1855-82b8aee55acd
+	fromColumn: 'Policy Measures'.policy_cancel_dt_key
+	toColumn: 'Policy Cancel Date'.date_key
+
+relationship 926059c2-5753-1f03-cd1a-4c48c4de9675
+	fromColumn: 'Policy Measures'.policy_coverage_end_dt_key
+	toColumn: 'Policy Coverage End Date'.date_key
+
+relationship 526072df-6121-ac16-d0ab-bd4075d94657
+	fromColumn: 'Policy Measures'.policy_coverage_start_dt_key
+	toColumn: 'Policy Coverage Start Date'.date_key
+
+relationship 05966e22-07bc-7c84-5ed1-2e3911ac7a41
+	fromColumn: 'Policy Measures'.policy_effec_end_dt_key
+	toColumn: 'Policy Effective End Date'.date_key
+
+relationship 4e6b7594-bbd8-394d-d827-142fce5c0995
+	fromColumn: 'Policy Measures'.policy_effec_start_dt_key
+	toColumn: 'Policy Effective Start Date'.date_key
+
+relationship 7eb01ef0-3fbc-67e0-c64c-3ca0f8e63619
+	fromColumn: 'Policy Measures'.policy_issue_dt_key
+	toColumn: 'Policy Issue Date'.date_key
+
+relationship c05c1c97-2423-57a2-c6e2-9255874949ea
+	fromColumn: 'Policy Measures'.policy_key
+	toColumn: Policy.policy_key
+
+relationship 7bad77b9-d03e-cfb3-e2e0-f9c72795f8d5
+	fromColumn: 'Policy Measures'.policy_sub_dt_key
+	toColumn: 'Policy Submission Date'.date_key
+
+relationship 9a3e5536-268e-2123-516f-deda351320db
+	fromColumn: 'Policy Measures'.prod_src_key
+	toColumn: 'Production Source'.prod_src_key
+
+relationship f76a73c0-c5b8-938e-7964-dca99785411d
+	fromColumn: 'Policy Transaction Detail'.carrier_key
+	toColumn: Carrier.carrier_key
+
+relationship 88d214ce-b71f-127f-7c57-92110cd61508
+	fromColumn: 'Policy Transaction Detail'.dec_uw_emp_key
+	toColumn: 'Decision Underwriter'.emp_key
+
+relationship 1b65abb6-bc4c-31f9-8695-471cae215b00
+	fromColumn: 'Policy Transaction Detail'.dist_chnl_key
+	toColumn: 'Distribution Channel / Agency'.dist_chnl_key
+
+relationship a60eb02c-608d-da83-b78f-91b98fd967a6
+	fromColumn: 'Policy Transaction Detail'.gov_bus_class_key
+	toColumn: 'Governing Class'.bus_class_key
+
+relationship a917d8ea-6031-9437-f3fb-07eff9dbbaa4
+	fromColumn: 'Policy Transaction Detail'.insd_key
+	toColumn: Insured.insd_key
+
+relationship 01bc0f19-3cf7-3c66-ef63-3e4804b8c754
+	fromColumn: 'Policy Transaction Detail'.lob_key
+	toColumn: 'Line of Business'.lob_key
+
+relationship d71672e3-3826-6275-e1f0-5c981cff6074
+	fromColumn: 'Policy Transaction Detail'.mkt_type_key
+	toColumn: 'Market Type'.mkt_type_key
+
+relationship f255b6bb-3595-4e9f-abfe-b7b4e0316285
+	fromColumn: 'Policy Transaction Detail'.naics_key
+	toColumn: NAICS.naics_key
+
+relationship 91d9bb64-58f4-d093-f76e-7d198bb29651
+	fromColumn: 'Policy Transaction Detail'.policy_coverage_end_dt_key
+	toColumn: 'Policy Coverage End Date'.date_key
+
+relationship 8a871b06-3790-c747-85a3-925810c7e688
+	fromColumn: 'Policy Transaction Detail'.policy_coverage_start_dt_key
+	toColumn: 'Policy Coverage Start Date'.date_key
+
+relationship 03241b83-d8a6-a6a5-2395-eda6d4e44a65
+	fromColumn: 'Policy Transaction Detail'.policy_effec_end_dt_key
+	toColumn: 'Policy Effective End Date'.date_key
+
+relationship b70fa318-a6a2-52d5-de92-ad9d106dd64c
+	fromColumn: 'Policy Transaction Detail'.policy_effec_start_dt_key
+	toColumn: 'Policy Effective Start Date'.date_key
+
+relationship fe034f28-51b8-2d19-05f9-4aed9b68788a
+	fromColumn: 'Policy Transaction Detail'.policy_key
+	toColumn: Policy.policy_key
+
+relationship dbf540f2-74bb-68be-7c48-abd9278e57c3
+	fromColumn: 'Policy Transaction Detail'.policy_trans_dt_key
+	toColumn: 'Policy Trans Date'.date_key
+
+relationship 49b5f994-5d30-8604-3ce8-c64516286556
+	fromColumn: 'Policy Transaction Detail'.policy_trans_subtype_key
+	toColumn: 'Policy Transaction Subtype'.policy_trans_subtype_key
+
+relationship d7d65084-2547-011e-e5c7-61f10020674b
+	fromColumn: 'Policy Transaction Detail'.policy_trans_type_key
+	toColumn: 'Policy Transaction Type'.policy_trans_type_key
+
+relationship 0cbde2a9-c788-729d-4e01-d6301f0170b1
+	fromColumn: 'Policy Transaction Detail'.prod_src_key
+	toColumn: 'Production Source'.prod_src_key
+
+relationship 262e7d96-fbcc-2ae2-6252-361e6a4ec3db
+	fromColumn: 'Policy Transactions'.carrier_key
+	toColumn: Carrier.carrier_key
+
+relationship c8895836-18e9-af3b-7475-dbe4ae46c092
+	fromColumn: 'Policy Transactions'.dec_uw_emp_key
+	toColumn: 'Decision Underwriter'.emp_key
+
+relationship b433b43b-35bb-0bbd-d421-0bff8e18a14d
+	fromColumn: 'Policy Transactions'.dist_chnl_key
+	toColumn: 'Distribution Channel / Agency'.dist_chnl_key
+
+relationship 5fdbb9de-cc6a-3438-e6b3-f6b92242cdcd
+	fromColumn: 'Policy Transactions'.gov_bus_class_key
+	toColumn: 'Governing Class'.bus_class_key
+
+relationship c41f01ba-5152-2e16-123f-4c839e23a365
+	fromColumn: 'Policy Transactions'.insd_key
+	toColumn: Insured.insd_key
+
+relationship e870c1d0-be42-df1f-f9e4-d01415c65b58
+	fromColumn: 'Policy Transactions'.lob_key
+	toColumn: 'Line of Business'.lob_key
+
+relationship e0614bff-f945-c93e-9f30-c08a997413a9
+	fromColumn: 'Policy Transactions'.mkt_type_key
+	toColumn: 'Market Type'.mkt_type_key
+
+relationship 67d2b1c4-7eab-fb4f-529e-7ff9e2eb25a0
+	fromColumn: 'Policy Transactions'.naics_key
+	toColumn: NAICS.naics_key
+
+relationship 179c6520-09ca-2c64-a03d-3750090ef93e
+	fromColumn: 'Policy Transactions'.policy_coverage_end_dt_key
+	toColumn: 'Policy Coverage End Date'.date_key
+
+relationship 337cb013-d2ce-852e-affb-cb8d29c72ab8
+	fromColumn: 'Policy Transactions'.policy_coverage_start_dt_key
+	toColumn: 'Policy Coverage Start Date'.date_key
+
+relationship 5979847b-b696-0a23-f68d-2242492cfd5c
+	fromColumn: 'Policy Transactions'.policy_effec_end_dt_key
+	toColumn: 'Policy Effective End Date'.date_key
+
+relationship 0d434369-06b7-aad8-7ba6-00a9a2fac901
+	fromColumn: 'Policy Transactions'.policy_effec_start_dt_key
+	toColumn: 'Policy Effective Start Date'.date_key
+
+relationship cffff643-d2d3-5879-349c-db8bd6a8475a
+	fromColumn: 'Policy Transactions'.policy_key
+	toColumn: Policy.policy_key
+
+relationship 7dfd167a-8d5f-6eff-1cef-039c64a111ea
+	fromColumn: 'Policy Transactions'.policy_trans_dt_key
+	toColumn: 'Policy Trans Date'.date_key
+
+relationship a940210e-b164-d05c-b977-77cfe1af9b02
+	fromColumn: 'Policy Transactions'.policy_trans_type_key
+	toColumn: 'Policy Transaction Type'.policy_trans_type_key
+
+relationship 4ee47361-57ea-ad08-c48a-4ddc72eca9b8
+	fromColumn: 'Policy Transactions'.policy_trans_written_on_dt_key
+	toColumn: 'Policy Trans Written Date'.date_key
+
+relationship 88c59e23-9872-5dc9-dd55-bd829e387085
+	fromColumn: 'Policy Transactions'.prod_src_key
+	toColumn: 'Production Source'.prod_src_key
+

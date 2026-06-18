@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-DataProductMgmt-INT",
+  "targetWorkspaceName": "Fluidity-DataProductMgmt-INT",
+  "targetSuperDomain": "Fluidity",
+  "targetSubDomain": "Data Product Mgmt",
+  "targetProject": "DnA Fluidity",
+  "targetRepository": "DnA Fluidity - Data Product Mgmt",
+  "environment": "int",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "6ebb0f2b-604e-488b-9f17-f51d2cc3bccf,2ac69476-4830-443e-af09-1589a170f200",
+  "viewerGroupPrincipalIds": "51bc80e5-3473-482a-8538-8cb70732721f,243d087a-255f-46bd-afec-cee6ce57e5bd,227f078b-f954-4a47-8947-112ddcfe2eeb"
+}

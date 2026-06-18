@@ -1,0 +1,11 @@
+{
+  "subject": "GL Policies - LexisNexis Weekly Output - {workspace_name}",
+  "body": {
+    "contentType": "text/html",
+    "content": "<p>Attached are the General Liability (GL) policies enriched with LexisNexis results from the past week.</p>\n<p>This report includes NAICS classifications and confidence scores returned from LexisNexis to support your review.</p>\n<p><strong>Details:</strong></p>\n<ul>\n  <li><strong>Run Date:</strong> {run_date}</li>\n</ul>\n<p>Please review the attached file and reach out if any questions or anomalies are identified.</p>\n<p>Best regards,<br>Data and Analytics Team</p>"
+  },
+  "emailRecipient": "simran.padam@guard.com",
+  "emailCc": "",
+  "emailSender": "GUARD_DnA_Teams_Notification@guard.com",
+  "enabled": true
+}

@@ -1,0 +1,484 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "batchCount": 15,
+          "items": {
+            "value": "@pipeline().parameters.Datasets_List",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Lookup",
+              "typeProperties": {
+                "source": {
+                  "type": "JsonSource",
+                  "formatSettings": {
+                    "type": "JsonReadSettings"
+                  },
+                  "storeSettings": {
+                    "type": "LakehouseReadSettings",
+                    "recursive": false,
+                    "wildcardFolderPath": {
+                      "value": "@concat('datasets/',item().sourceConfigFolderName)",
+                      "type": "Expression"
+                    },
+                    "wildcardFileName": {
+                      "value": "@concat(item().fileName,'.json')",
+                      "type": "Expression"
+                    },
+                    "enablePartitionDiscovery": false
+                  }
+                },
+                "datasetSettings": {
+                  "type": "Json",
+                  "typeProperties": {
+                    "location": {
+                      "type": "LakehouseLocation"
+                    }
+                  },
+                  "schema": {},
+                  "linkedService": {
+                    "name": "e73b8991_c031_4845_a742_26000eaf5137",
+                    "properties": {
+                      "type": "Lakehouse",
+                      "typeProperties": {
+                        "artifactId": "@pipeline().parameters.lh_metadata_id",
+                        "workspaceId": "@pipeline().parameters.workspace_id",
+                        "rootFolder": "Files"
+                      },
+                      "annotations": []
+                    }
+                  },
+                  "annotations": []
+                },
+                "firstRowOnly": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "GetDatasetMetadataFile",
+              "dependsOn": []
+            },
+            {
+              "type": "Switch",
+              "typeProperties": {
+                "on": {
+                  "value": "@activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sourceSystemType",
+                  "type": "Expression"
+                },
+                "cases": [
+                  {
+                    "value": "sftp",
+                    "activities": [
+                      {
+                        "type": "InvokePipeline",
+                        "typeProperties": {
+                          "parameters": {
+                            "Sftp_Folder_List": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sftpFolderList",
+                              "type": "Expression"
+                            },
+                            "lh_raw_id": {
+                              "value": "@pipeline().parameters.lh_raw_id",
+                              "type": "Expression"
+                            },
+                            "workspace_id": {
+                              "value": "@pipeline().parameters.workspace_id",
+                              "type": "Expression"
+                            },
+                            "copy_destination_folder": {
+                              "value": "@concat(activity('GetDatasetMetadataFile').output.value[0].rawProperties.directoryName,'/',activity('GetDatasetMetadataFile').output.value[0].datasetName,'/',pipeline().RunId)",
+                              "type": "Expression"
+                            },
+                            "lh_metadata_id": {
+                              "value": "@pipeline().parameters.lh_metadata_id",
+                              "type": "Expression"
+                            },
+                            "dataset_config_folder_name": {
+                              "value": "@item().sourceConfigFolderName",
+                              "type": "Expression"
+                            },
+                            "file_type": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].fileType",
+                              "type": "Expression"
+                            },
+                            "product_name": {
+                              "value": "@pipeline().parameters.Product_Name",
+                              "type": "Expression"
+                            },
+                            "feed_name": {
+                              "value": "@pipeline().parameters.Feed_Name",
+                              "type": "Expression"
+                            },
+                            "dataset_name": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].datasetName",
+                              "type": "Expression"
+                            },
+                            "ELT_Id": {
+                              "value": "@pipeline().parameters.ELT_Id",
+                              "type": "Expression"
+                            },
+                            "source_system": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sourceSystemName",
+                              "type": "Expression"
+                            },
+                            "elt_start_date_time": {
+                              "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                              "type": "Expression"
+                            },
+                            "dataset_config_json": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0]\r\n",
+                              "type": "Expression"
+                            },
+                            "lh_observability_id": {
+                              "value": "@pipeline().parameters.lh_observability_id",
+                              "type": "Expression"
+                            }
+                          },
+                          "waitOnCompletion": true,
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "pipelineId": "f521b7b4-9405-473e-819b-600f31ffb1fd",
+                          "operationType": "InvokeFabricPipeline"
+                        },
+                        "externalReferences": {
+                          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "Invoke Ingest SFTP",
+                        "dependsOn": []
+                      }
+                    ]
+                  },
+                  {
+                    "value": "lakehouse",
+                    "activities": [
+                      {
+                        "type": "InvokePipeline",
+                        "typeProperties": {
+                          "parameters": {
+                            "ELT_Id": {
+                              "value": "@pipeline().parameters.ELT_Id",
+                              "type": "Expression"
+                            },
+                            "Feed_Name": {
+                              "value": "@pipeline().parameters.Feed_Name",
+                              "type": "Expression"
+                            },
+                            "Product_Name": {
+                              "value": "@pipeline().parameters.Product_Name",
+                              "type": "Expression"
+                            },
+                            "Elt_Start_Date_Time": {
+                              "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                              "type": "Expression"
+                            },
+                            "lh_metadata_id": {
+                              "value": "@pipeline().parameters.lh_metadata_id",
+                              "type": "Expression"
+                            },
+                            "workspace_id": {
+                              "value": "@pipeline().parameters.workspace_id",
+                              "type": "Expression"
+                            },
+                            "lh_raw_id": {
+                              "value": "@pipeline().parameters.lh_raw_id",
+                              "type": "Expression"
+                            },
+                            "source_config_folder_name": {
+                              "value": "@item().sourceConfigFolderName",
+                              "type": "Expression"
+                            },
+                            "source_config_file_name": {
+                              "value": "@item().fileName",
+                              "type": "Expression"
+                            },
+                            "invocation_id": {
+                              "value": "@pipeline().RunId",
+                              "type": "Expression"
+                            },
+                            "lh_observability_id": {
+                              "value": "@pipeline().parameters.lh_observability_id",
+                              "type": "Expression"
+                            }
+                          },
+                          "waitOnCompletion": true,
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "pipelineId": "9db76394-afe7-4230-b62a-0bd43078444d",
+                          "operationType": "InvokeFabricPipeline"
+                        },
+                        "externalReferences": {
+                          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "Invoke load_file_to_curated",
+                        "dependsOn": []
+                      }
+                    ]
+                  },
+                  {
+                    "value": "notebook",
+                    "activities": [
+                      {
+                        "type": "InvokePipeline",
+                        "typeProperties": {
+                          "parameters": {
+                            "ELT_Id": {
+                              "value": "@pipeline().parameters.ELT_Id",
+                              "type": "Expression"
+                            },
+                            "Feed_Name": {
+                              "value": "@pipeline().parameters.Feed_Name",
+                              "type": "Expression"
+                            },
+                            "Product_Name": {
+                              "value": "@pipeline().parameters.Product_Name",
+                              "type": "Expression"
+                            },
+                            "Elt_Start_Date_Time": {
+                              "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                              "type": "Expression"
+                            },
+                            "lh_metadata_id": {
+                              "value": "@pipeline().parameters.lh_metadata_id",
+                              "type": "Expression"
+                            },
+                            "workspace_id": {
+                              "value": "@pipeline().parameters.workspace_id",
+                              "type": "Expression"
+                            },
+                            "lh_raw_id": {
+                              "value": "@pipeline().parameters.lh_raw_id",
+                              "type": "Expression"
+                            },
+                            "source_config_folder_name": {
+                              "value": "@item().sourceConfigFolderName",
+                              "type": "Expression"
+                            },
+                            "source_config_file_name": {
+                              "value": "@item().fileName",
+                              "type": "Expression"
+                            },
+                            "invocation_id": {
+                              "value": "@pipeline().RunId",
+                              "type": "Expression"
+                            },
+                            "lh_observability_id": {
+                              "value": "@pipeline().parameters.lh_observability_id",
+                              "type": "Expression"
+                            }
+                          },
+                          "waitOnCompletion": true,
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "pipelineId": "9131e26e-7e5c-a8fa-4ddd-a8c38ace9d2c",
+                          "operationType": "InvokeFabricPipeline"
+                        },
+                        "externalReferences": {
+                          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "Invoke Extract Source Files",
+                        "dependsOn": []
+                      }
+                    ]
+                  },
+                  {
+                    "value": "blob",
+                    "activities": [
+                      {
+                        "type": "InvokePipeline",
+                        "typeProperties": {
+                          "parameters": {
+                            "Sftp_Folder_List": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sftpFolderList",
+                              "type": "Expression"
+                            },
+                            "lh_raw_id": {
+                              "value": "@pipeline().parameters.lh_raw_id",
+                              "type": "Expression"
+                            },
+                            "workspace_id": {
+                              "value": "@pipeline().parameters.workspace_id",
+                              "type": "Expression"
+                            },
+                            "copy_destination_folder": {
+                              "value": "@concat(activity('GetDatasetMetadataFile').output.value[0].rawProperties.directoryName,'/',activity('GetDatasetMetadataFile').output.value[0].datasetName,'/',pipeline().RunId)",
+                              "type": "Expression"
+                            },
+                            "lh_metadata_id": {
+                              "value": "@pipeline().parameters.lh_metadata_id",
+                              "type": "Expression"
+                            },
+                            "dataset_config_folder_name": {
+                              "value": "@item().sourceConfigFolderName",
+                              "type": "Expression"
+                            },
+                            "file_type": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].fileType",
+                              "type": "Expression"
+                            },
+                            "product_name": {
+                              "value": "@pipeline().parameters.Product_Name",
+                              "type": "Expression"
+                            },
+                            "feed_name": {
+                              "value": "@pipeline().parameters.Feed_Name",
+                              "type": "Expression"
+                            },
+                            "dataset_name": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].datasetName",
+                              "type": "Expression"
+                            },
+                            "ELT_Id": {
+                              "value": "@pipeline().parameters.ELT_Id",
+                              "type": "Expression"
+                            },
+                            "source_system": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0].sourceSystemProperties.sourceSystemName",
+                              "type": "Expression"
+                            },
+                            "elt_start_date_time": {
+                              "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                              "type": "Expression"
+                            },
+                            "dataset_config_json": {
+                              "value": "@activity('GetDatasetMetadataFile').output.value[0]\r\n",
+                              "type": "Expression"
+                            },
+                            "lh_observability_id": {
+                              "value": "@pipeline().parameters.lh_observability_id",
+                              "type": "Expression"
+                            }
+                          },
+                          "waitOnCompletion": true,
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "pipelineId": "e788117d-c01b-bc34-4239-8249b1cddaeb",
+                          "operationType": "InvokeFabricPipeline"
+                        },
+                        "externalReferences": {
+                          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "Invoke Ingest Blob",
+                        "dependsOn": []
+                      }
+                    ]
+                  }
+                ],
+                "defaultActivities": [
+                  {
+                    "type": "Fail",
+                    "typeProperties": {
+                      "message": {
+                        "value": "'Not supported sourceSystemType. User configuration error.'",
+                        "type": "Expression"
+                      },
+                      "errorCode": "401"
+                    },
+                    "name": "FailUnknown",
+                    "dependsOn": []
+                  }
+                ]
+              },
+              "name": "Switch For SourceSystemType",
+              "dependsOn": [
+                {
+                  "activity": "GetDatasetMetadataFile",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "ForEachDataset",
+        "description": "Loop through the metadata",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "Datasets_List": {
+        "type": "array",
+        "defaultValue": [
+          {
+            "fileName": "massive_claims",
+            "sourceConfigFolderName": "accounting"
+          }
+        ]
+      },
+      "ELT_Id": {
+        "type": "string",
+        "defaultValue": " 7ae6d15a-cf3b-49d6-816a-93f48da92a4e"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "claims_bop"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "BOP"
+      },
+      "Elt_Start_Date_Time": {
+        "type": "string",
+        "defaultValue": "11/07/2024 20:02:44"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "fb48654f-171e-424a-8d53-8220b2da94e1"
+      },
+      "lh_observability_id": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "raw_directory": {
+        "type": "String"
+      },
+      "end_modified_end_datetime": {
+        "type": "String"
+      },
+      "start_modified_end_datetime": {
+        "type": "String"
+      }
+    }
+  }
+}

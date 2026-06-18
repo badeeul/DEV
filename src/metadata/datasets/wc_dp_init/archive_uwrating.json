@@ -1,0 +1,66 @@
+{
+    "datasetName": "archive_uwrating",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "PROSPECTHOLDINGARCHIVE",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "code",
+            "state",
+            "locnum",
+            "term",
+            "primeseq",
+            "seqcode",
+            "class",
+            "volcomp",
+            "classcode",
+            "classuffix",
+            "territory",
+            "rate",
+            "exposure",
+            "premium",
+            "additionalbenefits",
+            "rateeffdate",
+            "manualprorate",
+            "prorate",
+            "oexposure",
+            "additionaltext",
+            "additionaldate1",
+            "additionaldate2",
+            "id"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_PROSPECTHOLDINGARCHIVE"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "wc",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "code",
+            "ID"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

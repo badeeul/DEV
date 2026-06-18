@@ -1,0 +1,166 @@
+name: Platform-Services-Deploy-Release
+
+parameters:
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: sourceBranch
+  type: string
+  displayName: 'Source Release Branch'
+  default: 'release/platform-services-monitor-v1.0.0'
+
+- name: sourceOrganization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Source Azure DevOps Organization'
+- name: sourceProject
+  type: string
+  default: 'GDAP-Fluidity-PlatformServices'
+  displayName: 'Source Azure DevOps Project'
+- name: sourceRepository
+  type: string
+  default: 'PlatformServices-Fabric'
+  displayName: 'Source Repository Name'
+- name: targetOrganization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Target Azure DevOps Organization'
+
+- name: targetProject
+  type: string
+  default: 'GDAP-Fluidity-PlatformServices'
+  displayName: 'Target Azure DevOps Project'
+- name: targetRepository
+  type: string
+  default: 'PlatformServices-SubDomain-Monitor'
+  displayName: 'Target Repository Name'
+
+trigger: none
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+stages:
+- stage: Validate
+  displayName: 'Validate Parameters'
+  jobs:
+  - job: validate_parameters
+    steps:
+      
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true # Add this to ensure clean checkout
+
+    - task: PowerShell@2
+      displayName: 'Validate Source Branch'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Validating source branch format..."
+          $sourceBranch = "${{ parameters.sourceBranch }}"
+        
+          # Validate branch name format
+          if (-not ($sourceBranch -match 'release/platform-services-monitor-v\d+\.\d+\.\d+')) {
+              Write-Error "Invalid branch name format. Expected: release/platform-services-v{major}.{minor}.{patch}"
+              exit 1
+          }
+
+- stage: Deploy
+  displayName: 'Deploy Sub-Domains'
+  jobs:
+  - job: generator
+    steps:
+
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true
+
+    - task: PowerShell@2
+      displayName: Get all sub-domain config files
+      inputs:
+        targetType: 'inline'
+        script: |
+          $files = Get-ChildItem '$(Build.SourcesDirectory)/DevOpsServices/pipelines/subdomain_monitor' -Recurse -Filter *.json | Select-Object BaseName, FullName
+          $file_hash = @{}
+          foreach ($f in $files) { 
+            $parameters = Get-Content $f.FullName | Out-String | ConvertFrom-Json
+            $file_hash.add($f.BaseName, @{
+                "file_path" = $f.FullName
+                "targetVariableGroup" = $parameters.targetVariableGroup
+                "targetWorkspaceName" = $parameters.targetWorkspaceName
+                "targetSuperDomain" = $parameters.targetSuperDomain
+                "targetSubDomain" = $parameters.targetSubDomain
+                "environment" = $parameters.environment
+                "adminGroupPrincipalIds" = $parameters.adminGroupPrincipalIds
+                "contributorGroupPrincipalIds" = $parameters.contributorGroupPrincipalIds
+                "capacityId" = $parameters.capacityId
+                "keyvaultName" = $parameters.keyvaultName               
+              }
+            ) 
+          }
+          $json = $file_hash | ConvertTo-Json -Compress
+
+          echo "##vso[task.setVariable variable=legs;isOutput=true]$json"
+      name: mtrx
+
+  # multi-job configuration using matrix strategy takes json of file list above and dynamically executes jobs
+  # Matrix configuration names must contain only basic Latin alphabet letters (A - Z, a - z), numbers, and underscores (_). They must start with a letter. Also, they must be 100 characters or less.
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml#multi-job-configuration
+  - job: deploy
+    dependsOn: generator
+    strategy:
+      maxParallel: 5
+      matrix: $[ dependencies.generator.outputs['mtrx.legs'] ]
+    variables:
+    - group: ${{ parameters.variableGroup }}
+    - name: workingDirectory
+      value: $(System.DefaultWorkingDirectory)
+    steps:
+      - template: deploy-release-branch-monitor.yml
+        parameters:
+          variableGroup: ${{ parameters.variableGroup }}
+          targetVariableGroup: $(targetVariableGroup)
+          targetWorkspaceName: $(targetWorkspaceName)
+          targetSuperDomain: $(targetSuperDomain)
+          targetSubDomain: $(targetSubDomain)
+          sourceBranch: ${{ parameters.sourceBranch }}
+          targetProject: ${{ parameters.targetProject }}
+          targetRepository: ${{ parameters.targetRepository }}
+          environment: $(environment)
+          adminGroupPrincipalIds: $(adminGroupPrincipalIds)
+          contributorGroupPrincipalIds: $(contributorGroupPrincipalIds)
+          capacityId: $(capacityId)
+          keyvaultName: $(keyvaultName)
+
+  - job: copy_branch
+    steps:
+      - template: ../templates/auth-setup.yml
+      - task: PowerShell@2
+        name: DeployBranch
+        displayName: 'Copy Branch'
+        inputs:
+          targetType: 'filePath'
+          filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Deploy-ReleaseBranch-Monitor.ps1'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          arguments: >
+            -SourceBranch "${{ parameters.sourceBranch }}"
+            -SourceOrganization "${{ parameters.sourceOrganization }}"
+            -SourceProject "${{ parameters.sourceProject }}"
+            -SourceRepository "${{ parameters.sourceRepository }}"
+            -TargetOrganization "${{ parameters.targetOrganization }}"
+            -TargetProject "${{ parameters.targetProject }}"
+            -TargetRepository "${{ parameters.targetRepository }}"
+        env:
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+          ARM_TENANT_ID: $(ARM_TENANT_ID)

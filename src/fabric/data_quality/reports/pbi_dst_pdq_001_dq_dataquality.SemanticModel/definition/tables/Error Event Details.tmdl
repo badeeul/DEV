@@ -1,0 +1,88 @@
+table 'Error Event Details'
+	lineageTag: e7f8dbcf-8a08-4b90-ab02-121991ffa2bd
+	sourceLineageTag: [data_quality].[fact_dq_error_event_detail]
+
+	column dq_error_event_detail_key
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e6867519-7480-4fd3-8eab-0ca91398630d
+		sourceLineageTag: dq_error_event_detail_key
+		summarizeBy: none
+		sourceColumn: dq_error_event_detail_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_error_event_key
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d8d1f81c-689a-4c08-94d0-e88ea03e2fea
+		sourceLineageTag: dq_error_event_key
+		summarizeBy: none
+		sourceColumn: dq_error_event_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_rule_master_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 24483b6b-c01d-4cef-b136-bcb47260a4d9
+		sourceLineageTag: dq_rule_master_key
+		summarizeBy: none
+		sourceColumn: dq_rule_master_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column time_of_day
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f2c7b2fd-8ade-49fa-9ef9-bc47bd1b78ae
+		sourceLineageTag: time_of_day
+		summarizeBy: none
+		sourceColumn: time_of_day
+
+		annotation SummarizationSetBy = Automatic
+
+	column tested_record_identifier_delimited
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 300c1eb3-7e6b-4579-b147-0fea50f9d8cf
+		sourceLineageTag: tested_record_identifier_delimited
+		summarizeBy: none
+		sourceColumn: tested_record_identifier_delimited
+
+		annotation SummarizationSetBy = Automatic
+
+	column error_event_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: b3bfef97-b70e-4bf4-a771-347cadb885aa
+		sourceLineageTag: error_event_timestamp
+		summarizeBy: none
+		sourceColumn: error_event_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Error Event Details' = entity
+		mode: directLake
+		source
+			entityName: fact_dq_error_event_detail
+			schemaName: data_quality
+			expressionSource: DatabaseQuery
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

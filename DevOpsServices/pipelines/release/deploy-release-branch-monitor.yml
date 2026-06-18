@@ -1,0 +1,121 @@
+parameters:
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: targetVariableGroup
+  displayName: 'Target Variable Group'
+  type: string
+  default: 'Enter target variable group name'
+
+- name: targetWorkspaceName
+  displayName: 'Target Workspace Name'
+  type: string
+  default: 'Enter target workspace name'
+
+- name: targetSuperDomain
+  displayName: 'Target Super Domain Name'
+  type: string
+  default: 'Enter target super domain name'
+
+- name: targetSubDomain
+  displayName: 'Target Subdomain Name'
+  type: string
+  default: 'Enter target subdomain name'
+
+- name: sourceBranch
+  type: string
+  displayName: 'Source Release Branch'
+  default: 'release/platform-services-monitor-v1.0.0'
+- name: sourceOrganization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Source Azure DevOps Organization'
+- name: sourceProject
+  type: string
+  default: 'GDAP-Fluidity-PlatformServices'
+  displayName: 'Source Azure DevOps Project'
+- name: sourceRepository
+  type: string
+  default: 'PlatformServices-Fabric'
+  displayName: 'Source Repository Name'
+- name: targetOrganization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Target Azure DevOps Organization'
+
+- name: targetProject
+  type: string
+  default: 'GDAP-Fluidity-PlatformServices'
+  displayName: 'Target Azure DevOps Project'
+- name: targetRepository
+  type: string
+  default: 'PlatformServices-SubDomain-Monitor'
+  displayName: 'Target Repository Name'
+
+- name: environment
+  type: string
+  default: 'mtr'
+  displayName: 'Environment Name'
+
+- name: capacityId
+  type: string
+  default: 'Enter capacity Id'
+  displayName: 'Capacity Id'
+
+- name: keyvaultName
+  type: string
+  default: 'Enter keyvault name'
+  displayName: 'Keyvault Name'
+
+- name: adminGroupPrincipalIds
+  type: string
+  default: 'Enter admin group principal ids'
+  displayName: 'Admin Group Principal Ids'
+
+- name: contributorGroupPrincipalIds
+  type: string
+  default: 'Enter contributor group principal ids'
+  displayName: 'Contributor Group Principal Ids'
+
+trigger: none # Manual trigger only
+    
+steps:
+  
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+  clean: true # Add this to ensure clean checkout
+
+- template: ../templates/auth-setup.yml
+
+- task: PowerShell@2
+  displayName: 'Copy Variable Group'
+  name: copyVariableGroup
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Copy-VariableGroup.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -SourceOrg "${{ parameters.sourceOrganization }}"
+      -SourceProject "${{ parameters.sourceProject }}"
+      -SourceGroupName "${{ parameters.variableGroup }}"
+      -TargetOrg "${{ parameters.targetOrganization }}"
+      -TargetProject "${{ parameters.targetProject }}"
+      -TargetGroupName "${{ parameters.targetVariableGroup }}"
+      -TargetWorkspaceName "${{ parameters.targetWorkspaceName }}"
+      -TargetParentDomainName "${{ parameters.targetSuperDomain }}"
+      -TargetChildDomainName "${{ parameters.targetSubDomain }}"
+      -TargetRepository "${{ parameters.targetRepository }}"
+      -Environment "${{ parameters.environment }}"
+      -AdminGroupPrincipalIds "${{ parameters.adminGroupPrincipalIds }}"
+      -ContributorGroupPrincipalIds "${{ parameters.contributorGroupPrincipalIds }}"      
+      -CapacityId "${{ parameters.capacityId }}"   
+      -KeyvaultName "${{ parameters.keyvaultName }}"         
+  env:
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    ARM_TENANT_ID: $(ARM_TENANT_ID)
+    ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)      

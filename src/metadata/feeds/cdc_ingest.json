@@ -1,0 +1,19 @@
+{
+    "feedName": "cdc_test",
+    "feedDescription": "This is a demo feed for Demo Data Product used as a refernce to setup a feed.",
+    "workLoadType": "dp-spark",
+    "skipProductLoad": true,
+    "dataDeduplicationAlert": false,
+    "deduplicationAlertTemplate": "deduplication_msg",
+    "datasetsConfig": [
+        {
+            "datasetType": "database",
+            "datasets": [
+                {
+                    "fileName": "wcpayrol_cdc",
+                    "sourceConfigFolderName": "demo_sqldb"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-CommPdtLyr-MTR",
+    "targetWorkspaceName": "PdtandPrc-CommPdtLyr-MTR",
+    "targetSuperDomain": "Pdt and Prc",
+    "targetSubDomain": "Comm Pdt Lyr",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "E2241170-968F-4699-AF30-72AC06B9A0E8",  
+    "keyvaultName": "bhg-prod-commpdtlyr-eus",      
+    "adminGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd,d4facc31-bc53-474a-9f76-51916c0f9837,90cc682a-cb94-4048-83d1-139e05f8a292",
+    "contributorGroupPrincipalIds": ""
+}

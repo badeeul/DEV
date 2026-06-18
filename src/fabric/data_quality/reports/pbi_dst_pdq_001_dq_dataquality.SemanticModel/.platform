@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "pbi_dst_pdq_001_dq_dataquality"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5e5ad521-5fe1-8b81-4452-8bb4fae36e50"
+  }
+}

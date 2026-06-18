@@ -1,0 +1,111 @@
+table 'Error Events'
+	lineageTag: e3c60191-e3e8-4496-8ac1-0482c077d20f
+	sourceLineageTag: [data_quality].[fact_dq_error_event]
+
+	column dq_error_event_key
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b66b9307-2874-48df-a6df-3a1666e1f840
+		sourceLineageTag: dq_error_event_key
+		summarizeBy: none
+		sourceColumn: dq_error_event_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_error_event_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 72b8e551-2131-4ee8-ba63-ddfc5e7a57cc
+		sourceLineageTag: dq_error_event_date_key
+		summarizeBy: none
+		sourceColumn: dq_error_event_date_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column dq_rule_master_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: d97818f3-d1e7-4804-ad66-2941b0605cfd
+		sourceLineageTag: dq_rule_master_key
+		summarizeBy: none
+		sourceColumn: dq_rule_master_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column dp_processing_batch_key
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 198dbe03-3767-4565-b942-53b1e76913f1
+		sourceLineageTag: dp_processing_batch_key
+		summarizeBy: none
+		sourceColumn: dp_processing_batch_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Time of Day Error Logged'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2e69e908-6319-45dd-a2a0-c2c550af51f6
+		sourceLineageTag: time_of_day
+		summarizeBy: none
+		sourceColumn: time_of_day
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity_score
+		dataType: double
+		formatString: 0.0
+		sourceProviderType: float
+		lineageTag: 9bc86130-185c-4376-bb3d-b12ea8e32769
+		sourceLineageTag: severity_score
+		summarizeBy: sum
+		sourceColumn: severity_score
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Event Timestamp'
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: a39e4210-02c5-4d9d-820a-7b570de61180
+		sourceLineageTag: error_event_timestamp
+		summarizeBy: none
+		sourceColumn: error_event_timestamp
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Error Events' = entity
+		mode: directLake
+		source
+			entityName: fact_dq_error_event
+			schemaName: data_quality
+			expressionSource: DatabaseQuery
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

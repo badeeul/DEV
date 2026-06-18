@@ -1,0 +1,356 @@
+parameters:
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool 
+
+trigger: none
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+stages:
+- stage: reconcile_terraform_state
+  displayName: 'Reconcile Terraform State'
+  jobs:
+  - job: reconciling_terraform_state
+    steps:
+    
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true # Add this to ensure clean checkout
+
+    - template: ../templates/auth-setup.yml
+    - template: ../templates/convert-notebooks.yml
+    - template: ../templates/login-setup.yml
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+
+              # Check if Az modules are already installed
+              $requiredModules = @(
+                  'Az.Accounts' 
+              )
+
+              foreach ($module in $requiredModules) {
+                  if (!(Get-Module -Name $module -ListAvailable)) {
+                      Write-Host "Installing $module..."
+                      Install-PackageProvider -Name NuGet -Force -Scope CurrentUser -ErrorAction SilentlyContinue
+                      Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+                      Install-Module -Name $module -Force -AllowClobber -Scope CurrentUser -Confirm:$false
+                  } else {
+                      Write-Host "$module already installed"
+                  }
+              }
+                
+              # Import only needed modules
+              Import-Module Az.Accounts -DisableNameChecking
+
+              Clear-AzContext -Force
+            
+              Update-AzConfig -LoginExperienceV2 off
+              Update-AzConfig -EnableLoginByWam $false
+
+              $username = '$(SERVICE_ACCOUNT_NAME)'
+              $userPwd = '$(SERVICE_ACCOUNT_SECRET)' | ConvertTo-SecureString -AsPlainText -Force
+              $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $userPwd
+
+              Connect-AzAccount -Tenant $(ARM_TENANT_ID) -Credential $credential -AuthScope 'api://spn-gdap-fabricpview-usercontext'
+
+              $secureFabricToken = (Get-AzAccessToken -ResourceUrl 'https://api.fabric.microsoft.com' -AsSecureString).Token
+
+              $Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureFabricToken) 
+              $fabricToken = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($Ptr)
+              $env:FABRIC_TOKEN = $fabricToken
+              Write-Host "##vso[task.setvariable variable=FABRIC_TOKEN]$fabricToken" 
+
+      displayName: 'Service Account Fabric Token'    
+
+    - task: PowerShell@2
+      name: prepShortcutVars
+      displayName: 'Prepare Lakehouse Shortcut Variables'
+      inputs:
+        targetType: 'inline'
+        script: |
+          try {
+              # Initialize empty array for formatted shortcuts
+              $detailedShortcuts = @()
+              $shortcutGroups = @{}
+            
+              Write-Host "##[debug]Processing shortcut variables from environment..."
+            
+              # Iterate through all environment variables
+              foreach ($item in (Get-Item env:*)) {
+                  # Check if it's a shortcut variable (starts with 'shortcut.')
+
+                  if ($item.Name.ToLower().StartsWith('shortcut_')) {
+                      $item.Name = $item.Name.ToLower().Replace('shortcut_', 'shortcut.').Replace('_', '.')
+                  }
+                  if ($item.Name -like "shortcut.*") {
+                      Write-Host "##[debug]Found shortcut variable: $($item.Name) = $($item.Value)"
+                    
+                      # Parse the variable name: shortcut.{name}.{property}
+                      $nameParts = $item.Name -split "\."
+                    
+                      # Skip if the format is incorrect
+                      if ($nameParts.Length -ne 3) {
+                          Write-Host "##[warning]Invalid shortcut variable format: $($item.Name). Expected format: shortcut.{name}.{property}"
+                          continue
+                      }
+                    
+                      $shortcutName = $nameParts[1]
+                      $propertyName = $nameParts[2]
+                      $propertyValue = $item.Value
+                    
+                      # Initialize the shortcut object if it doesn't exist
+                      if (-not $shortcutGroups.ContainsKey($shortcutName)) {
+                          $shortcutGroups[$shortcutName] = @{}
+                      }
+                    
+                      # Add the property to the shortcut
+                      $shortcutGroups[$shortcutName][$propertyName] = $propertyValue
+                  }
+              }
+            
+              # Transform the grouped shortcuts into an array of objects
+              foreach ($name in $shortcutGroups.Keys) {
+                  $properties = $shortcutGroups[$name]
+                
+                  # Only add shortcuts that have both required properties
+                  if ($properties.ContainsKey("lakehouse") -and $properties.ContainsKey("workspace")) {
+                      $detailedShortcuts += [PSCustomObject]@{
+                          name = $name
+                          lakehouse = $properties["lakehouse"]
+                          workspace = $properties["workspace"]
+                      }
+                    
+                      Write-Host "##[debug]Added shortcut: $name (Lakehouse: $($properties["lakehouse"]), Workspace: $($properties["workspace"]))"
+                  }
+                  else {
+                      Write-Host "##[warning]Shortcut $name is missing required properties (lakehouse and/or workspace)"
+                  }
+              }
+            
+              # Check if any valid shortcuts were found
+              if ($detailedShortcuts.Count -eq 0) {
+                  Write-Host "##[warning]No valid shortcut variables found with both lakehouse and workspace properties"
+              } else {
+                  Write-Host "##[debug]Processed $($detailedShortcuts.Count) valid shortcut definitions"              
+
+                  # Convert to JSON
+                  $detailedShortcutsJson = $detailedShortcuts | ConvertTo-Json -Depth 5 -Compress
+                
+                  if ($detailedShortcuts.Count -eq 1) {
+                    # prepend and append brackets to make it a JSON array
+                    $detailedShortcutsJson = "[$detailedShortcutsJson]"
+                  }
+                    
+                  # Log the JSON for debugging
+                  Write-Host "##[debug]Detailed Shortcuts JSON: $detailedShortcutsJson"
+                
+                  # Set as pipeline variable
+                  Write-Host "##vso[task.setvariable variable=FABRIC_SHORTCUTS_DETAILED]$detailedShortcutsJson"
+              }
+          } catch {
+              Write-Error "Error processing shortcut variables: $_"
+              Write-Error $_.ScriptStackTrace
+              exit 1
+          }
+
+    - task: PowerShell@2
+      name: prepPrivateEndpointsVars
+      displayName: 'Prepare Private Endpoints Variables (PEP)'
+      inputs:
+        targetType: 'inline'
+        script: |
+          try {
+              # Initialize empty array for formatted PEP
+              $detailedPEPs = @()
+              $PEPGroups = @{}
+            
+              Write-Host "##[debug]Processing PEP variables from environment..."
+            
+              # Iterate through all environment variables
+              foreach ($item in (Get-Item env:*)) {
+                  # Check if it's a pep variable (starts with 'pep.')
+
+                  if ($item.Name.ToLower().StartsWith('pep_')) {
+                      $item.Name = $item.Name.ToLower().Replace('pep_', 'pep.').Replace('_', '.')
+                  }
+                  if ($item.Name -like "pep.*") {
+                      Write-Host "##[debug]Found PEP variable: $($item.Name) = $($item.Value)"
+                    
+                      # Parse the variable name: pep.{name}.{property}
+                      $nameParts = $item.Name -split "\."
+                    
+                      # Skip if the format is incorrect
+                      if ($nameParts.Length -ne 3) {
+                          Write-Host "##[warning]Invalid pep variable format: $($item.Name). Expected format: pep.{name}.{property}"
+                          continue
+                      }
+                    
+                      $pepName = $nameParts[1]
+                      $propertyName = $nameParts[2]
+                      $propertyValue = $item.Value
+                    
+                      # Initialize the PEP object if it doesn't exist
+                      if (-not $PEPGroups.ContainsKey($pepName)) {
+                          $PEPGroups[$pepName] = @{}
+                      }
+                    
+                      # Add the property to the PEP
+                      $PEPGroups[$pepName][$propertyName] = $propertyValue
+                  }
+              }
+            
+              # Transform the grouped PEPs into an array of objects
+              foreach ($name in $PEPGroups.Keys) {
+                  $properties = $PEPGroups[$name]
+
+                  $detailedPEPs += [PSCustomObject]@{
+                        allowed = $properties["allowed"]
+                        resourceId = $properties["resourceId"]
+                        subresourceType = $properties["subresourceType"]
+                    }
+                  
+                  Write-Host "##[debug]Added PEP: $name (Allowed: $($properties["allowed"]), resourceId: $($properties["resourceId"]), subresourceType: $($properties["subresourceType"]))"
+              }
+            
+              # Check if any valid PEP were found
+              if ($detailedPEPs.Count -eq 0) {
+                  Write-Host "##[warning]No valid PEP variables found with both allowed and resourceId properties"
+              } else {
+                  Write-Host "##[debug]Processed $($detailedPEPs.Count) valid PEP definitions"              
+
+                  # Convert to JSON
+                  $detailedPEPJson = $detailedPEPs | ConvertTo-Json -Depth 5 -Compress
+                
+                  if ($detailedPEPs.Count -eq 1) {
+                    # prepend and append brackets to make it a JSON array
+                    $detailedPEPJson = "[$detailedPEPJson]"
+                  }
+                    
+                  # Log the JSON for debugging
+                  Write-Host "##[debug]Detailed PEPs JSON: $detailedPEPJson"
+                
+                  # Set as pipeline variable
+                  Write-Host "##vso[task.setvariable variable=FABRIC_PEP_DETAILED]$detailedPEPJson"
+              }
+          } catch {
+              Write-Error "Error processing PEP variables: $_"
+              Write-Error $_.ScriptStackTrace
+              exit 1
+          }
+
+    - task: PowerShell@2
+      name: buildTerraformVars
+      displayName: 'Build Terraform Variables'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Set ErrorActionPreference to Stop so any errors will halt execution
+          $ErrorActionPreference = "Stop"
+        
+          try {
+              $admin_group_principal_ids = $env:TF_VAR_admin_group_principal_ids
+              $admin_sp_principal_ids = $env:TF_VAR_admin_sp_principal_ids
+              $contributor_group_principal_ids = $env:TF_VAR_contributor_group_principal_ids
+              $admin_user_principal_ids = $env:TF_VAR_admin_user_principal_ids
+              $workspace_names = $env:TF_VAR_workspace_names
+              $parent_domain_name = "$(PARENT_DOMAIN_NAME)"
+              $child_domain_name = "$(CHILD_DOMAIN_NAME)"
+          
+              Write-Host "workspace_names: $workspace_names"
+              Write-Host "##vso[task.setvariable variable=PARENT_DOMAIN_NAME]$parent_domain_name"
+              Write-Host "##vso[task.setvariable variable=CHILD_DOMAIN_NAME]$child_domain_name"
+            
+              # if empty array, leave as is no substitution needed
+              if ($admin_group_principal_ids -ne '[]') {
+                $admin_group_principal_ids = $admin_group_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+              }
+            
+              if ($contributor_group_principal_ids -ne '[]') {
+                $contributor_group_principal_ids = $contributor_group_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+              }
+            
+              write-host "##vso[task.setvariable variable=ADMIN_GROUP_PRINCIPAL_IDS]$admin_group_principal_ids"
+            
+              $admin_sp_principal_ids = $admin_sp_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+            
+              $admin_user_principal_ids = $admin_user_principal_ids.Replace('[', '["').Replace(']', '"]').Replace(',', '","').Replace(' ', '')
+            
+              $workspace_names = $workspace_names.Replace('[', '["').Replace(']', '"]').Replace(',', '","') -replace '"\s+', '"'
+            
+              Write-Host "Admin Group Principal IDs: $admin_group_principal_ids"
+              Write-Host "Admin SP Principal IDs: $admin_sp_principal_ids"
+              Write-Host "Workspace Names: $workspace_names"
+          
+              $default_spark_environment_name = if ([string]::IsNullOrEmpty($env:TF_VAR_default_spark_environment_name)) {
+                "null"
+              } else {
+                "$env:TF_VAR_default_spark_environment_name"
+              }
+            
+              $default_spark_runtime = $env:TF_VAR_default_spark_runtime
+              $shortcuts = $env:FABRIC_SHORTCUTS_DETAILED -replace '"', '\"'
+              $peps = $env:FABRIC_PEP_DETAILED -replace '"', '\"'
+              $environment = $env:TF_VAR_environment
+              $keyvault_name = $env:TF_VAR_keyvault_name
+              $capacity_id = $env:TF_VAR_capacity_id
+            
+              # Create tfvars content - Use PowerShell variables instead of env variables in here-string
+              @"
+                admin_group_principal_ids = $admin_group_principal_ids
+                admin_sp_principal_ids = $admin_sp_principal_ids
+                contributor_group_principal_ids = $contributor_group_principal_ids
+                admin_user_principal_ids = $admin_user_principal_ids
+                environment = "$environment"
+                keyvault_name = "$keyvault_name"
+                workspace_names = $workspace_names
+                capacity_id = "$capacity_id"
+                default_spark_environment_name = "$default_spark_environment_name"
+                parent_domain_name = "$parent_domain_name"
+                child_domain_name = "$child_domain_name"        
+                shortcuts = "$shortcuts"
+                peps = "$peps"
+                default_spark_runtime = "$default_spark_runtime"
+          "@ | Out-File -FilePath "terraform.tfvars" -Encoding UTF8
+          
+              # Show tfvars content for debugging
+              Write-Host "`nCreated terraform.tfvars content:"
+
+          } catch {
+              Write-Error "Error processing Build Terraform Vars: $_"
+              Write-Error $_.ScriptStackTrace
+              exit 1
+          }
+        workingDirectory: $(System.DefaultWorkingDirectory)/DevOpsServices/terraform/PlatformServices
+      env:
+        FABRIC_TOKEN: $env:FABRIC_TOKEN
+
+    - task: PowerShell@2
+      name: TerraformStateDrift
+      displayName: 'Repair Terraform State Drift'
+      inputs:
+        targetType: 'inline'
+        script: |
+          & "$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Repair-TerraformStateDrift.ps1"
+
+          terraform refresh -var-file="terraform.tfvars"
+
+          terraform show -json
+
+        workingDirectory: $(System.DefaultWorkingDirectory)/DevOpsServices/terraform/PlatformServices
+
+      env:
+        FABRIC_TOKEN: $env:FABRIC_TOKEN

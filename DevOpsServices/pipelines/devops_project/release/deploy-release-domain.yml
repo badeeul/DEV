@@ -1,0 +1,129 @@
+name: DevOps-Project
+
+parameters:
+- name: organizationName
+  displayName: 'Organization Name'
+  type: string
+  default: 'BHGDataAndAnalytics'
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+trigger: none
+
+variables:
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+stages:
+
+- stage: Deploy
+  displayName: 'Deploy Projects'
+  jobs:
+  - job: generator
+    steps:
+
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true
+
+    - task: PowerShell@2
+      displayName: Get all sub-domain config files
+      inputs:
+        targetType: 'inline'
+        script: |
+          $files = Get-ChildItem '$(Build.SourcesDirectory)/DevOpsServices/pipelines/devops_project/domains' -Recurse -Filter *.json | Select-Object BaseName, FullName
+          $file_hash = @{}
+          foreach ($f in $files) {
+            $parameters = Get-Content $f.FullName | Out-String | ConvertFrom-Json
+           
+            # Convert the projectTeams array to a proper JSON string and escape it
+            $projectTeamsJson = if ($parameters.projectTeams -ne $null) {
+                $projectTeamsString = $parameters.projectTeams | ConvertTo-Json -Compress -Depth 10
+                # Double escape for matrix compatibility
+                $projectTeamsString
+            } else {
+                '[]'
+            }
+
+            $projectPermissionsJson = if ($parameters.projectPermissions -ne $null) {
+                $projectPermissionsString = $parameters.projectPermissions | ConvertTo-Json -Compress -Depth 10
+                # Double escape for matrix compatibility
+                $projectPermissionsString
+            } else {
+                '[]'
+            }           
+
+            $file_hash.add($f.BaseName, @{
+                "file_path" = $f.FullName
+                "targetProjectName" = $parameters.projectName
+                "targetProjectDescription" = $parameters.description
+                "targetProjectVisibility" = $parameters.visibility
+                "targetProcessTemplate" = $parameters.processTemplate
+                "targetProjectAdministrators" = $parameters.projectAdministrators
+                "targetProjectTeams" = $projectTeamsJson
+                "targetProjectPermissions" = $projectPermissionsJson
+                "targetProjectRepositories" = $parameters.subdomains
+                "operationMode" = $parameters.operationMode
+                "confirmDeletion" = $parameters.confirmDeletion
+                "targetProjectAgentPools" = $parameters.targetProjectAgentPools
+                "backlogSourceProject" = $parameters.backlogSourceProject
+                "backlogSourceTeamName" = $parameters.backlogSourceTeamName
+                "backlogDestinationProject" = $parameters.backlogDestinationProject
+                "backlogDestinationTeamName" = $parameters.backlogDestinationTeamName
+                "backlogParentWorkItemTitle" = $parameters.backlogParentWorkItemTitle
+              }
+            )
+          }
+         
+          # Convert to JSON with higher depth limit
+          $json = $file_hash | ConvertTo-Json -Compress -Depth 10
+         
+          # Debug - output the resulting JSON to the pipeline logs
+          Write-Host "Generated matrix JSON:"
+          Write-Host $json
+         
+          echo "##vso[task.setVariable variable=legs;isOutput=true]$json"
+      name: mtrx
+
+
+  # multi-job configuration using matrix strategy takes json of file list above and dynamically executes jobs
+  # Matrix configuration names must contain only basic Latin alphabet letters (A - Z, a - z), numbers, and underscores (_). They must start with a letter. Also, they must be 100 characters or less.
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml#multi-job-configuration
+  - job: deploy
+    dependsOn: generator
+    strategy:
+      maxParallel: 5
+      matrix: $[ dependencies.generator.outputs['mtrx.legs'] ]
+    variables:
+    - group: ${{ parameters.variableGroup }}
+    - name: workingDirectory
+      value: $(System.DefaultWorkingDirectory)
+    steps:
+      - template: deploy-release-project.yml
+        parameters:
+          variableGroup: ${{ parameters.variableGroup }}
+          sourceOrganization: ${{ parameters.organizationName }}          
+          targetProjectName: $(targetProjectName)
+          targetProjectDescription: $(targetProjectDescription)
+          targetProjectVisibility: $(targetProjectVisibility)
+          targetProcessTemplate: $(targetProcessTemplate)
+          targetProjectTeams: $(targetProjectTeams)
+          targetProjectAdministrators: $(targetProjectAdministrators)
+          targetProjectPermissions: $(targetProjectPermissions)
+          targetProjectRepositories: $(targetProjectRepositories)
+          operationMode: $(operationMode)
+          confirmDeletion: $(confirmDeletion)
+          targetProjectAgentPools: $(targetProjectAgentPools)
+          backlogSourceProject: $(backlogSourceProject)
+          backlogSourceTeamName: $(backlogSourceTeamName)
+          backlogDestinationProject: $(backlogDestinationProject)
+          backlogDestinationTeamName: $(backlogDestinationTeamName)
+          backlogParentWorkItemTitle: $(backlogParentWorkItemTitle)

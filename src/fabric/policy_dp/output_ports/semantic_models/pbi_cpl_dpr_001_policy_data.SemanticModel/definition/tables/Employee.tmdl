@@ -1,0 +1,249 @@
+table Employee
+	isHidden
+	lineageTag: 2d3bc8c2-d389-4505-ab83-df28ed9e6fb1
+	sourceLineageTag: [policy].[dim_employee]
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c7ef7637-35fe-4e23-ba23-5c0acf48cc1d
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0835561c-d143-4160-968b-b9d43cd85acf
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 680519fb-795c-4e07-b9fe-967818d9341e
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 7923f0d1-c2dd-4714-b0f1-ec76f7d60a2c
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 916f1b6b-3548-4853-b7db-918763fb48d2
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 76ca0e03-1157-4bd3-88b8-315ab859fd41
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 4b29b94c-7c04-496c-9db3-a37961c8c2fc
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 4564673b-95e1-4249-8d5e-9cfca44688b9
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Employee Title
+	column 'Employee Title'
+		dataType: string
+		isHidden
+		lineageTag: 6edfdbae-c54d-44ca-aeb4-0ac408b5e8f9
+		sourceLineageTag: job_title
+		summarizeBy: none
+		sourceColumn: job_title
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Employee User ID
+	column 'Employee User ID'
+		dataType: string
+		isHidden
+		lineageTag: 0ab11725-752d-4dfa-81a5-5fcf1ce09d8d
+		sourceLineageTag: user_id
+		summarizeBy: none
+		sourceColumn: user_id
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Employee Termination Date
+	column 'Employee Termination Date'
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 4df938c6-96d1-4829-9ef1-a22a053db638
+		sourceLineageTag: term_dt
+		summarizeBy: none
+		sourceColumn: term_dt
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Is Employee Active
+	column 'Is Employee Active'
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6366f2ed-8112-485e-93dc-63492ac0d97e
+		sourceLineageTag: active
+		summarizeBy: none
+		sourceColumn: active
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 8eff5944-fdad-4102-aa31-6b6353121475
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 1da1507d-82b8-468c-be77-88bbac4bb3a9
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column emp_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: deb149ce-6c50-4feb-afa2-484599a8a66b
+		sourceLineageTag: emp_key
+		summarizeBy: none
+		sourceColumn: emp_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	/// Employee Code
+	column 'Employee Code'
+		dataType: string
+		isHidden
+		lineageTag: 65a0b8b4-9116-4399-8641-c656a24359f9
+		sourceLineageTag: emp_cd_bus_key
+		summarizeBy: none
+		sourceColumn: emp_cd_bus_key
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Employee Name
+	column 'Employee Name'
+		dataType: string
+		isHidden
+		lineageTag: 16645b78-565b-4367-9bef-8fd95af54466
+		sourceLineageTag: emp_nm
+		summarizeBy: none
+		sourceColumn: emp_nm
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_employee = entity
+		mode: directLake
+		source
+			entityName: dim_employee
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+
+	changedProperty = IsHidden
+

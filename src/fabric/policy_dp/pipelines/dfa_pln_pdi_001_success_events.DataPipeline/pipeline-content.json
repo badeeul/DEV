@@ -1,0 +1,379 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Script",
+        "typeProperties": {
+          "database": "GIGINSDATA",
+          "scripts": [
+            {
+              "text": {
+                "value": "select \n\t  LOB=(select l.descrip from giginsdata.dbo.lookups l where l.programid='insured' and l.keyfield='lob' and l.vals=i.lob)\n\t, premamount=sum(m.amount)\n\t, fsamount=sum(m.fsamount)\n\t, paamount=sum(m.paamount)\n\t, sf3amount=sum(m.sf3amount)\n\t, sf4amount=sum(m.sf4amount)\n\t, sf5amount=sum(m.sf5amount)\n\t, sf6amount=sum(m.sf6amount)\n\t, commisamt=sum(m.commisamt)\n\t, nocommprem=sum(m.nocommprem)\n\tfrom giginsdata.dbo.mgtrans m\n\tinner join giginsdata.dbo.insured i on m.code=i.code\n\twhere\n\ti.code=i.basemgacode\n\tand i.agency<>'PAFAKE10'\n\tgroup by i.lob\n\torder by 1",
+                "type": "Expression"
+              },
+              "type": "Query"
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        },
+        "externalReferences": {
+          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "WRITTEN-PREMIUM-FEES-COMMISSION-BY-LOB",
+        "dependsOn": []
+      },
+      {
+        "type": "Script",
+        "typeProperties": {
+          "database": "GIGINSDATA",
+          "scripts": [
+            {
+              "text": {
+                "value": "select \r\n\t  LOB=(select l.descrip from giginsdata.dbo.lookups l where l.programid='insured' and l.keyfield='lob' and l.vals=i.lob)\r\n\t, NW_BindPrem=isnull(sum(m.amount),0)\r\n\t, RN_BindPrem=isnull(sum(m2.amount),0)\r\n\tfrom giginsdata.dbo.insured i\r\n\tinner join giginsdata.dbo.lookups l on l.programid='insured' and l.keyfield='lob' and l.vals=i.lob\r\n\tleft outer join giginsdata.dbo.mgtrans m on i.code=m.code and m.transcode='NW'\r\n\tleft outer join giginsdata.dbo.mgtrans m2 on i.code=m2.code and m2.transcode='RN'\r\n\twhere\r\n\ti.code=i.basemgacode\r\n\tand i.agency<>'PAFAKE10'\r\n\tgroup by i.lob\r\n\torder by 1",
+                "type": "Expression"
+              },
+              "type": "Query"
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        },
+        "externalReferences": {
+          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "NEW-RENEWAL-BIND-PREMIUM-BY-LOB",
+        "dependsOn": []
+      },
+      {
+        "type": "Script",
+        "typeProperties": {
+          "database": "GIGINSDATA",
+          "scripts": [
+            {
+              "text": {
+                "value": "select\n\t  LOB=(select l.descrip from giginsdata.dbo.lookups l where l.programid='insured' and l.keyfield='lob' and l.vals=i.lob)\n\t, New_PolCount=sum((case when i.flags14='N' then 1 else 0 end))\n\t, Rnw_PolCount=sum((case when i.flags14='R' then 1 else 0 end))\n\tfrom giginsdata.dbo.insured i\n\twhere\n\ti.code=i.basemgacode\n\tand i.agency<>'PAFAKE10'\n\tgroup by i.lob\n\torder by 1",
+                "type": "Expression"
+              },
+              "type": "Query"
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        },
+        "externalReferences": {
+          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "NEW-RENEWAL-POLICY-COUNT-BY-LOB",
+        "dependsOn": []
+      },
+      {
+        "type": "Script",
+        "typeProperties": {
+          "database": "GIGINSDATA",
+          "scripts": [
+            {
+              "text": {
+                "value": "select\n\t  LOB=(select l.descrip from giginsdata.dbo.lookups l where l.programid='insured' and l.keyfield='lob' and l.vals=i.lob)\n\t, DecPrem=sum(i.podecprem)\n\tfrom giginsdata.dbo.insured i\n\twhere\n\ti.code=i.basemgacode\n\tand i.agency<>'PAFAKE10'\n\tgroup by i.lob\n\torder by 1",
+                "type": "Expression"
+              },
+              "type": "Query"
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        },
+        "externalReferences": {
+          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "DEC-PREM-BY-LOB",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "46684e74-d18c-accb-4741-4d4bd42cf0ee",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "premium_fees_commission": {
+              "value": {
+                "value": "@string(activity('WRITTEN-PREMIUM-FEES-COMMISSION-BY-LOB').output.resultSets[0])",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "new_renewal_bind_premium": {
+              "value": {
+                "value": "@string(activity('NEW-RENEWAL-BIND-PREMIUM-BY-LOB').output.resultSets[0])",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "new_renewal_policy_count": {
+              "value": {
+                "value": "@string(activity('NEW-RENEWAL-POLICY-COUNT-BY-LOB').output.resultSets[0])",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "dec_premium": {
+              "value": {
+                "value": "@string(activity('DEC-PREM-BY-LOB').output.resultSets[0])",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "parameter_template_name": {
+              "value": {
+                "value": "@string(pipeline().parameters.parameter_template_name)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "email_template_name": {
+              "value": {
+                "value": "@string(pipeline().parameters.email_template_name)",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LOOP-BACK-VERIFICATION",
+        "dependsOn": [
+          {
+            "activity": "WRITTEN-PREMIUM-FEES-COMMISSION-BY-LOB",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "NEW-RENEWAL-BIND-PREMIUM-BY-LOB",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "NEW-RENEWAL-POLICY-COUNT-BY-LOB",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "DEC-PREM-BY-LOB",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "6d229aa7-b050-bc27-45a7-c8d0be68bd1f",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "email_template_name": {
+              "value": "dq_rule_failure_msg.json",
+              "type": "string"
+            },
+            "sql_query_name": {
+              "value": "dq_rule_failures.sql",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "DQ Failure Notification",
+        "dependsOn": []
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "elt_values",
+          "value": {
+            "value": "@createArray(pipeline().RunId,pipeline().TriggerTime)",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get ELT Values",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "3c72dc57-586b-9254-40b3-f89b4e9a7cd1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "elt_id": {
+              "value": {
+                "value": "@variables('elt_values')[0]",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "trigger_time": {
+              "value": {
+                "value": "@variables('elt_values')[1]",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_name": {
+              "value": {
+                "value": "@pipeline().PipelineName",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "data_product": {
+              "value": {
+                "value": "@pipeline().parameters.Product_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "database_names": {
+              "value": {
+                "value": "@variables('database_names')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "workspace_id": {
+              "value": {
+                "value": "@pipeline().DataFactory",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "metadata_lakehouse_id": {
+              "value": {
+                "value": "@pipeline().parameters.lh_metadata_id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_id": {
+              "value": {
+                "value": "@pipeline().Pipeline",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "template_name": {
+              "value": {
+                "value": "dp_pipeline_completed.json",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "feed_name": {
+              "value": {
+                "value": "@pipeline().parameters.Feed_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Pipeline Succeeded Event",
+        "description": "",
+        "dependsOn": [
+          {
+            "activity": "Get ELT Values",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "email_template_name": {
+        "type": "string",
+        "defaultValue": "dp_loopback_verification_results.json"
+      },
+      "parameter_template_name": {
+        "type": "string",
+        "defaultValue": "params_loopback_verification.json"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "@pipeline().parameters.Product_Name"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "@pipeline().parameters.lh_metadata_id"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "@pipeline().parameters.Feed_Name"
+      }
+    },
+    "variables": {
+      "elt_values": {
+        "type": "Array"
+      },
+      "database_names": {
+        "type": "String",
+        "defaultValue": "GIGINSDATA,PROSPECTHOLDINGARCHIVE"
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+table 'ELT Log'
+	lineageTag: e9c9282a-5a80-4c44-be94-c88feba2fc73
+	sourceLineageTag: [audit].[elt_log]
+
+	column master_run_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6939a935-70b1-44ce-b51f-ea78f6f93156
+		sourceLineageTag: master_run_id
+		summarizeBy: none
+		sourceColumn: master_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column elt_start_date_time
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 0bd2d9cb-c3cc-46ce-87a5-d4344cae553e
+		sourceLineageTag: elt_start_date_time
+		summarizeBy: none
+		sourceColumn: elt_start_date_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column elt_end_date_time
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: fcf7e607-1fe5-43e6-baf0-ea94bb4a610a
+		sourceLineageTag: elt_end_date_time
+		summarizeBy: none
+		sourceColumn: elt_end_date_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column log_date_time
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 5c08d635-4679-4fbf-b609-dbb13e7e3b82
+		sourceLineageTag: log_date_time
+		summarizeBy: none
+		sourceColumn: log_date_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_date_time
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 575e3e65-7e56-4da4-b4a0-a12ffd14aba3
+		sourceLineageTag: updated_date_time
+		summarizeBy: none
+		sourceColumn: updated_date_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		sourceProviderType: varchar(2048)
+		lineageTag: ce57b004-dc78-43e4-9fe1-f71be7fbc442
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column feed_name
+		dataType: string
+		sourceProviderType: varchar(2048)
+		lineageTag: fe89c09c-4875-4dbc-9f19-7892f351044b
+		sourceLineageTag: feed_name
+		summarizeBy: none
+		sourceColumn: feed_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5f59bc5a-202f-44e7-ba0f-d48f54041387
+		sourceLineageTag: status
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column orchestration_tool
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 0de0b73e-4849-46cb-aa35-0999ba314a77
+		sourceLineageTag: orchestration_tool
+		summarizeBy: none
+		sourceColumn: orchestration_tool
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_platform_version
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: a806f263-efe8-4d29-a1bc-f11b1d3e47dd
+		sourceLineageTag: data_platform_version
+		summarizeBy: none
+		sourceColumn: data_platform_version
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'ELT Log' = entity
+		mode: directLake
+		source
+			entityName: elt_log
+			schemaName: audit
+			expressionSource: DatabaseQuery
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

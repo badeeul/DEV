@@ -1,0 +1,33 @@
+{
+    "loadGroupSnowflakeDims": [
+        {
+            "files": [
+                
+            ]
+        }
+    ],
+    "loadGroupDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_policy_extension_wc",
+                    "modelConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "dim_policy_extension_wc_carrier_placement",
+                    "modelConfigFolderName": "wc_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "wc_carrier_placement_snapshot",
+                    "modelConfigFolderName": "wc_dp"
+                }
+            ]
+        }
+    ]
+}

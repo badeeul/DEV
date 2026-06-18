@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "pbi_cpl_dpr_001_wc_carrier_placement"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e4242089-1112-83f4-4241-c57440e90ec9"
+  }
+}

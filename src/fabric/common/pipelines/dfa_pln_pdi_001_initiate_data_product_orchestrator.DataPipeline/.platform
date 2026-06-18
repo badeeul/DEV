@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_initiate_data_product_orchestrator",
+    "description": "This pipeline starts the workflow orchestrator to manage the Data Product through different task/zones."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "57f084a5-c475-40bc-8fe4-74b5cbc89568"
+  }
+}

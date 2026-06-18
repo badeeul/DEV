@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "den_nbk_pdi_001_generate_watermarks",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "21d224a5-49d8-9906-4f52-b4546337315c"
+  }
+}

@@ -1,0 +1,204 @@
+name: Platform-Services-Deploy-Release
+
+parameters:
+- name: organizationName
+  displayName: 'Organization Name'
+  type: string
+  default: 'BHGDataAndAnalytics'
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: sourceBranch
+  type: string
+  displayName: 'Source Release Branch'
+  default: 'release/platform-services-v1.0.0'
+
+trigger: none
+
+variables:
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+stages:
+- stage: Validate
+  displayName: 'Validate Parameters'
+  jobs:
+  - job: validate_parameters
+    steps:
+      
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true # Add this to ensure clean checkout
+
+    - task: PowerShell@2
+      displayName: 'Validate Source Branch'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Validating source branch format..."
+          $sourceBranch = "${{ parameters.sourceBranch }}"
+        
+          # Validate branch name format
+          if (-not ($sourceBranch -match 'release/platform-services-v\d+\.\d+\.\d+')) {
+              Write-Error "Invalid branch name format. Expected: release/platform-services-v{major}.{minor}.{patch}"
+              exit 1
+          }
+
+- stage: Deploy
+  displayName: 'Deploy Sub-Domains'
+  jobs:
+  - job: generator
+    steps:
+
+    - checkout: self
+      persistCredentials: true
+      fetchDepth: 0
+      clean: true
+
+    - task: PowerShell@2
+      displayName: Get all sub-domain config files
+      inputs:
+        targetType: 'inline'
+        script: |
+          $files = Get-ChildItem '$(Build.SourcesDirectory)/DevOpsServices/pipelines/subdomains' -Recurse -Filter *.json | Select-Object BaseName, FullName
+          $file_hash = @{}
+          foreach ($f in $files) {
+            $parameters = Get-Content $f.FullName | Out-String | ConvertFrom-Json
+           
+            # Convert the pep array to a proper JSON string and escape it
+            $pepJson = if ($parameters.pep -ne $null) {
+                $pepString = $parameters.pep | ConvertTo-Json -Compress -Depth 10
+                # Double escape for matrix compatibility
+                $pepString
+            } else {
+                '[]'
+            }
+
+            $lakeHouseDefaultReadersJson = if ($parameters.lakeHouseDefaultReaders -ne $null) {
+                $lhReadersString = $parameters.lakeHouseDefaultReaders | ConvertTo-Json -Compress -Depth 10
+                $lhReadersString
+            } else {
+                ''
+            }
+           
+            $file_hash.add($f.BaseName, @{
+                "file_path" = $f.FullName
+                "targetVariableGroup" = $parameters.targetVariableGroup
+                "targetWorkspaceName" = $parameters.targetWorkspaceName
+                "targetSuperDomain" = $parameters.targetSuperDomain
+                "targetSubDomain" = $parameters.targetSubDomain
+                "targetProject" = $parameters.targetProject
+                "targetRepository" = $parameters.targetRepository
+                "environment" = $parameters.environment
+                "adminGroupPrincipalIds" = $parameters.adminGroupPrincipalIds
+                "contributorGroupPrincipalIds" = $parameters.contributorGroupPrincipalIds
+                "capacityId" = $parameters.capacityId
+                "keyvaultName" = $parameters.keyvaultName
+                "pep" = $pepJson
+                "requiredSecurityGroup" = $parameters.requiredSecurityGroup
+                "optionalSecurityGroup" = $parameters.optionalSecurityGroup
+                "viewerGroupPrincipalIds" = $parameters.viewerGroupPrincipalIds                
+                "lakeHouseDefaultReaders" = $lakeHouseDefaultReadersJson
+              }
+            )
+          }
+         
+          # Convert to JSON with higher depth limit
+          $json = $file_hash | ConvertTo-Json -Compress -Depth 10
+         
+          # Debug - output the resulting JSON to the pipeline logs
+          Write-Host "Generated matrix JSON:"
+          Write-Host $json
+         
+          echo "##vso[task.setVariable variable=legs;isOutput=true]$json"
+          Write-Host "##vso[task.setvariable variable=SUBDOMAINS]$json"
+      name: mtrx
+
+
+  # multi-job configuration using matrix strategy takes json of file list above and dynamically executes jobs
+  # Matrix configuration names must contain only basic Latin alphabet letters (A - Z, a - z), numbers, and underscores (_). They must start with a letter. Also, they must be 100 characters or less.
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml#multi-job-configuration
+  - job: deploy
+    dependsOn: generator
+    strategy:
+      maxParallel: 5
+      matrix: $[ dependencies.generator.outputs['mtrx.legs'] ]
+    variables:
+    - group: ${{ parameters.variableGroup }}
+    - name: workingDirectory
+      value: $(System.DefaultWorkingDirectory)
+    steps:
+      - template: deploy-release-branch.yml
+        parameters:
+          variableGroup: ${{ parameters.variableGroup }}
+          targetVariableGroup: $(targetVariableGroup)
+          targetWorkspaceName: $(targetWorkspaceName)
+          targetSuperDomain: $(targetSuperDomain)
+          targetSubDomain: $(targetSubDomain)
+          sourceBranch: ${{ parameters.sourceBranch }}
+          targetProject: $(targetProject)
+          targetRepository: $(targetRepository)
+          environment: $(environment)
+          adminGroupPrincipalIds: $(adminGroupPrincipalIds)
+          contributorGroupPrincipalIds: $(contributorGroupPrincipalIds)
+          capacityId: $(capacityId)
+          keyvaultName: $(keyvaultName)
+          pep: $(pep)
+          requiredSecurityGroup: $(requiredSecurityGroup)
+          optionalSecurityGroup: $(optionalSecurityGroup)
+          viewerGroupPrincipalIds: $(viewerGroupPrincipalIds)
+          lakeHouseDefaultReaders: $(lakeHouseDefaultReaders)
+
+      - checkout: self
+        persistCredentials: true
+        fetchDepth: 0
+        clean: true
+
+      - task: PowerShell@2
+        displayName: 'Create Subdomain Release Pipeline'
+        inputs:
+          targetType: 'filePath'
+          filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Create-ReleasePipeline.ps1'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+          arguments: >
+            -Organization "${{ parameters.organizationName }}"
+            -Project "$(targetProject)"
+            -PipelineName "$(targetProject) - $(targetSubDomain)"
+            -ReleaseVersion "${{ parameters.sourceBranch }}"
+            -RepositoryName "$(targetRepository)"
+            -WorkspaceName "$(targetWorkspaceName)"
+            -VariableGroup "$(targetVariableGroup)"
+        env:
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+          ARM_TENANT_ID: $(ARM_TENANT_ID)
+          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+      - task: PowerShell@2
+        displayName: 'Create subdomain release branch pipeline'
+        inputs:
+          targetType: 'filePath'
+          filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Create-Pipeline.ps1'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+          arguments: >
+            -Organization "${{ parameters.organizationName }}"
+            -Project "$(targetProject)"
+            -PipelineName "Create subdomain release branch - $(targetSubDomain)"
+            -ReleaseVersion "${{ parameters.sourceBranch }}"
+            -RepositoryName "$(targetRepository)"
+            -WorkspaceName "$(targetWorkspaceName)"
+            -VariableGroupName "$(targetVariableGroup)"
+            -YamlPath "DevOpsServices/pipelines/release/create-subdomain-release-branch.yml"
+        env:
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+          ARM_TENANT_ID: $(ARM_TENANT_ID)
+          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)

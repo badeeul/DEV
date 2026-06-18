@@ -1,0 +1,380 @@
+parameters:
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: sourceOrganization
+  displayName: 'Source Organization'
+  type: string
+  default: 'BHGDataAndAnalytics'
+
+- name: targetProjectName
+  displayName: 'Target Project Name'
+  type: string
+  default: 'Enter target project name'
+
+- name: operationMode
+  displayName: 'Operation Mode'
+  type: string
+  default: 'upsert'  # Options: upsert, delete
+
+- name: confirmDeletion
+  displayName: 'Confirm Deletion'
+  type: string
+  default: ''  # Must be set to 'DELETE' to confirm deletion
+
+- name: targetProjectDescription
+  displayName: 'Target Project Description'
+  type: string
+  default: 'Enter target project description'
+
+- name: targetProcessTemplate
+  displayName: 'Process Template'  
+  type: string
+  default: 'Scrum'
+
+- name: targetProjectVisibility
+  displayName: 'Target Project Visibility'
+  type: string
+  default: 'private'
+
+- name: targetProjectTeams
+  displayName: 'Target Project Teams'
+  type: string
+  default: '[]'
+
+- name: targetProjectAdministrators
+  displayName: 'Target Project Administrators'
+  type: string
+  default: 'Enter target project administrators'
+
+- name: targetProjectPermissions
+  displayName: 'Target Project Permissions'
+  type: string
+  default: '[]'
+
+- name: targetProjectRepositories
+  displayName: 'Target Project Repositories'
+  type: string
+  default: ''  
+
+- name: targetProjectAgentPools
+  displayName: 'Target Project Agent Pools'
+  type: string
+  default: ''
+
+- name: backlogSourceProject
+  displayName: 'Backlog Source Project'
+  type: string
+  default: ''
+
+- name: backlogSourceTeamName
+  displayName: 'Backlog Source Team Name'  
+  type: string
+  default: ''
+
+- name: backlogDestinationProject
+  displayName: 'Backlog Destination Project'
+  type: string
+  default: ''
+
+- name: backlogDestinationTeamName
+  displayName: 'Backlog Destination Team Name'
+  type: string
+  default: ''
+
+- name: backlogParentWorkItemTitle
+  displayName: 'Backlog Parent Work Item Title'
+  type: string
+  default: ''
+
+steps:
+ 
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+  clean: true # Add this to ensure clean checkout
+
+# ====================================================================
+# STEP: Validate Operation Mode
+# ====================================================================
+- task: PowerShell@2
+  displayName: 'Validate Operation Mode'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $operationMode = '${{ parameters.operationMode }}'
+      $projectName = '${{ parameters.targetProjectName }}'
+     
+      Write-Host "========================================" -ForegroundColor Cyan
+      Write-Host "OPERATION MODE VALIDATION" -ForegroundColor Cyan
+      Write-Host "========================================" -ForegroundColor Cyan
+      Write-Host ""
+      Write-Host "Operation Mode: $operationMode" -ForegroundColor White
+      Write-Host "Project Name: $projectName" -ForegroundColor White
+      Write-Host ""
+     
+      if ($projectName -eq "Enter target project name") {
+          Write-Error "##[error]Invalid project name. Please specify the actual project name."
+          exit 1
+      }
+     
+      if ($operationMode -eq "delete") {
+          $confirmation = '${{ parameters.confirmDeletion }}'
+          Write-Host "Deletion mode detected. Confirmation: $confirmation" -ForegroundColor Yellow
+         
+          if ($confirmation -ne "DELETE") {
+              Write-Error "##[error]Deletion not confirmed. You must type 'DELETE' in the confirmation parameter to proceed."
+              Write-Host ""
+              Write-Host "To delete the project, set the 'Confirm Deletion' parameter to: DELETE" -ForegroundColor Yellow
+              Write-Host ""
+              exit 1
+          }
+          Write-Host "##[warning]Delete mode active - Remaining steps will be skipped"
+          Write-Host "##vso[task.setvariable variable=deleteProject]true"
+          Write-Host "##vso[task.setvariable variable=skipRemainingSteps]true"
+          Write-Host " Deletion confirmed. Proceeding with project deletion..." -ForegroundColor Red
+      } else {
+          Write-Host " Operation mode validated: $operationMode" -ForegroundColor Green
+      }
+      Write-Host ""
+
+# ====================================================================
+# STEP: Delete Project (Only if Operation Mode = Delete)
+# ====================================================================
+- task: PowerShell@2
+  name: DeleteProject
+  displayName: 'Delete Project'
+  condition: and(succeeded(), eq(variables['deleteProject'], 'true'))
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Delete-Project.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+  env:
+    CLIENT_ID: $(CLIENT_ID)
+    CLIENT_SECRET: $(CLIENT_SECRET)
+    TENANT_ID: $(TENANT_ID)
+
+- task: PowerShell@2
+  displayName: 'Prepare projectTeams Parameter'
+  name: prepareProjectTeams
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Get the projectTeams JSON string
+      $projectTeamsJson = '${{ parameters.targetProjectTeams }}'
+     
+      try {
+          # Attempt to parse the JSON
+          $projectTeamsArray = $projectTeamsJson | ConvertFrom-Json
+         
+          # Validate it's an array
+          if ($projectTeamsArray -isnot [System.Array]) {
+              Write-Warning "projectTeams parameter is not a valid JSON array. Converting single object to array."
+              # If it's a single object, convert to an array
+              $projectTeamsArray = @($projectTeamsArray)
+          }
+         
+          # Validate each entry has required fields
+          foreach ($entry in $projectTeamsArray) {
+              if (-not (($entry.PSObject.Properties.Name -contains "name") -and
+                        ($entry.PSObject.Properties.Name -contains "type") -and
+                        ($entry.PSObject.Properties.Name -contains "members"))) {
+                  Write-Error "One or more projectTeams entries is missing required fields (name, type, members)"
+                  exit 1
+              }
+          }
+         
+          # Re-encode as a JSON string
+          $validatedProjectTeamsJson = $projectTeamsArray | ConvertTo-Json -Compress
+          Write-Host "projectTeams validation successful. Found $($projectTeamsArray.Count) endpoint configurations."
+
+          # Write to a temporary file to avoid command-line escaping issues
+          $tempFile = Join-Path $env:TEMP "project_teams_data.json"
+          Set-Content -Path $tempFile -Value $validatedProjectTeamsJson -Encoding UTF8
+
+          # Set the path as a variable for use in subsequent tasks
+          Write-Host "##vso[task.setvariable variable=projectTeamsJsonFilePath]$tempFile"
+
+          $projectPermissionsJson = '${{ parameters.targetProjectPermissions }}'
+          # Attempt to parse the JSON
+          $projectPermissionsArray = $projectPermissionsJson | ConvertFrom-Json
+         
+          # Validate it's an array
+          if ($projectPermissionsArray -isnot [System.Array]) {
+              Write-Warning "projectPermissions parameter is not a valid JSON array. Converting single object to array."
+              # If it's a single object, convert to an array
+              $projectPermissionsArray = @($projectPermissionsArray)
+          }
+         
+          # Validate each entry has required fields
+          foreach ($entry in $projectPermissionsArray) {
+              if (-not (($entry.PSObject.Properties.Name -contains "name") -and
+                        ($entry.PSObject.Properties.Name -contains "type") -and
+                        ($entry.PSObject.Properties.Name -contains "members"))) {
+                  Write-Error "One or more projectPermissions entries is missing required fields (name, type, members)"
+                  exit 1
+              }
+          }
+         
+          # Re-encode as a JSON string
+          $validatedProjectPermissionsJson = $projectPermissionsArray | ConvertTo-Json -Compress
+          Write-Host "projectPermissions validation successful. Found $($projectPermissionsArray.Count) endpoint configurations."
+
+          # Write to a temporary file to avoid command-line escaping issues
+          $tempFile = Join-Path $env:TEMP "project_permissions_data.json"
+          Set-Content -Path $tempFile -Value $validatedProjectPermissionsJson -Encoding UTF8
+
+          # Set the path as a variable for use in subsequent tasks
+          Write-Host "##vso[task.setvariable variable=projectPermissionsJsonFilePath]$tempFile"
+
+      } catch {
+          Write-Error "Failed to parse projectTeams JSON: $_"
+          exit 1
+      }
+
+- task: PowerShell@2
+  name: DeployProject
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Create Project'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Deploy-Project.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+      -ProjectDescription "${{ parameters.targetProjectDescription }}"
+      -Visibility "${{ parameters.targetProjectVisibility }}"
+      -ProcessTemplate "${{ parameters.targetProcessTemplate }}"
+  env:
+    CLIENT_ID: $(CLIENT_ID)
+    CLIENT_SECRET: $(CLIENT_SECRET)
+    TENANT_ID: $(TENANT_ID)
+
+- task: PowerShell@2
+  name: AddProjectAdministrators
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Add Project Administrators'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Add-ProjectAdministrators.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+      -SecurityGroups "${{ parameters.targetProjectAdministrators }}"
+  env:
+    CLIENT_ID: $(CLIENT_ID)
+    CLIENT_SECRET: $(CLIENT_SECRET)
+    TENANT_ID: $(TENANT_ID)
+
+- task: PowerShell@2
+  name: AddProjectTeams
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Add Project Teams'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Add-ProjectTeams.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+      -projectTeamsFilePath "$(projectTeamsJsonFilePath)"
+  env:    
+    CLIENT_ID: $(CLIENT_ID)
+    CLIENT_SECRET: $(CLIENT_SECRET)
+    TENANT_ID: $(TENANT_ID)    
+
+- task: PowerShell@2
+  name: AddProjectPermissions
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Add Project Permissions'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Add-ProjectPermissions.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+      -projectPermissionsFilePath "$(projectPermissionsJsonFilePath)"    
+
+- task: PowerShell@2
+  name: AddProjectRepositories
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Add Project Repositories'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Add-ProjectRepository.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+      -Repositories "${{ parameters.targetProjectRepositories }}"    
+  env:    
+    CLIENT_ID: $(CLIENT_ID)
+    CLIENT_SECRET: $(CLIENT_SECRET)
+    TENANT_ID: $(TENANT_ID)      
+
+- task: PowerShell@2
+  name: AddProjectAgentPools
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Add Project Agent Pools'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Add-ProjectAgentPool.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -ProjectName "${{ parameters.targetProjectName }}"
+      -AgentPoolNames "${{ parameters.targetProjectAgentPools }}"
+  env:
+    CLIENT_ID: $(CLIENT_ID)
+    CLIENT_SECRET: $(CLIENT_SECRET)
+    TENANT_ID: $(TENANT_ID)
+
+- task: PowerShell@2
+  name: CopyBacklogs 
+  condition: and(succeeded(), ne(variables['skipRemainingSteps'], 'true'))
+  displayName: 'Copy Backlogs'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Copy-Backlogs.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -OrganizationUrl "https://dev.azure.com/${{ parameters.sourceOrganization }}"
+      -ClientId "$(CLIENT_ID)"
+      -ClientSecret "$(CLIENT_SECRET)"
+      -TenantId "$(TENANT_ID)"
+      -SourceProjectName "${{ parameters.backlogSourceProject }}"
+      -SourceTeamName "${{ parameters.backlogSourceTeamName }}"
+      -DestinationProjectName "${{ parameters.backlogDestinationProject }}"
+      -DestinationTeamName "${{ parameters.backlogDestinationTeamName }}"
+      -ParentWorkItemTitle "${{ parameters.backlogParentWorkItemTitle }}"

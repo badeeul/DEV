@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-DelegatedAuthority-INT",
+  "targetWorkspaceName": "Distribution-DelegatedAuthority-INT",
+  "targetSuperDomain": "Distribution",
+  "targetSubDomain": "Delegated Authority",
+  "targetProject": "DnA Distribution",
+  "targetRepository": "DnA Distro - Del Auth",
+  "environment": "int",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-dev-delauth-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "bb590c50-0ce1-40ac-b1f9-fc279745fe29,082ab9b1-0667-4a22-bd85-7bc14cc0e89d",
+  "viewerGroupPrincipalIds": "d355aa26-922b-425d-a3d1-9bf0deb894bc,58afc97a-f609-4593-88c0-77d2018d637e,4a2b760b-7a21-4b66-a313-3ddfee32ec3f"
+}

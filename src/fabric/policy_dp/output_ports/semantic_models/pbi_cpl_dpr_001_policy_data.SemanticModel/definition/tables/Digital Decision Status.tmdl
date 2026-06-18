@@ -1,0 +1,192 @@
+table 'Digital Decision Status'
+	lineageTag: e9534754-294c-4e86-b224-89d1e69cee09
+	sourceLineageTag: [policy].[dim_digital_decision_status]
+
+	column digital_decision_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d8d5029-8eb2-46e4-a3b2-d485a6636751
+		sourceLineageTag: digital_decision_status_key
+		summarizeBy: none
+		sourceColumn: digital_decision_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column digital_decision_status_level
+		dataType: string
+		lineageTag: 19378266-e5a4-4d85-8cf6-19d05eee69b5
+		sourceLineageTag: digital_decision_status_level
+		summarizeBy: none
+		sourceColumn: digital_decision_status_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column digital_decision_status_cd_bus_key
+		dataType: string
+		lineageTag: 8bae9f65-f364-40f0-be26-ea76a864629c
+		sourceLineageTag: digital_decision_status_cd_bus_key
+		summarizeBy: none
+		sourceColumn: digital_decision_status_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column digital_decision_status_desc
+		dataType: string
+		lineageTag: 0afbef18-d953-4c1b-b669-1016605d54c9
+		sourceLineageTag: digital_decision_status_desc
+		summarizeBy: none
+		sourceColumn: digital_decision_status_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column digital_decision_status_parent_cd_bus_key
+		dataType: string
+		lineageTag: 46cd6451-7301-4d23-8297-e057cd215b4c
+		sourceLineageTag: digital_decision_status_parent_cd_bus_key
+		summarizeBy: none
+		sourceColumn: digital_decision_status_parent_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column digital_decision_status_parent_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b1b736b6-be17-4c4a-bf70-4631e75a219e
+		sourceLineageTag: digital_decision_status_parent_key
+		summarizeBy: none
+		sourceColumn: digital_decision_status_parent_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dd_l0_level
+		dataType: string
+		lineageTag: 6d5e25a8-db51-401f-8322-f904b0fefcc3
+		sourceLineageTag: dd_l0_level
+		summarizeBy: none
+		sourceColumn: dd_l0_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column dd_l1_level
+		dataType: string
+		lineageTag: a08ee108-729e-43e0-abf0-2a37a68e3730
+		sourceLineageTag: dd_l1_level
+		summarizeBy: none
+		sourceColumn: dd_l1_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column dd_l2_level
+		dataType: string
+		lineageTag: a8bb53f6-40c4-49ff-a861-5c61dbeb5cba
+		sourceLineageTag: dd_l2_level
+		summarizeBy: none
+		sourceColumn: dd_l2_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		lineageTag: cbe80ebf-6dc0-4d4a-8c58-5af3fd54f052
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		lineageTag: 567acc9d-9b84-4bd5-b68e-e307f1e76d81
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		lineageTag: 8ff3604d-1db7-4ded-94f5-1045d0f2691d
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		lineageTag: ff2a8937-3c27-4e31-8644-5f41edcf283a
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ed0d864a-2412-44f1-add4-0710714d8d72
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 682e8129-0a67-4681-97b0-e29aab8239fc
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5af9656d-c372-4dee-843e-099ced1912de
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 79b3483d-888a-4d22-aea7-30a846c1da92
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 942d23cf-562e-465a-a7fc-925099bbf918
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0bf2dd5d-a5b1-4fd7-be61-648e7330e6f3
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Digital Decision Status' = entity
+		mode: directLake
+		source
+			entityName: dim_digital_decision_status
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

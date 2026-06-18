@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-Cheyenne-MTR",
+    "targetWorkspaceName": "Missouri-Cheyenne-MTR",
+    "targetSuperDomain": "Missouri",
+    "targetSubDomain": "Cheyenne",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",    
+    "keyvaultName": "bhg-hub-fabric01-eus-kv",    
+    "adminGroupPrincipalIds": "b8631a3c-9e45-4008-8311-dd4d7130c2d4",
+    "contributorGroupPrincipalIds": "e3078fb3-0605-4533-b747-26477add0cff"
+}

@@ -1,0 +1,257 @@
+table 'Policy Status'
+	lineageTag: 2638963f-db5a-4c2b-819a-ff3bfcdfc6f4
+	sourceLineageTag: [policy].[dim_policy_status]
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 887a522d-9fd1-42f0-b593-24fc8c97edf3
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 6d92ac18-09e7-4488-8002-023878566a01
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2de021c2-b23a-458c-8b36-9367aca145de
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: b9bf02bb-fd92-4274-a502-d3c9b9e240da
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 1f01abac-8a87-45a1-8b31-13cf7bc9d60c
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 1ae64d21-6387-40bd-af4a-e2186d460b03
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 537becaf-989b-45af-a9a0-3765ca3a350d
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: dab9e097-eaca-4b87-9ddd-4b5da49db8d3
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b74f535e-2b9f-4fac-bd17-d8996209939b
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status L0 Level
+	column 'Policy Status L0 Level'
+		dataType: string
+		lineageTag: 282d2a09-b1eb-4d0f-ae9e-5dc4d14e2728
+		sourceLineageTag: l0_level
+		summarizeBy: none
+		sourceColumn: l0_level
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status L1 Level
+	column 'Policy Status L1 Level'
+		dataType: string
+		lineageTag: f9ea7281-0487-4464-8073-27d57080a5dc
+		sourceLineageTag: l1_level
+		summarizeBy: none
+		sourceColumn: l1_level
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status L2 Level
+	column 'Policy Status L2 Level'
+		dataType: string
+		lineageTag: 21a074be-eb7e-4a4f-aecc-eeb36d1bd200
+		sourceLineageTag: l2_level
+		summarizeBy: none
+		sourceColumn: l2_level
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status L3 Level
+	column 'Policy Status L3 Level'
+		dataType: string
+		lineageTag: ccb4fae8-0f7a-4242-ab94-735fefe91a92
+		sourceLineageTag: l3_level
+		summarizeBy: none
+		sourceColumn: l3_level
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status L4 Level
+	column 'Policy Status L4 Level'
+		dataType: string
+		lineageTag: d99227d0-17ed-41b7-8e1a-3344159885c4
+		sourceLineageTag: l4_level
+		summarizeBy: none
+		sourceColumn: l4_level
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: c9ef26ec-f14a-4be3-9ea4-3d66a0245301
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_status_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: faf7002b-2e9c-415d-86cf-f51f3aaaa89b
+		sourceLineageTag: policy_status_key
+		summarizeBy: none
+		sourceColumn: policy_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Policy Status Level'
+		dataType: string
+		lineageTag: 7b9319a6-27ab-482f-9155-6cbcda10d3e6
+		sourceLineageTag: policy_status_level
+		summarizeBy: none
+		sourceColumn: policy_status_level
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_status_cd_bus_key
+		dataType: string
+		isHidden
+		lineageTag: f341a49d-6bc4-48b5-b5d6-ef2d3b14dbec
+		sourceLineageTag: policy_status_cd_bus_key
+		summarizeBy: none
+		sourceColumn: policy_status_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status
+	column 'Policy Status'
+		dataType: string
+		lineageTag: 74af3fa5-9d45-4033-8547-f21699b278e1
+		sourceLineageTag: policy_status_desc
+		summarizeBy: none
+		sourceColumn: policy_status_desc
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_status_parent_cd_bus_key
+		dataType: string
+		isHidden
+		lineageTag: 748651d9-79ed-497a-a2c3-900c4ad27a7a
+		sourceLineageTag: policy_status_parent_cd_bus_key
+		summarizeBy: none
+		sourceColumn: policy_status_parent_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_status_parent_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f2fa3b96-fbd9-4f46-a529-46d7a26b7d23
+		sourceLineageTag: policy_status_parent_key
+		summarizeBy: none
+		sourceColumn: policy_status_parent_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Policy Status L5 Level
+	column 'Policy Status L5 Level'
+		dataType: string
+		lineageTag: 1481af35-175e-4c7b-b281-3d59c8290e10
+		sourceLineageTag: l5_level
+		summarizeBy: none
+		sourceColumn: l5_level
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_policy_status = entity
+		mode: directLake
+		source
+			entityName: dim_policy_status
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

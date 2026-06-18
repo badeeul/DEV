@@ -1,0 +1,152 @@
+relationship 24c6a3ab-6de0-0d22-c56f-d40f0a400dc4
+	fromColumn: fact_policy.carrier_key
+	toColumn: dim_carrier.carrier_key
+
+relationship bf1313fd-df17-9202-f67d-7911dd512afc
+	fromColumn: fact_policy.policy_effec_start_dt_key
+	toColumn: dim_date.date_key
+
+relationship 18731f8c-0425-0ea9-120d-fa7772de7e0c
+	fromColumn: fact_policy.dist_chnl_key
+	toColumn: dim_dist_chnl.dist_chnl_key
+
+relationship 340b2dcb-2a6b-5f28-71ad-f0eacccf7fc8
+	fromColumn: fact_policy.dec_uw_emp_key
+	toColumn: dim_employee.emp_key
+
+relationship c923453a-3e7a-9e7d-602e-9645e5f2572f
+	fromColumn: fact_policy.insd_key
+	toColumn: dim_insured.insd_key
+
+relationship dab45591-6e1a-570e-692b-c416f1660b0f
+	fromColumn: dim_insured.legal_ent_type_key
+	toColumn: dim_insured_legal_entity_type.insd_leg_ent_type_key
+
+relationship 1b742fc7-36ce-1c9d-db70-bf01c2e7872f
+	fromColumn: fact_policy.lob_key
+	toColumn: dim_lob.lob_key
+
+relationship e8cf27c0-7363-2e6f-f772-496793b32e83
+	fromColumn: fact_policy.mkt_type_key
+	toColumn: dim_mkt_type.mkt_type_key
+
+relationship 8cef482b-b6a5-b4cf-5342-7fa436fd4cd2
+	fromColumn: fact_policy.naics_key
+	toColumn: dim_naics.naics_key
+
+relationship 0377131d-d20c-5026-ba51-799c1ac8fe1c
+	fromColumn: fact_policy.policy_key
+	toColumn: dim_policy.policy_key
+
+relationship 847a7f01-07a2-8ee9-7af8-4f19ddd461fa
+	fromColumn: dim_policy.latest_policy_status_key
+	toColumn: dim_policy_status.policy_status_key
+
+relationship c38e0d6d-15a0-ac4f-716c-262c04029066
+	fromColumn: fact_policy_transaction_detail.policy_trans_subtype_key
+	toColumn: dim_policy_trans_subtype.policy_trans_subtype_key
+
+relationship f4a32967-a8f9-eba6-1fea-ea40de60bbe7
+	fromColumn: fact_policy_transaction.policy_trans_type_key
+	toColumn: dim_policy_trans_type.policy_trans_type_key
+
+relationship 78c23e08-1562-b0d6-3da2-0ef4f39737f6
+	fromColumn: fact_policy.prod_src_key
+	toColumn: dim_prod_src.prod_src_key
+
+relationship 49912d49-ec69-cf99-1f87-ec159d78349f
+	fromColumn: fact_policy_transaction.bus_class_key
+	toColumn: dim_business_class.bus_class_key
+
+relationship 84cbf12e-4994-3179-e400-331d54e3b13a
+	fromColumn: fact_policy.bus_class_key
+	toColumn: dim_business_class.bus_class_key
+
+relationship 89c81c33-a4a4-77a0-e779-b7db9c6f1c81
+	fromColumn: fact_policy_transaction.carrier_key
+	toColumn: dim_carrier.carrier_key
+
+relationship 7c9015ca-6438-ead7-f727-d21be222f3b8
+	fromColumn: fact_policy_transaction.dec_uw_emp_key
+	toColumn: dim_employee.emp_key
+
+relationship 589c8f80-8243-de01-5bc4-a8d5550d3c9a
+	fromColumn: fact_policy_transaction.dist_chnl_key
+	toColumn: dim_dist_chnl.dist_chnl_key
+
+relationship ba208387-1b17-ced3-87a0-9a3fcbd3bfcd
+	fromColumn: fact_policy_transaction.policy_effec_start_dt_key
+	toColumn: dim_date.date_key
+
+relationship 4d99be9b-aa49-041d-e0a6-3bccc035bcb4
+	fromColumn: fact_policy_transaction.insd_key
+	toColumn: dim_insured.insd_key
+
+relationship c6625e5c-3d75-b6b3-3938-c065351721b4
+	fromColumn: fact_policy_transaction.lob_key
+	toColumn: dim_lob.lob_key
+
+relationship c1cea8eb-98f0-c38b-6493-d67b2e80e1a8
+	fromColumn: fact_policy_transaction.mkt_type_key
+	toColumn: dim_mkt_type.mkt_type_key
+
+relationship 3fe9ee09-df8a-0c99-120a-855a40d160fd
+	fromColumn: fact_policy_transaction.naics_key
+	toColumn: dim_naics.naics_key
+
+relationship 1b1ca6c2-c8bb-4f4f-3754-d0e2ed84b0f9
+	fromColumn: fact_policy_transaction.policy_key
+	toColumn: dim_policy.policy_key
+
+relationship a35bb33b-d3e1-d1c8-362d-412a5f678883
+	fromColumn: fact_policy_transaction.prod_src_key
+	toColumn: dim_prod_src.prod_src_key
+
+relationship 60efdde0-4949-3eba-1458-e3840d54373b
+	fromColumn: fact_policy_transaction_detail.bus_class_key
+	toColumn: dim_business_class.bus_class_key
+
+relationship d9866404-c2bc-ffc5-f894-91f3cf10d79e
+	fromColumn: fact_policy_transaction_detail.carrier_key
+	toColumn: dim_carrier.carrier_key
+
+relationship bd41b374-c876-4680-e4eb-e12ae4d8bf61
+	fromColumn: fact_policy_transaction_detail.policy_effec_start_dt_key
+	toColumn: dim_date.date_key
+
+relationship 33ed5a29-5c94-3436-017b-098039f1f4ca
+	fromColumn: fact_policy_transaction_detail.dist_chnl_key
+	toColumn: dim_dist_chnl.dist_chnl_key
+
+relationship 735da8d2-16ba-1c01-e294-5ddd22a399da
+	fromColumn: fact_policy_transaction_detail.dec_uw_emp_key
+	toColumn: dim_employee.emp_key
+
+relationship ae17885c-575d-29d8-d39b-d69ff1630e5f
+	fromColumn: fact_policy_transaction_detail.insd_key
+	toColumn: dim_insured.insd_key
+
+relationship 93478cad-f562-95ef-8a60-f14e5f6d1845
+	fromColumn: fact_policy_transaction_detail.lob_key
+	toColumn: dim_lob.lob_key
+
+relationship 7c3c5f51-791e-b085-cccd-741128068c73
+	fromColumn: fact_policy_transaction_detail.mkt_type_key
+	toColumn: dim_mkt_type.mkt_type_key
+
+relationship e1b5ab19-f452-f949-fe32-fa51135211a0
+	fromColumn: fact_policy_transaction_detail.naics_key
+	toColumn: dim_naics.naics_key
+
+relationship 868a6d07-d11f-6a62-cf96-5c5b4453abd0
+	fromColumn: fact_policy_transaction_detail.policy_key
+	toColumn: dim_policy.policy_key
+
+relationship fb27ff1f-6c9f-fbf3-deb0-8ab2c3adbcf2
+	fromColumn: fact_policy_transaction_detail.policy_trans_type_key
+	toColumn: dim_policy_trans_type.policy_trans_type_key
+
+relationship 123e4a60-1395-373e-2552-739d9138f4b7
+	fromColumn: fact_policy_transaction_detail.prod_src_key
+	toColumn: dim_prod_src.prod_src_key
+

@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-ClaimsHandling-INT",
+  "targetWorkspaceName": "Claims-ClaimsHandling-INT",
+  "targetSuperDomain": "Claims",
+  "targetSubDomain": "Claims Handling",
+  "targetProject": "DnA Claims",
+  "targetRepository": "DnA Claims - Claims Handling",
+  "environment": "int",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Claims Claims Handling - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-dev-claimshdl-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "e0b158e6-4d51-4c52-92c0-11c323a333a5,c17455bb-10e7-4912-99fb-2f2edfd0da74",
+  "viewerGroupPrincipalIds": "4e4df1ad-829d-4c07-9222-ef8209ec42de,c21cf7b1-c59a-4881-877e-7176b60f843b,85dab429-1f73-4a32-b74b-d387ffdaec50"
+}

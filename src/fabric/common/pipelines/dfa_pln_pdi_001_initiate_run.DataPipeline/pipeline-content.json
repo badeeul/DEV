@@ -1,0 +1,84 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "779edb3d-f032-4a03-ba54-2f6c9ac1a675",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "feed_name": {
+              "value": {
+                "value": "@pipeline().parameters.Feed_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_id": {
+              "value": {
+                "value": "@pipeline().parameters.run_id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "elt_start_date_time": {
+              "value": {
+                "value": "@pipeline().parameters.elt_start_date_time",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "product_name": {
+              "value": {
+                "value": "@pipeline().parameters.Product_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Initiate Logging",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "lh_metadata_id": {
+        "type": "String",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "workspace_id": {
+        "type": "String",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "claims_bop"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "BOP"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "fb48654f-171e-424a-8d53-8220b2da94e1"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "61a6df22-f73b-48bc-855f-55f41065eb20"
+      },
+      "run_id": {
+        "type": "string"
+      },
+      "elt_start_date_time": {
+        "type": "string"
+      }
+    }
+  }
+}

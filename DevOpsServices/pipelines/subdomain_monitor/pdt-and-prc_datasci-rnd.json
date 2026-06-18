@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-DataSciRnD-MTR",
+    "targetWorkspaceName": "PdtandPrc-DataSciRnD-MTR",
+    "targetSuperDomain": "Pdt and Prc",
+    "targetSubDomain": "Data Sci RnD",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",  
+    "keyvaultName": "bhg-hub-fabric01-eus-kv",      
+    "adminGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd,d4facc31-bc53-474a-9f76-51916c0f9837,90cc682a-cb94-4048-83d1-139e05f8a292",
+    "contributorGroupPrincipalIds": ""
+}

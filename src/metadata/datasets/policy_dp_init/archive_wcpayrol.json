@@ -1,0 +1,49 @@
+{
+    "datasetName": "archive_wcpayrol",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "PROSPECTHOLDINGARCHIVE",
+    "datasetSchema": "dbo",
+    "skipProductLoad": true,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "*"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_PROSPECTHOLDINGARCHIVE"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "policy",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": ["*"],
+        "primaryKeyList": [
+            "CLASSCODE",
+            "CODE",
+            "EFFDATE",
+            "PRIMESEQ",
+            "rateEFFDATE",
+            "SEQCODE",
+            "STATE",
+            "TERRITORY",
+            "VOLCOMP"
+        ], 
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "merge"
+    }
+}

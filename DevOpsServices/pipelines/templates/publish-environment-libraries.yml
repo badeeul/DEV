@@ -1,0 +1,47 @@
+parameters:
+  - name: fabricToken
+    type: string
+  - name: workspaceIds
+    type: string
+
+# steps:
+# - task: PowerShell@2
+#   displayName: 'Upload & Publish Environment Spark Libraries'
+#   inputs:
+#     targetType: 'filePath'
+#     filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Deploy-FabricEnvironmentSparkLibraries.ps1'
+#     arguments: "-FabricToken ${{ parameters.fabricToken }} -WorkspaceIds '${{ parameters.workspaceIds }}' -WaitForPublish $false"
+#     workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+#     pwsh: true
+#   env:
+#     FABRIC_TOKEN: ${{ parameters.fabricToken }}
+#     WORKSPACE_IDS: ${{ parameters.workspaceIds }}
+#   # Ensure PowerShell Core is used
+  
+steps:
+# - task: PowerShell@2
+#   displayName: 'Upload & Publish Environment Spark Libraries'
+#   inputs:
+#     targetType: 'filePath'
+#     filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Deploy-FabricEnvironmentSparkLibraries.ps1'
+#     arguments: "-FabricToken ${{ parameters.fabricToken }} -WorkspaceIds '${{ parameters.workspaceIds }}' -WaitForPublish $false"
+#     workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+    # pwsh: true
+  - task: PowerShell@2
+    displayName: 'Upload & Publish Environment Spark Libraries'
+    inputs:
+      targetType: 'inline'
+      script: |
+        $workspaceIds = ${{ parameters.workspaceIds }}
+        Write-Debug "WorkspaceIds: $workspaceIds Type: $($workspaceIds.GetType().Name)"
+        $pwshPath = 'C:\Program Files\PowerShell\7\pwsh.exe'
+        $scriptPath = '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Deploy-FabricEnvironmentSparkLibraries.ps1'
+        $fabricToken = '${{ parameters.fabricToken }}'
+        
+        Write-Host $workspaceIds
+        Write-Host $workspaceIds.GetType()
+        Write-Host "Deploying Fabric Environment Spark Libraries '${{ parameters.workspaceIds }}'"
+
+        & $pwshPath -File $scriptPath -FabricToken $fabricToken -WorkspaceIds $workspaceIds
+      pwsh: false
+      workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'

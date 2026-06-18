@@ -1,0 +1,205 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "If Database Restored",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "Until Database Restored",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@bool(activity('Lookup Restore Complete').output.firstRow.restoredCompleted)",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [
+            {
+              "name": "Set Restored Completed False",
+              "type": "SetVariable",
+              "dependsOn": [],
+              "policy": {
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "pipelineReturnValue",
+                "value": [
+                  {
+                    "key": "RestoreStatus",
+                    "value": {
+                      "type": "Boolean",
+                      "content": false
+                    }
+                  }
+                ],
+                "setSystemVariable": true
+              }
+            }
+          ],
+          "ifTrueActivities": [
+            {
+              "name": "Set Restored Completed True",
+              "type": "SetVariable",
+              "dependsOn": [],
+              "policy": {
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "pipelineReturnValue",
+                "value": [
+                  {
+                    "key": "RestoreStatus",
+                    "value": {
+                      "type": "Boolean",
+                      "content": true
+                    }
+                  }
+                ],
+                "setSystemVariable": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Until Database Restored",
+        "description": "Execute the SQL query to check for database(s) restore state",
+        "type": "Until",
+        "dependsOn": [],
+        "typeProperties": {
+          "expression": {
+            "value": "@activity('Lookup Restore Complete').output.firstRow.restoredCompleted",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "name": "Lookup Restore Complete",
+              "type": "Lookup",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 1,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "source": {
+                  "type": "SqlServerSource",
+                  "sqlReaderQuery": {
+                    "value": "@concat(\r\n  'WITH wanted AS (',\r\n  '  SELECT TRIM(value) AS db_name ',\r\n  '  FROM STRING_SPLIT(''', pipeline().parameters.DatabaseNames, ''', '','')',\r\n  '), ',\r\n  'restored_today AS (',\r\n  '  SELECT rh.destination_database_name ',\r\n  '  FROM msdb.dbo.restorehistory AS rh ',\r\n  '  WHERE rh.restore_type IN (''D'',''I'') ',\r\n  '    AND rh.destination_database_name IN (SELECT db_name FROM wanted) ',\r\n  '    AND rh.restore_date <= CAST(''', pipeline().parameters.CurrentDate, ''' AS DATETIME) ',\r\n  '    AND rh.restore_date > DATEADD(DAY, -1, CAST(''', pipeline().parameters.CurrentDate, ''' AS DATETIME)) ',\r\n  '  GROUP BY rh.destination_database_name',\r\n  ') ',\r\n  'SELECT CASE ',\r\n  '         WHEN COUNT(*) = (SELECT COUNT(*) FROM wanted) ',\r\n  '          AND SUM(CASE WHEN d.state = 0 THEN 1 ELSE 0 END) = (SELECT COUNT(*) FROM wanted) ',\r\n  '            THEN CAST(1 AS BIT) ',\r\n  '            ELSE CAST(0 AS BIT) ',\r\n  '       END AS restoredCompleted ',\r\n  'FROM restored_today rt ',\r\n  'JOIN sys.databases d ',\r\n  '  ON d.name = rt.destination_database_name'\r\n)",
+                    "type": "Expression"
+                  },
+                  "queryTimeout": "02:00:00",
+                  "partitionOption": "None"
+                },
+                "datasetSettings": {
+                  "annotations": [],
+                  "type": "SqlServerTable",
+                  "schema": [],
+                  "typeProperties": {
+                    "database": "GIGINSDATA"
+                  },
+                  "externalReferences": {
+                    "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+                  }
+                }
+              }
+            },
+            {
+              "name": "If Restore Complete",
+              "description": "If restoredCompleted is false, pass control to the Wait activity; otherwise, exit the Until loop.",
+              "type": "IfCondition",
+              "dependsOn": [
+                {
+                  "activity": "Lookup Restore Complete",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "typeProperties": {
+                "expression": {
+                  "value": "@bool(activity('Lookup Restore Complete').output.firstRow.restoredCompleted)",
+                  "type": "Expression"
+                },
+                "ifFalseActivities": [
+                  {
+                    "name": "Delay Lookup",
+                    "type": "Wait",
+                    "dependsOn": [],
+                    "typeProperties": {
+                      "waitTimeInSeconds": {
+                        "value": "@pipeline().parameters.DelaySeconds",
+                        "type": "Expression"
+                      }
+                    }
+                  }
+                ],
+                "ifTrueActivities": []
+              }
+            }
+          ],
+          "timeout": "0.0:03:00"
+        }
+      },
+      {
+        "name": "Set Restore Status False",
+        "type": "SetVariable",
+        "dependsOn": [
+          {
+            "activity": "Until Database Restored",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "pipelineReturnValue",
+          "value": [
+            {
+              "key": "RestoreStatus",
+              "value": {
+                "type": "Boolean",
+                "content": false
+              }
+            }
+          ],
+          "setSystemVariable": true
+        }
+      }
+    ],
+    "parameters": {
+      "DatabaseNames": {
+        "type": "string",
+        "defaultValue": "GIGINSDATA,PROSPECTHOLDINGARCHIVE"
+      },
+      "DelaySeconds": {
+        "type": "int",
+        "defaultValue": 60
+      },
+      "CurrentDate": {
+        "type": "string",
+        "defaultValue": "2025-06-06"
+      }
+    },
+    "variables": {
+      "current_date": {
+        "type": "String"
+      },
+      "zone_end_date_time": {
+        "type": "String"
+      }
+    }
+  }
+}

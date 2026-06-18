@@ -1,0 +1,49 @@
+table Display_Prior_WC_Years
+	lineageTag: 45446127-6fcb-44ae-ab88-c88ebeef4a7d
+
+	column prior_wc_years_segement_bus_key
+		lineageTag: 43c8aa8f-a1c5-4e9c-8a28-41af68a36d97
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [prior_wc_years_segement_bus_key]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Prior_WC_Years_Display
+		lineageTag: 4b323379-b05a-470f-ba55-109f765c2c64
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Prior_WC_Years_Display]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: 8bd78741-7d39-4fda-9233-19472b9c10e2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Display_Prior_WC_Years = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "prior_wc_years_segement_bus_key", STRING,
+				    "Prior_WC_Years_Display", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"0", "0", 1}, 
+				        {"1", "1", 2}, 
+				        {"2", "2", 3}, 
+				        {"Greater than or equal to 3", "≥ 3", 4},
+				        {"unknown", "unknown", 5}
+				    }
+				)
+				```
+
+	annotation PBI_Id = 0ed34424d6074447b06e923889a7c30c
+

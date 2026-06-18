@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "pbi_rpt_pdq_001_dq_dataquality_dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d0e1669c-1efd-859b-4b73-a5157e4dfbf0"
+  }
+}

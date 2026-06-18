@@ -1,0 +1,72 @@
+{
+    "datasetName": "question_questions",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "system_id",
+            "cat_id",
+            "sortorder",
+            "question_id",
+            "effective",
+            "questiontype",
+            "range",
+            "sqlloadvalue",
+            "sqlsubmitverify",
+            "whensqltext",
+            "whenquestion",
+            "whencondition",
+            "whenresponse",
+            "allowblank",
+            "alertcondition",
+            "alertvalue",
+            "questiontext",
+            "indent",
+            "barbefore",
+            "keyfield",
+            "acord_form",
+            "acord_field",
+            "de_category",
+            "de_question_categoryid",
+            "clientid"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "wc",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "System_ID",
+            "Cat_ID",
+            "Question_ID",
+            "WhenQuestion",
+            "WhenCondition",
+            "AllowBlank"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

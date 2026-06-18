@@ -1,0 +1,42 @@
+{
+    "datasetName": "claims_catcodes",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGEOMDATA",
+    "datasetSchema": "dbo",
+    "sourceSystemProperties": {
+        "sourceSystemName": "demo_sqldb",
+        "includeSpecificColumns": [
+            "*"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": false
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_pdi_001_raw",
+        "fileType": "parquet",
+        "directoryName": "demo_sqldb"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_pdi_001_curated",
+        "schemaName": "demo",
+        "schemaEvolutionMode": "addNewColumns",
+        "schemaLocation": null,
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": ["*"],
+        "primaryKeyList": [
+            "CatastropheCodeID"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

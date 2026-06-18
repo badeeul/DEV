@@ -1,0 +1,150 @@
+/// Date table containing the different date elements related to the error event date.
+table 'Date - Error Event'
+	lineageTag: b5c95070-a69f-4b17-9114-8b363391da6b
+	sourceLineageTag: [data_quality].[dim_dq_date]
+
+	column 'Error Event Date'
+		dataType: dateTime
+		formatString: Short Date
+		sourceProviderType: date
+		lineageTag: 9d56c62c-9206-4c05-ad69-c262512ff60b
+		sourceLineageTag: date
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DateKey
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: d96df905-0e2d-4056-a65f-6130fb477481
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Error Event Day of Week'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 8ccd5960-11d9-44e4-9baf-4805f9399d90
+		sourceLineageTag: DayOfWeekName
+		summarizeBy: none
+		sourceColumn: DayOfWeekName
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Error Event Month (Short)'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 66a97a90-ac73-4c95-b95a-da3bbfc6e04e
+		sourceLineageTag: MonthShort
+		summarizeBy: none
+		sourceColumn: MonthShort
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Error Event Year & Month'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5bf8a457-9c56-4608-baee-de27c27c170d
+		sourceLineageTag: YearMonthName
+		summarizeBy: none
+		sourceColumn: YearMonthName
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Error Event Month & Year'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 72a7226e-d263-47db-8397-6c934729a745
+		sourceLineageTag: MonthYearName
+		summarizeBy: none
+		sourceColumn: MonthYearName
+		sortByColumn: 'Error Event Year & Month'
+
+		changedProperty = SortByColumn
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Error Event Year'
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: eb7f7d81-2a4f-4bcc-bdfe-0ad17e2e3efa
+		sourceLineageTag: Year
+		summarizeBy: none
+		sourceColumn: Year
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Error Event Day of Month'
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: f5551ff9-076f-4cc8-a098-c62b554952ce
+		sourceLineageTag: DayOfMonth
+		summarizeBy: none
+		sourceColumn: DayOfMonth
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Error Event Month'
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: aa81b869-3414-4803-b8b8-ee21057dd9dd
+		sourceLineageTag: Month
+		summarizeBy: none
+		sourceColumn: Month
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = User
+
+	partition 'Date - Error Event' = entity
+		mode: directLake
+		source
+			entityName: dim_dq_date
+			schemaName: data_quality
+			expressionSource: DatabaseQuery
+
+	changedProperty = Name
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+

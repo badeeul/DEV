@@ -1,0 +1,243 @@
+parameters:
+
+- name: variableGroup
+  displayName: 'Source Variable Group'
+  type: string
+  default: 'PlatformServices'
+
+- name: targetVariableGroup
+  displayName: 'Target Variable Group'
+  type: string
+  default: 'Enter target variable group name'
+
+- name: targetWorkspaceName
+  displayName: 'Target Initialization Workspace Name'
+  type: string
+  default: 'Enter target workspace name'
+
+- name: targetSuperDomain
+  displayName: 'Target Super Domain Name'
+  type: string
+  default: 'Enter target super domain name'
+
+- name: targetSubDomain
+  displayName: 'Target Subdomain Name'
+  type: string
+  default: 'Enter target subdomain name'
+
+- name: sourceBranch
+  type: string
+  displayName: 'Source Release Branch'
+  default: 'release/platform-services-v1.0.0'
+- name: sourceOrganization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Source Azure DevOps Organization'
+- name: sourceProject
+  type: string
+  default: 'GDAP-Fluidity-PlatformServices'
+  displayName: 'Source Azure DevOps Project'
+- name: sourceRepository
+  type: string
+  default: 'PlatformServices-Fabric'
+  displayName: 'Source Repository Name'
+- name: targetOrganization
+  type: string
+  default: 'BHGDataAndAnalytics'
+  displayName: 'Target Azure DevOps Organization'
+
+- name: targetProject
+  type: string
+  default: 'Enter target project name'
+  displayName: 'Target Azure DevOps Project'
+- name: targetRepository
+  type: string
+  default: 'Enter target repository name'
+  displayName: 'Target Repository Name'
+
+- name: environment
+  type: string
+  default: 'Enter environment name'
+  displayName: 'Environment Name'
+
+- name: capacityId
+  type: string
+  default: 'Enter capacity Id'
+  displayName: 'Capacity Id'
+
+- name: keyvaultName
+  type: string
+  default: 'Enter keyvault name'
+  displayName: 'Keyvault Name'
+
+- name: adminGroupPrincipalIds
+  type: string
+  default: 'Enter admin group principal ids'
+  displayName: 'Admin Group Principal Ids'
+
+- name: contributorGroupPrincipalIds
+  type: string
+  default: 'Enter contributor group principal ids'
+  displayName: 'Contributor Group Principal Ids'
+
+- name: pep
+  type: string
+  default: '[]'
+  displayName: 'Private Endpoint Configurations (JSON array)'
+
+- name: requiredSecurityGroup
+  type: string
+  displayName: 'Pipeline Environment Security Group Name'
+
+- name: optionalSecurityGroup
+  type: string
+  displayName: 'Pipeline Environment Security Group Name (Optional)'
+
+- name: viewerGroupPrincipalIds
+  type: string
+  default: 'Enter viewer group principal ids'
+  displayName: 'Viewer Group Principal Ids'
+
+- name: lakeHouseDefaultReaders
+  type: string
+  default: ''
+  displayName: 'Lake House Default Readers'
+
+steps:
+ 
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+  clean: true # Add this to ensure clean checkout
+
+- template: ../templates/auth-setup.yml
+
+- task: PowerShell@2
+  name: DeployBranch
+  displayName: 'Deploy Release Branch'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Deploy-ReleaseBranch.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -SourceBranch "${{ parameters.sourceBranch }}"
+      -SourceOrganization "${{ parameters.sourceOrganization }}"
+      -SourceProject "${{ parameters.sourceProject }}"
+      -SourceRepository "${{ parameters.sourceRepository }}"
+      -TargetOrganization "${{ parameters.targetOrganization }}"
+      -TargetProject "${{ parameters.targetProject }}"
+      -TargetRepository "${{ parameters.targetRepository }}"
+  env:
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    ARM_TENANT_ID: $(ARM_TENANT_ID)
+
+- task: PowerShell@2
+  displayName: 'Prepare PEP Parameter'
+  name: preparePEP
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Get the PEP JSON string
+      $pepJson = '${{ parameters.pep }}'
+     
+      try {
+          # Attempt to parse the JSON
+          $pepArray = $pepJson | ConvertFrom-Json
+         
+          # Validate it's an array
+          if ($pepArray -isnot [System.Array]) {
+              Write-Warning "PEP parameter is not a valid JSON array. Converting single object to array."
+              # If it's a single object, convert to an array
+              $pepArray = @($pepArray)
+          }
+         
+          # Validate each entry has required fields
+          foreach ($entry in $pepArray) {
+              if (-not (($entry.PSObject.Properties.Name -contains "allowed") -and
+                        ($entry.PSObject.Properties.Name -contains "resourceId") -and
+                        ($entry.PSObject.Properties.Name -contains "subresourceType"))) {
+                  Write-Error "One or more PEP entries is missing required fields (allowed, resourceId, subresourceType)"
+                  exit 1
+              }
+          }
+         
+          # Re-encode as a JSON string
+          $validatedPepJson = $pepArray | ConvertTo-Json -Compress
+          Write-Host "PEP validation successful. Found $($pepArray.Count) endpoint configurations."
+         
+          # Write to a temporary file to avoid command-line escaping issues
+          $tempFile = Join-Path $env:TEMP "pep_data.json"
+          Set-Content -Path $tempFile -Value $validatedPepJson -Encoding UTF8
+         
+          # Set the path as a variable for use in subsequent tasks
+          Write-Host "##vso[task.setvariable variable=pepJsonFilePath]$tempFile"
+         
+      } catch {
+          Write-Error "Failed to parse PEP JSON: $_"
+          exit 1
+      }
+
+- task: PowerShell@2
+  displayName: 'Prepare Lake House Default Readers Parameter'
+  name: prepareLakeHouseDefaultReaders
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Get the Lake House Default Readers string
+      $lakeHouseDefaultReadersJson = '${{ parameters.lakeHouseDefaultReaders }}'
+      $tempFile = Join-Path $env:TEMP "lakehouse_default_readers.json"
+      Set-Content -Path $tempFile -Value $lakeHouseDefaultReadersJson -Encoding UTF8
+      Write-Host "##vso[task.setvariable variable=lakeHouseDefaultReadersJsonFilePath]$tempFile"
+      Write-Host "Lake House Default Readers parameter prepared."
+
+- task: PowerShell@2
+  displayName: 'Copy Variable Group'
+  name: copyVariableGroup
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Copy-VariableGroup.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -SourceOrg "${{ parameters.sourceOrganization }}"
+      -SourceProject "${{ parameters.sourceProject }}"
+      -SourceGroupName "${{ parameters.variableGroup }}"
+      -TargetOrg "${{ parameters.targetOrganization }}"
+      -TargetProject "${{ parameters.targetProject }}"
+      -TargetGroupName "${{ parameters.targetVariableGroup }}"
+      -TargetWorkspaceName "${{ parameters.targetWorkspaceName }}"
+      -TargetParentDomainName "${{ parameters.targetSuperDomain }}"
+      -TargetChildDomainName "${{ parameters.targetSubDomain }}"
+      -TargetRepository "${{ parameters.targetRepository }}"
+      -Environment "${{ parameters.environment }}"
+      -AdminGroupPrincipalIds "${{ parameters.adminGroupPrincipalIds }}"
+      -ContributorGroupPrincipalIds "${{ parameters.contributorGroupPrincipalIds }}"
+      -CapacityId "${{ parameters.capacityId }}"
+      -KeyvaultName "${{ parameters.keyvaultName }}"
+      -PepFilePath "$(pepJsonFilePath)"
+      -ViewerGroupPrincipalIds "${{ parameters.viewerGroupPrincipalIds }}"
+      -LakeHouseDefaultReadersFilePath "$(lakeHouseDefaultReadersJsonFilePath)"
+  env:
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    ARM_TENANT_ID: $(ARM_TENANT_ID)
+    ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+- task: PowerShell@2
+  displayName: 'Create Environment Checks Approval'
+  name: createEnvironmentApproval
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Create-AzDevOpsEnvironment.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -Organization "${{ parameters.targetOrganization }}"
+      -ProjectName "${{ parameters.targetProject }}"
+      -RequiredSecurityGroup "${{ parameters.requiredSecurityGroup }}"
+      -OptionalSecurityGroup "${{ parameters.optionalSecurityGroup }}"
+      -Environment "${{ parameters.environment }}"
+  env:
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    ARM_TENANT_ID: $(ARM_TENANT_ID)
+    ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)

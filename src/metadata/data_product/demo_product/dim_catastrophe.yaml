@@ -1,0 +1,26 @@
+target:
+  lakehouse: sub_domain_data_product
+  schema: your_schema
+  table: dim_catastrophe
+  load_strategy: type_two
+  key_columns:
+    - catastrophe_code
+  unknown_record: True
+  identity: True
+
+source:
+  - name: your_alias_name
+    lakehouse: sub_domain_curated
+    schema: your_schema
+    table: claims_catcodes
+
+query:
+  - name: dim_catastrophe
+    sql: SELECT 
+            catastrophecode as catastrophe_code
+            ,perils as catastrophe_perils
+        FROM 
+            curated_bop_claim_summary
+        GROUP BY
+            catastrophecode
+            ,perils

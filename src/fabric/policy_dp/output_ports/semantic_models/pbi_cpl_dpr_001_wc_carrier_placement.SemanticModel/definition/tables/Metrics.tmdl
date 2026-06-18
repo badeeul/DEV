@@ -1,0 +1,448 @@
+table Metrics
+	lineageTag: 7446061c-593e-4256-be18-871fb9193f8a
+
+	measure Issued =
+			
+			CALCULATE(SUM(wc_carrier_placement_snapshot[Policy_Issued])) + 0
+		formatString: #,0
+		displayFolder: Measures (Not Time Period Specific)\Counts
+		lineageTag: 3a25753a-923c-4548-91c8-e009fcf1446a
+
+	measure Quoted =
+			
+			CALCULATE(SUM(wc_carrier_placement_snapshot[Policy_Quoted])) + 0
+		formatString: #,0
+		displayFolder: Measures (Not Time Period Specific)\Counts
+		lineageTag: f3741b77-71e8-4ee1-b899-442ef58b30a6
+
+	measure Submitted =
+			
+			CALCULATE(SUM(wc_carrier_placement_snapshot[Policy_Submitted])) + 0
+		formatString: #,0
+		displayFolder: Measures (Not Time Period Specific)\Counts
+		lineageTag: 88e29d7f-d728-4fae-a6b2-c53014fb72d7
+
+	measure 'Hit Ratio' =
+			
+			DIVIDE([Issued],[Quoted])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Not Time Period Specific)\Ratios
+		lineageTag: 8e36307c-e49e-4086-836e-cb7d8ebcad98
+
+	measure 'Quote Ratio' =
+			
+			DIVIDE([Quoted],[Submitted])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Not Time Period Specific)\Ratios
+		lineageTag: 6603b84c-4620-466c-bd84-028a16da43d6
+
+	measure 'Yield Ratio' =
+			
+			DIVIDE([Issued],[Submitted])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Not Time Period Specific)\Ratios
+		lineageTag: 36acc15d-8fbb-4a53-a148-0c4c1c6e1b2b
+
+	measure 'Data Last Date' =
+			
+			CALCULATE(
+			    MAX(wc_carrier_placement_snapshot[policy_sub_dt]),
+			    ALL(wc_carrier_placement_snapshot)
+			)
+		formatString: Short Date
+		displayFolder: Date Helpers
+		lineageTag: 208c2405-af0f-4dea-8548-aae7a3bc2813
+
+	measure Implementation_WindowEnd = [Data Last Date]
+		formatString: General Date
+		displayFolder: Date Helpers
+		lineageTag: cba6ab60-d724-4beb-9f67-b73c09a0b287
+
+	measure Implementation_WindowStart =
+			
+			IF (
+			    NOT [Has Selection],
+			    BLANK(),
+			    CALCULATE (
+			        MAX ( State_ReleaseDates[ImplementationDate] ),
+			        ALLSELECTED ( State_ReleaseDates )     -- respects BOTH States[State] and States[Cohort]
+			    )
+			)
+		displayFolder: Date Helpers
+		lineageTag: a39d62d1-471e-4b77-a13a-4bf313784e1b
+
+	measure 'Has Selection' =
+			
+			OR ( ISFILTERED ( State_ReleaseDates[State] ), ISFILTERED ( State_ReleaseDates[Cohort] ) )
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: Date Helpers
+		lineageTag: 34fd207a-af99-4d5b-a854-245e15c29fa2
+
+	measure 'State Start Date' =
+			
+			VAR _state = SELECTEDVALUE('State_ReleaseDates'[State])
+			RETURN
+			IF(
+			    ISBLANK(_state),
+			    BLANK(),
+			    CALCULATE(
+			        MAX('State_ReleaseDates'[ImplementationDate]),
+			        KEEPFILTERS('State_ReleaseDates'[State] = _state)
+			    )
+			)
+		formatString: General Date
+		displayFolder: Date Helpers
+		lineageTag: ab623536-4f93-4c1f-9976-a87c95539669
+
+	measure Implementation_PrevYear_WindowStart =
+			
+			VAR s = [Implementation_WindowStart]
+			RETURN IF(ISBLANK(s), BLANK(), EDATE(s, -12))
+		formatString: General Date
+		displayFolder: Date Helpers
+		lineageTag: bd59fe3a-b52b-48cf-b7ca-0da9d72070fe
+
+	measure Implementation_PrevYear_WindowEnd =
+			
+			VAR e = [Implementation_WindowEnd]
+			RETURN IF(ISBLANK(e), BLANK(), EDATE(e, -12))
+		formatString: General Date
+		displayFolder: Date Helpers
+		lineageTag: d6098cf4-aa8f-4f37-b32b-b5e37f4576d5
+
+	measure Issued_Implementation_to_Current =
+			
+			VAR s = [Implementation_WindowStart]
+			VAR e = [Implementation_WindowEnd]
+			RETURN
+			IF (
+			    ISBLANK ( s ) || ISBLANK ( e ),
+			    BLANK(),
+			    CALCULATE (
+			        [Issued],
+			        FILTER (
+			            ALL ( wc_carrier_placement_snapshot[policy_sub_dt] ),   -- clear date to aggregate the entire window
+			            wc_carrier_placement_snapshot[policy_sub_dt] >= s &&
+			            wc_carrier_placement_snapshot[policy_sub_dt] <= e
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Measures (Time Period Specific)\Counts
+		lineageTag: 0cfdefcd-dd6a-48c2-a24c-24f1db87c40c
+
+	measure Issued_Implementation_to_Current_PrevYear =
+			
+			VAR s = [Implementation_PrevYear_WindowStart]
+			VAR e = [Implementation_PrevYear_WindowEnd]
+			RETURN
+			IF (
+			    ISBLANK ( s ) || ISBLANK ( e ),
+			    BLANK(),
+			    CALCULATE (
+			        [Issued],
+			        FILTER (
+			            ALL ( wc_carrier_placement_snapshot[policy_sub_dt] ),
+			            wc_carrier_placement_snapshot[policy_sub_dt] >= s &&
+			            wc_carrier_placement_snapshot[policy_sub_dt] <= e
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Measures (Time Period Specific)\Counts
+		lineageTag: 3b3873c3-242d-4c6e-a530-7b68fa5ce8e1
+
+	measure Quoted_Implementation_to_Current =
+			
+			VAR s = [Implementation_WindowStart]
+			VAR e = [Implementation_WindowEnd]
+			RETURN
+			IF (
+			    ISBLANK ( s ) || ISBLANK ( e ),
+			    BLANK(),
+			    CALCULATE (
+			        [Quoted],
+			        FILTER (
+			            ALL ( wc_carrier_placement_snapshot[policy_sub_dt] ),   -- clear date to aggregate the entire window
+			            wc_carrier_placement_snapshot[policy_sub_dt] >= s &&
+			            wc_carrier_placement_snapshot[policy_sub_dt] <= e
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Measures (Time Period Specific)\Counts
+		lineageTag: af4a697f-a1a9-46d5-a508-ad2570579fbe
+
+	measure Quoted_Implementation_to_Current_PrevYear =
+			
+			VAR s = [Implementation_PrevYear_WindowStart]
+			VAR e = [Implementation_PrevYear_WindowEnd]
+			RETURN
+			IF (
+			    ISBLANK ( s ) || ISBLANK ( e ),
+			    BLANK(),
+			    CALCULATE (
+			        [Quoted],
+			        FILTER (
+			            ALL ( wc_carrier_placement_snapshot[policy_sub_dt] ),
+			            wc_carrier_placement_snapshot[policy_sub_dt] >= s &&
+			            wc_carrier_placement_snapshot[policy_sub_dt] <= e
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Measures (Time Period Specific)\Counts
+		lineageTag: 95163843-a841-4cbd-a0fd-db54d8d49f49
+
+	measure Submitted_Implementation_to_Current =
+			
+			VAR s = [Implementation_WindowStart]
+			VAR e = [Implementation_WindowEnd]
+			RETURN
+			IF (
+			    ISBLANK ( s ) || ISBLANK ( e ),
+			    BLANK(),
+			    CALCULATE (
+			        [Submitted],
+			        FILTER (
+			            ALL ( wc_carrier_placement_snapshot[policy_sub_dt] ),   -- clear date to aggregate the entire window
+			            wc_carrier_placement_snapshot[policy_sub_dt] >= s &&
+			            wc_carrier_placement_snapshot[policy_sub_dt] <= e
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Measures (Time Period Specific)\Counts
+		lineageTag: d2282b42-115a-408e-9207-612a76a9c76a
+
+	measure Submitted_Implementation_to_Current_PrevYear =
+			
+			VAR s = [Implementation_PrevYear_WindowStart]
+			VAR e = [Implementation_PrevYear_WindowEnd]
+			RETURN
+			IF (
+			    ISBLANK ( s ) || ISBLANK ( e ),
+			    BLANK(),
+			    CALCULATE (
+			        [Submitted],
+			        FILTER (
+			            ALL ( wc_carrier_placement_snapshot[policy_sub_dt] ),
+			            wc_carrier_placement_snapshot[policy_sub_dt] >= s &&
+			            wc_carrier_placement_snapshot[policy_sub_dt] <= e
+			        )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Measures (Time Period Specific)\Counts
+		lineageTag: c27bb6f1-a4b3-4c8f-8293-51c69e899284
+
+	measure HitRatio_Implementation_to_Current =
+			
+			DIVIDE([Issued_Implementation_to_Current],[Quoted_Implementation_to_Current])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Time Period Specific)\Ratios
+		lineageTag: 6a3ba6a7-b60b-4eb4-bea8-b245a490ef84
+
+	measure HitRatio_Implementation_to_Current_PrevYear =
+			
+			DIVIDE([Issued_Implementation_to_Current_PrevYear],[Quoted_Implementation_to_Current_PrevYear])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Time Period Specific)\Ratios
+		lineageTag: ed1eea26-f9ce-4770-b7b5-ee476b04a712
+
+	measure QuoteRatio_Implementation_to_Current =
+			
+			DIVIDE([Quoted_Implementation_to_Current],[Submitted_Implementation_to_Current])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Time Period Specific)\Ratios
+		lineageTag: 060ba0b3-494a-49e3-b8d5-54cdb926ac68
+
+	measure QuoteRatio_Implementation_to_Current_PrevYear =
+			
+			DIVIDE([Quoted_Implementation_to_Current_PrevYear],[Submitted_Implementation_to_Current_PrevYear])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Time Period Specific)\Ratios
+		lineageTag: 00e4076b-9b56-4952-a6c8-0bd56be8884b
+
+	measure YieldRatio_Implementation_to_Current =
+			
+			DIVIDE([Issued_Implementation_to_Current],[Submitted_Implementation_to_Current])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Time Period Specific)\Ratios
+		lineageTag: c39485ea-fb8e-4c3a-97a5-6dbf183cc7a8
+
+	measure YieldRatio_Implementation_to_Current_PrevYear =
+			
+			DIVIDE([Issued_Implementation_to_Current_PrevYear],[Submitted_Implementation_to_Current_PrevYear])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Measures (Time Period Specific)\Ratios
+		lineageTag: 850559d6-c79b-450e-b8ec-94265b0c6d49
+
+	measure DnB_Score_MismatchedCount =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[dnb_score_points_match_flag]),
+			    wc_carrier_placement_snapshot[dnb_score_points_match_flag]="N"
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: d9c6d033-a043-4f5d-b3d7-084b540b52da
+
+	measure ExperienceMod_MismatchedCount =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[experience_mod_points_match_flag]),
+			    wc_carrier_placement_snapshot[experience_mod_points_match_flag]="N"
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: 32f7be12-989a-42ff-9655-15c3f0188f5e
+
+	measure HazardGroup_MismatchedCount =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[hazard_group_points_match_flag]),
+			    wc_carrier_placement_snapshot[hazard_group_points_match_flag]="N"
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: f5a8d943-8898-40ff-88d8-50ded75f3df3
+
+	measure PriorWCYrs_MismatchedCount =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[prior_wc_years_points_match_flag]),
+			    wc_carrier_placement_snapshot[prior_wc_years_points_match_flag]="N"
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: 6003c572-945d-4cd5-af74-3f17a7bf94fa
+
+	measure 'Points Difference' =
+			
+			ABS(
+			    CALCULATE(
+			        SUM(wc_carrier_placement_snapshot[dna_total_points]) - SUM(wc_carrier_placement_snapshot[guardtech_total_points])
+			    )
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: 73a646f2-a797-4b86-a3fb-c68cc19225f6
+
+	measure UniqueMatch_Count =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[policy_num_bus_key]),
+			        FILTER(wc_carrier_placement_snapshot, wc_carrier_placement_snapshot[all_category_points_match_flag]="Y")
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: a3f02860-45e3-4d9f-8980-42aeb7a0b94d
+
+	measure UniqueMismatch_Count =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[policy_num_bus_key]),
+			        FILTER(wc_carrier_placement_snapshot, wc_carrier_placement_snapshot[all_category_points_match_flag]="N")
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: 294cffe4-4a15-4e2b-9bba-cc5c3448f3e2
+
+	measure ScoredPolicy_Count =
+			
+			CALCULATE(
+			    COUNT(wc_carrier_placement_snapshot[policy_num_bus_key]),
+			        FILTER(wc_carrier_placement_snapshot, ISBLANK(wc_carrier_placement_snapshot[guardtech_enteredon])=FALSE)
+			)
+		formatString: #,0
+		displayFolder: Points Validation
+		lineageTag: d1079445-6329-4990-93c0-aecdc9cf1b53
+
+	measure UniqueMismatch_Percent =
+			
+			DIVIDE([UniqueMismatch_Count],[ScoredPolicy_Count])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Points Validation
+		lineageTag: d212b303-dc27-4cf4-bbd3-166eacc1a47a
+
+	measure 'Dynamic Chart Title' =
+			
+			VAR Metric =
+			    SELECTEDVALUE('Point Category'[Metric], "Total")
+			
+			-- counts
+			VAR StateCount =
+			    COUNTROWS(VALUES('State_ReleaseDates'[State]))
+			
+			VAR TotalStates =
+			    COUNTROWS(ALL('State_ReleaseDates'[State]))
+			
+			VAR CohortCount =
+			    COUNTROWS(VALUES('State_ReleaseDates'[Cohort]))
+			
+			VAR TotalCohorts =
+			    COUNTROWS(ALL('State_ReleaseDates'[Cohort]))
+			
+			-- 🔑 Detect if selection is purely cohort-based
+			VAR SelectedStates =
+			    VALUES('State_ReleaseDates'[State])
+			
+			VAR FullCohortSelection =
+			    CALCULATE(
+			        COUNTROWS('State_ReleaseDates'),
+			        ALLSELECTED('State_ReleaseDates')
+			    )
+			    =
+			    CALCULATE(
+			        COUNTROWS('State_ReleaseDates'),
+			        ALL('State_ReleaseDates'[State])
+			    )
+			
+			-- text
+			VAR StateText =
+			    CONCATENATEX(
+			        SelectedStates,
+			        'State_ReleaseDates'[State],
+			        ", "
+			    )
+			
+			VAR CohortText =
+			    CONCATENATEX(
+			        VALUES('State_ReleaseDates'[Cohort]),
+			        'State_ReleaseDates'[Cohort],
+			        ", "
+			    )
+			
+			RETURN
+			"Points Distribution - " & Metric &
+			SWITCH(
+			    TRUE(),
+			
+			    -- ✅ ONLY if selection corresponds exactly to full cohorts
+			    FullCohortSelection && CohortCount <> TotalCohorts,
+			        ": " & CohortText,
+			
+			    -- ✅ Otherwise show states
+			    StateCount <> TotalStates,
+			        ": " & StateText,
+			
+			    ""
+			)
+		lineageTag: 24fc34b7-ebf5-4d2f-a997-92f4becc1438
+
+	column _key
+		isHidden
+		lineageTag: 8140423f-8062-49f7-a148-5caec369af6a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [_key]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metrics = calculated
+		mode: import
+		source = DATATABLE("_key", STRING, {{"Placeholder"}})
+
+	annotation PBI_Id = b2d61040524e41e28f23fd87d5471c3e
+

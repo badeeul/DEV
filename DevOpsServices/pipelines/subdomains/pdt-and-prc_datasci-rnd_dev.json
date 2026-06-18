@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-DataSciRnD-DEV",
+  "targetWorkspaceName": "PdtandPrc-DataSciRnD-DEV",
+  "targetSuperDomain": "Pdt and Prc",
+  "targetSubDomain": "Data Sci RnD",
+  "targetProject": "DnA Pdt and Prc",
+  "targetRepository": "DnA Pdt and Prc - Data Sci RnD",
+  "environment": "dev",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Pdt and Prc Data Sci RnD - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "23C565A5-C86C-4711-B6A5-192777E8BA44",
+  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "contributorGroupPrincipalIds": "6fcb0551-1a6e-4ec1-be61-66c7cca249e6,8e0a27fc-e247-4ca2-be88-eb9b62c25a4f,5dd74215-37a9-4b79-a53b-7663796c7bc2,baa1c84c-219d-4805-ba76-4b61e08afb63,5e44056c-abf3-4676-8b45-7d7cf68398a9",
+  "viewerGroupPrincipalIds": "b85a6636-25fc-49ef-bca6-44f1d12f6c6e,3cfd7d12-3ff0-4a24-aea8-58d321aa5163,9a84696c-1f5b-4769-b736-511565665d5d,8fb72864-5841-42b6-99e4-854668760646"
+}

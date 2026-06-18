@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_process_logs",
+    "description": "This pipeline efficiently manages the entire life cycle of metadata log files and tables in audit schema within the Observability Lakehouse. It operates asynchronously, ensuring seamless and non-blocking processing of log data."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2a9e070f-499f-4495-99fd-1265f1ab07f1"
+  }
+}

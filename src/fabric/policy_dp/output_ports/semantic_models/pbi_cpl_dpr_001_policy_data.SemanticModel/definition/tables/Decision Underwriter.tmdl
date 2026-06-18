@@ -1,0 +1,175 @@
+table 'Decision Underwriter'
+	lineageTag: 7e326117-a079-40f4-88c2-4f8b926e3a1d
+	sourceLineageTag: [policy].[Policy Decision Underwriter]
+
+	column emp_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bc3e7de-635a-431d-ba7a-3f58555990ea
+		sourceLineageTag: emp_key
+		summarizeBy: none
+		sourceColumn: emp_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column emp_cd_bus_key
+		dataType: string
+		lineageTag: 8bc152c6-ef2b-448f-aa2f-48cfee2c0192
+		sourceLineageTag: emp_cd_bus_key
+		summarizeBy: none
+		sourceColumn: emp_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column emp_nm
+		dataType: string
+		lineageTag: d64988dd-fcdc-4c1b-8900-54ac6151c1fb
+		sourceLineageTag: emp_nm
+		summarizeBy: none
+		sourceColumn: emp_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column job_title
+		dataType: string
+		lineageTag: e78fc3f4-e4ba-475e-b905-428eb9a8ca12
+		sourceLineageTag: job_title
+		summarizeBy: none
+		sourceColumn: job_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column user_id
+		dataType: string
+		lineageTag: 8beb63e5-6cc2-4ac6-8159-8f4c1c860668
+		sourceLineageTag: user_id
+		summarizeBy: none
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column term_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 56424244-44e0-45fc-8bf5-bb56c20a3410
+		sourceLineageTag: term_dt
+		summarizeBy: none
+		sourceColumn: term_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e2f0f154-2e68-4b7e-8bff-3182a5a4a1a2
+		sourceLineageTag: active
+		summarizeBy: none
+		sourceColumn: active
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		lineageTag: c5c58c62-e132-44c2-9aba-aefdd7bd71ad
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		lineageTag: 94e256bc-45b8-4bf6-8fbc-c89e53666fad
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		lineageTag: 76dad43b-9803-41bd-866b-93eae107743b
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		lineageTag: ef23ccc7-3acc-4ec9-95df-3e254d8391c5
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2cf02b88-324a-4622-bb68-9441dcee91da
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6edd7995-ba12-4744-ab3c-227cfee8cac6
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2d736de1-2672-41b0-abf7-46993d9f58c8
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ee10869d-db61-4543-ae64-6b8ea0fbbb4d
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 26805542-7961-40bb-b852-b727e07ebb5d
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 829e03ab-027f-4935-a1fb-3771d7f059f5
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Decision Underwriter' = entity
+		mode: directLake
+		source
+			entityName: Policy Decision Underwriter
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

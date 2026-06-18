@@ -1,0 +1,94 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "2458fb100347192e9a0a",
+  "displayName": "Status Flow",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "08ca6ec28ad05b7d57a3",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Policy Submission Date"
+              }
+            },
+            "Property": "Submitted Date"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      }
+    ]
+  },
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "184L"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "f3d742780347d15b258a",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "50b06b4a200046107540",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "d803a1c01d4587873615",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "5f338c65ed9eed259080",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "5b3c4ad8c560bce0d830",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "5b392e62643cd361dad8",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "03a568b9ea023083633e",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "3884327f6a15c6b67675",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "7f812c8b0ae042ac0c02",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    },
+    {
+      "source": "3e7e174b60809d27a546",
+      "target": "b55a3b1932c3a5ac95e1",
+      "type": "DataFilter"
+    }
+  ]
+}

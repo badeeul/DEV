@@ -1,0 +1,51 @@
+table Display_ExperienceMod
+	lineageTag: 6281c21a-de51-4bef-84a9-fd69b388e26f
+
+	column SortOrder
+		formatString: 0
+		lineageTag: f458f319-f749-4a29-adaf-c261684eaaa1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = User
+
+	column ExperienceMod_Display
+		lineageTag: bad80de8-f942-48a1-9783-db0ac05b3aa0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ExperienceMod_Display]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column experience_mod_segement_bus_key
+		lineageTag: ea528917-9b52-4042-bfe6-b2156d899fe6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [experience_mod_segement_bus_key]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Display_ExperienceMod = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "experience_mod_segement_bus_key", STRING,
+				    "ExperienceMod_Display", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"Less than 1.00", "< 1.00", 1}, 
+				        {"1.00", "1.00", 2}, 
+				        {"1.01 - 1.05", "1.01 - 1.05", 3}, 
+				        {"1.06 - 1.15", "1.06 - 1.15", 4}, 
+				        {"1.16 - 1.50", "1.16 - 1.50", 5}, 
+				        {"Greater than 1.50", "> 1.50", 6}, 
+				        {"not applicable", "N/A", 7}
+				    }
+				)
+				```
+
+	annotation PBI_Id = c2b91394e3ec4a37a371d23e1b51afdd
+

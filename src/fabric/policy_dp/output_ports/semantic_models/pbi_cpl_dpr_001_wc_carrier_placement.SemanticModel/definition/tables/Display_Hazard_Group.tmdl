@@ -1,0 +1,62 @@
+table Display_Hazard_Group
+	lineageTag: 943f3381-30c3-41d7-9a9f-795179f1922d
+
+	column dna_hazard_group
+		lineageTag: 8d29ba8f-9527-49eb-9a36-a7369833fc01
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [dna_hazard_group]
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: eb3d3ba3-9ab9-4a45-b062-20ad6dfee5de
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hazard_Group_Display_Sorted =
+			
+			IF(
+			    ISBLANK(Display_Hazard_Group[dna_hazard_group]),
+			    "Unknown",
+			    Display_Hazard_Group[dna_hazard_group]
+			)
+		lineageTag: 40acd153-1f12-4b29-80b5-25f1aed1ee88
+		summarizeBy: none
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hazard_Group_Display
+		lineageTag: f2b99e5f-d7b4-4704-952e-f821225383db
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Hazard_Group_Display]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Display_Hazard_Group = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "dna_hazard_group", STRING,
+				    "Hazard_Group_Display", STRING,
+				    "SortOrder", INTEGER,
+				{
+				    {"A/1", "A/1", 7},
+				    {"B/2", "B/2", 6},
+				    {"C/3", "C/3", 5},
+				    {"D/4", "D/4", 4},
+				    {"E/5", "E/5", 3},
+				    {"F/6", "F/6", 2},
+				    {"G/7", "G/7", 1}
+				}
+				)
+
+	annotation PBI_Id = 3ba5c3b325c94aa8b6513fed949ac219
+

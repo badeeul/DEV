@@ -1,0 +1,28 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/schedule/v1.0/schema.json",
+  "schedules": [
+    {
+      "enabled": true,
+      "recurrence": {
+        "frequency": "Week",
+        "interval": 1,
+        "schedule": {
+          "weekDays": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "hours": [
+            11
+          ],
+          "minutes": [
+            45
+          ]
+        },
+        "timeZone": "Eastern Standard Time"
+      }
+    }
+  ]
+}

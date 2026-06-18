@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "den_nbk_pdi_001_initiate_logging",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "779edb3d-f032-4a03-ba54-2f6c9ac1a675"
+  }
+}

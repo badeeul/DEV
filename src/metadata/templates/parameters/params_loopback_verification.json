@@ -1,0 +1,31 @@
+{
+    "tables_to_analyze": [
+        "dim_policy",
+        "dim_insured",
+        "fact_policy",
+        "fact_policy_transaction",
+        "fact_policy_transaction_detail"
+    ],
+    "table_pk_list": [
+        {
+            "table_name": "dim_policy",
+            "primary_key": "policy_num_bus_key"
+        },
+        {
+            "table_name": "dim_insured",
+            "primary_key": "policy_num_bus_key"
+        },
+        {
+            "table_name": "dim_carrier",
+            "primary_key": "carrier_cd_bus_key"
+        },
+        {
+            "table_name": "dim_dist_chnl",
+            "primary_key": "agcy_cd_bus_key"
+        },
+        {
+            "table_name": "dim_lob",
+            "primary_key": "lob_cd_bus_key"
+        }
+    ]
+}

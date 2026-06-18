@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "pbi_rpt_dpr_001_policy_data_non_pii",
+    "description": "pbi_rpt_dpr_001_policy_data_non_pii"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8f87062c-016c-9377-4d71-a363a0e1e3a8"
+  }
+}

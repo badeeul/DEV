@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "den_nbk_pdi_001_workspace_parameters",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "47d3107e-1a73-442d-92bf-58f691d87335"
+  }
+}

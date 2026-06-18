@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "den_lhw_scu_001_policy_curated",
+    "description": "Data from the raw Lakehouse is organized into structured tables. Curated tables typically reflect the source data, often maintaining a one-to-one relationship."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "53c54631-ebd4-9b58-439c-2ade7ba074ef"
+  }
+}

@@ -1,0 +1,29 @@
+
+# Service Principal Auth Variables
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID]$(TENANT_ID)"
+      Write-Host "##vso[task.setvariable variable=FABRIC_TENANT_ID]$(TENANT_ID)"    
+      Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(SUBSCRIPTION_ID)"
+      Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID]$(CLIENT_ID)"
+      Write-Host "##vso[task.setvariable variable=FABRIC_CLIENT_ID]$(CLIENT_ID)"
+      Write-Host "##vso[task.setvariable variable=ARM_CLIENT_OBJECT_ID]$(CLIENT_OBJECT_ID)"
+      Write-Host "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$(CLIENT_SECRET)"
+      Write-Host "##vso[task.setvariable variable=FABRIC_CLIENT_SECRET]$(CLIENT_SECRET)"
+      Write-Host "##vso[task.setvariable variable=ARM_USE_AZUREAD]true"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_environment]$(ENVIRONMENT)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_keyvault_name]$(KEYVAULT_NAME)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_capacity_id]$(CAPACITY_ID)"      
+      Write-Host "##vso[task.setvariable variable=TF_VAR_workspace_names]$(WORKSPACE_NAMES)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_default_spark_environment_name]$(DEFAULT_SPARK_ENVIRONMENT_NAME)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_default_spark_runtime]$(DEFAULT_SPARK_RUNTIME)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_admin_group_principal_ids]$(ADMIN_GROUP_PRINCIPAL_IDS)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_admin_sp_principal_ids]$(ADMIN_SP_PRINCIPAL_IDS)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_contributor_group_principal_ids]$(CONTRIBUTOR_GROUP_PRINCIPAL_IDS)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_viewer_group_principal_ids]$(VIEWER_GROUP_PRINCIPAL_IDS)"
+      Write-Host "##vso[task.setvariable variable=TF_VAR_admin_user_principal_ids]$(ADMIN_USER_PRINCIPAL_IDS)"
+
+  displayName: 'Set Service Principal and Fabric Variables'

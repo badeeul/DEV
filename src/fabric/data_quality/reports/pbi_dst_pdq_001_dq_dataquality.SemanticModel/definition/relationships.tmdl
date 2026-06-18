@@ -1,0 +1,12 @@
+relationship aa6db321-f077-ee00-0624-4f3d8947deee
+	fromColumn: 'Error Events'.dq_error_event_date_key
+	toColumn: 'Date - Error Event'.DateKey
+
+relationship 5d3879ff-0605-c54c-cf22-2c02e5d1c454
+	fromColumn: 'Error Events'.dq_rule_master_key
+	toColumn: 'Rule Master'.dq_rule_master_key
+
+relationship 7f043d78-d98f-790f-39f6-b9e60b091b45
+	fromColumn: 'Error Event Details'.dq_error_event_key
+	toColumn: 'Error Events'.dq_error_event_key
+

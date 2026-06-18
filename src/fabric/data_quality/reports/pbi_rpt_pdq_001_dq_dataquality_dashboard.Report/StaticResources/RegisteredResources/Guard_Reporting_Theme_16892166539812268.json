@@ -1,0 +1,51 @@
+{
+  "name": "Guard Reporting Theme 1",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "catagoryAxis": [
+          {
+            "gridlinesStyle": "dotted"
+          }
+        ]
+      }
+    }
+  },
+  "dataColors": [
+    "#006DA8",
+    "#88B660",
+    "#6D6E71",
+    "#00325A",
+    "#C7C8CA",
+    "#ED7D31",
+    "#343333",
+    "#ED2121"
+  ],
+  "foreground": "#121212",
+  "background": "#FFFFFF",
+  "foregroundNeutralSecondary": "#6C6966",
+  "backgroundLight": "#E5E0DA",
+  "foregroundNeutralTertiary": "#ABA7A2",
+  "backgroundNeutral": "#C6C2BE",
+  "tableAccent": "#4E9466",
+  "maximum": "#0B2F54",
+  "center": "#59A472",
+  "minimum": "#0E94FF",
+  "bad": "#0F3D6E",
+  "neutral": "#186DD5",
+  "good": "#46835A",
+  "textClasses": {
+    "label": {
+      "fontFace": "Verdana"
+    },
+    "callout": {
+      "fontFace": "Roboto"
+    },
+    "title": {
+      "fontFace": "Verdana"
+    },
+    "header": {
+      "fontFace": "Verdana"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-PartnerPerfMgmt-INT",
+  "targetWorkspaceName": "Distribution-PartnerPerfMgmt-INT",
+  "targetSuperDomain": "Distribution",
+  "targetSubDomain": "PartnerPerfMgmt",
+  "targetProject": "DnA Distribution",
+  "targetRepository": "DnA Distro - Partner Perf Mgmt",
+  "environment": "int",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "0e987248-3011-4299-9d32-35891e4b387d,f7b74a8f-0401-4227-a98a-43be7f7a87c4",
+  "viewerGroupPrincipalIds": "cddf8b07-2318-4246-9385-43fb6dc8cd1a,65ab93ae-6ba9-499a-b600-917d34df13a0,934c3117-81d6-4851-b024-0a1175385271"
+}

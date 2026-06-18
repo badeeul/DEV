@@ -1,0 +1,50 @@
+table 'Digital Decisioning Ratio Switcher'
+	lineageTag: 15c70749-9d95-4d10-b724-86c6d387b4f7
+
+	column 'Ratio Switcher'
+		lineageTag: 8acbe77e-47e6-4462-af23-63c8065453b5
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Ratio Switcher Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Ratio Switcher Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ratio Switcher Fields'
+		isHidden
+		lineageTag: d430befa-3e30-4181-8431-e1d5b91e48ca
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Ratio Switcher Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ratio Switcher Order'
+		isHidden
+		formatString: 0
+		lineageTag: f49cc262-2c89-4c70-914e-3f3cf2705bd1
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Digital Decisioning Ratio Switcher' = calculated
+		mode: import
+		source =
+				{
+				    ("Digitally Decisioned Ratio", NAMEOF('Metrics'[Digitally Decisioned Ratio]), 0),
+				    ("Digitally Assisted Ratio", NAMEOF('Metrics'[Assisted-or-Incomplete Ratio]), 1),
+				    ("Manual / Supplemental Ratio", NAMEOF('Metrics'[Manual-or-Supplemental Ratio]), 2)
+				}
+
+	annotation PBI_Id = 4ef6538ea3ae4aeea48eedeff8103164
+

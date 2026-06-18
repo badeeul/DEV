@@ -1,0 +1,25 @@
+
+steps:
+
+# Login using service principal
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "STORAGE_ACCOUNT is set: $(STORAGE_ACCOUNT)"
+      echo "tfstate is set: $(ENVIRONMENT).tfstate"
+      echo "BACKEND_RG is set: $(BACKEND_RG)"
+      echo "ARM_SUBSCRIPTION_ID is set: $(ARM_SUBSCRIPTION_ID)  ..."
+      echo "ARM_CLIENT_ID is set: $(ARM_CLIENT_ID)   ..."
+      echo "ARM_CLIENT_SECRET is set: $(ARM_CLIENT_SECRET)  ..."
+      echo "ARM_TENANT_ID is set: $(ARM_TENANT_ID)  ..."
+
+      az login --service-principal --username $(ARM_CLIENT_ID) --password $(ARM_CLIENT_SECRET) --tenant $(ARM_TENANT_ID)
+
+    workingDirectory: $(System.DefaultWorkingDirectory)/DevOpsServices/terraform/PlatformServices
+  displayName: 'Login Setup'
+ 
+
+
+
+      

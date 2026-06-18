@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "den_lhw_dpr_001_raw_files",
+    "description": "Raw ingestion: Storing unprocessed data exactly as received from the source."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "51092fec-6a3c-8995-4270-c4b7d85d0d09"
+  }
+}

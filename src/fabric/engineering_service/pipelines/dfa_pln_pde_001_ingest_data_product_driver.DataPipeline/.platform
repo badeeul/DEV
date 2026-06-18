@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pde_001_ingest_data_product_driver",
+    "description": "This pipeline is an entry point to the Platform Services Engineering service. It orchestrates the load of the Data Product model defined in the JSON file passed in parameter Feed_Name."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "99342187-b86f-44d0-8b92-2235c1cc9041"
+  }
+}

@@ -1,0 +1,45 @@
+table 'Report Date Periods'
+	lineageTag: be90ef1a-0b94-47c6-af5e-7d851b0a66d0
+
+	column 'Period Key'
+		lineageTag: b3fbc2fd-5d82-47cb-9e9d-c5fc52f5e387
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Period Key]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Period Name'
+		lineageTag: ccc91401-fe91-43f1-be5d-6f0fb381294e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Period Name]
+		sortByColumn: 'Sort Order'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sort Order'
+		formatString: 0
+		lineageTag: c711265c-7985-4df8-b9e1-851f380f8d23
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Sort Order]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Report Date Periods' = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Period Key", STRING,
+				    "Period Name", STRING,
+				    "Sort Order", INTEGER,
+				    {
+				        { "DEFAULT", "Default (Prior Year + YTD)" , 1},
+				        { "CUSTOM",  "Custom (Choose Dates Below)" , 2}
+				    }
+				)
+
+	annotation PBI_Id = 741bc0cfa02b44ec8607f5266fa4613f
+

@@ -1,0 +1,255 @@
+table 'Rule Master'
+	lineageTag: 48617b89-8b34-4cc8-b39e-71e08ea3c71f
+	sourceLineageTag: [data_quality].[dim_dq_rule_master]
+
+	column dq_rule_master_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: f9d8227b-fb90-4a97-8ca3-b5e11b205bf9
+		sourceLineageTag: dq_rule_master_key
+		summarizeBy: none
+		sourceColumn: dq_rule_master_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The data quality rule ID from the master rulebook
+	column 'Rule ID'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d0bf15dd-ae52-4a86-a0dd-b3d68689460d
+		sourceLineageTag: dq_rule_id
+		summarizeBy: none
+		sourceColumn: dq_rule_id
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Product Name'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f806d63c-8043-4bbb-b19d-c4d7369d437b
+		sourceLineageTag: data_product_name
+		summarizeBy: none
+		sourceColumn: data_product_name
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the business subdomain (Claims Handling, for example)
+	column 'Subdomain Name'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c9ced82d-d37e-4afa-a497-89b7faaadc38
+		sourceLineageTag: sub_domain_name
+		summarizeBy: none
+		sourceColumn: sub_domain_name
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Full text description of the data quality rule from the master rule book. This represents the unique Rule ID that the Sub Domain wants to maintain for the Data Product being developed. 
+	column 'Rule Description'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2b3b808d-8540-4343-8e88-d301ef27fad4
+		sourceLineageTag: dq_rule_description
+		summarizeBy: none
+		sourceColumn: dq_rule_description
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_rule_constraint
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d9757f92-b30f-4aa8-a644-764dce3b66cd
+		sourceLineageTag: dq_rule_constraint
+		summarizeBy: none
+		sourceColumn: dq_rule_constraint
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// This will be a value selected from "COMPLETENESS", "CONSISTENCY", "ACCURACY", "UNIQUENESS", "CONFORMITY", "COMPLIANCE", "TIMELINESS
+	column 'Rule Dimension'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: cc3ac42c-743a-4d6c-aa4c-d3ae44101cd5
+		sourceLineageTag: dq_rule_dimension
+		summarizeBy: none
+		sourceColumn: dq_rule_dimension
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Contains values for the rule dimension, also known as the screen type or DQ Check (Column, Structure, Business Rules)
+	column 'DQ Check Type (Screen Type)'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6b6b1e31-8042-406e-b5b2-7960d6b2e6b5
+		sourceLineageTag: dq_screen_type
+		summarizeBy: none
+		sourceColumn: dq_screen_type
+
+		changedProperty = Description
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// This represents the Lakehouse of the table where the attribute that is being quality checked 
+	column 'Applicable Lakehouse Name'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 88a87499-52d3-45ba-8f46-79baabbbb7be
+		sourceLineageTag: dq_rule_applicable_lakehouse
+		summarizeBy: none
+		sourceColumn: dq_rule_applicable_lakehouse
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// This represents the schema of the Lakehouse table where the attribute that is being quality checked 
+	column 'Applicable Schema Name'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 7c81290f-5d35-4f6c-99c4-6e47c81e8eb8
+		sourceLineageTag: dq_rule_applicable_schema
+		summarizeBy: none
+		sourceColumn: dq_rule_applicable_schema
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// This represents the table/file where the attribute that is being quality checked 
+	column 'Applicable Table or Object'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 395708e4-8efe-4d84-80de-882673eceee1
+		sourceLineageTag: dq_rule_applicable_object
+		summarizeBy: none
+		sourceColumn: dq_rule_applicable_object
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// This represents the column/attribute that is being quality checked. Descriptive column only.
+	column 'Applicable Column'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b54f44c1-5d5f-4d34-ae4f-a5e40b053d7a
+		sourceLineageTag: dq_rule_applicable_attribute
+		summarizeBy: none
+		sourceColumn: dq_rule_applicable_attribute
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Action taken when rule fails (WARN, DROP, FAIL)
+	column 'Failure Action'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d4c3b660-3327-46d6-b016-143bd187fd8b
+		sourceLineageTag: dq_rule_failure_action
+		summarizeBy: none
+		sourceColumn: dq_rule_failure_action
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_rule_severity_score
+		dataType: double
+		isHidden
+		sourceProviderType: float
+		lineageTag: e671811c-4cd9-413b-a7a8-a560688a5564
+		sourceLineageTag: dq_rule_severity_score
+		summarizeBy: none
+		sourceColumn: dq_rule_severity_score
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Slowly changing dimension field. Flag to determine if record is current  = 1, if not = 0.
+	column is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 4fedf16e-5eaa-4744-946b-66882680d89f
+		sourceLineageTag: is_current_flag
+		summarizeBy: none
+		sourceColumn: is_current_flag
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 6bb228a5-562d-4487-92f0-b957b93e8c8f
+		sourceLineageTag: row_effective_date
+		summarizeBy: none
+		sourceColumn: row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 4d11feed-7edd-458c-931d-6ebb3dae0488
+		sourceLineageTag: row_expiration_date
+		summarizeBy: none
+		sourceColumn: row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Rule Master' = entity
+		mode: directLake
+		source
+			entityName: dim_dq_rule_master
+			schemaName: data_quality
+			expressionSource: DatabaseQuery
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

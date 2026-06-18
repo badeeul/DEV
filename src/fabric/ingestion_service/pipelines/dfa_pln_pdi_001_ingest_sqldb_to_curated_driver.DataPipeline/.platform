@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_ingest_sqldb_to_curated_driver",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f93f100a-1d58-46bd-a470-971d2054ed6c"
+  }
+}

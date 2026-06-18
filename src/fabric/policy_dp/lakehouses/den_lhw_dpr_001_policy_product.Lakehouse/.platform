@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "den_lhw_dpr_001_policy_product",
+    "description": "Data in the Product Lakehouse is organized into dimension and fact tables. Product-related tables are transformed and structured into a star schema, enabling efficient analytics and easy data consumption."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b8ceb1c9-f6f0-be83-464b-702f0a240555"
+  }
+}

@@ -1,0 +1,25 @@
+{
+    "targetVariableGroup": "PlatformServices-ClaimsHandling-MTR",
+    "targetWorkspaceName": "Claims-ClaimsHandling-MTR",
+    "targetSuperDomain": "Claims",
+    "targetSubDomain": "Claims Handling",
+    "targetProject": "DnA Claims",
+    "targetRepository": "DnA Claims - Claims Handling",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "3E1C977E-2467-4F8A-B9CD-0FA98811FD48", 
+    "keyvaultName": "bhg-prod-claimshdl-eus-k",       
+    "adminGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd,c17455bb-10e7-4912-99fb-2f2edfd0da74",
+    "contributorGroupPrincipalIds": "12d058e7-e71e-4172-9e6e-83f21b6c7a7d"
+}

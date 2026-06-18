@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-CommPdtLyr-PRD",
+  "targetWorkspaceName": "PdtandPrc-CommPdtLyr-PRD",
+  "targetSuperDomain": "Pdt and Prc",
+  "targetSubDomain": "Comm Pdt Lyr",
+  "targetProject": "DnA Pdt and Prc",
+  "targetRepository": "DnA Pdt and Prc - Comn Pdt Lyr",
+  "environment": "prd",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Pdt and Prc Comm Pdt Lyr - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "E2241170-968F-4699-AF30-72AC06B9A0E8",
+  "keyvaultName": "bhg-prod-commpdtlyr-eus",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "bfd646fd-78d9-4aaa-a38d-f6a8fc2babcd",
+  "viewerGroupPrincipalIds": "e0689d34-6cd9-4e66-9c99-954d52f41088,6f06e883-6cf8-45ec-b393-a8e9cf100776,f130b9fb-3d4d-430d-8815-b42c4393643e,04fa688f-207a-4790-9822-0ccbf912bdfe,5800c66a-3ed6-4cc6-a794-a0dffbbaad1a,3c2804ea-3571-418a-94c7-e393243be67e,863d6271-68fb-483d-bf17-1b8485730128,48619855-9880-4f96-ac90-6ef67733a472,6e10b2ab-dbaa-479e-88a1-02838f8a46fd,d4facc31-bc53-474a-9f76-51916c0f9837"
+}

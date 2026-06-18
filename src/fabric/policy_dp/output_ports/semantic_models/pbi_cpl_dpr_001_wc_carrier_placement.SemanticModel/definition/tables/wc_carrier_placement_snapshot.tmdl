@@ -1,0 +1,550 @@
+table wc_carrier_placement_snapshot
+	lineageTag: 5ffd661c-2535-41ae-b11a-d90c43dc8089
+	sourceLineageTag: [wc].[wc_carrier_placement_snapshot]
+
+	column policy_key
+		dataType: int64
+		formatString: 0
+		lineageTag: d723d39e-5f18-4343-837a-766801cb54d0
+		sourceLineageTag: policy_key
+		summarizeBy: none
+		sourceColumn: policy_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column policy_num_bus_key
+		dataType: string
+		lineageTag: 3742e699-2c20-462a-87c2-ac4063e946a5
+		sourceLineageTag: policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_sub_dt
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 8813c269-f81a-4509-b044-90ff1813fb3b
+		sourceLineageTag: policy_sub_dt
+		summarizeBy: none
+		sourceColumn: policy_sub_dt
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_start_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 09a7642f-2a17-4877-b1d6-925dffce4d3c
+		sourceLineageTag: policy_effec_start_dt
+		summarizeBy: none
+		sourceColumn: policy_effec_start_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gov State'
+		dataType: string
+		lineageTag: f408344f-dc49-4bc0-8fa1-3efa23d137bc
+		sourceLineageTag: gov_state
+		summarizeBy: none
+		sourceColumn: gov_state
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Production Source Desc'
+		dataType: string
+		lineageTag: 2121f94d-b579-4cca-b537-6cb740249732
+		sourceLineageTag: prod_src_desc
+		summarizeBy: none
+		sourceColumn: prod_src_desc
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gov Class Description'
+		dataType: string
+		lineageTag: 011dfb3f-dccd-4d91-b2c5-d83187640d59
+		sourceLineageTag: gov_class_desc
+		summarizeBy: none
+		sourceColumn: gov_class_desc
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NAICS Industry'
+		dataType: string
+		lineageTag: 20193d4d-2eb4-4494-9ec8-e272282effe2
+		sourceLineageTag: naics_industry
+		summarizeBy: none
+		sourceColumn: naics_industry
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Super Agency Name'
+		dataType: string
+		lineageTag: 920a7e24-9d81-4955-8ca2-d676e4f0b94f
+		sourceLineageTag: superagency_nm
+		summarizeBy: none
+		sourceColumn: superagency_nm
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Agency Name'
+		dataType: string
+		lineageTag: 344d73ef-1177-4a1e-a7e2-14500e6235ea
+		sourceLineageTag: agency_nm
+		summarizeBy: none
+		sourceColumn: agency_nm
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Submission Point of Origin'
+		dataType: string
+		lineageTag: 6489d1d7-e6dd-46da-bca3-3f8950a7e1ac
+		sourceLineageTag: sub_point_of_origin_desc
+		summarizeBy: none
+		sourceColumn: sub_point_of_origin_desc
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Policy_Submitted
+		dataType: int64
+		formatString: 0
+		lineageTag: 1cc30e2c-3b0f-4e29-8a11-38b40934b9f4
+		sourceLineageTag: nb_submitted_count
+		summarizeBy: sum
+		sourceColumn: nb_submitted_count
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Policy_Quoted
+		dataType: int64
+		formatString: 0
+		lineageTag: 68a6c6ff-4a4b-4440-b000-608d1f019c49
+		sourceLineageTag: nb_quoted_count
+		summarizeBy: sum
+		sourceColumn: nb_quoted_count
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Policy_Issued
+		dataType: int64
+		formatString: 0
+		lineageTag: 06edc678-bdd1-4184-a44a-55ef9d05a0b4
+		sourceLineageTag: nb_issued_count
+		summarizeBy: sum
+		sourceColumn: nb_issued_count
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column carrier_nm
+		dataType: string
+		lineageTag: 472b391c-bf9f-473f-b269-614dc6bf44fc
+		sourceLineageTag: carrier_nm
+		summarizeBy: none
+		sourceColumn: carrier_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column dna_hazard_group
+		dataType: string
+		lineageTag: b2ddb62f-3d2a-4238-a429-914a89922c76
+		sourceLineageTag: dna_hazard_group
+		summarizeBy: none
+		sourceColumn: dna_hazard_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column dna_hazard_group_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 75015a72-f507-487d-b6b5-800338106c30
+		sourceLineageTag: dna_hazard_group_points
+		summarizeBy: sum
+		sourceColumn: dna_hazard_group_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_hazard_group
+		dataType: string
+		lineageTag: 464875a8-45bf-4763-8d21-995d7d827ab4
+		sourceLineageTag: guardtech_hazard_group
+		summarizeBy: none
+		sourceColumn: guardtech_hazard_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_hazard_group_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ad61cc6-c6f9-4227-bb1e-a6a20138d37e
+		sourceLineageTag: guardtech_hazard_group_points
+		summarizeBy: sum
+		sourceColumn: guardtech_hazard_group_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column hazard_group_points_match_flag
+		dataType: string
+		lineageTag: e054c70a-8e4b-441c-b1ee-1041af251667
+		sourceLineageTag: hazard_group_points_match_flag
+		summarizeBy: none
+		sourceColumn: hazard_group_points_match_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column experience_mod_segment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 492d44ed-4def-4321-8772-9a30767bc290
+		sourceLineageTag: experience_mod_segment_key
+		summarizeBy: none
+		sourceColumn: experience_mod_segment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dna_experience_mod
+		dataType: decimal
+		formatString: #,0.000
+		lineageTag: 1741bd83-1d22-4b97-b9bc-d314f41d0c7f
+		sourceLineageTag: dna_experience_mod
+		summarizeBy: none
+		sourceColumn: dna_experience_mod
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column dna_experience_mod_points
+		dataType: int64
+		formatString: 0
+		lineageTag: e9898b36-6f6f-448a-966f-1090123434d1
+		sourceLineageTag: dna_experience_mod_points
+		summarizeBy: sum
+		sourceColumn: dna_experience_mod_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_experience_mod
+		dataType: decimal
+		formatString: #,0.000
+		lineageTag: cee19eca-f3a5-44fe-9c2b-2b8dc745927a
+		sourceLineageTag: guardtech_experience_mod
+		summarizeBy: none
+		sourceColumn: guardtech_experience_mod
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+	column guardtech_experience_mod_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 81bb1bae-69a8-4705-b03f-4b4350de0314
+		sourceLineageTag: guardtech_experience_mod_points
+		summarizeBy: sum
+		sourceColumn: guardtech_experience_mod_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column experience_mod_points_match_flag
+		dataType: string
+		lineageTag: 3b7bbd79-b71d-40db-9742-000d0ebb1c4b
+		sourceLineageTag: experience_mod_points_match_flag
+		summarizeBy: none
+		sourceColumn: experience_mod_points_match_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dnb_score_segment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 05f72960-807d-407a-93e4-f937c2123474
+		sourceLineageTag: dnb_score_segment_key
+		summarizeBy: none
+		sourceColumn: dnb_score_segment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dna_dnb_score
+		dataType: int64
+		formatString: 0
+		lineageTag: edf3b29b-101e-47a4-b761-a3d91438399e
+		sourceLineageTag: dna_dnb_score
+		summarizeBy: none
+		sourceColumn: dna_dnb_score
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column dna_dnb_score_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b517a3f-b09f-426c-bed9-ef9e82164012
+		sourceLineageTag: dna_dnb_score_points
+		summarizeBy: sum
+		sourceColumn: dna_dnb_score_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_dnb_score
+		dataType: int64
+		formatString: 0
+		lineageTag: e88a57e0-43f2-41d6-b612-5f797b50d7c1
+		sourceLineageTag: guardtech_dnb_score
+		summarizeBy: none
+		sourceColumn: guardtech_dnb_score
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column guardtech_dnb_score_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b4626e5-7c87-4f07-8b85-a72c67c4832e
+		sourceLineageTag: guardtech_dnb_score_points
+		summarizeBy: sum
+		sourceColumn: guardtech_dnb_score_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column dnb_score_points_match_flag
+		dataType: string
+		lineageTag: c41ce93c-e690-4069-b511-a75b4e8f64bc
+		sourceLineageTag: dnb_score_points_match_flag
+		summarizeBy: none
+		sourceColumn: dnb_score_points_match_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_wc_years_segment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: cdf2682d-dc23-47bd-bce7-e1c989e8c0e6
+		sourceLineageTag: prior_wc_years_segment_key
+		summarizeBy: none
+		sourceColumn: prior_wc_years_segment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dna_prior_wc_years_count
+		dataType: decimal
+		formatString: 0
+		lineageTag: 59f24446-b44a-4317-af3f-8d6120f3b06a
+		sourceLineageTag: dna_prior_wc_years_count
+		summarizeBy: none
+		sourceColumn: dna_prior_wc_years_count
+
+		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column dna_prior_wc_years_count_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 9dd75efa-0cd2-452b-ace9-cbf2fb45b3a1
+		sourceLineageTag: dna_prior_wc_years_count_points
+		summarizeBy: sum
+		sourceColumn: dna_prior_wc_years_count_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_prior_wc_years_count
+		dataType: decimal
+		formatString: 0
+		lineageTag: fb0f9a08-36ac-4364-a9f1-79c1051166d6
+		sourceLineageTag: guardtech_prior_wc_years_count
+		summarizeBy: none
+		sourceColumn: guardtech_prior_wc_years_count
+
+		changedProperty = SummarizeBy
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column guardtech_prior_wc_years_count_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 270f5f97-21ef-469a-b288-9a69b22fa067
+		sourceLineageTag: guardtech_prior_wc_years_count_points
+		summarizeBy: sum
+		sourceColumn: guardtech_prior_wc_years_count_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_wc_years_points_match_flag
+		dataType: string
+		lineageTag: 5c3b8bd5-6e53-404f-bd82-27e5351ff4d3
+		sourceLineageTag: prior_wc_years_points_match_flag
+		summarizeBy: none
+		sourceColumn: prior_wc_years_points_match_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_category_points_match_flag
+		dataType: string
+		lineageTag: 6afaaa7e-9e0f-42ce-b252-47891816cbe9
+		sourceLineageTag: all_category_points_match_flag
+		summarizeBy: none
+		sourceColumn: all_category_points_match_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dna_total_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 986d0df2-1722-4569-8049-007eae201da7
+		sourceLineageTag: dna_total_points
+		summarizeBy: sum
+		sourceColumn: dna_total_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_total_points
+		dataType: int64
+		formatString: 0
+		lineageTag: 7967633f-5181-4fe4-84fd-93bee6842d1e
+		sourceLineageTag: guardtech_total_points
+		summarizeBy: sum
+		sourceColumn: guardtech_total_points
+
+		annotation SummarizationSetBy = Automatic
+
+	column guardtech_enteredon
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c675d09b-8d64-4f39-a5aa-b614ddcf5698
+		sourceLineageTag: guardtech_enteredon
+		summarizeBy: none
+		sourceColumn: guardtech_enteredon
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'GT Carrier Selection Group'
+		dataType: string
+		lineageTag: 330b718a-bfbd-40db-bd4c-12525ebd52e3
+		sourceLineageTag: guardtech_carrier_select_group
+		summarizeBy: none
+		sourceColumn: guardtech_carrier_select_group
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 65c882c9-3b3f-4049-a722-01e2022609da
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 7ad13d01-8743-4e65-a0f3-e13501849c4d
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 8bd77861-d4ce-46ce-b96b-8ff39a53d62d
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 3d9eaa08-ea97-4806-b28b-79ba73926b7d
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 71316a5b-a32c-49b8-9b86-a483829948b1
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: ec1b19ec-3254-4e60-9348-686c345d2c3e
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition wc_carrier_placement_snapshot = entity
+		mode: directLake
+		source
+			entityName: wc_carrier_placement_snapshot
+			schemaName: wc
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+

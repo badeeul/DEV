@@ -1,0 +1,193 @@
+table segmentation_experience_mod
+	lineageTag: c8018df2-5450-464c-b822-e10770538e3c
+	sourceLineageTag: [wc].[segmentation_experience_mod]
+
+	column experience_mod_segment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b9a778e-3c70-41b1-a2b1-1000019c11c9
+		sourceLineageTag: experience_mod_segment_key
+		summarizeBy: none
+		sourceColumn: experience_mod_segment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column experience_mod_segment_bus_key
+		dataType: string
+		lineageTag: 6c552ff0-d89f-40a4-bc09-4af7625aea74
+		sourceLineageTag: experience_mod_segment_bus_key
+		summarizeBy: none
+		sourceColumn: experience_mod_segment_bus_key
+		sortByColumn: sort_order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column minimum_value
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: ca36f223-c21a-41f7-9bd1-1b3cdaede898
+		sourceLineageTag: minimum_value
+		summarizeBy: sum
+		sourceColumn: minimum_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column maximum_value
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3f3baa76-71d7-405f-8461-898a0457a63b
+		sourceLineageTag: maximum_value
+		summarizeBy: sum
+		sourceColumn: maximum_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column sort_order
+		dataType: int64
+		formatString: 0
+		lineageTag: 53e60e53-a4d0-43d7-88b0-34a88cb5c043
+		sourceLineageTag: sort_order
+		summarizeBy: sum
+		sourceColumn: sort_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: a48def0c-2e1d-41c7-9dec-7bf1e9d88d21
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 1a316541-8642-4533-a82b-209a21396128
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: b5e88a99-9c26-433d-b23e-dbe4df9644e3
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 997c9b6c-2f4d-49ce-9ba1-19954d7ae5c0
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0145d944-4e9b-4249-93c4-06ecd53d08eb
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: a3ededa4-20db-48b0-a8d7-99fabaca8136
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: bf2b1a2b-7969-45b6-bd5f-1769d398d91e
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 5713bf19-c2f9-4fd0-a930-d804ec3f5f8c
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 50d24b30-d4ea-4c81-a351-a48d7a127dab
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 931fd645-ec24-4661-87d1-022177fdf95f
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition segmentation_experience_mod = entity
+		mode: directLake
+		source
+			entityName: segmentation_experience_mod
+			schemaName: wc
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+

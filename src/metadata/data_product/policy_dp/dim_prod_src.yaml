@@ -1,0 +1,30 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_prod_src # target table
+  load_strategy: type_two # scd type
+  key_columns: # is merge key
+    - prod_src_cd_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: prod_src_key # sharepoint first row
+
+source:
+  - name: lookups # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: lookups # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_prod_src # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: select distinct
+          vals as prod_src_cd_bus_key
+        , descrip as prod_src_desc
+        , True as dl_is_current_flag
+        ,CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        ,CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        ,False as dl_is_deleted_flag
+      from lookups 
+      where LOWER(trim(keyfield)) = 'productionsrc' and LOWER(trim(programid)) = 'insured'

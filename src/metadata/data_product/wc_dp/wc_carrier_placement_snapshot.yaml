@@ -1,0 +1,304 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product 
+  schema: wc 
+  table: wc_carrier_placement_snapshot 
+  load_strategy: overwrite 
+  key_columns: 
+    - policy_key
+    - policy_num_bus_key
+  unknown_record: False 
+  identity: False 
+  identity_column_name: null
+
+source:
+  - name: dim_policy 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_policy 
+    incremental: False
+
+  - name: fact_policy 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: fact_policy 
+    incremental: False
+
+  - name: dim_mkt_type 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_mkt_type 
+    incremental: False
+
+  - name: dim_policy_extension_wc 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: wc 
+    table: dim_policy_extension_wc 
+    incremental: False
+
+  - name: dim_date 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_date 
+    incremental: False
+
+  - name: dim_prod_src 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_prod_src 
+    incremental: False
+
+  - name: dim_business_class 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_business_class 
+    incremental: False
+
+  - name: dim_naics 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_naics 
+    incremental: False
+
+  - name: dim_dist_chnl 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_dist_chnl 
+    incremental: False
+
+  - name: dim_carrier 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: policy 
+    table: dim_carrier 
+    incremental: False
+
+  - name: dim_policy_extension_wc_carrier_placement 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: wc 
+    table: dim_policy_extension_wc_carrier_placement 
+    incremental: False
+
+  - name: dim_wc_carrier_placement_points_rule 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: wc 
+    table: dim_wc_carrier_placement_points_rule 
+    incremental: False
+
+  - name: segmentation_experience_mod 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: wc 
+    table: segmentation_experience_mod 
+    incremental: False
+
+  - name: segmentation_dnb_score 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: wc 
+    table: segmentation_dnb_score 
+    incremental: False
+    
+  - name: segmentation_prior_wc_years 
+    lakehouse: den_lhw_dpr_001_policy_product 
+    schema: wc 
+    table: segmentation_prior_wc_years 
+    incremental: False
+
+query:
+  - name: wc_carrier_placement_snapshot 
+    sql:
+      WITH base_wcpols AS (
+        SELECT
+          p.policy_key,
+          p.policy_num_bus_key
+        FROM
+          dim_policy p
+          INNER JOIN fact_policy f ON p.policy_key = f.policy_key
+          INNER JOIN dim_mkt_type m ON f.mkt_type_key = m.mkt_type_key
+          INNER JOIN dim_policy_extension_wc w ON p.policy_key = w.policy_key
+          INNER JOIN dim_date ds ON f.policy_sub_dt_key = ds.date_key
+        WHERE
+          f.nb_submitted_count = 1
+          AND w.is_multi_state_flag = 0
+          AND LOWER(TRIM(m.mkt_type_cd_bus_key)) IN ('v', 'c')
+          AND ds.date >= '2025-01-01'
+      )
+      , wc_data AS (
+        SELECT
+          b.policy_key,
+          b.policy_num_bus_key,
+          ds.date AS policy_sub_dt,
+          de.date AS policy_effec_start_dt,
+          p.gov_state,
+          ps.prod_src_desc,
+          CASE
+            WHEN bc.bus_class_key NOT IN (-1, -2) THEN CONCAT(COALESCE(bc.bus_class_cd_bus_key,''), ' - ', COALESCE(bc.bus_class_desc,''))
+            ELSE bc.bus_class_desc
+          END AS gov_class_desc,
+          n.naics_industry,
+          CONCAT(COALESCE(dc.super_agcy_desc,''), ' (', COALESCE(dc.super_agcy_cd,''), ')') AS superagency_nm,
+          CONCAT(COALESCE(dc.agcy_desc,''), ' (', COALESCE(dc.agcy_cd_bus_key,''), ')') AS agency_nm,
+          p.sub_point_of_origin_desc,
+          f.nb_submitted_count,
+          f.nb_quoted_count,
+          f.nb_issued_count,
+          c.carrier_nm,
+          w.gov_hazard_group,
+          cp.experience_mod,
+          w.dnb_score,
+          w.prior_wc_years_count
+        FROM
+          base_wcpols b
+          INNER JOIN fact_policy f ON b.policy_key = f.policy_key
+          INNER JOIN dim_date ds ON f.policy_sub_dt_key = ds.date_key
+          INNER JOIN dim_date de ON f.policy_effec_start_dt_key = de.date_key
+          INNER JOIN dim_policy p ON b.policy_key = p.policy_key
+          INNER JOIN dim_prod_src ps ON f.prod_src_key = ps.prod_src_key
+          INNER JOIN dim_business_class bc ON f.gov_bus_class_key = bc.bus_class_key
+          INNER JOIN dim_naics n ON f.naics_key = n.naics_key
+          INNER JOIN dim_dist_chnl dc ON f.dist_chnl_key = dc.dist_chnl_key
+          INNER JOIN dim_carrier c ON f.carrier_key = c.carrier_key
+          INNER JOIN dim_policy_extension_wc w ON p.policy_key = w.policy_key
+          INNER JOIN dim_policy_extension_wc_carrier_placement cp ON p.policy_key = cp.policy_key
+      )
+      , dna_points_assignment AS (
+        SELECT
+          wc.policy_key,
+          wc.policy_num_bus_key,
+          wc.gov_hazard_group,
+          COALESCE(haz.points_assigned, haz_null.points_assigned) AS dna_hazard_group_points,
+          wc.experience_mod,
+          COALESCE(emod.points_assigned, emod_null.points_assigned) AS dna_experience_mod_points,
+          wc.dnb_score,
+          COALESCE(dnb.points_assigned, dnb_null.points_assigned) AS dna_dnb_score_points,
+          wc.prior_wc_years_count,
+          COALESCE(wcy.points_assigned, wcy_null.points_assigned) AS dna_prior_wc_years_count_points,
+          COALESCE(haz.points_assigned, haz_null.points_assigned, 0)
+            + COALESCE(emod.points_assigned, emod_null.points_assigned, 0)
+            + COALESCE(dnb.points_assigned, dnb_null.points_assigned, 0)
+            + COALESCE(wcy.points_assigned, wcy_null.points_assigned, 0) AS dna_total_points
+        FROM
+          wc_data wc
+          INNER JOIN dim_policy_extension_wc_carrier_placement cp ON wc.policy_key = cp.policy_key
+          LEFT JOIN dim_wc_carrier_placement_points_rule haz ON LOWER(TRIM(haz.rating_type)) = 'hazard'
+            AND wc.gov_hazard_group BETWEEN haz.low_code AND haz.high_code
+          LEFT JOIN dim_wc_carrier_placement_points_rule haz_null ON LOWER(TRIM(haz_null.rating_type)) = 'hazard'
+            AND haz_null.low_code IS NULL
+            AND haz_null.high_code IS NULL
+          LEFT JOIN dim_wc_carrier_placement_points_rule emod ON LOWER(TRIM(emod.rating_type)) = 'expmod'
+            AND wc.experience_mod BETWEEN emod.minimum_value AND emod.maximum_value
+          LEFT JOIN dim_wc_carrier_placement_points_rule emod_null ON LOWER(TRIM(emod_null.rating_type)) = 'expmod'
+            AND emod_null.minimum_value IS NULL
+            AND emod_null.maximum_value IS NULL
+          LEFT JOIN dim_wc_carrier_placement_points_rule dnb ON LOWER(TRIM(dnb.rating_type)) = 'dnbscore'
+            AND wc.dnb_score BETWEEN dnb.minimum_value AND dnb.maximum_value
+          LEFT JOIN dim_wc_carrier_placement_points_rule dnb_null ON LOWER(TRIM(dnb_null.rating_type)) = 'dnbscore'
+            AND dnb_null.minimum_value IS NULL
+            AND dnb_null.maximum_value IS NULL
+          LEFT JOIN dim_wc_carrier_placement_points_rule wcy ON LOWER(TRIM(wcy.rating_type)) = 'wcyears'
+            AND wc.prior_wc_years_count BETWEEN wcy.minimum_value AND wcy.maximum_value
+          LEFT JOIN dim_wc_carrier_placement_points_rule wcy_null ON LOWER(TRIM(wcy_null.rating_type)) = 'wcyears'
+            AND wcy_null.minimum_value IS NULL
+            AND wcy_null.maximum_value IS NULL
+        WHERE
+          cp.guardtech_total_points IS NOT NULL
+          AND cp.guardtech_enteredon >= '2026-02-20'
+      )
+      , points_comparison AS (
+        SELECT
+          a.policy_key,
+          a.policy_num_bus_key,
+          a.gov_hazard_group,
+          a.dna_hazard_group_points,
+          cp.guardtech_hazard_group,
+          COALESCE(cp.guardtech_hazard_group_points, 0) AS guardtech_hazard_group_points,
+          CASE
+            WHEN a.dna_hazard_group_points = COALESCE(cp.guardtech_hazard_group_points, 0) THEN 'Y'
+            ELSE 'N'
+          END AS hazard_group_points_match_flag,
+          a.experience_mod,
+          a.dna_experience_mod_points,
+          cp.guardtech_experience_mod,
+          cp.guardtech_experience_mod_points,
+          CASE
+            WHEN a.dna_experience_mod_points = cp.guardtech_experience_mod_points THEN 'Y'
+            ELSE 'N'
+          END AS experience_mod_points_match_flag,
+          a.dnb_score,
+          a.dna_dnb_score_points,
+          cp.guardtech_dnb_score,
+          cp.guardtech_dnb_score_points,
+          CASE
+            WHEN a.dna_dnb_score_points = cp.guardtech_dnb_score_points THEN 'Y'
+            ELSE 'N'
+          END AS dnb_score_points_match_flag,
+          a.prior_wc_years_count,
+          a.dna_prior_wc_years_count_points,
+          cp.guardtech_prior_wc_years_count,
+          COALESCE(cp.guardtech_prior_wc_years_count_points, 0) AS guardtech_prior_wc_years_count_points,
+          CASE
+            WHEN a.dna_prior_wc_years_count_points = COALESCE(cp.guardtech_prior_wc_years_count_points, 0) THEN 'Y'
+            ELSE 'N'
+          END AS prior_wc_years_points_match_flag,
+          CASE
+            WHEN a.dna_hazard_group_points = COALESCE(cp.guardtech_hazard_group_points, 0)
+              AND a.dna_experience_mod_points = cp.guardtech_experience_mod_points
+              AND a.dna_dnb_score_points = cp.guardtech_dnb_score_points
+              AND a.dna_prior_wc_years_count_points = COALESCE(cp.guardtech_prior_wc_years_count_points, 0) THEN 'Y'
+            ELSE 'N'
+          END AS all_category_points_match_flag,
+          a.dna_total_points,
+          cp.guardtech_total_points,
+          cp.guardtech_enteredon,
+          cp.guardtech_carrier_select_group
+        FROM
+          dna_points_assignment a
+          INNER JOIN dim_policy_extension_wc_carrier_placement cp ON a.policy_key = cp.policy_key
+      )
+      SELECT
+        d.policy_key,
+        d.policy_num_bus_key,
+        d.policy_sub_dt,
+        d.policy_effec_start_dt,
+        d.gov_state,
+        d.prod_src_desc,
+        d.gov_class_desc,
+        d.naics_industry,
+        d.superagency_nm,
+        d.agency_nm,
+        d.sub_point_of_origin_desc,
+        d.nb_submitted_count,
+        d.nb_quoted_count,
+        d.nb_issued_count,
+        d.carrier_nm,
+        d.gov_hazard_group AS dna_hazard_group,
+        pc.dna_hazard_group_points,
+        pc.guardtech_hazard_group,
+        pc.guardtech_hazard_group_points,
+        pc.hazard_group_points_match_flag,
+        COALESCE(sem.experience_mod_segment_key, -2) AS experience_mod_segment_key,
+        d.experience_mod AS dna_experience_mod,
+        pc.dna_experience_mod_points,
+        pc.guardtech_experience_mod,
+        pc.guardtech_experience_mod_points,
+        pc.experience_mod_points_match_flag,
+        COALESCE(sds.dnb_score_segment_key, -2) AS dnb_score_segment_key,
+        d.dnb_score AS dna_dnb_score,
+        pc.dna_dnb_score_points,
+        pc.guardtech_dnb_score,
+        pc.guardtech_dnb_score_points,
+        pc.dnb_score_points_match_flag,
+        COALESCE(spy.prior_wc_years_segment_key, -1) AS prior_wc_years_segment_key,
+        d.prior_wc_years_count AS dna_prior_wc_years_count,
+        pc.dna_prior_wc_years_count_points,
+        pc.guardtech_prior_wc_years_count,
+        pc.guardtech_prior_wc_years_count_points,
+        pc.prior_wc_years_points_match_flag,
+        pc.all_category_points_match_flag,
+        pc.dna_total_points,
+        pc.guardtech_total_points,
+        pc.guardtech_enteredon,
+        pc.guardtech_carrier_select_group
+      FROM
+        wc_data d
+        LEFT JOIN points_comparison pc ON d.policy_key = pc.policy_key 
+        LEFT JOIN segmentation_experience_mod sem ON d.experience_mod BETWEEN sem.minimum_value AND sem.maximum_value
+        LEFT JOIN segmentation_dnb_score sds ON d.dnb_score BETWEEN sds.minimum_value AND sds.maximum_value
+        LEFT JOIN segmentation_prior_wc_years spy ON d.prior_wc_years_count BETWEEN spy.minimum_value AND spy.maximum_value

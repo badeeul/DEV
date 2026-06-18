@@ -1,0 +1,216 @@
+table 'Governing Class'
+	lineageTag: d88ef65a-889d-46b6-9c4b-c9cdeff6233c
+	sourceLineageTag: [policy].[dim_business_class]
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7822dc58-f706-45a6-a774-dca5c70b7975
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ba77f1df-f4c2-4bf4-9a41-09f68433b18e
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 3995ea27-145b-4ce3-9a7b-a4768bd5d1f9
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: d550f5c1-e139-450f-9662-f6c6e6a63a8f
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ccf6159d-9de6-4543-abcf-073f13aa1eb7
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Governing Class LOB
+	column 'Gov Class LOB'
+		dataType: string
+		lineageTag: 66d73363-0bca-432d-ab8e-24ad55efa5a5
+		sourceLineageTag: bus_lob
+		summarizeBy: none
+		sourceColumn: bus_lob
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 37eb135e-2731-4c9b-adf1-0b970e25e3bb
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 1f9c118c-88f8-41b3-95a7-4c9504095e5e
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: b3204a94-49f6-44fc-ae97-0e08240cea12
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 74f01a0b-bc97-4c75-8fbb-933036eab7e5
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: cfbea305-085e-47de-9a29-d8870304ce30
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column bus_class_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c629e100-42c9-4f56-8436-55fbec16214d
+		sourceLineageTag: bus_class_key
+		summarizeBy: none
+		sourceColumn: bus_class_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Governing Class Code
+	column 'Gov Class Code'
+		dataType: string
+		lineageTag: 67487924-5e87-4432-830e-929b9baeae1a
+		sourceLineageTag: bus_class_cd_bus_key
+		summarizeBy: none
+		sourceColumn: bus_class_cd_bus_key
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Governing Class Suffix
+	column 'Gov Class Suffix'
+		dataType: string
+		lineageTag: ab866807-3b4f-42f0-a03d-60f480bac6eb
+		sourceLineageTag: bus_class_suffix_bus_key
+		summarizeBy: none
+		sourceColumn: bus_class_suffix_bus_key
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Governing Class Source ID
+	column 'Gov Class Source ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: f5936195-0bc4-4873-a7dc-d81f7b57475b
+		sourceLineageTag: bus_class_src_id_bus_key
+		summarizeBy: none
+		sourceColumn: bus_class_src_id_bus_key
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = User
+
+	/// Governing Class Desc
+	column 'Gov Class Desc'
+		dataType: string
+		lineageTag: 319097d0-491d-427e-8f1c-108faee1601a
+		sourceLineageTag: bus_class_desc
+		summarizeBy: none
+		sourceColumn: bus_class_desc
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Governing Class NAICS
+	column 'Gov Class NAICS'
+		dataType: string
+		lineageTag: 8937663f-3def-4af8-a6d3-f6b8147e6e5c
+		sourceLineageTag: bus_naics_cd
+		summarizeBy: none
+		sourceColumn: bus_naics_cd
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_business_class = entity
+		mode: directLake
+		source
+			entityName: dim_business_class
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

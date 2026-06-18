@@ -1,0 +1,31 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # required
+  schema: policy # required
+  table: dim_cancellation_reasons # required
+  load_strategy: type_two
+  key_columns:
+    - cancel_reason_cd_bus_key
+  unknown_record: True
+  identity: True
+  identity_column_name: cancel_reason_key
+
+source:
+  - name: lookups # name of the source for it to be references by queries below
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: lookups
+    incremental: False # think about it # filters the source table where last modified >= last time the yaml was successfully executed based on source_ingestion_log
+
+query:
+  - name: dim_cancellation_reasons # name of the query for it to be referenced by subsequent queries
+    sql: select 
+         vals as cancel_reason_cd_bus_key
+         , descrip as cancel_reason_desc
+         , True as dl_is_current_flag
+         , CAST('1901-01-01' AS DATE) as dl_row_effective_date
+         , CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+         , False as dl_is_deleted_flag
+         from lookups
+         where
+         LOWER(trim(programid))='insured'
+         and LOWER(trim(keyfield))='canreason'

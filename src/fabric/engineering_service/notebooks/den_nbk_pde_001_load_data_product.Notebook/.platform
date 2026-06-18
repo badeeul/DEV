@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "den_nbk_pde_001_load_data_product",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "eb150afc-9ca4-4321-a528-da96dc9d751f"
+  }
+}

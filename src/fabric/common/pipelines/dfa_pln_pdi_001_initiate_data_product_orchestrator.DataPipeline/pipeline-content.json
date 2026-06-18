@@ -1,0 +1,238 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "enablePartitionDiscovery": false
+            }
+          },
+          "datasetSettings": {
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": "feeds",
+                "fileName": {
+                  "value": "@concat(pipeline().parameters.Feed_Name,'.json')",
+                  "type": "Expression"
+                }
+              }
+            },
+            "schema": {},
+            "linkedService": {
+              "name": "fae475b3_6667_4297_ada2_4a3fff942b2d",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "@pipeline().parameters.lh_metadata_id",
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Feed Metadata",
+        "description": "Gets feed file from the metadata store",
+        "dependsOn": []
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "elt_values",
+          "value": {
+            "value": "@createArray(pipeline().RunId,pipeline().TriggerTime)",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get ELT Values",
+        "dependsOn": []
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {
+            "ELT_Id": {
+              "value": "@variables('elt_values')[0]",
+              "type": "Expression"
+            },
+            "Feed_Name": {
+              "value": "@pipeline().parameters.Feed_Name",
+              "type": "Expression"
+            },
+            "Product_Name": {
+              "value": "@pipeline().parameters.Product_Name",
+              "type": "Expression"
+            },
+            "Elt_Start_Date_Time": {
+              "value": "@variables('elt_values')[1]",
+              "type": "Expression"
+            },
+            "lh_metadata_id": {
+              "value": "@pipeline().parameters.lh_metadata_id",
+              "type": "Expression"
+            },
+            "workspace_id": {
+              "value": "@pipeline().parameters.workspace_id",
+              "type": "Expression"
+            },
+            "lh_raw_id": {
+              "value": "@pipeline().parameters.lh_raw_id",
+              "type": "Expression"
+            },
+            "lh_observability_id": {
+              "value": "@pipeline().parameters.lh_observability_id",
+              "type": "Expression"
+            }
+          },
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "653e82a3-ee74-4659-8830-40f27cf372ce",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Invoke Data Ingestion",
+        "description": "This pipeline runs in async mode",
+        "dependsOn": [
+          {
+            "activity": "Initiate Feed Run",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {
+            "lh_metadata_id": {
+              "value": "@pipeline().parameters.lh_metadata_id",
+              "type": "Expression"
+            },
+            "workspace_id": {
+              "value": "@pipeline().parameters.workspace_id",
+              "type": "Expression"
+            },
+            "Feed_Name": {
+              "value": "@pipeline().parameters.Feed_Name",
+              "type": "Expression"
+            },
+            "Product_Name": {
+              "value": "@pipeline().parameters.Product_Name",
+              "type": "Expression"
+            },
+            "lh_raw_id": {
+              "value": "@pipeline().parameters.lh_raw_id",
+              "type": "Expression"
+            },
+            "lh_observability_id": {
+              "value": "@pipeline().parameters.lh_observability_id",
+              "type": "Expression"
+            },
+            "run_id": {
+              "value": "@variables('elt_values')[0]",
+              "type": "Expression"
+            },
+            "elt_start_date_time": {
+              "value": "@variables('elt_values')[1]",
+              "type": "Expression"
+            }
+          },
+          "waitOnCompletion": false,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "2aa722ea-93bd-a872-44ac-52fb6d064565",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Initiate Feed Run",
+        "description": "This pipeline runs in async mode",
+        "dependsOn": [
+          {
+            "activity": "Get Feed Metadata",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Get ELT Values",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "lh_metadata_id": {
+        "type": "String",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "workspace_id": {
+        "type": "String",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "demo_product"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "DEMO"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "16db151c-84d0-4338-99b2-a639ad80c839"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "61a6df22-f73b-48bc-855f-55f41065eb20"
+      }
+    },
+    "variables": {
+      "elt_values": {
+        "type": "Array"
+      }
+    }
+  }
+}

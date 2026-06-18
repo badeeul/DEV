@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_data_product_orchestrator",
+    "description": "This pipeline orchestrates management of the Data Product workflow."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "653e82a3-ee74-4659-8830-40f27cf372ce"
+  }
+}

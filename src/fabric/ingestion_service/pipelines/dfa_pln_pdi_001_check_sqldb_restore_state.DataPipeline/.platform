@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_check_sqldb_restore_state",
+    "description": "This data pipeline checks the restore status of a dynamic list of SQL Server databases to determine if all have been restored on the current date and are in an ONLINE state. It uses a Lookup activity to execute a SQL query, an Until activity with a Wait activity to poll until the restore is complete, and sets a pipeline variable (RestoreStatus) to return the result to the caller (e.g., a parent pipeline). The pipeline is designed for monitoring database restore operations in a SQL Server environment. PurposeThe pipeline verifies that all specified databases:Have at least one restore history entry in msdb.dbo.restorehistory for the current date (YYYY-MM-DD).\nAre in state = 1 (ONLINE) in sys.databases.\nIt returns RestoreStatus = true only if all databases meet these conditions, otherwise false."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "14fa050e-28ab-8143-42c1-2568076e9dcc"
+  }
+}

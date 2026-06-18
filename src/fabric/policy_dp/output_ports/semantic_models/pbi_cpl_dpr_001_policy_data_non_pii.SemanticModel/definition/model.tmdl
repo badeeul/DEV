@@ -1,0 +1,38 @@
+model Model
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DatabaseQuery"]
+
+annotation PBI_ProTooling = ["WebModelingEdit","RemoteModeling"]
+
+annotation PBIDesktopVersion = 2.145.1602.0 (25.07)+10647c9fa319b5e39936cdb21328038c371d1fe4
+
+ref table dim_policy_status
+ref table dim_date
+ref table dim_policy_trans_type
+ref table fact_policy_transaction
+ref table dim_naics
+ref table dim_business_class
+ref table fact_policy
+ref table fact_policy_transaction_detail
+ref table dim_dist_chnl
+ref table dim_policy
+ref table dim_mkt_type
+ref table dim_insured_legal_entity_type
+ref table dim_lob
+ref table dim_prod_src
+ref table dim_carrier
+ref table dim_employee
+ref table dim_policy_trans_subtype
+ref table dim_insured
+
+ref cultureInfo en-US
+

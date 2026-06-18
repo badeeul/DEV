@@ -1,0 +1,16 @@
+[
+    {
+        "Feed_Name": "policy_dp",
+        "Product_Name": "policy",
+        "lh_raw_id": "c322b1e8-5644-4b4f-8fdc-2b7dab38d3cf",
+        "skip_database_restore": false,
+        "run_group": 1
+    },
+    {
+        "Feed_Name": "wc_dp",
+        "Product_Name": "wc",
+        "lh_raw_id": "c322b1e8-5644-4b4f-8fdc-2b7dab38d3cf",
+        "skip_database_restore": true,
+        "run_group": 2
+    }
+]

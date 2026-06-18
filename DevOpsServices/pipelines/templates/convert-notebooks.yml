@@ -1,0 +1,9 @@
+
+steps:
+- task: PowerShell@2
+  displayName: 'Convert Python to Jupyter Notebooks'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Convert-NotebooksPythonToJupiter.ps1'
+    arguments: '-KeyVaultName "$(TF_VAR_keyvault_name)"'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'

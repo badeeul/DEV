@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Environment",
+    "displayName": "den_env_pdi_001_spark_runtime_environment",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a"
+  }
+}

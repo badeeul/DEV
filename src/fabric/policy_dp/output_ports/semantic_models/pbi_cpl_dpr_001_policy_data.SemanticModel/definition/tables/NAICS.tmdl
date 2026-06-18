@@ -1,0 +1,253 @@
+table NAICS
+	lineageTag: 180e49a2-683d-4af8-ab43-bc1fe7f41121
+	sourceLineageTag: [policy].[dim_naics]
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 1e19fc70-a4c8-4df1-bda6-00c0f434da99
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b3f47cf2-1c50-49fb-8b7b-ecc78894fdca
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: b3980d5b-4294-48e6-b9ec-b769fc28d1eb
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 6ee50d39-b033-43a8-b172-42a4f26b42c1
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d7fbadbe-c208-4625-9da4-34296743649d
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b828b2af-55a1-4fe1-9177-65b9e22e83ab
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e4697b85-a699-4bd8-a20e-1ac668437109
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 0bbff308-c6de-45e1-a0fc-a358043ceb56
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 2-Digit NAICS Code
+	column NAICS_2
+		dataType: string
+		lineageTag: 0fece3c8-ec7c-4854-b7bb-63c93e37a9a7
+		sourceLineageTag: naics_two_digit
+		summarizeBy: none
+		sourceColumn: naics_two_digit
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 3-Digit NAICS Code
+	column NAICS_3
+		dataType: string
+		lineageTag: d6a512bd-7431-4325-b0ee-35f6d9048b43
+		sourceLineageTag: naics_three_digit
+		summarizeBy: none
+		sourceColumn: naics_three_digit
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 4-Digit NAICS Code
+	column NAICS_4
+		dataType: string
+		lineageTag: 6e0957e7-c178-44f7-a8dd-c72c6fba69b1
+		sourceLineageTag: naics_four_digit
+		summarizeBy: none
+		sourceColumn: naics_four_digit
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 5-Digit NAICS Code
+	column NAICS_5
+		dataType: string
+		lineageTag: 1f0f3766-4701-462b-8a62-830b657c16a1
+		sourceLineageTag: naics_five_digit
+		summarizeBy: none
+		sourceColumn: naics_five_digit
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: cf4d15fa-302d-4a74-8b89-f0e3de143274
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 6b398e77-d039-47c3-9512-9b1f2b5ccd6d
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ccd96ecd-2445-4a3d-be42-30902ed2cb8d
+		sourceLineageTag: naics_key
+		summarizeBy: none
+		sourceColumn: naics_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 6-Digit NAICS Code
+	column NAICS_6
+		dataType: string
+		lineageTag: e7b56ce6-75f9-4578-971f-ac49bd00d3c9
+		sourceLineageTag: naics_bus_key
+		summarizeBy: none
+		sourceColumn: naics_bus_key
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 6-Digit NAICS Code Description
+	column 'NAICS_6 Desc'
+		dataType: string
+		lineageTag: 23f3d269-504b-4da0-8194-65fc9a324aed
+		sourceLineageTag: naics_desc
+		summarizeBy: none
+		sourceColumn: naics_desc
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 6-Digit NAICS Code Industry (as defined by GUARD)
+	column 'NAICS_6 Industry'
+		dataType: string
+		lineageTag: 352caa69-7184-45a2-9a02-b39b4f73fb04
+		sourceLineageTag: naics_industry
+		summarizeBy: none
+		sourceColumn: naics_industry
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 6-Digit NAICS Code Sub-Industry (as defined by GUARD)
+	column 'NAICS_6 Sub-Industry'
+		dataType: string
+		lineageTag: f84def5d-8439-43cf-9b51-74c18a741d91
+		sourceLineageTag: naics_sub_industry
+		summarizeBy: none
+		sourceColumn: naics_sub_industry
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 6-Digit NAICS Code Business Type (as defined by GUARD)
+	column 'NAICS_6 Business Type'
+		dataType: string
+		lineageTag: a59ad4ca-e246-4065-ad60-d2474caa7426
+		sourceLineageTag: naics_bus_type
+		summarizeBy: none
+		sourceColumn: naics_bus_type
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_naics = entity
+		mode: directLake
+		source
+			entityName: dim_naics
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

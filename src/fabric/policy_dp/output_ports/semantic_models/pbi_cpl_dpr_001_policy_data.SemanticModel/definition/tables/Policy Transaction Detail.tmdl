@@ -1,0 +1,419 @@
+table 'Policy Transaction Detail'
+	lineageTag: 14fa25b4-4d77-47e3-a35c-570fcb4aba8b
+	sourceLineageTag: [policy].[fact_policy_transaction_detail]
+
+	column policy_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b61866d4-45e4-4eca-881a-d070ff943746
+		sourceLineageTag: policy_key
+		summarizeBy: none
+		sourceColumn: policy_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_start_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 43c7c5f5-0cd9-49eb-8df6-98e301f386e1
+		sourceLineageTag: policy_effec_start_dt_key
+		summarizeBy: none
+		sourceColumn: policy_effec_start_dt_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_end_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 97340a82-32f6-4df7-ad47-d2193e152d99
+		sourceLineageTag: policy_effec_end_dt_key
+		summarizeBy: none
+		sourceColumn: policy_effec_end_dt_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column lob_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 75709232-ae75-4c06-9211-942165328d13
+		sourceLineageTag: lob_key
+		summarizeBy: none
+		sourceColumn: lob_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 451f335c-077b-4466-af28-6b89bde255cb
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 5b5ecf6a-ec6e-45b1-8c47-daecaa5d5a09
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8c570adf-4f09-4f69-98eb-ac021f3f97e8
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 5b153b2d-10d1-4b64-8dd5-321348132119
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: f8249ffd-3428-4a8b-aafc-40514be14500
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: cff38f5e-c3ad-42b6-82b4-8f6fddcf7293
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 23faab40-20e5-4317-882a-c545b095298d
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b5b2a766-b3cc-4130-a71d-62b0e6c34d1f
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 58c37ef7-0cab-4ad0-ad97-7156d4bc9611
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_trans_subtype_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4331cf93-6290-40f3-a805-b9275089bd25
+		sourceLineageTag: policy_trans_subtype_key
+		summarizeBy: none
+		sourceColumn: policy_trans_subtype_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Trans Extra Info
+	column 'Trans Extra Info'
+		dataType: string
+		lineageTag: 1ea31399-f400-4e75-b067-a4099710931b
+		sourceLineageTag: extra_info
+		summarizeBy: none
+		sourceColumn: extra_info
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Trans Additional Info
+	column 'Trans Additional Info'
+		dataType: string
+		lineageTag: f84feaa4-5356-4d3d-985c-d2f6d10b1a58
+		sourceLineageTag: additional_info
+		summarizeBy: none
+		sourceColumn: additional_info
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 53d393f4-7f86-4c2b-9466-4b842b8bb580
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column carrier_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 41cd3005-6e6b-43d9-b990-0856abe007f5
+		sourceLineageTag: carrier_key
+		summarizeBy: none
+		sourceColumn: carrier_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_trans_type_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 37e4bb41-8421-4437-8e34-d42ed7ca603d
+		sourceLineageTag: policy_trans_type_key
+		summarizeBy: none
+		sourceColumn: policy_trans_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_trans_effec_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b48d9406-2b28-42b6-83f5-d6a4967cd8c5
+		sourceLineageTag: policy_trans_effec_dt_key
+		summarizeBy: none
+		sourceColumn: policy_trans_effec_dt_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column policy_trans_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c78404ce-10d9-4fd1-98bc-4f041588d2ab
+		sourceLineageTag: policy_trans_dt_key
+		summarizeBy: none
+		sourceColumn: policy_trans_dt_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	/// Policy Trans Sequence
+	column 'Policy Trans Sequence'
+		dataType: int64
+		formatString: 0
+		lineageTag: 14ce0b12-2d72-4b45-9b6b-0b0eb33b298f
+		sourceLineageTag: policy_trans_seq_num
+		summarizeBy: none
+		sourceColumn: policy_trans_seq_num
+
+		changedProperty = Name
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column src_trans_detail_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2a4ca1db-7823-40e0-94f4-e88f423682ed
+		sourceLineageTag: src_trans_detail_id
+		summarizeBy: none
+		sourceColumn: src_trans_detail_id
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column dist_chnl_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f94166a2-a184-4fd1-a879-4f0c11c20d7a
+		sourceLineageTag: dist_chnl_key
+		summarizeBy: none
+		sourceColumn: dist_chnl_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column insd_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 392cd8b5-bbd1-4bf6-a163-c50d54a61f4f
+		sourceLineageTag: insd_key
+		summarizeBy: none
+		sourceColumn: insd_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column naics_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2dfe6fa1-71d7-47ef-93ce-8ec5064e790d
+		sourceLineageTag: naics_key
+		summarizeBy: none
+		sourceColumn: naics_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dec_uw_emp_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ac08a9eb-9e5f-4a27-abdd-18a8ef685747
+		sourceLineageTag: dec_uw_emp_key
+		summarizeBy: none
+		sourceColumn: dec_uw_emp_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column mkt_type_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b22b8b23-ac3d-42e8-9f56-451b1b61ed37
+		sourceLineageTag: mkt_type_key
+		summarizeBy: none
+		sourceColumn: mkt_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column prod_src_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 10eb8592-767e-4723-b1f5-4c3fabe67b61
+		sourceLineageTag: prod_src_key
+		summarizeBy: none
+		sourceColumn: prod_src_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_coverage_start_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f9311a1b-1455-4ab9-806f-a797fd36b4f9
+		sourceLineageTag: policy_coverage_start_dt_key
+		summarizeBy: none
+		sourceColumn: policy_coverage_start_dt_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column policy_coverage_end_dt_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 66aa7864-a9f9-484a-aa09-8c39427469a8
+		sourceLineageTag: policy_coverage_end_dt_key
+		summarizeBy: none
+		sourceColumn: policy_coverage_end_dt_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column gov_bus_class_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5c4d1670-961b-46b8-a842-af0808015c11
+		sourceLineageTag: gov_bus_class_key
+		summarizeBy: none
+		sourceColumn: gov_bus_class_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column lob_product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: db16f604-7a02-4b1d-899c-e629f21cee92
+		sourceLineageTag: lob_product_key
+		summarizeBy: none
+		sourceColumn: lob_product_key
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	/// Cancellation Reason Code
+	column 'Cancellation Reason Code'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 64e31dda-d549-42f1-8236-b347d757867b
+		sourceLineageTag: cancel_reason_key
+		summarizeBy: count
+		sourceColumn: cancel_reason_key
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_policy_transaction_detail = entity
+		mode: directLake
+		source
+			entityName: fact_policy_transaction_detail
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

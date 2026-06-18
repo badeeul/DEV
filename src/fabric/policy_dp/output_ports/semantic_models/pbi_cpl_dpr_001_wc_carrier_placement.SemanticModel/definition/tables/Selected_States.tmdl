@@ -1,0 +1,23 @@
+table Selected_States
+	lineageTag: 04afd777-f87d-4bc2-95c5-59324dd9bb8f
+
+	column State
+		lineageTag: f446ed7b-3c98-4b54-86c8-8b86f292f270
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: State_ReleaseDates[State]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Selected_States = calculated
+		mode: import
+		source = ```
+				
+				CALCULATETABLE (
+				    VALUES ( State_ReleaseDates[State] ),
+				    ALLSELECTED ( State_ReleaseDates ) 
+				)
+				```
+
+	annotation PBI_Id = 893990299a754068951429275c45472a
+

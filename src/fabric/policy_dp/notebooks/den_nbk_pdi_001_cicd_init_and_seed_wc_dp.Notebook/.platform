@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "den_nbk_pdi_001_cicd_init_and_seed_wc_dp",
+    "description": "This notebook is used to initialize and seed the WC DP data product Tables."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4b7fb9fe-e8a1-84fa-4d71-6852f1d250d1"
+  }
+}

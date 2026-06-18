@@ -1,0 +1,173 @@
+table 'Territory Manager'
+	lineageTag: fd332938-8b5a-4f18-beaf-1300a311376f
+	sourceLineageTag: [policy].[Territory Manager]
+
+	column emp_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f6d59442-9255-4d75-becc-0247cd25d022
+		sourceLineageTag: emp_key
+		summarizeBy: none
+		sourceColumn: emp_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column emp_cd_bus_key
+		dataType: string
+		lineageTag: a0f50191-bc13-4d6d-96d1-e0b6a58370f9
+		sourceLineageTag: emp_cd_bus_key
+		summarizeBy: none
+		sourceColumn: emp_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column emp_nm
+		dataType: string
+		lineageTag: 223235de-0675-41d4-9f40-09cf10fa50ba
+		sourceLineageTag: emp_nm
+		summarizeBy: none
+		sourceColumn: emp_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column job_title
+		dataType: string
+		lineageTag: b772576f-a6e8-48f7-8918-b15b3170ed40
+		sourceLineageTag: job_title
+		summarizeBy: none
+		sourceColumn: job_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column user_id
+		dataType: string
+		lineageTag: 31008c73-e0a9-4559-a8cc-50f249b01631
+		sourceLineageTag: user_id
+		summarizeBy: none
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column term_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 783476ec-de12-46b6-a5e2-7759038d7e5f
+		sourceLineageTag: term_dt
+		summarizeBy: none
+		sourceColumn: term_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8730dcb6-aa0a-4687-b466-6b06f6865bc0
+		sourceLineageTag: active
+		summarizeBy: none
+		sourceColumn: active
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		lineageTag: 0a74892e-fa28-4363-b185-86623a51b256
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		lineageTag: 34599cbb-4d18-47d9-9dc8-18a698b191bb
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		lineageTag: 19ac368c-fddf-4570-a56f-c29e09397a62
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		lineageTag: fb208f91-a624-4e80-854f-9a433e64ba38
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5e25212e-50e9-46e0-9fce-418fad24998c
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e04abcec-7181-49bc-b93e-a9a9858e8c87
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bd0deaee-ea01-4c59-a9e7-ed8ea425927c
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 588e62cd-8053-44df-94b5-2dd5a0d6050d
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: abc8a42f-7dbe-445a-9570-8a279432cabe
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7e6921a4-932a-4fc3-9a1b-6a71827187d8
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Territory Manager' = entity
+		mode: directLake
+		source
+			entityName: Territory Manager
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+

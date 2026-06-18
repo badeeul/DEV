@@ -1,0 +1,334 @@
+/// A container table that stores the Data Quality metrics and measures. There are no data attributes or fields in this container.
+table Metrics
+	lineageTag: 6ab0129f-bab3-4fab-b961-9fb922e87690
+	sourceLineageTag: [data_quality].[dim_dq_metrics]
+
+	/// # of distinct data products
+	measure '# Data Products' = DISTINCTCOUNT('Rule Master'[Data Product Name])
+		formatString: General Number
+		lineageTag: 61cb3af3-0077-45d2-80d6-591ed0609e13
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure '#Data Products Above Threshold' = ```
+			
+			 COUNTROWS(
+			FILTER(
+			
+					ADDCOLUMNS(
+			
+						-- One row per data product
+			
+						SUMMARIZE(
+			
+							ALL('Rule Master'[Data Product Name]),
+			
+							'Rule Master'[Data Product Name]
+						),
+			
+						-- For that product, find the latest date across all time
+			
+						"LastDate",
+			 CALCULATE(
+			
+							MAX('Date - Error Event'[Error Event Date]),
+			
+							ALL('Date - Error Event'),
+							'Error Events' -- ignore any date filters if you want the absolute last date
+			
+						),
+			
+						-- Then, for that product's last date, get the min severity
+			
+						"MinSeverityOnLastDate",
+			 CALCULATE(
+			
+							MIN('Error Events'[severity_score]),
+			
+							FILTER(
+			
+								ALL('Date - Error Event'),
+			
+								'Date - Error Event'[Error Event Date] = CALCULATE(
+			
+									MAX('Date - Error Event'[Error Event Date]),
+			
+									ALL('Date - Error Event'),
+									'Error Events' -- ignore any date filters if you want the absolute last date
+			
+								)
+							)
+						)
+					),
+			
+					[MinSeverityOnLastDate] > 0.01
+				)
+			
+				)
+			 
+			//  CALCULATE(
+			// 			DISTINCTCOUNT(dim_dq_rule_master[data_product_name]),
+			// 			ALL(dim_dq_rule_master[data_product_name]),
+			// 			FILTER(
+			// 				VALUES(dim_dq_rule_master[data_product_name]),
+			// 				MIN(fact_dq_error_event[severity_score]) > 0.01
+			// 			)
+			// 		)
+			```
+		formatString: General Number
+		lineageTag: 0bae09dc-166f-49a0-9e8e-0079849f53e2
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure #Errors = COUNTROWS('Error Event Details')
+		formatString: #,0.00
+		lineageTag: 152cee59-7fa1-4468-ae39-6417de5dc891
+
+		changedProperty = FormatString
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// % of distinct rules that have encountered failures
+	measure '% of Rules with Failures' = ```
+			DIVIDE(
+			    DISTINCTCOUNT('Error Event Details'[dq_rule_master_key]), 
+			    DISTINCTCOUNT('Rule Master'[dq_rule_master_key]
+			    ))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		lineageTag: 455e3f7a-d6a8-48be-bbdf-bd2c391ee91c
+
+		changedProperty = Description
+
+		changedProperty = Name
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure '%Pct Error By Rule' = ```
+			DIVIDE([#Errors],CALCULATE([#Errors], REMOVEFILTERS('Rule Master'[Rule Description]))) 
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		isHidden
+		lineageTag: 063087a0-4fcf-4e49-a1c0-31e0944de682
+
+		changedProperty = IsHidden
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// Data should accurately represent real-world entities. Context matters! For example, if you’re storing customer addresses, ensure they match the actual locations. 
+	/// % of data entries that are correct. 
+	measure 'Accuracy %' =
+			
+			CALCULATE (
+			    DIVIDE ( [Total Passed Records], [Total Records] ),
+			    'Rule Master'[Rule Dimension] = "Accuracy"
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 8683c7d4-61fa-4094-844f-11554f409740
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure 'Avg Failure %' = MEDIAN('Error Events'[severity_score])/100
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 1fb085e3-0d15-4ee4-93d2-e54498819bdc
+
+		changedProperty = Name
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// The objective of this rule is to identify the empty, null, or missing data. This rule validates that all values are present (though not necessarily correct). 
+	/// % of data entries that are complete 
+	measure 'Completeness %' =
+			
+			CALCULATE (
+			    DIVIDE ( [Total Passed Records], [Total Records] ),
+			    'Rule Master'[Rule Dimension] = "Completeness"
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: b153fac9-5570-4dc6-a6b7-dcebaed0bd9f
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// This rule ensures that the data follows data formatting standards such as representation of dates, addresses, and allowed values. 
+	/// % of data that meets data formatting standards 
+	measure 'Conformity %' =
+			
+			CALCULATE (
+			    DIVIDE ( [Total Passed Records], [Total Records] ),
+			    'Rule Master'[Rule Dimension] = "Conformity "
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 1eb42909-82ab-403e-a244-153d7f348e8a
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// This rule checks that different values of the same record are in conformity with a given rule and there are no contradictions. Data consistency ensures that the same information is represented uniformly across different records. For instance, if you have a product catalog, consistent product names and descriptions are crucial. 
+	/// % of data that is consistent 
+	measure 'Consistency %' =
+			
+			CALCULATE (
+			    DIVIDE ( [Total Passed Records], [Total Records] ),
+			    'Rule Master'[Rule Dimension] = "Consistency"
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 9aa057bb-9159-4372-af66-40e72bfe868f
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure LastDate = ```
+			
+				MINX(
+					ADDCOLUMNS(
+						SUMMARIZE(
+							'Rule Master',
+							'Rule Master'[Data Product Name]
+						),
+						"lastdate", CALCULATE(
+							MAX('Date - Error Event'[Error Event Date]),
+							REMOVEFILTERS('Date - Error Event'[Error Event Date]),
+							'Error Events'
+						)
+					),
+					[lastdate]
+				)
+			```
+		formatString: General Number
+		isHidden
+		lineageTag: 0235fd93-ee62-4029-80f9-61c3c1de9c0f
+
+		changedProperty = IsHidden
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure 'Max Severity Score' = MAX('Error Events'[severity_score])/100
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: e0e3d2fe-4ee9-4332-bf53-de688b97319a
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	measure 'Min Severity Score' = MIN('Error Events'[severity_score])/100
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 19ecdd91-ed9a-46c5-8953-4a418cb3cf3b
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// Overall data quality score that counts passed records divided by the total processed.
+	measure 'Overall Score' = DIVIDE([Total Passed Records], [Total Records])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: a99da9d9-baff-4841-b4dd-14c5a3824235
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// Failure %, or # of errors divided by total records
+	measure 'Rule Fail %' = DIVIDE([#Errors], [Total Records])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 39619c22-8f6d-48ee-a264-8164c52322f7
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// Pass %, or # of passed records divided by Total
+	measure 'Rule Pass %' = DIVIDE([Total Passed Records], [Total Records])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: ad5f59ae-eabb-4fb9-8fc3-6c16a5cd31c6
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// This rule aims to ensure that the data is accessible in as short a time as possible. It ensures that the data is up to date. 
+	/// % of data updated within required timeframes.
+	measure 'Timeliness %' =
+			
+			CALCULATE (
+			    DIVIDE ( [Total Passed Records], [Total Records] ),
+			    'Rule Master'[Rule Dimension] = "Timeliness"
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: b6771616-eada-465e-8614-937662bd8786
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// Total number of passing records
+	measure 'Total Passed Records' = [Total Records] - [#Errors]
+		formatString: General Number
+		lineageTag: 12f00194-e348-4418-8c46-65d11cf28cd6
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// Total number of records processed
+	measure 'Total Records' = ```
+			SUMX (     'Error Events',     
+			VAR CurrentEventID = 'Error Events'[dq_error_event_key]     
+			VAR FailedForEvent =         CALCULATE ([#Errors],  'Error Event Details'[dq_error_event_key] = CurrentEventID)     
+			VAR FailurePercentage = 'Error Events'[severity_score] / 100     
+			RETURN 
+			DIVIDE ( FailedForEvent, FailurePercentage ) )
+			```
+		formatString: General Number
+		lineageTag: f244547b-69df-49c8-a20b-87cc0cf5d0bc
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	/// This rule checks that values aren't duplicated, for example, if there's supposed to be only one record per customer, then there aren't multiple records for the same customer. Each customer, product, or transaction should have a unique identifier. 
+	/// % of unique entries for key identifiers. 
+	measure 'Uniqueness %' =
+			
+			CALCULATE (
+			    DIVIDE ( [Total Passed Records], [Total Records] ),
+			    'Rule Master'[Rule Dimension] = "Uniqueness"
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 00f76dc9-0d05-448b-85cb-53c005516f7e
+
+		changedProperty = Description
+
+		annotation semanticlinklabs = reportlevelmeasure
+
+	column dim_dq_metrics
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d428ac81-ebb8-4b72-ba16-3132e484fb52
+		sourceLineageTag: dim_dq_metrics
+		summarizeBy: none
+		sourceColumn: dim_dq_metrics
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metrics = entity
+		mode: directLake
+		source
+			entityName: dim_dq_metrics
+			schemaName: data_quality
+			expressionSource: DatabaseQuery
+
+	changedProperty = IsHidden
+
+	changedProperty = Name
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+

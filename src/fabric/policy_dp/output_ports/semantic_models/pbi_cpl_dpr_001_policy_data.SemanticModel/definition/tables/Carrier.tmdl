@@ -1,0 +1,163 @@
+table Carrier
+	lineageTag: a67de659-4a8f-4847-a612-d03cabd5ece8
+	sourceLineageTag: [policy].[dim_carrier]
+
+	column carrier_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6486f8aa-2ef0-4be9-91db-a2a3c5289c6b
+		sourceLineageTag: carrier_key
+		summarizeBy: none
+		sourceColumn: carrier_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Carrier Type Admitted or Non Admitted
+	column 'Carrier Type'
+		dataType: string
+		lineageTag: a458d54d-96e7-46b0-9838-0636a7c29ab5
+		sourceLineageTag: carrier_type
+		summarizeBy: none
+		sourceColumn: carrier_type
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Carrier Name
+	column 'Carrier Name'
+		dataType: string
+		lineageTag: 964c32d3-80a5-4dd3-bdac-38a583e4158b
+		sourceLineageTag: carrier_nm
+		summarizeBy: none
+		sourceColumn: carrier_nm
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Carrier Code
+	column 'Carrier Code'
+		dataType: string
+		lineageTag: d00b921e-8be9-4079-84be-3a81a4297497
+		sourceLineageTag: carrier_cd_bus_key
+		summarizeBy: none
+		sourceColumn: carrier_cd_bus_key
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 8dca9c96-d083-4433-8b24-620c1cc6d110
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 1cf37d6c-495c-48e2-8ae1-314f74c789ce
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: a69ce930-c903-489a-b6bf-acf030c519f7
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 25c2b06c-04ba-4029-9c40-226d764ed6c8
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 5be9efe5-a45c-43bc-9dd8-2643f41d2eec
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 3c10b641-5a00-4487-8b1e-b762c214a5d6
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fe2dd6ab-3758-46d7-b40b-97e1e91e3b89
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 80f67324-6342-4361-b226-a2703ab79837
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c8814c5b-0d53-448a-87bd-67748034e5d8
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 28efd54d-58bd-4ddc-bd31-0b1010437a99
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_carrier = entity
+		mode: directLake
+		source
+			entityName: dim_carrier
+			schemaName: policy
+			expressionSource: 'DirectLake - den_lhw_dpr_001_policy_product'
+
+	changedProperty = Name
+

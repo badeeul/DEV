@@ -1,0 +1,23 @@
+{
+    "targetVariableGroup": "PlatformServices-PartnerPerfMgmt-MTR",
+    "targetWorkspaceName": "Distribution-PartnerPerfMgmt-MTR",
+    "targetSuperDomain": "Distribution",
+    "targetSubDomain": "PartnerPerfMgmt",
+    "environment": "mtr",
+    "pep": [
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "vault"
+        },
+        {  
+            "allowed": false,
+            "resourceId": "",    
+            "subresourceType": "blob"
+        }        
+    ],
+    "capacityId": "8EC86993-48EC-4FE7-B905-A74A0A192064",   
+    "keyvaultName": "bhg-hub-fabric01-eus-kv",     
+    "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd,f7b74a8f-0401-4227-a98a-43be7f7a87c4,d2c0a36a-db4f-4c32-9ca3-331331ff6d0c",
+    "contributorGroupPrincipalIds": "d2c0a36a-db4f-4c32-9ca3-331331ff6d0c"
+}

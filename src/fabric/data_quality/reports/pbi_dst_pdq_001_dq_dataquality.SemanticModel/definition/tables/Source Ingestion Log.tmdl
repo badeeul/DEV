@@ -1,0 +1,274 @@
+table 'Source Ingestion Log'
+	isHidden
+	lineageTag: 795c600e-a8d6-4db2-867f-8a6dd432b3c6
+	sourceLineageTag: [audit].[source_ingestion_log]
+
+	column run_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 8944a409-3055-42a9-82a1-57a6556eb4ba
+		sourceLineageTag: run_id
+		summarizeBy: none
+		sourceColumn: run_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column elt_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d02767c2-85e9-4b08-9a5c-3d92889dce67
+		sourceLineageTag: elt_id
+		summarizeBy: none
+		sourceColumn: elt_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: 459e2cef-4d1d-49a8-8ed8-d7c8759fcb93
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column feed_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: 0e78337f-0e7c-4555-ad93-1ffc11f31ade
+		sourceLineageTag: feed_name
+		summarizeBy: none
+		sourceColumn: feed_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_system
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: 7775ea39-82c3-4203-a7a0-ababb04592e9
+		sourceLineageTag: source_system
+		summarizeBy: none
+		sourceColumn: source_system
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataset_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: e36768f2-d258-4956-932b-1187b2ee5344
+		sourceLineageTag: dataset_name
+		summarizeBy: none
+		sourceColumn: dataset_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column metadata
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d854f9fe-94df-4395-a529-f048cd2d6c92
+		sourceLineageTag: metadata
+		summarizeBy: none
+		sourceColumn: metadata
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date_time
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 47a91958-a7f2-407b-b0bd-e553970da6a3
+		sourceLineageTag: start_date_time
+		summarizeBy: none
+		sourceColumn: start_date_time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_date_time
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 8e7613e9-34ad-4c8c-a9a6-112a6b43a6cc
+		sourceLineageTag: end_date_time
+		summarizeBy: none
+		sourceColumn: end_date_time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_read
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 4fa1852e-045b-4e64-a4f3-2fbf8640dd1f
+		sourceLineageTag: data_read
+		summarizeBy: sum
+		sourceColumn: data_read
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_written
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: d2039d15-eb01-4912-84e0-19f4f12500df
+		sourceLineageTag: data_written
+		summarizeBy: sum
+		sourceColumn: data_written
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column files_read
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: f34690ab-2e1c-4022-b061-938cf3678220
+		sourceLineageTag: files_read
+		summarizeBy: sum
+		sourceColumn: files_read
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column files_written
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 0658dd22-9403-484c-8f92-e54c12695cbc
+		sourceLineageTag: files_written
+		summarizeBy: sum
+		sourceColumn: files_written
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ebc8bc31-e307-46c4-9432-08ee32c073c8
+		sourceLineageTag: status
+		summarizeBy: none
+		sourceColumn: status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column throughput
+		dataType: double
+		isHidden
+		sourceProviderType: float
+		lineageTag: 3af9e617-24c4-4d53-ac68-6eb18d9b79cd
+		sourceLineageTag: throughput
+		summarizeBy: sum
+		sourceColumn: throughput
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column copy_duration
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 9a2601e9-6c39-4d43-9d09-8a41f8326260
+		sourceLineageTag: copy_duration
+		summarizeBy: sum
+		sourceColumn: copy_duration
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column inserted_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e00cdc70-77a5-4762-a75d-4c75a8e4db8d
+		sourceLineageTag: inserted_by
+		summarizeBy: none
+		sourceColumn: inserted_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7c0611ca-d9f8-4100-9233-b26242022539
+		sourceLineageTag: modified_by
+		summarizeBy: none
+		sourceColumn: modified_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column zone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 43fe5b44-0ca1-4218-84e2-b604667ee538
+		sourceLineageTag: zone
+		summarizeBy: none
+		sourceColumn: zone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Source Ingestion Log' = entity
+		mode: directLake
+		source
+			entityName: source_ingestion_log
+			schemaName: audit
+			expressionSource: DatabaseQuery
+
+	changedProperty = IsHidden
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

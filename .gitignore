@@ -1,0 +1,16 @@
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+
+*.ipynb
+
+ServiceAccountLogin.ps1
+terraformenv.ps1
+
+# Crash log files
+crash.log
+crash.*.log

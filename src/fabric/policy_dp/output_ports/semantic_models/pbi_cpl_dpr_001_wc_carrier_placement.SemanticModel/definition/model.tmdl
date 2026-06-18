@@ -1,0 +1,32 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DirectLake - den_lhw_dpr_001_policy_product"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit","RemoteModeling"]
+
+ref table segmentation_dnb_score
+ref table segmentation_experience_mod
+ref table segmentation_prior_wc_years
+ref table wc_carrier_placement_snapshot
+ref table Metrics
+ref table State_ReleaseDates
+ref table DateTableTemplate_eb11590c-a975-4b90-bfb1-c0ff10d980e6
+ref table LocalDateTable_e6349edd-0729-4f3e-b9b6-413ee45985af
+ref table Selected_States
+ref table 'Point Category'
+ref table 'Metric Group'
+ref table Bins
+ref table Display_ExperienceMod
+ref table Display_Hazard_Group
+ref table Display_DnB_Score
+ref table Display_Prior_WC_Years
+ref table Display_Carrier
+

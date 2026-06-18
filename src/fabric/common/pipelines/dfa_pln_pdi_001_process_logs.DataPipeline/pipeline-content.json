@@ -1,0 +1,48 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "45d84570-5e09-4d6f-b503-dde84d27be98",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "elt_id": {
+              "value": {
+                "value": "@pipeline().parameters.ELT_Id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "update_elt_log": {
+              "value": {
+                "value": "@pipeline().parameters.update_elt_log",
+                "type": "Expression"
+              },
+              "type": "bool"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "process_logs",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "ELT_Id": {
+        "type": "string",
+        "defaultValue": "868f7757-6c33-4f7f-bb41-b98c910ddfe5"
+      },
+      "update_elt_log": {
+        "type": "string",
+        "defaultValue": "false"
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DirectLake - den_lhw_dpr_001_policy_product"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit","CalcGroup"]
+
+annotation __BNorm = 1
+
+ref table Carrier
+ref table Date
+ref table 'Decision Underwriter'
+ref table 'Digital Decision Status'
+ref table 'Digital Decisioning Ratio Switcher'
+ref table dim_policy_trans_reason
+ref table 'Distribution Channel / Agency'
+ref table Employee
+ref table 'Governing Class'
+ref table Insured
+ref table 'Insured Legal Entity Type'
+ref table 'Line of Business'
+ref table 'Market Type'
+ref table Metrics
+ref table NAICS
+ref table Policy
+ref table 'Policy Cancel Date'
+ref table 'Policy Coverage End Date'
+ref table 'Policy Coverage Start Date'
+ref table 'Policy Effective End Date'
+ref table 'Policy Effective Start Date'
+ref table 'Policy Issue Date'
+ref table 'Policy Measures'
+ref table 'Policy Status'
+ref table 'Policy Submission Date'
+ref table 'Policy Trans Date'
+ref table 'Policy Trans Written Date'
+ref table 'Policy Transaction Detail'
+ref table 'Policy Transaction Subtype'
+ref table 'Policy Transaction Type'
+ref table 'Policy Transactions'
+ref table 'Producer Relations Advisor'
+ref table 'Production Source'
+ref table 'Territory Manager'
+ref table 'Report Date Periods'
+ref table 'NB Efficiencies Y-Axis Metric'
+ref table 'NB Efficiencies Date Role'
+ref table 'RB Efficiencies Y-Axis Metric'
+

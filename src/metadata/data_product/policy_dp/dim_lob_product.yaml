@@ -1,0 +1,31 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_lob_product # target table
+  load_strategy: merge # scd type
+  key_columns: # is merge key
+    - lob_product_id_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: lob_product_key # sharepoint first row
+
+source:
+  - name: pc_products # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: pc_products # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_lob_product # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: SELECT productid AS lob_product_id_bus_key
+          ,description AS lob_product_desc
+          ,keyidentifier AS lob_product_keyidentifier
+          ,lob AS lob_product_lob
+          ,effectivelob AS lob_product_effectivelob
+          ,True as dl_is_current_flag
+          ,CAST('1901-01-01' AS DATE) as dl_row_effective_date
+          ,CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+          ,False as dl_is_deleted_flag
+           FROM pc_products

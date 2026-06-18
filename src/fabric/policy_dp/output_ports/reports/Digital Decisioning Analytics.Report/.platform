@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Digital Decisioning Analytics",
+    "description": "Digital Decisioning Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0ff5d789-5a79-baee-4dd3-b71bfc89b1ef"
+  }
+}

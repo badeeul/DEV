@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_pdi_001_ingest_files_to_curated_driver",
+    "description": "Main logic of this pipeline is to cycle through Dataset_list parameter to ingest source data to raw and curated lakehouses."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9ec89220-9f98-4f30-aba3-313899c92206"
+  }
+}

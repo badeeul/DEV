@@ -1,0 +1,32 @@
+{
+  "targetVariableGroup": "PlatformServices-Service-INT",
+  "targetWorkspaceName": "Distribution-Service-INT",
+  "targetSuperDomain": "Distribution",
+  "targetSubDomain": "Service",
+  "targetProject": "DnA Distribution",
+  "targetRepository": "DnA Distro - Service",
+  "environment": "int",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distribution Service - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-dev-service-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "df63e84e-9732-4710-9132-7dbb31e667d5",
+  "viewerGroupPrincipalIds": "4b6e4fbe-4a09-434b-963f-95e91f4164b1,0b76f7d9-c670-4b6b-b448-b1c4b71a8f8a,83a4b381-40fb-4800-964e-4ee636d7b2cf"
+}

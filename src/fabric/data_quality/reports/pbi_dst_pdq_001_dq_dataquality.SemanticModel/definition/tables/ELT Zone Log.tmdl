@@ -1,0 +1,214 @@
+table 'ELT Zone Log'
+	isHidden
+	lineageTag: 4ccfd340-3bc9-4222-bccf-7547466b7079
+	sourceLineageTag: [audit].[elt_zone_log]
+
+	column run_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 39c3e426-cecc-4324-9347-e4181f0b675f
+		sourceLineageTag: run_id
+		summarizeBy: none
+		sourceColumn: run_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column elt_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 122e2f0e-befb-4f40-bc1c-56718081f88c
+		sourceLineageTag: elt_id
+		summarizeBy: none
+		sourceColumn: elt_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: 1879086a-8e29-4dd8-98db-b86f671b87fe
+		sourceLineageTag: product_name
+		summarizeBy: none
+		sourceColumn: product_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column feed_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: 876f37ed-4b2d-4d2d-a204-35b8ea1f29fb
+		sourceLineageTag: feed_name
+		summarizeBy: none
+		sourceColumn: feed_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column zone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: c584d347-c418-4f30-babf-265bccb2b011
+		sourceLineageTag: zone
+		summarizeBy: none
+		sourceColumn: zone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(2048)
+		lineageTag: 17ba8325-3469-4e90-8a75-df6c54616a29
+		sourceLineageTag: stage
+		summarizeBy: none
+		sourceColumn: stage
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column zone_start_date_time
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: a7dd2fd7-0cfb-4b4e-a002-c0e9810f92d4
+		sourceLineageTag: zone_start_date_time
+		summarizeBy: none
+		sourceColumn: zone_start_date_time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column zone_end_date_time
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 716d79e4-1d5f-43ff-9b5d-dd0b7e9c8a83
+		sourceLineageTag: zone_end_date_time
+		summarizeBy: none
+		sourceColumn: zone_end_date_time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column zone_status
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3dcab94b-8138-4eac-93ab-3b50c94ad2f3
+		sourceLineageTag: zone_status
+		summarizeBy: none
+		sourceColumn: zone_status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_data_size
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: dfabdbc0-9443-428d-8f78-c846e1d5eb1c
+		sourceLineageTag: total_data_size
+		summarizeBy: none
+		sourceColumn: total_data_size
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column total_models_shared
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: af0208b7-c25a-4fd1-9b2e-1c1be0d5ad92
+		sourceLineageTag: total_models_shared
+		summarizeBy: none
+		sourceColumn: total_models_shared
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column total_retry_count
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: e13c34ec-4253-4b8c-b378-0b4255f1f84c
+		sourceLineageTag: total_retry_count
+		summarizeBy: none
+		sourceColumn: total_retry_count
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column total_error_count
+		dataType: int64
+		isHidden
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 9f21f1e4-25f3-45b5-86ad-c296757bac3b
+		sourceLineageTag: total_error_count
+		summarizeBy: none
+		sourceColumn: total_error_count
+
+		changedProperty = IsHidden
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column invocation_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 69438e45-7b1e-4d61-88f5-de842de70dee
+		sourceLineageTag: invocation_id
+		summarizeBy: none
+		sourceColumn: invocation_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'ELT Zone Log' = entity
+		mode: directLake
+		source
+			entityName: elt_zone_log
+			schemaName: audit
+			expressionSource: DatabaseQuery
+
+	changedProperty = IsHidden
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

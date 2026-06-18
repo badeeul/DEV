@@ -1,0 +1,60 @@
+{
+    "projectName": "test-project",
+    "operationMode": "upsert",
+    "confirmDeletion": "",
+    "visibility": "private",
+    "description": "This is a test project for demonstration purposes.",
+    "processTemplate": "Scrum Custom",
+    "projectTeams":  [
+        {  
+            "name": "DnA TestProject Team",
+            "type": "group",    
+            "members": "GUARD DnA - Fluidity - PlatSvc DevOps"
+        },
+        {  
+            "name": "DnA TestProject Team",
+            "type": "user",    
+            "members": "carlos.triassi@guard.com, kiran.krishna@guard.com, matthew.giroux@guard.com"
+        },
+        {  
+            "name": "test-project Team",
+            "type": "user",    
+            "members": "carlos.triassi@guard.com, kiran.krishna@guard.com, sergei.kolpakov@guard.com"
+        },
+        {  
+            "name": "GDAP-Fluidity-Data Engineering Services",
+            "type": "user",    
+            "members": "carlos.triassi@guard.com, kiran.krishna@guard.com, sergei.kolpakov@guard.com"
+        }           
+    ],
+    "projectPermissions": [
+        {
+            "name": "Build Administrators",
+            "type": "group",
+            "members": "DnA TestProject Team, Project Administrators"
+        },       
+        {
+            "name": "Contributors",
+            "type": "user",
+            "members": "carlos.triassi@guard.com, kiran.krishna@guard.com, matthew.giroux@guard.com"
+        },
+        {
+            "name": "Readers",
+            "type": "group",
+            "members": "GDAP-Fluidity-Data Engineering Services"
+        },
+        {
+            "name": "Custom - Build Service Accounts",
+            "type": "user",
+            "members": "carlos.triassi@guard.com, kiran.krishna@guard.com, matthew.giroux@guard.com"
+        }
+    ],
+    "projectAdministrators": "GUARD DnA - Fluidity - PlatSvc DevOps,GUARD DnA - Fluidity - PlatSvc ScrumOps,AAD Role - GUARD DnA - Fabric Administrator",
+    "subdomains":  "test-project-repo",
+    "targetProjectAgentPools": "GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool",
+    "backlogSourceProject": "GDAP-Fluidity-FoundationEnablement",
+    "backlogSourceTeamName": "GDAP-Fluidity-FoundationEnablement Team",
+    "backlogDestinationProject": "test-project",
+    "backlogDestinationTeamName": "test-project Team",
+    "backlogParentWorkItemTitle": "Version 4.3*"
+}

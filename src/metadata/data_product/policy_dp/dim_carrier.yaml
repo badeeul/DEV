@@ -1,0 +1,39 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_carrier # target table
+  load_strategy: type_two # scd type
+  key_columns: # is merge key
+    - carrier_cd_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: carrier_key # sharepoint first row
+
+source:
+  - name: lookups # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: lookups # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_carrier # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: select distinct 
+        vals as  carrier_cd_bus_key, 
+        descrip as  carrier_nm,
+        case when LOWER(trim(descrip)) = 'azguard' then 'Non-admitted' else 'Admitted' end  as carrier_type
+        , True as dl_is_current_flag
+        ,CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        ,CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        ,False as dl_is_deleted_flag
+        , case 
+            when lower(trim(carrier_type)) = 'unknown' or lower(trim(carrier_type)) = 'not applicable' then 1
+            when lower(trim(carrier_nm)) = 'azguard' and lower(trim(carrier_type)) <> 'non-admitted' then 0
+            when lower(trim(carrier_nm)) <> 'azguard' and lower(trim(carrier_type)) <> 'admitted' then 0
+            else 1
+          end as dq_cr_nm_cr_type_check
+        from lookups 
+        where LOWER(trim(keyfield)) =  'carrier'
+          and LOWER(trim(programid)) = '*'
+        order by 1

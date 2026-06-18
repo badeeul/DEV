@@ -1,0 +1,156 @@
+table dim_carrier
+	lineageTag: 36ca4f53-4f1e-4df2-be5c-2be9788cd214
+	sourceLineageTag: [policy].[dim_carrier]
+
+	column carrier_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: a9aef56e-2fd5-4f08-8674-7af36fb99a1b
+		sourceLineageTag: carrier_key
+		summarizeBy: none
+		sourceColumn: carrier_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column carrier_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e3697b9b-38a9-4a01-8df5-196d9f654ba5
+		sourceLineageTag: carrier_type
+		summarizeBy: none
+		sourceColumn: carrier_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column carrier_nm
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ddb3c03f-5e61-4610-9e3d-b92fe3804bfe
+		sourceLineageTag: carrier_nm
+		summarizeBy: none
+		sourceColumn: carrier_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column carrier_cd_bus_key
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: bd54a29c-cac2-4840-9bee-31c66b2d5f12
+		sourceLineageTag: carrier_cd_bus_key
+		summarizeBy: none
+		sourceColumn: carrier_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f9a2fabc-63c9-4131-bba1-eee0b78358e8
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 296d96fe-f8ed-4a92-a157-29bb80bd6461
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: bb06eca0-3dcc-44c2-8e7d-b841b9932961
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d4e11949-f144-49fd-89a7-b3557fe03066
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 6303fbba-d387-44fb-addc-45fb29587337
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c44ecf76-18f4-47fc-b121-38d3001ca5ae
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d863f2d8-b53b-4f69-94f0-1a0927125fa9
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 0af2f125-5b67-4f78-a962-ecbc8a696cdd
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 29fc1e21-5eed-449c-8a2a-73841cae9f83
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 060621f4-9ea6-4039-9754-d07a9f24eba9
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_carrier = entity
+		mode: directLake
+		source
+			entityName: dim_carrier
+			schemaName: policy
+			expressionSource: DatabaseQuery
+

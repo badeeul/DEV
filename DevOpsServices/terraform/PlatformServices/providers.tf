@@ -1,0 +1,1 @@
+# Provider configurations (SP and User auth)

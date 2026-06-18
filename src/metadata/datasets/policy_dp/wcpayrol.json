@@ -1,0 +1,75 @@
+{
+    "datasetName": "wcpayrol",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "code",
+            "primeseq",
+            "state",
+            "effdate",
+            "classcode",
+            "seqcode",
+            "territory",
+            "exmod",
+            "minprem",
+            "exposure",
+            "premium",
+            "rate",
+            "xcluamt",
+            "losscons",
+            "form",
+            "paragraph",
+            "volcomp",
+            "hazard",
+            "cvrg",
+            "disctype",
+            "classuffix",
+            "diffprem",
+            "diffrate",
+            "rateeffdate",
+            "losscost"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "policy",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/mm/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "code",
+            "primeseq",
+            "state",
+            "effdate",
+            "classcode",
+            "seqcode",
+            "territory",
+            "rateeffdate",
+            "volcomp"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}
+

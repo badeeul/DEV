@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "dfa_pln_dpr_001_ingest_load_dp"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ed2ee9ba-995c-4ae9-a31a-0e29934a405b"
+  }
+}

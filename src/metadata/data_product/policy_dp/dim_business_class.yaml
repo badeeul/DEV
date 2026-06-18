@@ -1,0 +1,57 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_business_class # target table
+  load_strategy: type_two # scd type
+  key_columns: # is merge key
+    - bus_class_cd_bus_key
+    - bus_class_suffix_bus_key
+    - bus_class_src_id_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: bus_class_key # sharepoint first row
+
+source:
+  - name: bpclass # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: bpclass # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+  - name: wcclass # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: wcclass # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_business_class # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: (select
+          class as bus_class_cd_bus_key
+        , classsuffix as bus_class_suffix_bus_key
+        , description as bus_class_desc
+        , bpclass_id as bus_class_src_id_bus_key
+        , naics as bus_naics_cd
+        , 'BP' as bus_lob
+        , True as dl_is_current_flag
+        ,CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        ,CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        ,False as dl_is_deleted_flag
+        from bpclass
+        where LOWER(trim(lob))='bp')
+
+        union all
+
+        (select
+          class as bus_class_cd_bus_key
+        , classuffix as bus_class_suffix_bus_key
+        , classdesc as bus_class_desc
+        , 0 as bus_class_src_id_bus_key
+        , naics as bus_naics_cd
+        , 'WC' as bus_lob
+        , True as dl_is_current_flag
+        ,CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        ,CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        ,False as dl_is_deleted_flag
+        from wcclass
+        where class is not null and classuffix is not null)

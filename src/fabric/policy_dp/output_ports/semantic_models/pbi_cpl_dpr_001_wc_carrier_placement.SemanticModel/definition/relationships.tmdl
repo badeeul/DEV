@@ -1,0 +1,41 @@
+relationship 376ba4ea-8c00-a667-c367-790fefba5221
+	fromColumn: wc_carrier_placement_snapshot.dnb_score_segment_key
+	toColumn: segmentation_dnb_score.dnb_score_segment_key
+
+relationship 088704b1-0cb2-c71a-19ce-0da6aa8bee3a
+	fromColumn: wc_carrier_placement_snapshot.experience_mod_segment_key
+	toColumn: segmentation_experience_mod.experience_mod_segment_key
+
+relationship 2c7cd455-6891-3892-48fd-d584f8768caf
+	fromColumn: wc_carrier_placement_snapshot.prior_wc_years_segment_key
+	toColumn: segmentation_prior_wc_years.prior_wc_years_segment_key
+
+relationship 7c927997-527f-47b0-b281-1da2af0b9bf2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: State_ReleaseDates.ImplementationDate
+	toColumn: LocalDateTable_e6349edd-0729-4f3e-b9b6-413ee45985af.Date
+
+relationship 52d7b43a-6bac-8d96-8fce-c871a0dac7f7
+	fromColumn: wc_carrier_placement_snapshot.'Gov State'
+	toColumn: State_ReleaseDates.State
+
+relationship 9b41ec70-0ff6-da3f-4a11-eca5dbce2ade
+	fromColumn: segmentation_experience_mod.experience_mod_segment_bus_key
+	toColumn: Display_ExperienceMod.experience_mod_segement_bus_key
+
+relationship 9e4dfeb2-6a67-97f9-6ba6-b783add3ec2d
+	fromColumn: segmentation_dnb_score.dnb_score_segment_bus_key
+	toColumn: Display_DnB_Score.dnb_score_segement_bus_key
+
+relationship c0c15cea-3c6d-4681-6b21-a31f553a715e
+	fromColumn: wc_carrier_placement_snapshot.dna_hazard_group
+	toColumn: Display_Hazard_Group.dna_hazard_group
+
+relationship ab817468-9949-c4c4-84ab-9cef37e4d84e
+	fromColumn: segmentation_prior_wc_years.prior_wc_years_segment_bus_key
+	toColumn: Display_Prior_WC_Years.prior_wc_years_segement_bus_key
+
+relationship c63d3cf6-afac-9482-d483-04bc355b854c
+	fromColumn: wc_carrier_placement_snapshot.carrier_nm
+	toColumn: Display_Carrier.carrier_nm
+

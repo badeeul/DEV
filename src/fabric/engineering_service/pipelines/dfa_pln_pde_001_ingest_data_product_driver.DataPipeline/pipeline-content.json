@@ -1,0 +1,260 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
+            "storeSettings": {
+              "type": "LakehouseReadSettings",
+              "recursive": false,
+              "enablePartitionDiscovery": false
+            }
+          },
+          "datasetSettings": {
+            "type": "Json",
+            "typeProperties": {
+              "location": {
+                "type": "LakehouseLocation",
+                "folderPath": {
+                  "value": "@concat('data_product/','feeds')",
+                  "type": "Expression"
+                },
+                "fileName": {
+                  "value": "@concat(pipeline().parameters.Feed_Name,'.json')",
+                  "type": "Expression"
+                }
+              }
+            },
+            "schema": {},
+            "linkedService": {
+              "name": "32145c85_6228_405e_a9ca_002c5af4941b",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "@pipeline().parameters.lh_metadata_id",
+                  "workspaceId": "@pipeline().parameters.workspace_id",
+                  "rootFolder": "Files"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Data Product Metadata",
+        "description": "Gets feed file from the metadata store",
+        "dependsOn": []
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {
+            "ELT_Id": {
+              "value": "@pipeline().parameters.ELT_Id",
+              "type": "Expression"
+            },
+            "update_elt_log": {
+              "value": "true",
+              "type": "Expression"
+            }
+          },
+          "waitOnCompletion": false,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "2a9e070f-499f-4495-99fd-1265f1ab07f1",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "ed22cf49-cea1-4171-ac69-28ae3fe2b9f1"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Process Logs",
+        "dependsOn": [
+          {
+            "activity": "Load Data Product",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "12710260-5e4e-8020-4834-23b392a86560",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "feed_name": {
+              "value": {
+                "value": "@pipeline().parameters.Feed_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "elt_id": {
+              "value": {
+                "value": "@pipeline().parameters.ELT_Id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "elt_start_date_time": {
+              "value": {
+                "value": "@pipeline().parameters.Elt_Start_Date_Time",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "product_name": {
+              "value": {
+                "value": "@pipeline().parameters.Product_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "source_system": {
+              "value": {
+                "value": "Curated",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "invocation_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "workspace_id": {
+              "value": {
+                "value": "@pipeline().parameters.workspace_id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "lh_metadata_id": {
+              "value": {
+                "value": "@pipeline().parameters.lh_metadata_id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "lh_observability_id": {
+              "value": {
+                "value": "@pipeline().parameters.lh_observability_id",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Load Data Product",
+        "description": "Process dataset files defined in the feed file",
+        "dependsOn": [
+          {
+            "activity": "Get Data Product Metadata",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@activity('Load Data Product').output.result.error.evalue",
+            "type": "Expression"
+          },
+          "errorCode": {
+            "value": "@activity('Load Data Product').output.result.error.ename",
+            "type": "Expression"
+          }
+        },
+        "name": "Fail Pipeline",
+        "dependsOn": [
+          {
+            "activity": "Load Data Product",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "ELT_Id": {
+        "type": "string",
+        "defaultValue": "08bdd3a3-ccc5-43ad-82d6-3e01b1841587"
+      },
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "demo_product"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "DEMO"
+      },
+      "Elt_Start_Date_Time": {
+        "type": "string",
+        "defaultValue": "11/07/2024 20:02:44"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "61a6df22-f73b-48bc-855f-55f41065eb20"
+      }
+    },
+    "variables": {
+      "raw_directory": {
+        "type": "String"
+      },
+      "end_modified_end_datetime": {
+        "type": "String"
+      },
+      "start_modified_end_datetime": {
+        "type": "String"
+      }
+    }
+  }
+}
