@@ -1,0 +1,44 @@
+{
+    "loadGroupSnowflakeDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_vehicle_type",
+                    "modelConfigFolderName": "cauto_dp"
+                },
+                {
+                    "fileName": "dim_trailer_type",
+                    "modelConfigFolderName": "cauto_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_garage_location",
+                    "modelConfigFolderName": "cauto_dp"
+                },
+                {
+                    "fileName": "dim_vehicle_radius_of_operation",
+                    "modelConfigFolderName": "cauto_dp"
+                },
+                {
+                    "fileName": "dim_vehicle",
+                    "modelConfigFolderName": "cauto_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_vehicle",
+                    "modelConfigFolderName": "cauto_dp"
+                }
+            ]
+        }
+    ]
+}
