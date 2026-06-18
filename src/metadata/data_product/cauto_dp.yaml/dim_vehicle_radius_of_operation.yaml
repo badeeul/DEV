@@ -1,0 +1,41 @@
+target:
+  lakehouse: den_lhw_dpr_001_cauto_product # keep
+  schema: cauto # keep
+  table: dim_vehicle_radius_of_operation # target table
+  load_strategy: merge # scd type
+  key_columns: # is merge key
+    - vehicle_radius_of_operation_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: vehicle_radius_of_operation_surrogate_key # sharepoint first row
+
+source:
+  - name: lookups # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: lookups # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_vehicle_radius_of_operation # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: select 
+         lower(trim(l.vals)) as vehicle_radius_of_operation_bus_key
+        , lower(trim(l.descrip)) as vehicle_radius_of_operation_desc
+        , (case lower(trim(l.vals)) 
+            when 'local' then 1
+            when 'intermediate' then 2
+            when 'long' then 3
+            when 'unknown' then 4
+            when 'not applicable' then 5
+            else 6
+          end) as vehicle_radius_of_operation_sort_order
+        , True as dl_is_current_flag
+        , CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        , CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        , False as dl_is_deleted_flag
+
+        from lookups l
+
+        where lower(trim(l.programid)) = 'uwvehicles'
+        and lower(trim(l.keyfield)) = 'radiusofoperation'
