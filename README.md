@@ -28,7 +28,7 @@ Deeper directory levels are documented in per-component README files (linked bel
 # Getting started
 See [CONTRIBUTING.md](/CONTRIBUTING.md) if you want to contribute to Fluidity.
 
-Deployments are organised by the Fluidity Sub Domain team as part of project management. It's not possible to run Fluidity locally (e.g., for testing purposes).
+Deployments are organised by the Fluidity Sub Domain team as part of project management. It's not possible to run Fluidity locally (e.g. for testing purposes).
 
 # Contacting the core team
 Please email:
