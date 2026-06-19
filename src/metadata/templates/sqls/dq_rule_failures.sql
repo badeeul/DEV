@@ -8,6 +8,7 @@ WITH cte AS (
 cte2 AS (
     SELECT
         CAST(CURRENT_TIMESTAMP AS DATE) AS stats_as_of_date,
+        r.data_product_name,
         r.dq_rule_master_key,
         r.dq_rule_id,
         REPLACE(r.dq_rule_description, CHAR(10), ' ') AS dq_rule_description,
@@ -30,6 +31,7 @@ cte2 AS (
         ON ee.dq_error_event_key = ed.dq_error_event_key
     JOIN cte c ON c.dp_processing_batch_key = ee.dp_processing_batch_key
     GROUP BY
+        r.data_product_name,
         r.dq_rule_master_key,
         r.dq_rule_id,
         r.dq_rule_description,
@@ -48,6 +50,7 @@ cteAll AS (
 )
 SELECT 
     stats_as_of_date,
+    data_product_name,
     dq_rule_id,
     dq_rule_description,
     dq_rule_applicable_object,

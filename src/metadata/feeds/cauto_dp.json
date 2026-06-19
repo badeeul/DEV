@@ -1,0 +1,23 @@
+{
+    "feedName": "cauto_dp",
+    "feedDescription": "This is a feed for CAuto DP",
+    "workLoadType": "dp-spark",
+    "skipProductLoad": false,
+    "dataDeduplicationAlert": false,
+    "deduplicationAlertTemplate": "deduplication_msg",
+    "datasetsConfig": [
+        {
+            "datasetType": "database",
+            "datasets": [
+                {
+                    "fileName": "mgtrans_coverages",
+                    "sourceConfigFolderName": "cauto_dp"
+                },
+                {
+                    "fileName": "uwvehicles",
+                    "sourceConfigFolderName": "cauto_dp"
+                }
+            ]
+        }
+    ]
+}
