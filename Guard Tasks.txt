@@ -1,0 +1,529 @@
+
+badeeul.visakhapatnam@guard.com
+SilverMoon76!
+/\/\/\/\
+
+|*|-------------------------------------SQL----------------------------------------------|*|
+|*|======================================================================================|*|
+|*|--------------------------------------------------------------------------------------|*|
+|*|		SELECT 'SELECT table_name = '''+t.name+                                          |*|
+|*|		''', column_name = '''+c.name+                                                   |*|
+|*|		''', key_group=(case when '+c.name+'=-1 then ''Unknown'''+                       |*|
+|*|		                  ' when '+c.name+' = -2 then ''Not Applicable'''+               |*|
+|*|		                  ' when '+c.name+' = 0 then ''Zero Value'''+                    |*|
+|*|		                  ' when '+c.name+' is null then ''NULL'''+                      |*|
+|*|		                  ' else ''Key Populated'''+                                     |*|
+|*|		                  ' end)'+                                                       |*|
+|*|		', record_count=count(*)'+                                                       |*|
+|*|		' FROM [den_lhw_dpr_001_policy_product].[policy].'+t.name+                       |*|
+|*|		' where dl_is_current_flag = 1                                                   |*|
+|*|		GROUP BY                                                                         |*|
+|*|		(case when '+c.name+'=-1 then ''Unknown'''+                                      |*|
+|*|		                  ' when '+c.name+' = -2 then ''Not Applicable'''+               |*|
+|*|		                  ' when '+c.name+' = 0 then ''Zero Value'''+                    |*|
+|*|		                  ' when '+c.name+' is null then ''NULL'''+                      |*|
+|*|		                  ' else ''Key Populated'''+                                     |*|
+|*|		                  ' end)'+                                                       |*|
+|*|		' UNION'                                                                         |*|
+|*|		FROM sys.tables t                                                                |*|
+|*|		inner join sys.columns c on c.object_id =  t.object_id                           |*|
+|*|		where t.name not like '%quarantine%'                                             |*|
+|*|		and t.name not like '%_pii%'                                                     |*|
+|*|		and c.name like '%_key'                                                          |*|
+|*|		and c.name not like '%bus%'                                                      |*|
+|*|		--and c.column_id =1                                                             |*|
+|*|																				         |*|
+|*|-----------------------------------SQL------------------------------------------------|*|
+|*|======================================================================================|*|
+|*|--------------------------------------------------------------------------------------|*|
+
+|*|-----------------------------------SQL-----------------------------------------------|*|
+|*|=====================================================================================|*|
+|*|-------------------------------------------------------------------------------------|*|
+|*|		SELECT                                                                          |*|
+|*|		    'SELECT table_name = ''' + t.name +                                         |*|
+|*|		    ''', column_name = ''' + c.name +                                           |*|
+|*|		    ''', key_group = (case when ' + c.name + ' = -1 then ''Unknown''' +         |*|
+|*|		                      ' when ' + c.name + ' = -2 then ''Not Applicable''' +     |*|
+|*|		                      ' when ' + c.name + ' = 0 then ''Zero Value''' +          |*|
+|*|		                      ' when ' + c.name + ' is null then ''NULL''' +            |*|
+|*|		                      ' else ''Key Populated''' +                               |*|
+|*|		                      ' end)' +                                                 |*|
+|*|		    ', record_count = count(*)' +                                               |*|
+|*|		    ' FROM [den_lhw_dpr_001_policy_product].[policy].' + t.name +               |*|
+|*|		    ' where dl_is_current_flag = 1                                              |*|
+|*|		    GROUP BY                                                                    |*|
+|*|		    (case when ' + c.name + ' = -1 then ''Unknown''' +                          |*|
+|*|		                      ' when ' + c.name + ' = -2 then ''Not Applicable''' +     |*|
+|*|		                      ' when ' + c.name + ' = 0 then ''Zero Value''' +          |*|
+|*|		                      ' when ' + c.name + ' is null then ''NULL''' +            |*|
+|*|		                      ' else ''Key Populated''' +                               |*|
+|*|		                      ' end)' +                                                 |*|
+|*|		    ' HAVING count(*) > 1' +                                                    |*|
+|*|		    CASE                                                                        |*|
+|*|		        WHEN ROW_NUMBER() OVER (ORDER BY t.name) = COUNT(*) OVER ()             |*|
+|*|		        THEN ' ORDER BY 1,3'                                                    |*|
+|*|		        ELSE ' UNION'                                                           |*|
+|*|		    END                                                                         |*|
+|*|		FROM sys.tables t                                                               |*|
+|*|		inner join sys.columns c on c.object_id = t.object_id                           |*|
+|*|		where t.name not like '%quarantine%'                                            |*|
+|*|		and t.name not like '%_pii%'                                                    |*|
+|*|		and c.name like '%_key'                                                         |*|
+|*|		and c.name not like '%bus%'                                                     |*|
+|*|		and c.column_id = 1                                                             |*|
+|*|		order by t.name                                                                 |*|
+|*|-----------------------------------SQL-----------------------------------------------|*|
+|*|=====================================================================================|*|
+|*|-------------------------------------------------------------------------------------|*|		
+
+|*|-----------------------------------SQL------------------------------------------|*|
+|*|================================================================================|*|
+|*|--------------------------------------------------------------------------------|*|
+|*|																				   |*|
+|*|		SELECT 'SELECT COUNT(*) AS COUNT, '                                        |*|
+|*|		+''''                                                                      |*|
+|*|		+ t.name                                                                   |*|
+|*|		+ ''''                                                                     |*|
+|*|		+ ' AS TABLE_NAME'                                                         |*|
+|*|		+ ' FROM policy.'                                                          |*|
+|*|		+ t.name                                                                   |*|
+|*|		+ ' WHERE dl_is_current_flag = 1 '                                         |*|
+|*|		--+ ' AND '                                                                |*|
+|*|		--+ c.name                                                                 |*|
+|*|		--+ ' IS NULL '                                                            |*|
+|*|		--+c.name+'=-1'                                                            |*|
+|*|		+ ' UNION'                                                                 |*|
+|*|		FROM sys.tables t                                                          |*|
+|*|		INNER JOIN sys.columns c ON c.object_id = t.object_id                      |*|
+|*|		WHERE t.name NOT LIKE '%quarantine%'                                       |*|
+|*|			AND t.name NOT LIKE '%_pii%'                                           |*|
+|*|			AND c.name LIKE '%_key'                                                |*|
+|*|			AND c.name NOT LIKE '%bus%'                                            |*|
+|*|			AND c.column_id = 1                                                    |*|
+|*|																				   |*|
+|*|-----------------------------------SQL------------------------------------------|*|
+|*|================================================================================|*|
+|*|--------------------------------------------------------------------------------|*|
+
+|*|-----------------------------------SQL-------------------------------------------------------|*|
+|*|=============================================================================================|*|
+|*|---------------------------------------------------------------------------------------------|*|
+|*|                                                                                             |*|
+|*|		--YEAR                                                                                  |*|
+|*|		WITH joined_data AS (                                                                   |*|
+|*|		    SELECT                                                                              |*|
+|*|		        a.transdate,                                                                    |*|
+|*|		        a.paa_amt,                                                                      |*|
+|*|		        a.comm_amt,                                                                     |*|
+|*|		        a.non_comm_prem_amt,                                                            |*|
+|*|		        b.paamount,                                                                     |*|
+|*|		        b.commisamt,                                                                    |*|
+|*|		        b.nocommprem,                                                                   |*|
+|*|		        (a.paa_amt - b.paamount) AS paa_amt_diff,                                       |*|
+|*|		        (a.comm_amt - b.commisamt) AS comm_amt_diff,                                    |*|
+|*|		        (a.non_comm_prem_amt - b.nocommprem) AS non_comm_prem_amt_diff                  |*|
+|*|		    FROM (                                                                              |*|
+|*|		        SELECT                                                                          |*|
+|*|		            SUM([paa_amt]) AS paa_amt,                                                  |*|
+|*|		            SUM(comm_amt) AS comm_amt,                                                  |*|
+|*|		            SUM(non_comm_prem_amt) AS non_comm_prem_amt,                                |*|
+|*|		            YEAR(CAST(d.date AS DATE)) AS transdate                                     |*|
+|*|		        FROM [policy].[fact_policy_transaction] f                                       |*|
+|*|		        LEFT JOIN policy.dim_date d ON d.date_key = f.policy_trans_dt_key               |*|
+|*|		        GROUP BY YEAR(CAST(d.date AS DATE))                                             |*|
+|*|		    ) a                                                                                 |*|
+|*|		    INNER JOIN (                                                                        |*|
+|*|		        SELECT                                                                          |*|
+|*|		            SUM([paamount]) AS paamount,                                                |*|
+|*|		            SUM([commisamt]) AS commisamt,                                              |*|
+|*|		            SUM([nocommprem]) AS nocommprem,                                            |*|
+|*|		            YEAR(CAST(transdate AS DATE)) AS transdate                                  |*|
+|*|		        FROM den_lhw_scu_001_policy_curated.policy.[mgtrans]                            |*|
+|*|		        GROUP BY YEAR(CAST(transdate AS DATE))                                          |*|
+|*|		    ) b ON a.transdate = b.transdate                                                    |*|
+|*|		)                                                                                       |*|
+|*|		SELECT                                                                                  |*|
+|*|		    transdate,                                                                          |*|
+|*|		    paa_amt,                                                                            |*|
+|*|		    comm_amt,                                                                           |*|
+|*|		    non_comm_prem_amt,                                                                  |*|
+|*|		    paamount,                                                                           |*|
+|*|		    commisamt,                                                                          |*|
+|*|		    nocommprem,                                                                         |*|
+|*|		    transdate AS transdate_b,                                                           |*|
+|*|		    paa_amt_diff,                                                                       |*|
+|*|		    comm_amt_diff,                                                                      |*|
+|*|		    non_comm_prem_amt_diff                                                              |*|
+|*|		FROM joined_data                                                                        |*|
+|*|		                                                                                        |*|
+|*|		UNION ALL                                                                               |*|
+|*|		                                                                                        |*|
+|*|		SELECT                                                                                  |*|
+|*|		    9999 AS transdate,                                                                  |*|
+|*|		    NULL AS paa_amt,                                                                    |*|
+|*|		    NULL AS comm_amt,                                                                   |*|
+|*|		    NULL AS non_comm_prem_amt,                                                          |*|
+|*|		    NULL AS paamount,                                                                   |*|
+|*|		    NULL AS commisamt,                                                                  |*|
+|*|		    NULL AS nocommprem,                                                                 |*|
+|*|		    NULL AS transdate_b,                                                                |*|
+|*|		    SUM(paa_amt_diff) AS paa_amt_diff,                                                  |*|
+|*|		    SUM(comm_amt_diff) AS comm_amt_diff,                                                |*|
+|*|		    SUM(non_comm_prem_amt_diff) AS non_comm_prem_amt_diff                               |*|
+|*|		FROM joined_data                                                                        |*|
+|*|		                                                                                        |*|
+|*|		ORDER BY transdate                                                                      |*|
+|*|---------------------------------------------------------------------------------------------|*|
+|*|		--MONTH                                                                                 |*|
+|*|		SELECT                                                                                  |*|
+|*|		    a.*,                                                                                |*|
+|*|		    b.paamount,                                                                         |*|
+|*|		    b.commisamt,                                                                        |*|
+|*|		    b.nocommprem,                                                                       |*|
+|*|		    b.transdate AS transdate_b,                                                         |*|
+|*|		    (a.paa_amt - b.paamount) AS paa_amt_diff,                                           |*|
+|*|		    (a.comm_amt - b.commisamt) AS comm_amt_diff,                                        |*|
+|*|		    (a.non_comm_prem_amt - b.nocommprem) AS non_comm_prem_amt_diff                      |*|
+|*|		FROM (                                                                                  |*|
+|*|		    SELECT                                                                              |*|
+|*|		        SUM([paa_amt]) AS paa_amt,                                                      |*|
+|*|		        SUM(comm_amt) AS comm_amt,                                                      |*|
+|*|		        SUM(non_comm_prem_amt) AS non_comm_prem_amt,                                    |*|
+|*|		        MONTH(CAST(d.date AS DATE)) AS transdate                                        |*|
+|*|		    FROM [policy].[fact_policy_transaction] f                                           |*|
+|*|		    LEFT JOIN policy.dim_date d ON d.date_key = f.policy_trans_dt_key                   |*|
+|*|		    WHERE YEAR(CAST(d.date AS DATE)) = 2005                                             |*|
+|*|		    GROUP BY MONTH(CAST(d.date AS DATE))                                                |*|
+|*|		) a                                                                                     |*|
+|*|		INNER JOIN (                                                                            |*|
+|*|		    SELECT                                                                              |*|
+|*|		        SUM([paamount]) AS paamount,                                                    |*|
+|*|		        SUM([commisamt]) AS commisamt,                                                  |*|
+|*|		        SUM([nocommprem]) AS nocommprem,                                                |*|
+|*|		        MONTH(CAST(transdate AS DATE)) AS transdate                                     |*|
+|*|		    FROM den_lhw_scu_001_policy_curated.policy.[mgtrans]                                |*|
+|*|		    WHERE YEAR(CAST(transdate AS DATE)) = 2005                                          |*|
+|*|		    GROUP BY MONTH(CAST(transdate AS DATE))                                             |*|
+|*|		) b ON a.transdate = b.transdate                                                        |*|
+|*|		ORDER BY a.transdate                                                                    |*|
+|*|---------------------------------------------------------------------------------------------|*|
+|*|		--DAY                                                                                   |*|
+|*|		SELECT                                                                                  |*|
+|*|		    a.*,                                                                                |*|
+|*|		    b.paamount,                                                                         |*|
+|*|		    b.commisamt,                                                                        |*|
+|*|		    b.nocommprem,                                                                       |*|
+|*|		    b.transdate AS transdate_b,                                                         |*|
+|*|		    (a.paa_amt - b.paamount) AS paa_amt_diff,                                           |*|
+|*|		    (a.comm_amt - b.commisamt) AS comm_amt_diff,                                        |*|
+|*|		    (a.non_comm_prem_amt - b.nocommprem) AS non_comm_prem_amt_diff                      |*|
+|*|		FROM (                                                                                  |*|
+|*|		    SELECT                                                                              |*|
+|*|		        SUM([paa_amt]) AS paa_amt,                                                      |*|
+|*|		        SUM(comm_amt) AS comm_amt,                                                      |*|
+|*|		        SUM(non_comm_prem_amt) AS non_comm_prem_amt,                                    |*|
+|*|		        DAY(CAST(d.date AS DATE)) AS transdate                                          |*|
+|*|		    FROM [policy].[fact_policy_transaction] f                                           |*|
+|*|		    LEFT JOIN policy.dim_date d ON d.date_key = f.policy_trans_dt_key                   |*|
+|*|		    WHERE YEAR(CAST(d.date AS DATE)) = 2005                                             |*|
+|*|		      AND MONTH(CAST(d.date AS DATE)) = 4                                               |*|
+|*|		    GROUP BY DAY(CAST(d.date AS DATE))                                                  |*|
+|*|		) a                                                                                     |*|
+|*|		INNER JOIN (                                                                            |*|
+|*|		    SELECT                                                                              |*|
+|*|		        SUM([paamount]) AS paamount,                                                    |*|
+|*|		        SUM([commisamt]) AS commisamt,                                                  |*|
+|*|		        SUM([nocommprem]) AS nocommprem,                                                |*|
+|*|		        DAY(CAST(transdate AS DATE)) AS transdate                                       |*|
+|*|		    FROM den_lhw_scu_001_policy_curated.policy.[mgtrans]                                |*|
+|*|		    WHERE YEAR(CAST(transdate AS DATE)) = 2005                                          |*|
+|*|		      AND MONTH(CAST(transdate AS DATE)) = 4                                            |*|
+|*|		    GROUP BY DAY(CAST(transdate AS DATE))                                               |*|
+|*|		) b ON a.transdate = b.transdate                                                        |*|
+|*|		ORDER BY a.transdate                                                                    |*|
+|*|---------------------------------------------------------------------------------------------|*|
+|*|		--TRANSACTION LEVEL                                                                     |*|
+|*|		--DPR                                                                                   |*|
+|*|		SELECT                                                                                  |*|
+|*|		        [paa_amt] AS paa_amt,                                                           |*|
+|*|		        [comm_amt] AS comm_amt,                                                         |*|
+|*|		        [non_comm_prem_amt] AS non_comm_prem_amt                                        |*|
+|*|		    FROM [policy].[fact_policy_transaction] f                                           |*|
+|*|		    LEFT JOIN policy.dim_date d ON d.date_key = f.policy_trans_dt_key                   |*|
+|*|		    WHERE YEAR(CAST(d.date AS DATE)) = 2005                                             |*|
+|*|		      AND MONTH(CAST(d.date AS DATE)) = 4                                               |*|
+|*|		      AND DAY(CAST(d.date AS DATE)) = 1                                                 |*|
+|*|		      AND ([paa_amt] != 0.00 OR [comm_amt] != 0.00 OR [non_comm_prem_amt] != 0.00)      |*|
+|*|		      ORDER BY 1,2,3                                                                    |*|
+|*|		--SQL                                                                                   |*|
+|*|		SELECT                                                                                  |*|
+|*|		        [paamount] AS paamount,                                                         |*|
+|*|		        [commisamt] AS commisamt,                                                       |*|
+|*|		        [nocommprem] AS nocommprem                                                      |*|
+|*|		    FROM den_lhw_scu_001_policy_curated.policy.[mgtrans]                                |*|
+|*|		    WHERE YEAR(CAST(transdate AS DATE)) = 2005                                          |*|
+|*|		      AND MONTH(CAST(transdate AS DATE)) = 4                                            |*|
+|*|		      AND DAY(CAST(transdate AS DATE)) = 1                                              |*|
+|*|		      AND ([paamount] != 0.00 OR [commisamt] != 0.00 OR [nocommprem] != 0.00)           |*|
+|*|		ORDER BY 1,2,3                                                                          |*|
+|*|-----------------------------------SQL-------------------------------------------------------|*|
+|*|=============================================================================================|*|
+|*|---------------------------------------------------------------------------------------------|*|
+
+Tasks 01-05-2026 - 01-09-2026
+1. 28836 - Renewal Business Usability Improvements | Dev
+		32899 - Dev - Code Changes for Renewal Business Usability Improvements
+2. 32296 - Create DP Measures in Power BI
+		32333 - Review and Research
+		32334 - Connect with Necessary People
+		32335 - Create Measures
+		
+Tasks 01-12-2026 - 01-16-2026 (01-12-2026 - 01-14-2026, PH-15th & PTO-16th)
+1. 32296 - Create DP Measures in Power BI
+		32333 - Review and Research
+		32334 - Connect with Necessary People
+		32335 - Create Measures
+
+Tasks 01-19-2026 - 01-23-2026
+1. 32296 - Create DP Measures in Power BI
+	32333 - Review and Research
+	32334 - Connect with Necessary People
+	32335 - Create Measures
+2. 33164 - PROD E2E Discussion Topics
+	33287 - WCLOCNAM Duplication Error
+	33165 - DIM_POLICY - autouwstatus ISNULL check
+	33733 - Drop Tables and Reload Data
+	33734 - Deploy to Higher Environments
+
+Tasks 01-26-2026 - 01-30-2026 (01-27-2026 - 01-30-2026, PH-26th) 
+1. 32978 - Digitally Decisioned | Development
+	33228 - Dev - Create Table Script Notebook for dim_digital_decision_status And modify dim_policy script
+	33229 - Dev - Add DQ Rules
+	33230 - Unit Testing
+2. 33164 - PROD E2E Discussion Topics
+	33734 - Deploy to Higher Environments
+
+Tasks 02-02-2026 - 02-06-2026
+1. 35634 - Renewal Business Usability Improvements | Dev | E2E Fixes
+	35649 - Renewal Business Usability Improvements | Dev | E2E Fixes | dim_policy_status For release/v1.1.1_policy-dp
+	35648 - Renewal Business Usability Improvements | Dev | E2E Fixes | dim_policy For release/v1.1.1_policy-dp
+	
+	35648 - Renewal Business Usability Improvements | Dev | E2E Fixes | dim_policy For release/v1.1.2_policy-dp
+	35649 - Renewal Business Usability Improvements | Dev | E2E Fixes | dim_policy_status For release/v1.1.2_policy-dp
+2. Release Policy DP Version 1.0 to PROD
+3. Release Policy DP Version 1.1.1 to QA
+
+Tasks 02-09-2026 - 02-13-2026
+1. 34890 - Establish CDC for WCLOCNAM
+	34896 - Dev - Enable CDC on WCLOCNAM
+2. 36240 - Renewal Business Usability Improvements | DEV (Part 2)
+	36241 - Renewal Business Usability Improvements | Dev (Part 2) | dim_policy
+	36242 -  Renewal Business Usability Improvements | Dev (Part 2) | fact_policy
+3. 36405 - Prod Deployment & Scheduling Daily Data Ingestion Pipeline
+
+Tasks 02-16-26 - 02-20-26
+1. 36405 - Prod Deployment & Scheduling Daily Data Ingestion Pipeline
+	36752 - Deployment release V1.1.2 to QA|UAT|PROD
+	36751 - Fix Prod Pipeline Execution/scheduling Data Issues
+	36613 - QA - Deployment v1.1.1 E2E Fixes
+	
+Tasks 02-23-26 - 02-27-26
+1. 36405 - Prod Deployment & Scheduling Daily Data Ingestion Pipeline
+	36752 - Deployment release V1.1.2 to QA|UAT|
+	36613 - QA - Deployment v1.1.1 E2E Fixes
+2. 32977 - Release Policy DP Version 1.1 to PROD
+	37473 - Change Load Strategy from merge to SCD type two for v1.1.1
+	37773 - Fix Amount Mismatch between Source MGTRANS and DPR fact_policy_transaction
+	
+Tasks 03-02-26 - 03-06-26	
+1. 31658 - Loopback Verification
+	37478 - Dev - Loopback Verification
+2. 38123 - Ensure that sensitive data is handled correctly
+	39882 - Remove "_pii" tables from PROD
+3. 37688 - WC Coverages & Risk Details | Identify tables & columns needed from the source - Part2
+	33223 - STTM - Add New Tables for WC
+	
+Tasks 03-09-26 - 03-13-26
+1. 31658 - Loopback Verification 
+	37478 - Dev - Loopback Verification
+2. 37688 - WC Coverages & Risk Details | Identify tables & columns needed from the source - Part2
+	33223 - STTM - Add New Tables for WC
+	33224 - Dev - Configure Tables to Ingest to Fabric
+	35976 - Ingest Data and Unit Testing
+3. 42982 - DQ Failure Notification
+	42983 - Create SQL, Notebook and Setup pipeline For DQ Failure Notification
+4. 38123 - Ensure that sensitive data is handled correctly
+	39882 - Remove "_pii" tables from PROD
+	
+Tasks 03-16-26 - 03-19-26
+1. 37688 - WC Coverages & Risk Details | Identify tables & columns needed from the source - Part2
+	33223 - STTM - Add New Tables for WC
+	33224 - Dev - Configure Tables to Ingest to Fabric
+	35976 - Ingest Data and Unit Testing
+2. 39267 - Release solution in PROD environment
+	44349 - Release v1.1.2-policy_dp in Prod
+3. Design / Enhance cross-domain product architecture
+	44350 - Create Architecture for WC DP
+	
+Tasks 03-23-26 - 03-27-26
+1. 36857 - MERGE code Testing with updated Library file
+2. 39267 - Release solution in PROD environment
+	44349 - Release v1.1.2-policy_dp in Prod
+3. 39430 - Design / Enhance cross-domain product architecture
+	44350 - Create Architecture for WC DP
+4. 39431 - Design / Enhance domain product architecture
+5. 39438 - Fill / Enhance DQ Rulebook
+	44012 - Determine appropriate / applicable columns to include for rules
+	44017 - Code / include new rules into DQ Rulebook
+	44018 - Call with engineer to discuss new rules
+6. 44800 - Policies that were worked on by UW are counting as Digitally Decisioned
+
+Tasks 03-30-26 - 03-31-26
+1. 39438 - Fill / Enhance DQ Rulebook
+	44012 - Determine appropriate / applicable columns to include for rules
+	44017 - Code / include new rules into DQ Rulebook
+	44018 - Call with engineer to discuss new rules
+	
+Tasks 04-01-2026 - 04-03-2026
+1. 39445 - WC DP v1.0 - DEV
+	39446 - Configure pipelines
+ 	39447 - Perform data load in Lower Environment
+	
+Tasks 04-06-2026 - 04-10-2026
+1. 39445 - WC DP v1.0 - DEV
+	39447 - Perform data load in Lower Environment
+	39450 - Functional & unit testing
+2. Workers' COMP DP V1.0 Promote to QA
+3. BUG Fix	
+	46342 - Bug | | Source table validation for Worker's COMP
+	46343 - Bug | | Source table validation for Worker's COMP
+4. 45930 - Deploy the Semantic Model / PowerBI to UAT
+5. Implement DQ rules Workers' COMP DP V1.0
+
+Tasks 04-13-2026 - 04-17-2026
+1. 39459 - Workers' COMP DP V1.0 Promote to UAT
+2. 45930 - Deploy the Semantic Model / PowerBI to UA
+3. 46584 - Bug | | STTM | | 'policy_key' incorrect maping in 'dim_policy_extension_wc'
+4. 46585 - Bug | | STTM | | 'policy_key' incorrect maping in 'dim_policy_extension_wc_carrier_placement'
+5. 46586 - Bug | | DPR Layer | | Found data difference in dim_policy_extension_wc table
+6. 39716 - DPE: Cancellation Reasons - Policy DP V1.3
+	39766 Policy DP V1.3 - ADOPT
+	39727 Policy DP V1.3 - Design
+	39741 Policy DP V1.3 - DEV
+	
+Tasks 04-20-2026 - 04-24-2026
+39727-Policy DP V1.3 - Design
+	39728-Design / Enhance domain product architecture
+		48340-Design & document data models in Ellie
+	39730-Fill / Enhance STTM
+		48347-Fill / Enhance STTM
+	39735-Fill / Enhance DQ Rulebook
+		48343-Fill / Enhance DQ Rulebook
+	39740-[Stage gate] | Conclude design and start delivery phase
+		48339-Conclude design and start delivery phase
+
+39741-Policy DP V1.3 - DEV
+	39742-Configure pipelines
+		48354-Configure yaml files for dim_cancellation_reasons and fact_transaction_detail
+	39743-Implement DQ rules
+		48355-Implement DQ rules for dim_cancellation_reasons
+	39744-Functional & unit testing
+		48356-Functional & unit testing
+	39745-[Stage gate] | Conclude Development and start QA
+		48416-Conclude Development and Start QA
+	
+Tasks 04-27-2026 - 05-01-2026
+1. 39742-Configure pipelines
+	48609 - Modify Create and Seed Table Notebook
+	48608 - Modify DQ Rule Processor Notebook
+2. 48686 - Implement UAT Findings work for WC DP
+	48773 - Modify YAMLs for WC DP Dimensions
+3. 47909 - DPE: Policy DP v1.3.1 - Minor Enhancements
+	47943 - Policy DP v1.3.1 - DEV
+
+Tasks 05-04-2026 - 05-08-2026
+1. 39727 - Policy DP V1.3 - Design
+	48340 - Design & document data models in Ellie
+2. 48686 - Implement UAT Findings work for WC DP
+	48773 - Modify YAMLs for WC DP Dimensions
+3. 46773 - Add Consumption-ready Tables for Carrier Placement Monitoring Report
+	46777 - [Design] Update STTM
+	46778 - [Dev] Configure YAML Files
+	46779 - [Dev] Deployments and Pipeline runs
+4. 49072 - Deployment to Higher Environments (DEV/QA/UAT/PREPRD)	
+	49073 - Deploy Semantic Model and Digital Decisioning Analytics V1.0 to DEV
+
+Tasks 05-11-2026 - 05-15-2026
+1. 46777 - [Design] Update STTM
+	48867 - [Design] Update STTM for Carrier Placement Monitoring Report
+2. 49072 - Deployment to Higher Environments (DEV/QA/UAT/PREPRD)IIS_PROSPECTHOLDINGARCHIVE/dbo_archive_question_responses/e6e4fdf5-e066-408d-a062-acd226a11940	
+	49073 - Deploy Semantic Model and Digital Decisioning Analytics V1.0 to PROD
+3. 48966 - Data mismatch found from source to target for wc_carrier_placement_snapshot Table
+		 - Investigate and Fix data mismatch found from source to target for wc_carrier_placement_snapshot Table
+4. 49636 - Load Issue with fact_policy_transaction_detail
+	49637 - Investigate and Fix Load Issue with fact_policy_transaction_detail
+5. 49638 - Investigate Issue with dim_policy fields (latest_policy_status_key & sub_point_of_origin_desc)
+	49639 - Investigate and Fix Issue with dim_policy fields (latest_policy_status_key & sub_point_of_origin_desc)
+
+Tasks 05-18-2026 - 05-22-2026
+1. 47909 - DPE: Policy DP v1.3.2 - Minor Enhancements
+	47944 - Policy DP v1.3.2 - DEV
+	47947 - Functional & unit testing
+	47945 - Implement DQ rules
+	49641 - Minor Dim Policy Enhancements
+2. 49072 - Deployment to Higher Environments (DEV/QA)
+3. 50266 - Bug | | Data mismatch between QA workspace
+4. 47925 - Define & Document E2E solution architecture
+5. 47926 - Design / Enhance domain product architecture
+6. 47927 - Design / Enhance cross-domain product architecture & dependencies
+7. 47928 - Design & document conceptual data model
+8. 47929 - Design & document logical data model
+9. 47930 - Design & document physical data model
+10. 47933 - Fill / Enhance DQ Rulebook
+11. 47932 - Fill / Enhance STTM
+12. 503545 - Bug | | Data not up to date in QA environment and configuration issue on Dev environment
+
+Tasks 05-25-2026 - 05-29-2026
+1. 47925 - Define & Document E2E solution architecture
+2. 47926 - Design / Enhance domain product architecture
+3. 47927 - Design / Enhance cross-domain product architecture & dependencies
+4. 47928 - Design & document conceptual data model
+5. 47929 - Design & document logical data model
+6. 47930 - Design & document physical data model
+7. 47933 - Fill / Enhance DQ Rulebook
+8. 47932 - Fill / Enhance STTM
+9. 503545 - Bug | | Data not up to date in QA environment and configuration issue on Dev environment
+10. 51106 - Bug | | Inconsistent values for rewrite_reissue_ind in dim_policy
+11. 51107 - Blank should be null for sub_point_of_origin_desc in dim_policy for renewals
+12. 41898 - Commercial Auto - Initiatives
+13. 48107 - Comm. Auto DP_v1.0 - Vehicle Data
+		48125 - Define & Document data refresh and retention SLAs
+		48126 - Define & Document E2E solution architecture		
+		48129 - Design & document conceptual data model
+		48130 - Design & document logical data model
+		48131 - Design & document physical data model
+
+Tasks 06-01-2026 - 06-05-2026
+1. 48107 - Comm. Auto DP_v1.0 - Vehicle Data
+	48125 - Define & Document data refresh and retention SLAs
+	48126 - Define & Document E2E solution architecture
+	48127 - Design / Enhance domain product architecture
+	48128 - Design / Enhance cross-domain product architecture & dependencies
+	48129 - Design & document conceptual data model
+	48130 - Design & document logical data model
+	48131 - Design & document physical data model
+
+Tasks 06-08-2026 - 06-12-2026
+1. 48107 - Comm. Auto DP_v1.0 - Vehicle Data
+	48132 - Fill / Enhance STTM
+	48133 - Fill / Enhance DQ Rulebook
+	48125 - Define & Document data refresh and retention SLAs
+	48127 - Design / Enhance domain product architecture
+	48128 - Design / Enhance cross-domain product architecture & dependencies
+
+
+Tasks 06-15-2026 - 06-19-2026
+1. 
+
+
