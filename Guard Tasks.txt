@@ -524,6 +524,16 @@ Tasks 06-08-2026 - 06-12-2026
 
 
 Tasks 06-15-2026 - 06-19-2026
-1. 
+1. 48107 - Comm. Auto DP_v1.0 - Vehicle Data
+	51930 - CAuto DP - Implement
+		51931 - Configure lakehouse
+		51932 - Configure SQL endpoint
+		51933 - Implement or enhance pipelines
+		51939 - Execute pipeline testing in DEV
+		51938 - Execute SQL endpoint testing in DEV
+		51934 - Implement or enhance data quality rules
+		51940 - Execute DQ rule testing in DEV
+		51935 - Implement or enhance source loop-back verification
+		51943 - Promote to Fabric QA environment
 
 
