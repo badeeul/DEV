@@ -1,0 +1,5 @@
+{
+    "query": "SELECT code,state,stbegin,stexpir,poanniv,per1low,per1high,per2low,per2high,takeout,takeonumyr,st_tin,minprem,ismodifiers,isexposures,stytdprem,stfrshstrt,stpoassess,stfee3,stfee4,stfee5,stfee6,triacode,triaamt1,triaamt2,hazard1,hazard2,mcprovider,stfee7,riskid,priorrateeffdate,manualpremium,subjectpremium,modifiedpremium,standardpremium,estimatedpremium,estimatedcost FROM dbo.archive_uwstates ",
+    "sourceWatermarkIdentifier": "",
+    "watermarkValue": "1983-01-01T00:00:00Z"
+}

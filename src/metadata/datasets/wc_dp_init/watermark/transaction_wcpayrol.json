@@ -1,0 +1,5 @@
+{
+    "query": "SELECT transaction_wcpayrol_id,code,trancnt,recordtype,primeseq,state,effdate,classcode,rateeffdate,seqcode,territory,exmod,minprem,exposure,premium,rate,volcomp,hazard,classuffix,diffprem,diffrate,before,after FROM dbo.transaction_wcpayrol ",
+    "sourceWatermarkIdentifier": "",
+    "watermarkValue": "1983-01-01T00:00:00Z"
+}

@@ -1,5 +1,5 @@
 {
-    "datasetName": "WCPAYROL",
+    "datasetName": "wcpayrol",
     "enable": true,
     "datasetTypeName": "database",
     "databaseName": "GIGINSDATA",
@@ -32,15 +32,15 @@
         },
         "columnList": ["*"],
         "primaryKeyList": [
-            "CLASSCODE",
-            "CODE",
-            "EFFDATE",
-            "PRIMESEQ",
-            "rateEFFDATE",
-            "SEQCODE",
-            "STATE",
-            "TERRITORY",
-            "VOLCOMP"
+            "classcode",
+            "code",
+            "effdate",
+            "primeseq",
+            "rateeffdate",
+            "seqcode",
+            "state",
+            "territory",
+            "volcomp"
         ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",

@@ -1,0 +1,5 @@
+{
+    "query": "SELECT policydatapointsid,code,itemid,datapointtype,extendeddatapointtype,datapoint,datapointsource,datapointvals,active,deletedon,deletedby,enteredon,enteredby,enteredon as dl_watermark FROM dbo.policydatapoints WHERE enteredon > CAST('2026-06-21 23:25:20.293000' AS datetime2)",
+    "sourceWatermarkIdentifier": "enteredon",
+    "watermarkValue": "2026-06-21 23:25:20.293000"
+}

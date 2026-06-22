@@ -1,0 +1,5 @@
+{
+    "query": "SELECT system_id,keyident,question_id,response,correctresponse,de_class_rules_id,enteredon,enteredby,updateon,updateby,isnull(updateon, enteredon) as dl_watermark FROM dbo.question_responses WHERE isnull(updateon, enteredon) > CAST('2026-06-21 23:09:58.673000' AS datetime2)",
+    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+    "watermarkValue": "2026-06-21 23:09:58.673000"
+}

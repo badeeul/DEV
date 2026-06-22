@@ -46,7 +46,7 @@
             "estimatedpremium",
             "estimatedcost"
         ],
-        "ingestType": "cdc",
+        "ingestType": "full",
         "isDynamicQuery": true
     },
     "rawProperties": {
@@ -75,6 +75,6 @@
         ],
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }

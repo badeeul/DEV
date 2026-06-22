@@ -1,0 +1,5 @@
+{
+    "query": "SELECT system_id,cat_id,sortorder,question_id,effective,questiontype,range,sqlloadvalue,sqlsubmitverify,whensqltext,whenquestion,whencondition,whenresponse,allowblank,alertcondition,alertvalue,questiontext,indent,barbefore,keyfield,acord_form,acord_field,de_category,de_question_categoryid,clientid FROM dbo.question_questions ",
+    "sourceWatermarkIdentifier": "",
+    "watermarkValue": "1983-01-01T00:00:00Z"
+}

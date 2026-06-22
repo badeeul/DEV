@@ -1,8 +1,8 @@
 {
-    "datasetName": "archive_wcpayrol",
+    "datasetName": "wcinfo",
     "enable": true,
     "datasetTypeName": "database",
-    "databaseName": "PROSPECTHOLDINGARCHIVE",
+    "databaseName": "GIGINSDATA",
     "datasetSchema": "dbo",
     "skipProductLoad": true,
     "sourceSystemProperties": {
@@ -16,7 +16,7 @@
     "rawProperties": {
         "lakehouseName": "den_lhw_dpr_001_raw_files",
         "fileType": "parquet",
-        "directoryName": "IIS_PROSPECTHOLDINGARCHIVE"
+        "directoryName": "IIS_GIGINSDATA"
     },
     "curatedProperties": {
         "lakehouseName": "den_lhw_scu_001_policy_curated",
@@ -28,22 +28,17 @@
             "multiline": true,
             "delimiter": ",",
             "escape": "\"",
-            "timestampFormat": "dd/MM/yyyy"
+            "timestampFormat": "dd/mm/yyyy"
         },
-        "columnList": ["*"],
+        "columnList": [
+            "*"
+        ],
         "primaryKeyList": [
-            "CLASSCODE",
-            "CODE",
-            "EFFDATE",
-            "PRIMESEQ",
-            "rateEFFDATE",
-            "SEQCODE",
-            "STATE",
-            "TERRITORY",
-            "VOLCOMP"
-        ], 
+            "code"
+        ],
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
         "targetLoadType": "overwrite"
     }
 }
+

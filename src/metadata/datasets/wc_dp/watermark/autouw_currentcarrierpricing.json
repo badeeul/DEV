@@ -1,0 +1,5 @@
+{
+    "query": "SELECT autouw_currentcarrierpricingid,mgacode,carrier,ratetype,poytdprem,stfees,manualpremium,govclassstate,govstate,ascselectionremoved,ascselectionremovedreason,enteredby,enteredon,enteredon as dl_watermark FROM dbo.autouw_currentcarrierpricing WHERE enteredon > CAST('2026-06-21 23:10:03.143000' AS datetime2)",
+    "sourceWatermarkIdentifier": "enteredon",
+    "watermarkValue": "2026-06-21 23:10:03.143000"
+}

@@ -1,5 +1,5 @@
 {
-    "datasetName": "archive_UWBUILDINGS",
+    "datasetName": "archive_uwbuildings",
     "enable": true,
     "datasetTypeName": "database",
     "databaseName": "PROSPECTHOLDINGARCHIVE",
@@ -10,8 +10,7 @@
         "includeSpecificColumns": [
             "*"
         ],
-        "ingestType": "watermark",
-        "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+        "ingestType": "full",
         "isDynamicQuery": true
     },
     "rawProperties": {
@@ -33,10 +32,10 @@
         },
         "columnList": ["*"],
         "primaryKeyList": [
-            "buildingID"
+            "buildingid"
         ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }

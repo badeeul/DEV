@@ -1,5 +1,5 @@
 {
-    "datasetName": "WCLOCNAM",
+    "datasetName": "wclocnam",
     "enable": true,
     "datasetTypeName": "database",
     "databaseName": "GIGINSDATA",
@@ -32,9 +32,9 @@
         },
         "columnList": ["*"],
         "primaryKeyList": [
-            "CODE",
-            "LOCTYPENUM",
-            "USELOCNUM"
+            "code",
+            "loctypenum",
+            "uselocnum"
         ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
