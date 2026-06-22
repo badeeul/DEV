@@ -1,0 +1,5 @@
+{
+    "query": "SELECT * FROM dbo.naics ",
+    "sourceWatermarkIdentifier": "",
+    "watermarkValue": "1983-01-01T00:00:00Z"
+}

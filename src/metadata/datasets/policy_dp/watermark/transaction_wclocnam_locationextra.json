@@ -1,0 +1,5 @@
+{
+    "query": "SELECT code,loctypenum,trancnt,before,after,annualsalesorrevenue,enteredon,enteredby,updateon,updateby,isnull(updateon, enteredon) as dl_watermark FROM dbo.transaction_wclocnam_locationextra WHERE isnull(updateon, enteredon) > CAST('2026-06-21 23:07:14.500000' AS datetime2)",
+    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+    "watermarkValue": "2026-06-21 23:07:14.500000"
+}

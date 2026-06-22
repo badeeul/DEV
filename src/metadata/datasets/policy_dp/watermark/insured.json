@@ -1,0 +1,5 @@
+{
+    "query": "SELECT *,isnull(updateon, enteredon) as dl_watermark FROM dbo.insured WHERE isnull(updateon, enteredon) > CAST('2026-06-21 23:41:41.050000' AS datetime2)",
+    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+    "watermarkValue": "2026-06-21 23:41:41.050000"
+}

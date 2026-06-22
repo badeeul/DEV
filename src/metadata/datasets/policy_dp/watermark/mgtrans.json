@@ -1,0 +1,5 @@
+{
+    "query": "SELECT *,enteredon as dl_watermark FROM dbo.mgtrans WHERE enteredon > CAST('2026-06-21 22:27:59.550000' AS datetime2)",
+    "sourceWatermarkIdentifier": "enteredon",
+    "watermarkValue": "2026-06-21 22:27:59.550000"
+}

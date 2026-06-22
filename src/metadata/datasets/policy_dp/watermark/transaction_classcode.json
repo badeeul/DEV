@@ -1,0 +1,5 @@
+{
+    "query": "SELECT code,transaction_classcodeid,trancnt,before,after,classid,transaction_source_id,renewal_source_id,bpclass_id,sic,naics,state,revision,loctypenum,occupancy,description,class,classsuffix,basis,ratetype,ratemodifier,ratemodifier2,industry,basetiv,ezrate_industry,territory,startdate,enddate,lob,premium,classgroup,exposure,deletedon,enteredon,enteredby,updateon,updateby,descripofoperations,terror_territory,officermembercount,partnercount,payrollcorp,isnull(updateon, enteredon) as dl_watermark FROM dbo.transaction_classcode WHERE isnull(updateon, enteredon) > CAST('2026-06-19 17:47:43.440000' AS datetime2)",
+    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+    "watermarkValue": "2026-06-19 17:47:43.440000"
+}

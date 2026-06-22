@@ -10,7 +10,7 @@
         "includeSpecificColumns": [
             "*"
         ],
-        "ingestType": "full",
+        "ingestType": "cdc",
         "isDynamicQuery": true
     },
     "rawProperties": {
@@ -40,7 +40,7 @@
         ],
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "overwrite"
+        "targetLoadType": "merge"
     }
 }
 

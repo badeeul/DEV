@@ -1,0 +1,5 @@
+{
+    "query": "SELECT *,updateon as dl_watermark FROM dbo.polact WHERE updateon > CAST('2026-06-21 23:22:25.400000' AS datetime2)",
+    "sourceWatermarkIdentifier": "updateon",
+    "watermarkValue": "2026-06-21 23:22:25.400000"
+}

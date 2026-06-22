@@ -1,0 +1,5 @@
+{
+    "query": "SELECT *,isnull(updateon, enteredon) as dl_watermark FROM dbo.archive_wclocnam WHERE isnull(updateon, enteredon) > CAST('1983-01-01T00:00:00Z' AS datetime2)",
+    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+    "watermarkValue": "1983-01-01T00:00:00Z"
+}

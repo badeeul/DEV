@@ -14,12 +14,10 @@
             "before",
             "after",
             "annualsalesorrevenue",
-            "officercount",
-            "officerpayroll",
-            "updateon",
-            "updateby",
             "enteredon",
-            "enteredby"
+            "enteredby",
+            "updateon",
+            "updateby"
         ],
         "ingestType": "watermark",
         "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
@@ -47,9 +45,8 @@
         ],
         "primaryKeyList": [
             "code",
-            "locTypeNum",
-            "tranCnt",
-            "before",
+            "loctypenum",
+            "trancnt",
             "after"
         ],
         "duplicateCheckEnabled": false,
