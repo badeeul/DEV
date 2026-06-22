@@ -1,5 +1,0 @@
-{
-    "query": "SELECT carrier,state,primeseq,seqcode,multi,effdate,discontinued,classcode,extended,promptfor,description,atleast,baseprem,rate,formula,minprem,maxprem,updateon,updateby,enteredon,enteredby,isnull(updateon, enteredon) as dl_watermark FROM dbo.wcrating WHERE isnull(updateon, enteredon) > CAST('2026-06-11 19:31:51.410000' AS datetime2)",
-    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
-    "watermarkValue": "2026-06-11 19:31:51.410000"
-}

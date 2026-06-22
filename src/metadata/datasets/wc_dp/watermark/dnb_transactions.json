@@ -1,5 +1,0 @@
-{
-    "query": "SELECT id,duns,creditscore,scoreage,rawdataxml,enteredon,enteredby,updateon,updateby,isnull(updateon, enteredon) as dl_watermark FROM dbo.dnb_transactions WHERE isnull(updateon, enteredon) > CAST('2026-06-21 23:06:48.437000' AS datetime2)",
-    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
-    "watermarkValue": "2026-06-21 23:06:48.437000"
-}

@@ -1,5 +1,0 @@
-{
-    "query": "SELECT id,policynumber,lookupaddress,confidencescore,duns,cs_id,status,enteredon,enteredby,updateon,updateby,isnull(updateon, enteredon) as dl_watermark FROM dbo.dnb_policylookups WHERE isnull(updateon, enteredon) > CAST('2026-06-21 23:09:57.967000' AS datetime2)",
-    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
-    "watermarkValue": "2026-06-21 23:09:57.967000"
-}

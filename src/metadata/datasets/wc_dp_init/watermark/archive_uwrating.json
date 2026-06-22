@@ -1,5 +1,0 @@
-{
-    "query": "SELECT code,state,locnum,term,primeseq,seqcode,class,volcomp,classcode,classuffix,territory,rate,exposure,premium,additionalbenefits,rateeffdate,manualprorate,prorate,oexposure,additionaltext,additionaldate1,additionaldate2,id FROM dbo.archive_uwrating ",
-    "sourceWatermarkIdentifier": "",
-    "watermarkValue": "1983-01-01T00:00:00Z"
-}

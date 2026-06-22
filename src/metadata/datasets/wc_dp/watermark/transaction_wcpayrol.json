@@ -1,5 +1,0 @@
-{
-    "query": "WITH LatestChanges AS (\n                SELECT transaction_wcpayrol_id,code,trancnt,recordtype,primeseq,state,effdate,classcode,rateeffdate,seqcode,territory,exmod,minprem,exposure,premium,rate,volcomp,hazard,classuffix,diffprem,diffrate,before,after,__$operation,__$start_lsn,__$seqval, \n                ROW_NUMBER() OVER (PARTITION BY transaction_wcpayrol_id,Code,Trancnt,Primeseq,State,Effdate,ClassCode,RateEffDate,SeqCode,Territory,MinPrem,Exposure,Premium,Rate,Volcomp,Classuffix,DiffPrem,DiffRate,before,after ORDER BY [__$seqval] DESC) AS rn \n                FROM [cdc].[dbo_transaction_wcpayrol_CT] \n                WHERE [__$operation] IN (1, 2, 4) AND __$start_lsn > 0x0\n            )\n            SELECT transaction_wcpayrol_id,code,trancnt,recordtype,primeseq,state,effdate,classcode,rateeffdate,seqcode,territory,exmod,minprem,exposure,premium,rate,volcomp,hazard,classuffix,diffprem,diffrate,before,after,__$operation,__$start_lsn,__$seqval FROM LatestChanges WHERE rn = 1",
-    "sourceWatermarkIdentifier": "__$start_lsn",
-    "watermarkValue": "0x0"
-}

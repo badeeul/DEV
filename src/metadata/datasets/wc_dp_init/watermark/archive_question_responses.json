@@ -1,5 +1,0 @@
-{
-    "query": "SELECT system_id,keyident,question_id,response,correctresponse,de_class_rules_id,enteredon,enteredby,updateon,updateby FROM dbo.archive_question_responses ",
-    "sourceWatermarkIdentifier": "",
-    "watermarkValue": "1983-01-01T00:00:00Z"
-}

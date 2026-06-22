@@ -1,5 +1,0 @@
-{
-    "query": "SELECT * FROM dbo.wcclass ",
-    "sourceWatermarkIdentifier": "",
-    "watermarkValue": "1983-01-01T00:00:00Z"
-}

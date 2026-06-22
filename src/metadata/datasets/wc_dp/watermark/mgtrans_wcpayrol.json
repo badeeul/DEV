@@ -1,5 +1,0 @@
-{
-    "query": "SELECT id,transno,p_seq,premium,fees,amount,enteredon,enteredby,updateon,udpateby,isnull(updateon, enteredon) as dl_watermark FROM dbo.mgtrans_wcpayrol WHERE isnull(updateon, enteredon) > CAST('2026-06-21 22:27:59.677000' AS datetime2)",
-    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
-    "watermarkValue": "2026-06-21 22:27:59.677000"
-}

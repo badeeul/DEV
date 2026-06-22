@@ -1,5 +1,0 @@
-{
-    "query": "WITH LatestChanges AS (\n                SELECT *, \n                ROW_NUMBER() OVER (PARTITION BY code,loctypenum,uselocnum ORDER BY [__$seqval] DESC) AS rn \n                FROM [cdc].[dbo_wclocnam_CT] \n                WHERE [__$operation] IN (1, 2, 4) AND __$start_lsn > 0x0\n            )\n            SELECT * FROM LatestChanges WHERE rn = 1",
-    "sourceWatermarkIdentifier": "__$start_lsn",
-    "watermarkValue": "0x0"
-}

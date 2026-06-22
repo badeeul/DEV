@@ -1,5 +1,0 @@
-{
-    "query": "SELECT autouw_proposalid,mgacode,source,proposalnumber,totalemployeepayroll,totalofficerownerpayroll,govstate,govclass,reruncarriers,enteredby,enteredon,updateby,updateon,autouweligible,pobegin,initflags19,pilotprogram,isnull(updateon, enteredon) as dl_watermark FROM dbo.autouw_proposals WHERE isnull(updateon, enteredon) > CAST('2026-06-21 23:10:04.647000' AS datetime2)",
-    "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
-    "watermarkValue": "2026-06-21 23:10:04.647000"
-}
