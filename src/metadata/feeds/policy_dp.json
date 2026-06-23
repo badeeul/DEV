@@ -15,23 +15,23 @@
                 },
                 {
                     "fileName": "archive_billings",
-                    "sourceConfigFolderName": "policy_dp_init"
+                    "sourceConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "archive_insured",
-                    "sourceConfigFolderName": "policy_dp_init"
+                    "sourceConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "archive_uwbuildings",
-                    "sourceConfigFolderName": "policy_dp_init"
+                    "sourceConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "archive_wclocnam",
-                    "sourceConfigFolderName": "policy_dp_init"
+                    "sourceConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "archive_wcpayrol",
-                    "sourceConfigFolderName": "policy_dp_init"
+                    "sourceConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "autouw_results",
