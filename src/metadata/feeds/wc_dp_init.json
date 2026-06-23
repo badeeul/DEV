@@ -67,7 +67,7 @@
                 },
                 {
                     "fileName": "uwstates",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "wcautopricing",
