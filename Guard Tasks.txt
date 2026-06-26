@@ -567,4 +567,5 @@ Tasks 06-22-2026 - 06-26-2026
 		51695 - Implement or enhance semantic model
 		51689 - Implement or enhance source loop-back verification
 		51697 - Promote to Fabric QA environment
-
+Child
+55696 - Update PREPRD with Platform Latest Release
