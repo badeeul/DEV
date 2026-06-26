@@ -536,4 +536,29 @@ Tasks 06-15-2026 - 06-19-2026
 		51935 - Implement or enhance source loop-back verification
 		51943 - Promote to Fabric QA environment
 
+Tasks 06-22-2026 - 06-26-2026
+1. 51650 - Policy DP V1.4 - Design
+	47971 - Design DPE: Policy DP V1.4 - In-Force
+		51660 - Create or update conceptual data model
+		51659 - Create or update cross-domain product architecture
+		51652 - Create or update Data Product template
+		51662 - Create or update logical data model
+		51669 - Create or update physical data model
+		51671 - Create or update source-to-target-mapping
+		51651 - Define & document end-to-end solution architecture
+		51656 - Define & document refresh and retention SLAs
+2. 51684 - Policy DP V1.4 - Implement
+		51685 - Configure lakehouse
+		51686 - Configure SQL endpoint
+		51694 - Execute DQ rule testing in DEV
+		51691 - Execute lakehouse testing in DEV
+		51693 - Execute pipeline testing in DEV
+		51696 - Execute semantic model testing in DEV
+		51692 - Execute SQL endpoint testing in DEV
+		51688 - Implement or enhance data quality rules
+		51690 - Implement or enhance data quality verification email
+		51687 - Implement or enhance pipelines
+		51695 - Implement or enhance semantic model
+		51689 - Implement or enhance source loop-back verification
+		51697 - Promote to Fabric QA environment
 
