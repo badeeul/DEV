@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product # keep
   schema: policy # keep
   table: dim_policy # target table
-  load_strategy: merge # scd type
+  load_strategy: overwrite # scd type
   key_columns: # is merge key
     - policy_num_bus_key
   unknown_record: True # keep
@@ -186,6 +186,63 @@ query:
         FROM
           combine c
           JOIN insured i ON LOWER(TRIM(c.nextpolicy)) = LOWER(TRIM(i.code))
+      )
+      , policy_dates AS (
+        SELECT
+          ins.code,
+          ins.pobegin AS policy_effec_start_dt,
+          ins.poexpir AS policy_effec_end_dt,
+          ins.pobegin AS policy_coverage_start_dt,
+          CASE 
+            WHEN LOWER(TRIM(ins.stat5)) = 'c' THEN ins.pocancel 
+            ELSE ins.poexpir 
+          END AS policy_coverage_end_dt,
+          CASE 
+            WHEN LOWER(TRIM(ins.stat5)) = 'c' THEN ins.pocancel 
+            ELSE NULL 
+          END AS policy_cancel_dt,
+          CASE 
+            WHEN LOWER(TRIM(ins.stat5)) = 'c' THEN ins.trcancel 
+            ELSE NULL 
+          END AS policy_cancel_trans_dt,
+          ins.poaudit AS policy_audit_dt,
+          ins.enteredon AS policy_sub_dt,
+          ins.poissue AS policy_issue_dt
+        FROM
+          insured ins
+        WHERE
+          LOWER(TRIM(ins.code)) = LOWER(TRIM(ins.basemgacode))
+          AND LOWER(TRIM(ins.agency)) <> 'pafake10'
+      )
+      , policy_inforce_dates AS (
+        SELECT
+          pd.code,
+          (
+            CASE 
+              WHEN CAST(pd.policy_effec_start_dt AS DATE) > CAST(pd.policy_issue_dt AS DATE)
+              THEN CAST(pd.policy_effec_start_dt AS DATE)
+              ELSE CAST(pd.policy_issue_dt AS DATE)
+            END
+          ) AS policy_inforce_start_date,
+          (
+            CASE 
+              WHEN CAST(pd.policy_effec_end_dt AS DATE) <> CAST(pd.policy_coverage_end_dt AS DATE)
+              THEN (
+                CASE 
+                  WHEN CAST(pd.policy_cancel_dt AS DATE) > CAST(pd.policy_cancel_trans_dt AS DATE)
+                  THEN CAST(pd.policy_cancel_dt AS DATE)
+                  WHEN CAST(pd.policy_cancel_trans_dt AS DATE) < CAST(pd.policy_effec_end_dt AS DATE)
+                  THEN CAST(pd.policy_cancel_trans_dt AS DATE)
+                  ELSE CAST(pd.policy_effec_end_dt AS DATE)
+                END
+              )
+              ELSE CAST(pd.policy_effec_end_dt AS DATE)
+            END
+          ) AS policy_inforce_end_date
+        FROM
+          policy_dates pd
+        WHERE
+          pd.policy_issue_dt IS NOT NULL
       )
       , policy_status_mapping AS (
         SELECT
@@ -405,24 +462,25 @@ query:
           ELSE 'Renewal'
         END AS policy_bus_type,
         w.govstate AS gov_state,
-        CAST(i.pobegin AS DATE) AS policy_effec_start_dt,
-        CAST(i.poexpir AS DATE) AS policy_effec_end_dt,
-        CAST(i.pobegin AS DATE) AS policy_coverage_start_dt,
-        CASE
-          WHEN LOWER(TRIM(i.stat5)) = 'c' THEN CAST(i.pocancel AS DATE)
-          ELSE CAST(i.poexpir AS DATE)
-        END AS policy_coverage_end_dt,
-        CASE
-          WHEN LOWER(TRIM(i.stat5)) = 'c' THEN CAST(i.pocancel AS DATE)
-          ELSE NULL
-        END AS policy_cancel_dt,
-        CASE
-          WHEN LOWER(TRIM(i.stat5)) = 'c' THEN CAST(i.trcancel AS DATE)
-          ELSE NULL
-        END AS policy_cancel_trans_dt,
-        CAST(i.poaudit AS DATE) AS policy_audit_dt,
-        CAST(i.enteredon AS DATE) AS policy_sub_dt,
-        CAST(i.poissue AS DATE) AS policy_issue_dt,
+        CAST(pds.policy_effec_start_dt AS DATE) AS policy_effec_start_dt,
+        CAST(pds.policy_effec_end_dt AS DATE) AS policy_effec_end_dt,
+        CAST(pds.policy_coverage_start_dt AS DATE) AS policy_coverage_start_dt,
+        CAST(pds.policy_coverage_end_dt AS DATE) AS policy_coverage_end_dt,
+        CAST(pds.policy_cancel_dt AS DATE) AS policy_cancel_dt,
+        CAST(pds.policy_cancel_trans_dt AS DATE) AS policy_cancel_trans_dt,
+        CAST(pds.policy_audit_dt AS DATE) AS policy_audit_dt,
+        CAST(pds.policy_sub_dt AS DATE) AS policy_sub_dt,
+        CAST(pds.policy_issue_dt AS DATE) AS policy_issue_dt,
+        pid.policy_inforce_start_date,
+        pid.policy_inforce_end_date,
+        (
+          CASE 
+            WHEN pid.policy_inforce_start_date <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE) 
+              AND pid.policy_inforce_end_date > CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE) 
+            THEN 'Y' 
+            ELSE 'N' 
+          END
+        ) AS current_inforce_policy_ind,
         CASE
           WHEN LOWER(TRIM(i.offerren)) = 'y' THEN 1
           ELSE 0
@@ -534,6 +592,8 @@ query:
         ) mg ON LOWER(TRIM(mg.code)) = LOWER(TRIM(i.code))
           LEFT OUTER JOIN submissionpointoforigin spo ON LOWER(TRIM(i.code)) = LOWER(TRIM(spo.code))
           LEFT OUTER JOIN (select distinct code FROM mgnotrans WHERE typeid = 39) mg2 ON LOWER(TRIM(i.code)) = LOWER(TRIM(mg2.code))
+        LEFT OUTER JOIN policy_dates pds ON LOWER(TRIM(i.code)) = LOWER(TRIM(pds.code))
+        LEFT OUTER JOIN policy_inforce_dates pid ON LOWER(TRIM(i.code)) = LOWER(TRIM(pid.code))
         LEFT OUTER JOIN insured p ON LOWER(TRIM(p.code)) = LOWER(TRIM(i.renewalofcode))
         LEFT JOIN (
           SELECT DISTINCT

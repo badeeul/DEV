@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: wc
   table: dim_policy_extension_wc_carrier_placement
-  load_strategy: merge
+  load_strategy: overwrite
   key_columns:
     - policy_num_bus_key
   unknown_record: False
@@ -13,25 +13,25 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: policydatapoints
-    incremental: True
+    incremental: False
 
   - name: insured
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: True
+    incremental: False
 
   - name: wcinfo
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: wcinfo
-    incremental: True
+    incremental: False
 
   - name: uwrating
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: uwrating
-    incremental: True
+    incremental: False
 
   - name: archive_uwrating
     lakehouse: den_lhw_scu_001_policy_curated
@@ -43,7 +43,7 @@ source:
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_policy
-    incremental: True
+    incremental: False
 
 query:
   - name: datapointvals_filtered
