@@ -559,13 +559,20 @@ Tasks 06-22-2026 - 06-26-2026
 		51692 - Execute SQL endpoint testing in DEV
 		51693 - Execute pipeline testing in DEV
 		51694 - Execute DQ rule testing in DEV
-		51696 - Execute semantic model testing in DEV
-		
-		51688 - Implement or enhance data quality rules
-		51690 - Implement or enhance data quality verification email
-		
-		51695 - Implement or enhance semantic model
-		51689 - Implement or enhance source loop-back verification
-		51697 - Promote to Fabric QA environment
-Child
-55696 - Update PREPRD with Platform Latest Release
+		51696 - Execute semantic model testing in DEV		
+
+
+Tasks 06-29-2026 - 06-30-2026
+49347 - Update Platform to Latest Release
+	55696 - Update PREPRD with Platform Latest Release
+51684 - Policy DP V1.4 - Implement
+	51697 - Promote to Fabric QA environment
+
+
+Tasks 07-01-2026 - 07-03-2026
+51684 - Policy DP V1.4 - Implement
+	51688 - Implement or enhance data quality rules
+	51690 - Implement or enhance data quality verification email		
+	51695 - Implement or enhance semantic model
+	51689 - Implement or enhance source loop-back verification
+	
