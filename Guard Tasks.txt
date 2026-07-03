@@ -571,9 +571,18 @@ Tasks 06-29-2026 - 06-30-2026
 
 Tasks 07-01-2026 - 07-03-2026
 51684 - Policy DP V1.4 - Implement
+	51671 - Create or update source-to-target-mapping
+
+53026 - Admin Work - DnA2026-13
 	55963 - Bug Testing 49530 - P&P - CDC Issue
 	55964 - End To End Testing for spark library - spark_engine-0.1.1-py3-none-any.whl
-	51671 - Create or update source-to-target-mapping
+55851 - Bug || Data mismatch from source and target table for dim_policy
+55852 - Bug || Data mismatch from source and target table for fact_policy
+55865 - Bug || Data mismatch from source and target for dim_policy table
+55866 - Bug || DQ Rule failing for dim_policy table for column 'current_inforce_policy_ind'
+
+Tasks 07-06-2026 - 07-10-2026
+51684 - Policy DP V1.4 - Implement
 	51688 - Implement or enhance data quality rules
 	51689 - Implement or enhance source loop-back verification
 	
