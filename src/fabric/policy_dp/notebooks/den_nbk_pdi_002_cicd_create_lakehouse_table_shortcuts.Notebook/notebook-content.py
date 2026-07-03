@@ -27,10 +27,16 @@ def get_workspace_info(lakehouse_name):
 
 # CELL ********************
 
-lakehouse_name = 'den_lhw_dpr_001_policy_product'
+# Target lakehouse where shortcuts will be created
+target_lakehouse_name = 'den_lhw_dpr_001_cauto_product'
 
-TARGET_WORKSPACE_ID = get_workspace_info(lakehouse_name)['WorkspaceID']
-TARGET_ITEM_ID = get_workspace_info(lakehouse_name)['LakehouseID']
+TARGET_WORKSPACE_ID = get_workspace_info(target_lakehouse_name)['WorkspaceID']
+TARGET_ITEM_ID = get_workspace_info(target_lakehouse_name)['LakehouseID']
+
+# Source lakehouse where actual tables exist
+source_lakehouse_name = 'den_lhw_dpr_001_policy_product'
+SOURCE_WORKSPACE_ID = get_workspace_info(source_lakehouse_name)['WorkspaceID']
+SOURCE_ITEM_ID = get_workspace_info(source_lakehouse_name)['LakehouseID']
 
 base_url = f"https://api.fabric.microsoft.com/v1/workspaces/{TARGET_WORKSPACE_ID}/items/{TARGET_ITEM_ID}/shortcuts"
 
@@ -263,8 +269,8 @@ failed = []
 
 for shortcut in shortcuts:
 
-    shortcut["target"]["oneLake"]["itemId"] = TARGET_ITEM_ID
-    shortcut["target"]["oneLake"]["workspaceId"] = TARGET_WORKSPACE_ID
+    shortcut["target"]["oneLake"]["itemId"] = SOURCE_ITEM_ID
+    shortcut["target"]["oneLake"]["workspaceId"] = SOURCE_WORKSPACE_ID
 
     name = shortcut["name"]
     if name in existing_shortcuts:

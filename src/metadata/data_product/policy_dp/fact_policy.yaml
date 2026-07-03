@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: policy
   table: fact_policy
-  load_strategy: merge
+  load_strategy: overwrite
   key_columns:
     - policy_key
   unknown_record: false
@@ -13,12 +13,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: True
+    incremental: False
   - name: wcpayrol
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: wcpayrol
-    incremental: True
+    incremental: False
   - name: wcinfo
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
@@ -28,7 +28,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: uwbuildings
-    incremental: True
+    incremental: False
   - name: mgextra
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
@@ -43,17 +43,17 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: archive_uwbuildings
-    incremental: True
+    incremental: False
   - name: mgtrans
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: mgtrans
-    incremental: True
+    incremental: False
   - name: pc_products
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: pc_products
-    incremental: True
+    incremental: False
   - name: dim_policy
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
@@ -113,12 +113,12 @@ source:
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_policy_status
-    incremental: false
+    incremental: False
   - name: dim_lob_product
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_lob_product
-    incremental: false
+    incremental: False
 
 query:
   - name: fact_policy
@@ -342,7 +342,14 @@ query:
           CASE WHEN dpsl.is_renewable = 'Y' and npcw.nextpol IS NOT NULL
               THEN 1
               ELSE 0
-            END AS next_policy_quoted_count
+            END AS next_policy_quoted_count,
+          (
+            CASE 
+              WHEN dp.current_inforce_policy_ind = 'Y' 
+              THEN inf_prem.inforceprem 
+              ELSE 0 
+            END
+          ) AS current_inforce_policy_prem
           
         FROM insured i 
         LEFT OUTER JOIN mgextra me ON LOWER(TRIM(me.code)) = LOWER(TRIM(i.code))
@@ -358,6 +365,13 @@ query:
           INNER JOIN mgtrans mgt1 ON LOWER(TRIM(mgt1.code)) = LOWER(TRIM(i1.code)) AND mgt1.writtenon <= i1.poexpir 
           GROUP BY i1.code
         ) prem ON LOWER(TRIM(prem.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN dim_policy dp ON LOWER(TRIM(i.code)) = LOWER(TRIM(dp.policy_num_bus_key)) AND dp.dl_is_current_flag = 1
+        LEFT OUTER JOIN (
+          SELECT code, SUM(amount) AS inforceprem 
+          FROM mgtrans 
+          WHERE writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
+          GROUP BY code
+        ) inf_prem ON LOWER(TRIM(i.code)) = LOWER(TRIM(inf_prem.code))
         WHERE LOWER(TRIM(i.code)) = LOWER(TRIM(i.basemgacode))
           AND LOWER(TRIM(i.agency)) <> 'pafake10'
       )
@@ -401,7 +415,8 @@ query:
         CAST(COALESCE(fd.expiring_renewable_prem, 0) AS DECIMAL(19,4)) AS expiring_renewable_prem,
         COALESCE(fd.expiring_renewable_count, 0) AS expiring_renewable_count,
         CAST(COALESCE(fd.next_policy_quoted_prem, 0) AS DECIMAL(19,4)) AS next_policy_quoted_prem,
-        COALESCE(fd.next_policy_quoted_count, 0) AS next_policy_quoted_count,        
+        COALESCE(fd.next_policy_quoted_count, 0) AS next_policy_quoted_count,
+        CAST(COALESCE(fd.current_inforce_policy_prem, 0) AS DECIMAL(19,4)) AS current_inforce_policy_prem,
         TRUE AS dl_is_current_flag,
         CAST('1901-01-01' AS DATE) AS dl_row_effective_date,
         CAST('9999-12-31' AS DATE) AS dl_row_expiration_date,

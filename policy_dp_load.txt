@@ -1,0 +1,494 @@
+Start 2026-06-27 16:01:25.010789
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_business_class.yaml
+Reading dim_business_class.yaml Completed in 0:00:00.735603
+Generate source views Completed in 0:00:09.958500
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.102582
+Writing Dataframe to Table..... 2026-06-27 16:01:35.807522
+Calculating Metrics: 100%
+10/10 [00:07<00:00, 1.36it/s]
+Writing Dataframe to Table Completed in 0:01:04.953378
+Total Duaration 0:01:15.750111
+metrics - {
+  "success": true,
+  "eltId": "65346132-6196-4ba4-9656-2434afc28156",
+  "runId": "b68659f9-c920-4f99-9e1f-4ec761fd1006",
+  "startTime": "2026-06-27T16:01:25.010855+00:00",
+  "endTime": "2026-06-27T16:02:40.760512+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_business_class",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:02:40.761090
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_cancellation_reasons.yaml
+Reading dim_cancellation_reasons.yaml Completed in 0:00:00.228556
+Generate source views Completed in 0:00:00.514115
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.030992
+Writing Dataframe to Table..... 2026-06-27 16:02:41.534794
+Writing Dataframe to Table Completed in 0:00:13.616347
+Total Duaration 0:00:14.390051
+metrics - {
+  "success": true,
+  "eltId": "04ee4ed7-4f7d-40f7-9733-4cd81055b447",
+  "runId": "e96bf7e3-90bd-4919-9a5b-ace5711f26c7",
+  "startTime": "2026-06-27T16:02:40.761113+00:00",
+  "endTime": "2026-06-27T16:02:55.150980+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_cancellation_reasons",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:02:55.151263
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_carrier.yaml
+Reading dim_carrier.yaml Completed in 0:00:00.139031
+Generate source views Completed in 0:00:00.314679
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.086691
+Writing Dataframe to Table..... 2026-06-27 16:02:55.691710
+Calculating Metrics: 100%
+34/34 [00:02<00:00, 16.19it/s]
+Writing Dataframe to Table Completed in 0:00:17.761369
+Total Duaration 0:00:18.301816
+metrics - {
+  "success": true,
+  "eltId": "aeb4e92a-74d7-4fc8-b14c-09b6d732c920",
+  "runId": "3b9e3624-e9cc-46d0-a28b-e00c68576624",
+  "startTime": "2026-06-27T16:02:55.151301+00:00",
+  "endTime": "2026-06-27T16:03:13.452463+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_carrier",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:03:13.453311
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_dist_chnl.yaml
+Reading dim_dist_chnl.yaml Completed in 0:00:00.158192
+Generate source views Completed in 0:00:01.021001
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.209238
+Writing Dataframe to Table..... 2026-06-27 16:03:14.841828
+Calculating Metrics: 100%
+69/69 [00:05<00:00, 13.54it/s]
+Writing Dataframe to Table Completed in 0:00:28.694098
+Total Duaration 0:00:30.082615
+metrics - {
+  "success": true,
+  "eltId": "a1bbe97e-051a-4095-a978-1d205c07f285",
+  "runId": "f7053af8-2117-4355-b078-dba731e036ff",
+  "startTime": "2026-06-27T16:03:13.453335+00:00",
+  "endTime": "2026-06-27T16:03:43.535086+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_dist_chnl",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:03:43.536146
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_employee.yaml
+Reading dim_employee.yaml Completed in 0:00:00.183310
+Generate source views Completed in 0:00:00.481508
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.024136
+Writing Dataframe to Table..... 2026-06-27 16:03:44.225133
+Calculating Metrics: 100%
+40/40 [00:01<00:00, 21.14it/s]
+Writing Dataframe to Table Completed in 0:00:17.728155
+Total Duaration 0:00:18.417142
+metrics - {
+  "success": true,
+  "eltId": "6d6ae5ff-85ef-4d52-8db2-9142e9c9ee1c",
+  "runId": "d5cb75d1-4a86-41de-914c-21dcef6d2d19",
+  "startTime": "2026-06-27T16:03:43.536167+00:00",
+  "endTime": "2026-06-27T16:04:01.952735+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_employee",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:04:01.953503
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_insured.yaml
+Reading dim_insured.yaml Completed in 0:00:00.164143
+Generate source views Completed in 0:00:02.994853
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.451998
+Writing Dataframe to Table..... 2026-06-27 16:04:05.564590
+Calculating Metrics: 100%
+29/29 [05:06<00:00, 6.44s/it]
+Writing Dataframe to Table Completed in 0:13:32.832104
+Total Duaration 0:13:36.443191
+metrics - {
+  "success": true,
+  "eltId": "c2507804-47bb-4702-9ce0-b2308ce68907",
+  "runId": "55d01cfd-7ff3-4510-9cd4-11afc003dcc2",
+  "startTime": "2026-06-27T16:04:01.953528+00:00",
+  "endTime": "2026-06-27T16:17:38.361779+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_insured",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:17:38.421827
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_insured_legal_entity_type.yaml
+Reading dim_insured_legal_entity_type.yaml Completed in 0:00:01.639243
+Generate source views Completed in 0:00:00.577020
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.077558
+Writing Dataframe to Table..... 2026-06-27 16:17:40.715691
+Calculating Metrics: 100%
+15/15 [00:11<00:00, 1.45it/s]
+Writing Dataframe to Table Completed in 0:00:51.904436
+Total Duaration 0:00:54.198300
+metrics - {
+  "success": true,
+  "eltId": "fddd2c25-c4d7-4976-9538-6ca4981653e1",
+  "runId": "db612db3-ae91-4061-852c-467239c870f4",
+  "startTime": "2026-06-27T16:17:38.423626+00:00",
+  "endTime": "2026-06-27T16:18:32.619697+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_insured_legal_entity_type",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:18:32.620632
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_lob.yaml
+Reading dim_lob.yaml Completed in 0:00:00.614650
+Generate source views Completed in 0:00:00.403805
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.051339
+Writing Dataframe to Table..... 2026-06-27 16:18:33.690471
+Calculating Metrics: 100%
+15/15 [00:02<00:00, 6.92it/s]
+Writing Dataframe to Table Completed in 0:00:29.940601
+Total Duaration 0:00:31.010440
+metrics - {
+  "success": true,
+  "eltId": "6c108fee-ee5e-45b6-8f65-419784432f12",
+  "runId": "6d4abeeb-8c0a-48cb-ae18-f612004fde00",
+  "startTime": "2026-06-27T16:18:32.620662+00:00",
+  "endTime": "2026-06-27T16:19:03.630721+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_lob",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:19:03.631234
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_lob_product.yaml
+Reading dim_lob_product.yaml Completed in 0:00:00.170770
+Generate source views Completed in 0:00:00.589917
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.022590
+Writing Dataframe to Table..... 2026-06-27 16:19:04.414544
+Calculating Metrics: 100%
+10/10 [00:00<00:00, 12.62it/s]
+Writing Dataframe to Table Completed in 0:00:19.821096
+Total Duaration 0:00:20.604406
+metrics - {
+  "success": true,
+  "eltId": "3d9bc885-83af-457a-8193-d74dc3fc7c5d",
+  "runId": "eebd1b22-fc52-4eaf-99e7-ae3dfe0dfeb6",
+  "startTime": "2026-06-27T16:19:03.631253+00:00",
+  "endTime": "2026-06-27T16:19:24.235406+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_lob_product",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:19:24.235781
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_mkt_type.yaml
+Reading dim_mkt_type.yaml Completed in 0:00:00.170158
+Generate source views Completed in 0:00:00.287576
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.038214
+Writing Dataframe to Table..... 2026-06-27 16:19:24.731762
+Calculating Metrics: 100%
+15/15 [00:09<00:00, 1.67it/s]
+Writing Dataframe to Table Completed in 0:00:35.696190
+Total Duaration 0:00:36.192171
+metrics - {
+  "success": true,
+  "eltId": "f894e912-cd7a-49d8-9ffd-19dfffe1fe20",
+  "runId": "6dec787a-5b39-4d24-8f9f-fc5feff6de57",
+  "startTime": "2026-06-27T16:19:24.235799+00:00",
+  "endTime": "2026-06-27T16:20:00.427578+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_mkt_type",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:20:00.428099
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_naics.yaml
+Reading dim_naics.yaml Completed in 0:00:00.223131
+Generate source views Completed in 0:00:00.565604
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.030450
+Writing Dataframe to Table..... 2026-06-27 16:20:01.247322
+Calculating Metrics: 100%
+33/33 [00:08<00:00, 4.13it/s]
+Writing Dataframe to Table Completed in 0:00:34.010163
+Total Duaration 0:00:34.829386
+metrics - {
+  "success": true,
+  "eltId": "3acb1252-cf34-4453-89f9-282c97608959",
+  "runId": "79356a6b-dcd0-4df9-93c0-689e1e14615c",
+  "startTime": "2026-06-27T16:20:00.428116+00:00",
+  "endTime": "2026-06-27T16:20:35.256825+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_naics",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:20:35.257675
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_policy.yaml
+Reading dim_policy.yaml Completed in 0:00:00.177206
+Generate source views Completed in 0:00:05.784179
+Transforming Yaml Queries to Dataframe Completed in 0:00:05.298169
+Writing Dataframe to Table..... 2026-06-27 16:20:46.517324
+Calculating Metrics: 100%
+94/94 [18:13<00:00, 7.77s/it]
+Writing Dataframe to Table Completed in 0:28:31.494254
+Total Duaration 0:28:42.753903
+metrics - {
+  "success": true,
+  "eltId": "1733c0df-45c7-4267-9a17-e577cbcfaeb5",
+  "runId": "ae7ea631-5c30-4919-8a33-05b20be19f50",
+  "startTime": "2026-06-27T16:20:35.257765+00:00",
+  "endTime": "2026-06-27T16:49:18.007435+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_policy",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:49:18.015013
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_policy_trans_subtype.yaml
+Reading dim_policy_trans_subtype.yaml Completed in 0:00:00.505894
+Generate source views Completed in 0:00:00.763586
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.019700
+Writing Dataframe to Table..... 2026-06-27 16:49:19.304219
+Calculating Metrics: 100%
+15/15 [00:02<00:00, 7.69it/s]
+Writing Dataframe to Table Completed in 0:00:23.160119
+Total Duaration 0:00:24.449325
+metrics - {
+  "success": true,
+  "eltId": "7f786b90-17e9-4506-ae9c-5b42bc6514a7",
+  "runId": "f7500679-171b-440c-8e40-ce312697357a",
+  "startTime": "2026-06-27T16:49:18.015325+00:00",
+  "endTime": "2026-06-27T16:49:42.463915+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_policy_trans_subtype",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:49:42.466451
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_policy_trans_type.yaml
+Reading dim_policy_trans_type.yaml Completed in 0:00:00.543910
+Generate source views Completed in 0:00:00.492157
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.084429
+Writing Dataframe to Table..... 2026-06-27 16:49:43.586986
+Calculating Metrics: 100%
+15/15 [00:04<00:00, 3.24it/s]
+Writing Dataframe to Table Completed in 0:00:27.901383
+Total Duaration 0:00:29.021918
+metrics - {
+  "success": true,
+  "eltId": "b24a713d-8794-4119-802d-ba5cc62e5e2b",
+  "runId": "830e5d3c-994f-4fd2-988a-6c3a85608bab",
+  "startTime": "2026-06-27T16:49:42.466477+00:00",
+  "endTime": "2026-06-27T16:50:11.487954+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_policy_trans_type",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:50:11.488728
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/dim_prod_src.yaml
+Reading dim_prod_src.yaml Completed in 0:00:00.176544
+Generate source views Completed in 0:00:00.370671
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.033759
+Writing Dataframe to Table..... 2026-06-27 16:50:12.069736
+Calculating Metrics: 100%
+15/15 [00:02<00:00, 5.21it/s]
+Writing Dataframe to Table Completed in 0:00:19.914678
+Total Duaration 0:00:20.495686
+metrics - {
+  "success": true,
+  "eltId": "4e1167c6-5536-41fd-84f4-efe1c62543cc",
+  "runId": "eaf6b691-7922-420b-beda-916c7722396e",
+  "startTime": "2026-06-27T16:50:11.488778+00:00",
+  "endTime": "2026-06-27T16:50:31.980155+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_prod_src",
+  "error": null,
+  "recordInserts": 0,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:50:31.984578
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/fact_policy.yaml
+Reading fact_policy.yaml Completed in 0:00:00.226015
+Generate source views Completed in 0:00:12.857632
+Transforming Yaml Queries to Dataframe Completed in 0:00:06.892252
+Writing Dataframe to Table..... 2026-06-27 16:50:51.960591
+Calculating Metrics: 100%
+137/137 [05:29<00:00, 1.66s/it]
+Writing Dataframe to Table Completed in 0:07:53.643296
+Total Duaration 0:08:13.619309
+metrics - {
+  "success": true,
+  "eltId": "d56b0b14-132f-4003-a52b-e760fea6ade5",
+  "runId": "c7296f21-0916-44b6-abc4-cc416c4caa44",
+  "startTime": "2026-06-27T16:50:31.984597+00:00",
+  "endTime": "2026-06-27T16:58:45.602187+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "fact_policy",
+  "error": null,
+  "recordInserts": 17126799,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 16:58:45.604162
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/fact_policy_transaction.yaml
+Reading fact_policy_transaction.yaml Completed in 0:00:00.243564
+Generate source views Completed in 0:00:06.050019
+Transforming Yaml Queries to Dataframe Completed in 0:00:03.602887
+Writing Dataframe to Table..... 2026-06-27 16:58:55.500721
+Calculating Metrics: 100%
+193/193 [36:21<00:00, 5.74s/it]
+Writing Dataframe to Table Completed in 1:13:27.144464
+Total Duaration 1:13:37.041023
+metrics - {
+  "success": true,
+  "eltId": "afc769a3-fd73-48e8-b2da-d3720973a2ff",
+  "runId": "7eaffa0c-a671-4ac6-9923-8b36f1912127",
+  "startTime": "2026-06-27T16:58:45.604184+00:00",
+  "endTime": "2026-06-27T18:12:22.643160+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "fact_policy_transaction",
+  "error": null,
+  "recordInserts": 94577806,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}
+
+
+Start 2026-06-27 18:12:22.645837
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/fact_policy_transaction_detail.yaml
+Reading fact_policy_transaction_detail.yaml Completed in 0:00:00.404656
+Generate source views Completed in 0:00:10.337068
+Transforming Yaml Queries to Dataframe Completed in 0:00:04.348113
+Writing Dataframe to Table..... 2026-06-27 18:12:37.735786
+Calculating Metrics: 4%
+4/89 [00:00<00:00, 390.24it/s]
+InvalidHttpRequest
+Submission failed due to error content =["requirement failed: Session isn't active."] HTTP status code: 400. Trace ID: 9f28d995-938f-41f2-9561-c0797fda0c0b.
+
+
+Start 2026-06-28 03:39:46.118015
+abfss://d372a400-2b4c-409b-a19b-243ee159f369@onelake.dfs.fabric.microsoft.com/669f2667-731a-4ac6-854a-0e61f1d77a45/Files/data_product/policy_dp/fact_policy_transaction_detail.yaml
+Reading fact_policy_transaction_detail.yaml Completed in 0:00:01.017781
+Generate source views Completed in 0:00:24.334533
+Transforming Yaml Queries to Dataframe Completed in 0:00:04.116798
+Writing Dataframe to Table..... 2026-06-28 03:40:15.587245
+Calculating Metrics: 100%
+89/89 [26:16<00:00, 12.34s/it]
+Writing Dataframe to Table Completed in 0:32:50.251377
+Total Duaration 0:33:19.720607
+metrics - {
+  "success": true,
+  "eltId": "21a421c1-c1f0-483a-8f98-a7ad75dd0f0d",
+  "runId": "5cce021a-7888-43ea-ab0b-af3193721e2b",
+  "startTime": "2026-06-28T03:39:46.118225+00:00",
+  "endTime": "2026-06-28T04:13:05.832156+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "fact_policy_transaction_detail",
+  "error": null,
+  "recordInserts": 98000540,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 0
+}

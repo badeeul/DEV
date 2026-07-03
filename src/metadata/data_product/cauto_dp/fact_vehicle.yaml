@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_cauto_product
   schema: cauto
   table: fact_vehicle
-  load_strategy: merge
+  load_strategy: overwrite
   key_columns:
     - vehicle_surrogate_key
   unknown_record: false
@@ -13,22 +13,22 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: True
+    incremental: False
   - name: uwvehicles
     lakehouse: den_lhw_scu_001_policy_curated
     schema: cauto
     table: uwvehicles
-    incremental: True
+    incremental: False
   - name: mgtrans
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: mgtrans
-    incremental: True
+    incremental: False
   - name: mgtrans_coverages
     lakehouse: den_lhw_scu_001_policy_curated
     schema: cauto
     table: mgtrans_coverages
-    incremental: True
+    incremental: False
   - name: dim_policy
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
@@ -86,9 +86,9 @@ query:
         from insured i
         inner join mgtrans m on lower(trim(i.code)) = lower(trim(m.code))
         inner join mgtrans_coverages mc on lower(trim(m.transno)) = lower(trim(mc.mgtrans_transno))
-        inner join dim_policy dp on lower(trim(i.code)) = lower(trim(dp.policy_num_bus_key))
-        where lower(trim(dp.current_policy_inforce_ind)) = 'y'
-        and m.writtenon <= CAST(DATEADD(DAY, -1, GETDATE()) AS DATE)
+        inner join dim_policy dp on lower(trim(i.code)) = lower(trim(dp.policy_num_bus_key)) and dp.dl_is_current_flag = 1
+        where lower(trim(dp.current_inforce_policy_ind)) = 'y'
+        and m.writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
         group by lower(trim(m.code)), lower(trim(mc.itemid))
       )
       

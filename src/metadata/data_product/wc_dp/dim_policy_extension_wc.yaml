@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: wc
   table: dim_policy_extension_wc
-  load_strategy: merge
+  load_strategy: overwrite
   key_columns:
     - policy_num_bus_key
   unknown_record: True
@@ -13,49 +13,49 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: True
+    incremental: False
 
   - name: wcinfo
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: wcinfo
-    incremental: True
+    incremental: False
 
   - name: wcpayrol
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: wcpayrol
-    incremental: True
+    incremental: False
 
   - name: archive_wcpayrol
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: archive_wcpayrol
-    incremental: True
+    incremental: False
 
   - name: uwstates
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: uwstates
-    incremental: True
+    incremental: False
 
   - name: archive_uwstates
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: archive_uwstates
-    incremental: True
+    incremental: False
 
   - name: question_responses
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: question_responses
-    incremental: True
+    incremental: False
 
   - name: archive_question_responses
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: archive_question_responses
-    incremental: True
+    incremental: False
 
   - name: question_questions
     lakehouse: den_lhw_scu_001_policy_curated
@@ -67,19 +67,19 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: dnb_transactions
-    incremental: True
+    incremental: False
 
   - name: dnb_policylookups
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: dnb_policylookups
-    incremental: True
+    incremental: False
   
   - name: dim_policy
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_policy
-    incremental: True
+    incremental: False
 
 query:
   - name: cte_wcpolicylist

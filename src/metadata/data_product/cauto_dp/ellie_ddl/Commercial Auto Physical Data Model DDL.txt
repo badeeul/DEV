@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `dim_vehicle_type` (
 
 CREATE TABLE IF NOT EXISTS `fact_vehicle` (
   `vehicle_surrogate_key` INT,
-  `policy_surrogate_key` INT,
+  `policy_surrogate_key` LONG,
   `garage_loc_surrogate_key` INT,
   `vehicle_radius_of_operation_surrogate_key` INT,
   `vehicle_start_date_surrogate_key` INT,
@@ -122,9 +122,9 @@ CREATE TABLE IF NOT EXISTS `fact_vehicle` (
   `deleted_vehicle_flag` BOOLEAN,
   `count_as_vehicle_flag` BOOLEAN,
   `count_as_power_unit_flag` BOOLEAN,
-  `latest_vehicle_prem` DECIMAL(18, 6),
-  `current_inforce_vehicle_prem` DECIMAL(18, 6),
-  `vehicle_msrp` DECIMAL(18, 6),
+  `latest_vehicle_prem` DECIMAL(19, 4),
+  `current_inforce_vehicle_prem` DECIMAL(19, 4),
+  `vehicle_msrp` DECIMAL(19, 4),
   `dl_eltid` STRING,
   `dl_runid` STRING,
   `dl_row_insert_agent` STRING,
