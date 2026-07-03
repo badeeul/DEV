@@ -571,8 +571,9 @@ Tasks 06-29-2026 - 06-30-2026
 
 Tasks 07-01-2026 - 07-03-2026
 51684 - Policy DP V1.4 - Implement
+	55963 - Bug Testing 49530 - P&P - CDC Issue
+	55964 - End To End Testing for spark library - spark_engine-0.1.1-py3-none-any.whl
+	51671 - Create or update source-to-target-mapping
 	51688 - Implement or enhance data quality rules
-	51690 - Implement or enhance data quality verification email		
-	51695 - Implement or enhance semantic model
 	51689 - Implement or enhance source loop-back verification
 	
