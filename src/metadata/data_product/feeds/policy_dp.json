@@ -71,6 +71,16 @@
             ]
         }
     ],
+    "loadGroupDimsDefaultRecords": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_policy_default_records",
+                    "modelConfigFolderName": "policy_dp"
+                }
+            ]
+        }
+    ],
     "loadGroupFacts": [
         {
             "files": [
