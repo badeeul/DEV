@@ -1,0 +1,71 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product
+  schema: wc
+  table: dim_policy_extension_wc_carrier_placement
+  load_strategy: merge
+  key_columns:
+    - policy_num_bus_key
+  unknown_record: False
+  identity: False
+  identity_column_name: policy_key
+
+query:
+  - name: dim_policy_extension_wc_carrier_placement
+    sql: |
+      select 
+          -1 AS policy_key
+        , 'unknown' AS policy_num_bus_key
+        , -1.0 AS experience_mod
+        , 'unknown' AS guardtech_hazard_group
+        , -1 AS guardtech_hazard_group_points
+        , -1.0 AS guardtech_experience_mod
+        , -1 AS guardtech_experience_mod_points
+        , -1 AS guardtech_dnb_score
+        , -1 AS guardtech_dnb_score_points
+        , -1 AS guardtech_prior_wc_years_count
+        , -1 AS guardtech_prior_wc_years_count_points
+        , -1 AS guardtech_total_points
+        , NULL AS guardtech_enteredon
+        , 'unknown' AS guardtech_carrier_select_group
+
+        , true as dl_is_current_flag
+        , sha2(concat_ws('||', -1, 'unknown'), 256) as dl_row_hash
+        , CURRENT_TIMESTAMP() dl_row_insert_timestamp
+        , CURRENT_TIMESTAMP() dl_row_update_timestamp
+        , 'ELT' as dl_row_insert_agent
+        , 1 as dl_eltid
+        , 1 as dl_runid
+        , NULL as dl_row_expiration_date
+        , CURRENT_DATE() as dl_row_effective_date
+        , false as dl_is_deleted_flag
+      
+      union
+
+      select 
+          -2 AS policy_key
+        , 'not applicable' AS policy_num_bus_key
+        , -2.0 AS experience_mod
+        , 'not applicable' AS guardtech_hazard_group
+        , -2 AS guardtech_hazard_group_points
+        , -2.0 AS guardtech_experience_mod
+        , -2 AS guardtech_experience_mod_points
+        , -2 AS guardtech_dnb_score
+        , -2 AS guardtech_dnb_score_points
+        , -2 AS guardtech_prior_wc_years_count
+        , -2 AS guardtech_prior_wc_years_count_points
+        , -2 AS guardtech_total_points
+        , NULL AS guardtech_enteredon
+        , 'not applicable' AS guardtech_carrier_select_group
+
+        , true as dl_is_current_flag
+        , sha2(concat_ws('||', -2, 'not applicable'), 256) as dl_row_hash
+        , CURRENT_TIMESTAMP() dl_row_insert_timestamp
+        , CURRENT_TIMESTAMP() dl_row_update_timestamp
+        , 'ELT' as dl_row_insert_agent
+        , 1 as dl_eltid
+        , 1 as dl_runid
+        , NULL as dl_row_expiration_date
+        , CURRENT_DATE() as dl_row_effective_date
+        , false as dl_is_deleted_flag
+
+    description: "This query adds the -1/unknown and -2/not applicable records to dim_policy_extension_wc_carrier_placement, since 'identity: True' does not work with overwrite load strategy."
