@@ -2,14 +2,12 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product # keep
   schema: policy # keep
   table: dim_policy # target table
-  load_strategy: merge # Use merge for incremental loading
+  load_strategy: overwrite # scd type
   key_columns: # is merge key
     - policy_num_bus_key
   unknown_record: True # keep
   identity: True # keep
   identity_column_name: policy_key # sharepoint first row
-  partition_by:
-    - policy_year
 
 source:
   - name: insured
@@ -187,42 +185,41 @@ query:
         , case when CAST(policy_effec_start_dt AS DATE) > CAST(policy_effec_end_dt AS DATE) then 0 else 1 end as dq_effec_st_dt_check
         , case when CAST(policy_coverage_start_dt AS DATE) < CAST(policy_effec_start_dt AS DATE) then 0 else 1 end as dq_coverage_st_dt_check
         , case when CAST(policy_coverage_end_dt AS DATE) > CAST(policy_effec_end_dt AS DATE) then 0 else 1 end as dq_coverage_end_dt_check
-        , YEAR(CAST(pb.policy_effec_start_dt AS DATE)) AS policy_year
       FROM
         insured i
-        LEFT OUTER JOIN billings b ON b.code = i.code
-        LEFT OUTER JOIN wcinfo w ON w.code = i.code
-        LEFT OUTER JOIN lookups l ON l.keyfield = 'stat7'
-          AND l.programid = 'insured'
-          AND l.vals = i.stat7
-        LEFT OUTER JOIN stg_policy_base pb ON pb.code = i.code
-        LEFT OUTER JOIN stg_policy_derived pd ON pd.code = i.code
+        LEFT OUTER JOIN billings b ON LOWER(TRIM(b.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN wcinfo w ON LOWER(TRIM(w.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN lookups l ON LOWER(TRIM(l.keyfield)) = 'stat7'
+          AND LOWER(TRIM(l.programid)) = 'insured'
+          AND LOWER(TRIM(l.vals)) = LOWER(TRIM(i.stat7))
+        LEFT OUTER JOIN stg_policy_base pb ON LOWER(TRIM(pb.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN stg_policy_derived pd ON LOWER(TRIM(pd.code)) = LOWER(TRIM(i.code))
         LEFT OUTER JOIN (
           SELECT DISTINCT
             code
           FROM
             mgnotrans
           WHERE
-            reason = '13.00'
-        ) mg ON mg.code = i.code
-          LEFT OUTER JOIN (select distinct code FROM mgnotrans WHERE typeid = 39) mg2 ON i.code = mg2.code
-        LEFT OUTER JOIN insured p ON p.code = i.renewalofcode
+            LOWER(TRIM(reason)) = '13.00'
+        ) mg ON LOWER(TRIM(mg.code)) = LOWER(TRIM(i.code))
+          LEFT OUTER JOIN (select distinct code FROM mgnotrans WHERE typeid = 39) mg2 ON LOWER(TRIM(i.code)) = LOWER(TRIM(mg2.code))
+        LEFT OUTER JOIN insured p ON LOWER(TRIM(p.code)) = LOWER(TRIM(i.renewalofcode))
         LEFT JOIN (
           SELECT DISTINCT
             mn.code
           FROM
             mgnotrans mn
-            INNER JOIN mgnotrans mn2 ON mn.code = mn2.code
+            INNER JOIN mgnotrans mn2 ON LOWER(TRIM(mn.code)) = LOWER(TRIM(mn2.code))
               AND mn2.typeid = 143
             LATERAL VIEW EXPLODE (SPLIT(mn.extra, '\\|')) x AS value
           WHERE
-            mn.transcode = 'ex'
-            AND value <> ''
-        ) m ON m.code = p.code
-        LEFT OUTER JOIN lookups ln ON ln.keyfield = 'stat7'
-          AND ln.programid = 'insured'
-          AND ln.vals = pb.nextpolstat7
-        LEFT OUTER JOIN dim_policy_status dpol ON dpol.policy_status_cd_bus_key = pd.policy_status_cd
+            LOWER(TRIM(mn.transcode)) = 'ex'
+            AND LOWER(TRIM(value)) <> ''
+        ) m ON LOWER(TRIM(m.code)) = LOWER(TRIM(p.code))
+        LEFT OUTER JOIN lookups ln ON LOWER(TRIM(ln.keyfield)) = 'stat7'
+          AND LOWER(TRIM(ln.programid)) = 'insured'
+          AND LOWER(TRIM(ln.vals)) = LOWER(TRIM(pb.nextpolstat7))
+        LEFT OUTER JOIN dim_policy_status dpol ON LOWER(TRIM(dpol.policy_status_cd_bus_key)) = LOWER(TRIM(pd.policy_status_cd))
 
         LEFT OUTER JOIN dim_digital_decision_status ddst ON LOWER(TRIM(ddst.digital_decision_status_cd_bus_key)) =
         CASE
@@ -252,5 +249,5 @@ query:
         END
  
       WHERE
-        i.code = i.basemgacode
-        AND i.agency <> 'pafake10'
+        LOWER(TRIM(i.code)) = LOWER(TRIM(i.basemgacode))
+        AND LOWER(TRIM(i.agency)) <> 'pafake10'
