@@ -20,12 +20,6 @@ source:
     table: insured
     incremental: False
 
-  - name: dim_policy_status
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_policy_status
-    incremental: False
-
 query:
   # stg_autowind logic
   - name: autowindbase
@@ -187,13 +181,6 @@ query:
        where LOWER(TRIM(i.code)) = LOWER(TRIM(i.basemgacode))
          and LOWER(TRIM(i.agency)) <> 'pafake10'
 
-  # stg_policy_status_lineage logic
-  - name: statuslineage
-    sql: |
-      SELECT  dpstat.policy_status_key  AS  policy_status_key
-           ,  CONCAT('|', COALESCE(dpstat.l0_level,''), '|', COALESCE(dpstat.l1_level,''), '|', COALESCE(dpstat.l2_level,''), '|', COALESCE(dpstat.l3_level,''), '|', COALESCE(dpstat.l4_level,''), '|', COALESCE(dpstat.l5_level,''), '|')  AS  policy_status_lineage 
-        FROM  dim_policy_status dpstat
-
   # Final combined table
   - name: stg_policy_base
     sql: |
@@ -214,12 +201,9 @@ query:
         pd.policy_audit_dt,
         pd.policy_sub_dt,
         pd.policy_issue_dt,
-        so.sub_poo,
-        sl.policy_status_key AS sl_policy_status_key,
-        sl.policy_status_lineage
+        so.sub_poo
       FROM
         policydates pd
         LEFT JOIN autowind aw ON LOWER(TRIM(pd.code)) = LOWER(TRIM(aw.keyfield))
         LEFT JOIN nextpolicy np ON LOWER(TRIM(pd.code)) = LOWER(TRIM(np.currpol))
         LEFT JOIN submissionorigin so ON LOWER(TRIM(pd.code)) = LOWER(TRIM(so.code))
-        LEFT JOIN statuslineage sl ON 1=1

@@ -223,11 +223,11 @@ query:
 
         LEFT OUTER JOIN dim_digital_decision_status ddst ON LOWER(TRIM(ddst.digital_decision_status_cd_bus_key)) =
         CASE
-        WHEN  pb.policy_status_lineage LIKE '%|NB - New Submission|%'
+        WHEN  CONCAT('|', COALESCE(dpol.l0_level,''), '|', COALESCE(dpol.l1_level,''), '|', COALESCE(dpol.l2_level,''), '|', COALESCE(dpol.l3_level,''), '|', COALESCE(dpol.l4_level,''), '|', COALESCE(dpol.l5_level,''), '|') LIKE '%|NB - New Submission|%'
           THEN  CASE  
                 WHEN  pb.sub_poo = 'Programs/Bindings' OR LOWER(TRIM(i.markettype)) IN ('r','a') OR LOWER(TRIM(i.productionsrc)) = 'l'
                   THEN  'excluded from digital decisioning' 
-                WHEN  mg2.code IS NULL AND LOWER(TRIM(COALESCE(pb.autouwstatus,''))) = 'pass' AND pb.sub_poo <> 'Manual/Supplemental' AND pb.policy_status_lineage LIKE '%|NB - Quoted|%'
+                WHEN  mg2.code IS NULL AND LOWER(TRIM(COALESCE(pb.autouwstatus,''))) = 'pass' AND pb.sub_poo <> 'Manual/Supplemental' AND CONCAT('|', COALESCE(dpol.l0_level,''), '|', COALESCE(dpol.l1_level,''), '|', COALESCE(dpol.l2_level,''), '|', COALESCE(dpol.l3_level,''), '|', COALESCE(dpol.l4_level,''), '|', COALESCE(dpol.l5_level,''), '|') LIKE '%|NB - Quoted|%'
                   THEN  'digitally decisioned'
                 WHEN  mg2.code IS NULL AND LOWER(TRIM(COALESCE(pb.autouwstatus,''))) = 'decline' AND pb.sub_poo <> 'Manual/Supplemental'
                   THEN  'digitally decisioned'
@@ -235,13 +235,13 @@ query:
                   THEN  'mitigating circumstances'
                 WHEN  mg2.code IS NOT NULL AND LOWER(TRIM(COALESCE(pb.autouwstatus,''))) = 'referral' AND pb.sub_poo <> 'Manual/Supplemental'
                   THEN  'digitally assisted'
-                WHEN  LOWER(TRIM(COALESCE(pb.autouwstatus,''))) = 'referral' AND pb.sub_poo <> 'Manual/Supplemental' AND pb.policy_status_lineage NOT LIKE '%|NB - Quoted|%'
+                WHEN  LOWER(TRIM(COALESCE(pb.autouwstatus,''))) = 'referral' AND pb.sub_poo <> 'Manual/Supplemental' AND CONCAT('|', COALESCE(dpol.l0_level,''), '|', COALESCE(dpol.l1_level,''), '|', COALESCE(dpol.l2_level,''), '|', COALESCE(dpol.l3_level,''), '|', COALESCE(dpol.l4_level,''), '|', COALESCE(dpol.l5_level,''), '|') NOT LIKE '%|NB - Quoted|%'
                   THEN  'incomplete'
                 WHEN  pb.sub_poo = 'Manual/Supplemental'
                   THEN  'manual / supplemental'
-                WHEN  pb.policy_status_lineage LIKE '%|NB - Quoted|%' AND coalesce(i.decsbr,i.decuw) = '1~'
+                WHEN  CONCAT('|', COALESCE(dpol.l0_level,''), '|', COALESCE(dpol.l1_level,''), '|', COALESCE(dpol.l2_level,''), '|', COALESCE(dpol.l3_level,''), '|', COALESCE(dpol.l4_level,''), '|', COALESCE(dpol.l5_level,''), '|') LIKE '%|NB - Quoted|%' AND coalesce(i.decsbr,i.decuw) = '1~'
                   THEN  'digitally decisioned'
-                WHEN  pb.policy_status_lineage LIKE '%|NB - Quoted|%' AND coalesce(i.decsbr,i.decuw) <> '1~'
+                WHEN  CONCAT('|', COALESCE(dpol.l0_level,''), '|', COALESCE(dpol.l1_level,''), '|', COALESCE(dpol.l2_level,''), '|', COALESCE(dpol.l3_level,''), '|', COALESCE(dpol.l4_level,''), '|', COALESCE(dpol.l5_level,''), '|') LIKE '%|NB - Quoted|%' AND coalesce(i.decsbr,i.decuw) <> '1~'
                   THEN  'manual / supplemental'
                 ELSE  'incomplete'
                 END
