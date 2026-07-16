@@ -1,0 +1,70 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product
+  schema: policy
+  table: dim_policy
+  load_strategy: merge
+  key_columns:
+    - policy_num_bus_key
+  unknown_record: False
+  identity: False
+  partition_by:
+    - policy_year
+
+source:
+  - name: dim_policy_current
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_policy
+    incremental: False
+
+query:
+  - name: dim_policy
+    sql: |
+      SELECT
+        policy_num_bus_key,
+        policy_bus_type,
+        gov_state,
+        policy_effec_start_dt,
+        policy_effec_end_dt,
+        policy_coverage_start_dt,
+        policy_coverage_end_dt,
+        policy_cancel_dt,
+        policy_cancel_trans_dt,
+        policy_audit_dt,
+        policy_sub_dt,
+        policy_issue_dt,
+        policy_inforce_start_date,
+        policy_inforce_end_date,
+        -- Recalculate flag based on CURRENT_DATE()
+        CASE 
+          WHEN policy_inforce_start_date <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
+            AND policy_inforce_end_date > CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
+          THEN 'Y' 
+          ELSE 'N' 
+        END AS current_inforce_policy_ind,
+        offer_rn,
+        previous_policy_num_bus_key,
+        next_policy_num_bus_key,
+        chain_id,
+        first_dwnpymnt_recd_dt,
+        rewritten_reissued_ind,
+        rewrite_reissue_ind,
+        is_expiring_flag,
+        is_renewable_flag,
+        is_prev_policy_ubetag_flag,
+        is_cloned_flag,
+        src_policy_status_descrip,
+        latest_policy_status_key,
+        digital_decision_status_key,
+        autouw_status_desc,
+        sub_point_of_origin_desc,
+        dl_is_current_flag,
+        dl_row_effective_date,
+        dl_row_expiration_date,
+        dl_is_deleted_flag,
+        dq_effec_st_dt_check,
+        dq_coverage_st_dt_check,
+        dq_coverage_end_dt_check,
+        policy_year
+      FROM
+        dim_policy_current
