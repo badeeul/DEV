@@ -1,0 +1,225 @@
+target:
+  lakehouse: den_lhw_scu_001_policy_curated
+  schema: stg_policy
+  table: stg_policy_base
+  load_strategy: overwrite
+  key_columns:
+  unknown_record: False
+  identity: False
+
+source:
+  - name: autouw_results
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: autouw_results
+    incremental: False
+
+  - name: insured
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: insured
+    incremental: False
+
+  - name: dim_policy_status
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_policy_status
+    incremental: False
+
+query:
+  # stg_autowind logic
+  - name: autowindbase
+    sql: |
+      SELECT
+        ar.keyfield,
+        ar.autouwstatus,
+        ROW_NUMBER() OVER (
+          PARTITION BY
+            ar.keyfield
+          ORDER BY
+            ar.updateon DESC
+        ) AS rn
+      FROM
+        autouw_results ar
+      WHERE
+        LOWER(TRIM(ar.systemkey)) <> 'iis_authority_bp'
+
+  - name: autowind
+    sql: |
+      SELECT
+        keyfield,
+        autouwstatus
+      FROM
+        autowindbase
+      WHERE
+        rn = 1
+
+  # stg_next_policy_statuses logic
+  - name: nextpolicycheck1
+    sql: |
+      SELECT
+        code,
+        renewedbycode
+      FROM
+        insured
+      WHERE
+        LOWER(TRIM(code)) = LOWER(TRIM(basemgacode))
+        AND LOWER(TRIM(agency)) <> 'pafake10'
+
+  - name: nxtpolchk2base
+    sql: |
+      SELECT
+        npc2.code AS code,
+        npc2.renewof AS renewof,
+        npc2.enteredon AS enteredon,
+        ROW_NUMBER() OVER (
+          PARTITION BY
+            npc2.renewof
+          ORDER BY
+            npc2.enteredon DESC
+        ) AS npc2rn
+      FROM
+        insured npc2
+      WHERE
+        COALESCE(npc2.flags04, '') = ''
+        AND LOWER(TRIM(npc2.code)) = LOWER(TRIM(npc2.basemgacode))
+
+  - name: nxtpolchk2
+    sql: |
+      SELECT
+        code,
+        renewof
+      FROM
+        nxtpolchk2base
+      WHERE
+        npc2rn = 1
+
+  - name: combine
+    sql: |
+      SELECT
+        n1.code AS code,
+        (
+          CASE
+            WHEN n1.renewedbycode IS NOT NULL THEN n1.renewedbycode
+            ELSE n2.code
+          END
+        ) AS nextpolicy
+      FROM
+        nextpolicycheck1 n1
+        LEFT OUTER JOIN nxtpolchk2 n2 ON LOWER(TRIM(n2.renewof)) = LOWER(TRIM(n1.code))
+
+  - name: nextpolicy
+    sql: |
+      SELECT
+        c.code AS currpol,
+        c.nextpolicy AS nextpol,
+        i.stat2 AS nextpolstat2,
+        i.stat7 AS nextpolstat7
+      FROM
+        combine c
+        JOIN insured i ON LOWER(TRIM(c.nextpolicy)) = LOWER(TRIM(i.code))
+
+  # stg_policy_dates logic
+  - name: policydates
+    sql: |
+      SELECT
+        ins.code,
+        ins.pobegin AS policy_effec_start_dt,
+        ins.poexpir AS policy_effec_end_dt,
+        ins.pobegin AS policy_coverage_start_dt,
+        CASE 
+          WHEN LOWER(TRIM(ins.stat5)) = 'c' THEN ins.pocancel 
+          ELSE ins.poexpir 
+        END AS policy_coverage_end_dt,
+        CASE 
+          WHEN LOWER(TRIM(ins.stat5)) = 'c' THEN ins.pocancel 
+          ELSE NULL 
+        END AS policy_cancel_dt,
+        CASE 
+          WHEN LOWER(TRIM(ins.stat5)) = 'c' THEN ins.trcancel 
+          ELSE NULL 
+        END AS policy_cancel_trans_dt,
+        ins.poaudit AS policy_audit_dt,
+        ins.enteredon AS policy_sub_dt,
+        ins.poissue AS policy_issue_dt
+      FROM
+        insured ins
+      WHERE
+        LOWER(TRIM(ins.code)) = LOWER(TRIM(ins.basemgacode))
+        AND LOWER(TRIM(ins.agency)) <> 'pafake10'
+
+  # stg_submission_point_of_origin logic
+  - name: originbase
+    sql: |
+      SELECT i.code
+           ,  COALESCE(CASE 
+                       WHEN LOWER(TRIM(i.flags04)) NOT IN ('w','x') THEN i.code 
+                       ELSE oldest.code 
+                       END, i.code) AS origincode 
+           ,  oldest.flags25, oldest.agency, oldest.enteredby 
+        FROM insured  i 
+        LEFT JOIN (SELECT chainid, code, flags25, agency, enteredby 
+                     FROM (SELECT chainid, code, flags25, agency, enteredby, 
+                     ROW_NUMBER() OVER (PARTITION BY chainid ORDER BY enteredon ASC) AS rn 
+                             FROM insured 
+                  ) sub 
+                   WHERE rn = 1) oldest
+               ON i.chainid = oldest.chainid AND LOWER(TRIM(i.flags14)) = 'n'
+
+  - name: submissionorigin
+    sql: |
+      select i.code AS code
+           ,  CASE
+              WHEN LOWER(TRIM(i.lob)) = 'pl'
+                OR LOWER(TRIM(ob.agency)) IN ('scjojo12','njftpi10','njjimc11','flbass28','flbass29','gasiui10','paamwi16','paamwi17','lakbki10','pansmi11','caciba11','caciba10','txscis10','cagors12','cacano11')
+                THEN 'Programs/Bindings'
+              WHEN COALESCE(LOWER(TRIM(ob.flags25)),'') =  'a'
+                THEN 'API' 
+              WHEN ob.enteredby = '10001'
+                OR ob.enteredby LIKE '400%'
+                OR LOWER(TRIM(ob.enteredby)) IN ('@z','xx','')
+                THEN 'ASC' 
+              ELSE 'Manual/Supplemental'
+              END AS sub_poo 
+        from insured  i 
+        join originbase  ob
+          on LOWER(TRIM(i.code)) = LOWER(TRIM(ob.code))
+       where LOWER(TRIM(i.code)) = LOWER(TRIM(i.basemgacode))
+         and LOWER(TRIM(i.agency)) <> 'pafake10'
+
+  # stg_policy_status_lineage logic
+  - name: statuslineage
+    sql: |
+      SELECT  dpstat.policy_status_key  AS  policy_status_key
+           ,  CONCAT('|', COALESCE(dpstat.l0_level,''), '|', COALESCE(dpstat.l1_level,''), '|', COALESCE(dpstat.l2_level,''), '|', COALESCE(dpstat.l3_level,''), '|', COALESCE(dpstat.l4_level,''), '|', COALESCE(dpstat.l5_level,''), '|')  AS  policy_status_lineage 
+        FROM  dim_policy_status dpstat
+
+  # Final combined table
+  - name: stg_policy_base
+    sql: |
+      SELECT
+        pd.code,
+        aw.keyfield AS aw_keyfield,
+        aw.autouwstatus,
+        np.currpol,
+        np.nextpol,
+        np.nextpolstat2,
+        np.nextpolstat7,
+        pd.policy_effec_start_dt,
+        pd.policy_effec_end_dt,
+        pd.policy_coverage_start_dt,
+        pd.policy_coverage_end_dt,
+        pd.policy_cancel_dt,
+        pd.policy_cancel_trans_dt,
+        pd.policy_audit_dt,
+        pd.policy_sub_dt,
+        pd.policy_issue_dt,
+        so.sub_poo,
+        sl.policy_status_key AS sl_policy_status_key,
+        sl.policy_status_lineage
+      FROM
+        policydates pd
+        LEFT JOIN autowind aw ON LOWER(TRIM(pd.code)) = LOWER(TRIM(aw.keyfield))
+        LEFT JOIN nextpolicy np ON LOWER(TRIM(pd.code)) = LOWER(TRIM(np.currpol))
+        LEFT JOIN submissionorigin so ON LOWER(TRIM(pd.code)) = LOWER(TRIM(so.code))
+        LEFT JOIN statuslineage sl ON 1=1

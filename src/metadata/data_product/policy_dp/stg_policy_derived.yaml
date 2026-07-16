@@ -1,0 +1,293 @@
+target:
+  lakehouse: den_lhw_scu_001_policy_curated
+  schema: stg_policy
+  table: stg_policy_derived
+  load_strategy: overwrite
+  key_columns:
+  unknown_record: False
+  identity: False
+
+source:
+  - name: stg_policy_base
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: stg_policy
+    table: stg_policy_base
+    incremental: False
+
+  - name: insured
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: insured
+    incremental: False
+
+  - name: billings
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: billings
+    incremental: False
+
+  - name: wcinfo
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: wcinfo
+    incremental: False
+
+  - name: lookups
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: lookups
+    incremental: False
+
+  - name: mgnotrans
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: mgnotrans
+    incremental: False
+
+query:
+  # stg_policy_inforce_dates logic
+  - name: inforcedates
+    sql: |
+      SELECT
+        pb.code,
+        (
+          CASE 
+            WHEN CAST(pb.policy_effec_start_dt AS DATE) > CAST(pb.policy_issue_dt AS DATE)
+            THEN CAST(pb.policy_effec_start_dt AS DATE)
+            ELSE CAST(pb.policy_issue_dt AS DATE)
+          END
+        ) AS policy_inforce_start_date,
+        (
+          CASE 
+            WHEN CAST(pb.policy_effec_end_dt AS DATE) <> CAST(pb.policy_coverage_end_dt AS DATE)
+            THEN (
+              CASE 
+                WHEN CAST(pb.policy_cancel_dt AS DATE) > CAST(pb.policy_cancel_trans_dt AS DATE)
+                THEN CAST(pb.policy_cancel_dt AS DATE)
+                WHEN CAST(pb.policy_cancel_trans_dt AS DATE) < CAST(pb.policy_effec_end_dt AS DATE)
+                THEN CAST(pb.policy_cancel_trans_dt AS DATE)
+                ELSE CAST(pb.policy_effec_end_dt AS DATE)
+              END
+            )
+            ELSE CAST(pb.policy_effec_end_dt AS DATE)
+          END
+        ) AS policy_inforce_end_date
+      FROM
+        stg_policy_base pb
+      WHERE
+        pb.policy_issue_dt IS NOT NULL
+
+  # stg_policy_status_mapping logic  
+  - name: statusmapping
+    sql: |
+      SELECT
+        i.code,
+        CASE
+          WHEN LOWER(TRIM(i.flags39)) = 'w'
+          AND COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'p' THEN 'NB - Canceled Pro-rata'
+          WHEN LOWER(TRIM(i.flags39)) = 'x'
+          AND COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'p' THEN 'NB - Canceled Pro-rata'
+          WHEN LOWER(TRIM(i.flags39)) = 'w'
+          AND COALESCE(LOWER(TRIM(i.flags14)), '') = 'r'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'p' THEN 'RN - Canceled Pro-rata'
+          WHEN LOWER(TRIM(i.flags39)) = 'x'
+          AND COALESCE(LOWER(TRIM(i.flags14)), '') = 'r'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'p' THEN 'RN - Canceled Pro-rata'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'w' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'n' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'NB - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'x' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'n' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'NB - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'w' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'r' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'RN - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'x' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'r' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'RN - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'w' 
+          AND LOWER(trim(COALESCE(i.stat5,''))) = 'c' THEN 'Canceled For Rewrite'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'x' 
+          AND LOWER(trim(COALESCE(i.stat5,''))) = 'c' THEN 'Canceled For Reissue'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'w' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'n' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'NB - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'x' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'n' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'NB - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'w' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'r' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'RN - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'x' 
+          AND LOWER(TRIM(COALESCE(i.flags14, ''))) = 'r' 
+          AND LOWER(TRIM(COALESCE(i.stat5,''))) = 'c' 
+          AND LOWER(TRIM(COALESCE(i.typcancel,''))) = 's' THEN 'RN - Canceled Short Rate'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'w' 
+          AND LOWER(trim(COALESCE(i.stat5,''))) = 'c' THEN 'Canceled For Rewrite'
+          WHEN LOWER(TRIM(COALESCE(i.flags39,''))) = 'x' 
+          AND LOWER(trim(COALESCE(i.stat5,''))) = 'c' THEN 'Canceled For Reissue'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'f' THEN 'NB - Canceled Flat'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 's' THEN 'NB - Canceled Short Rate'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'p' THEN 'NB - Canceled Pro-rata'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND i.poytdprem IS NULL
+          AND LOWER(TRIM(COALESCE(pb.autouwstatus, ''))) <> 'decline' THEN 'NB - Abandoned Before Prem Est'            
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND i.poytdprem IS NULL
+          AND LOWER(TRIM(COALESCE(pb.autouwstatus, ''))) = 'decline' THEN 'NB - Decline - Class of Exposure'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND i.poytdprem IS NOT NULL
+          AND LOWER(TRIM(COALESCE(pb.autouwstatus, ''))) <> 'decline' THEN 'NB - Agent Withdrew After Initial Prem Estimate'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND i.poytdprem IS NOT NULL
+          AND LOWER(TRIM(COALESCE(pb.autouwstatus, ''))) = 'decline' THEN 'NB - Decline - Questions'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by ca/uw' THEN 'NB - Decline - Broker of Record'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND LOWER(TRIM(i.stat0)) <> 'p'
+          AND mg.code IS NOT NULL THEN 'NB - Not Responding to UW'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND LOWER(TRIM(i.stat0)) = 'p' THEN 'NB - Quote Not Taken'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+          AND LOWER(TRIM(i.stat0)) <> 'p' THEN 'NB - Agent Withdraw Before Quote'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          AND LOWER(TRIM(l.descrip)) = 'declined by ca/uw' THEN 'NB - Decline - UW'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          AND LOWER(TRIM(i.stat2)) = 'i'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') <> 'c' THEN 'NB - Issued'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          AND (
+            (
+              LOWER(TRIM(l.descrip)) IN ('pending agy decision', 'accepted by agency')
+              AND LOWER(TRIM(i.stat2)) <> 'i'
+            )
+            OR (
+              LOWER(TRIM(l.descrip)) = 'waiting for info'
+              AND LOWER(TRIM(i.stat0)) = 'p'
+            )
+          ) THEN 'NB - Open Quote'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND (
+            (
+              COALESCE(LOWER(TRIM(i.flags33)), '') = 'p'
+              AND i.poytdprem IS NOT NULL
+            )
+            OR COALESCE(LOWER(TRIM(i.flags33)), '') <> 'p'
+          ) THEN 'NB - Open Completed Submission'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
+          AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p' THEN 'NB - Open Submission'
+          WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n' THEN 'NB - Other Exception'
+          WHEN LOWER(TRIM(i.flags14)) = 'r' AND LOWER(TRIM(i.stat2)) = 'i' AND COALESCE(LOWER(TRIM(i.stat5)), '') <> 'c' THEN 'RN - Issued'
+          WHEN LOWER(TRIM(i.flags14)) = 'r' AND LOWER(TRIM(i.stat2)) = 'i' AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 's' THEN 'RN - Canceled Short Rate'
+          WHEN LOWER(TRIM(i.flags14)) = 'r'
+          AND LOWER(TRIM(i.stat2)) = 'i'
+          AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+          AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'p' THEN 'RN - Canceled Pro-rata'
+          WHEN LOWER(TRIM(i.flags14)) = 'r'
+          AND LOWER(TRIM(i.stat2)) <> 'i'
+          AND LOWER(TRIM(l.descrip)) = 'declined by ca/uw' THEN 'RN - Guard Declined'
+          WHEN LOWER(TRIM(i.flags14)) = 'r'
+          AND (
+            LOWER(TRIM(i.stat2)) <> 'i'
+            AND LOWER(TRIM(l.descrip)) = 'declined by agency'
+            AND LOWER(TRIM(COALESCE(p.offerren, ''))) = 'y'
+          )
+          OR (
+            LOWER(TRIM(i.stat2)) = 'i'
+            AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+            AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 'f'
+          ) THEN 'RN - Quote Not Taken'
+          WHEN LOWER(TRIM(i.flags14)) = 'r'
+          AND LOWER(TRIM(i.stat2)) <> 'i'
+          AND LOWER(TRIM(COALESCE(p.offerren, ''))) = 'y' THEN 'RN - Open Quote'
+          WHEN LOWER(TRIM(i.flags14)) = 'r'
+          AND LOWER(TRIM(i.stat2)) <> 'i'
+          AND LOWER(TRIM(COALESCE(p.offerren, ''))) <> 'y' THEN 'RN - Open Renewal'
+          WHEN LOWER(TRIM(i.flags14)) = 'r' THEN 'RN - Other Exception'
+          ELSE 'Other Exception'
+        END AS policy_status_cd
+      FROM
+        insured i
+        LEFT OUTER JOIN billings b ON LOWER(TRIM(b.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN wcinfo w ON LOWER(TRIM(w.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN lookups l ON LOWER(TRIM(l.keyfield)) = 'stat7'
+          AND LOWER(TRIM(l.programid)) = 'insured'
+          AND LOWER(TRIM(l.vals)) = LOWER(TRIM(i.stat7))
+        LEFT OUTER JOIN stg_policy_base pb ON LOWER(TRIM(pb.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN (
+          SELECT DISTINCT
+            code
+          FROM
+            mgnotrans
+          WHERE
+            LOWER(TRIM(reason)) = '13.00'
+        ) mg ON LOWER(TRIM(mg.code)) = LOWER(TRIM(i.code))
+        LEFT OUTER JOIN insured p ON LOWER(TRIM(p.code)) = LOWER(TRIM(i.renewalofcode))
+        LEFT JOIN (
+          SELECT DISTINCT
+            mn.code
+          FROM
+            mgnotrans mn
+            INNER JOIN mgnotrans mn2 ON LOWER(TRIM(mn.code)) = LOWER(TRIM(mn2.code))
+              AND mn2.typeid = 143
+            LATERAL VIEW EXPLODE (SPLIT(mn.extra, '\\|')) x AS value
+          WHERE
+            LOWER(TRIM(mn.transcode)) = 'ex'
+            AND LOWER(TRIM(value)) <> ''
+        ) m ON LOWER(TRIM(m.code)) = LOWER(TRIM(p.code))
+        LEFT OUTER JOIN lookups ln ON LOWER(TRIM(ln.keyfield)) = 'stat7'
+          AND LOWER(TRIM(ln.programid)) = 'insured'
+          AND LOWER(TRIM(ln.vals)) = LOWER(TRIM(pb.nextpolstat7))
+      WHERE
+        LOWER(TRIM(i.code)) = LOWER(TRIM(i.basemgacode))
+        AND LOWER(TRIM(i.agency)) <> 'pafake10'
+
+  # Final combined table
+  - name: stg_policy_derived
+    sql: |
+      SELECT
+        id.code,
+        id.policy_inforce_start_date,
+        id.policy_inforce_end_date,
+        sm.policy_status_cd
+      FROM
+        inforcedates id
+        INNER JOIN statusmapping sm ON LOWER(TRIM(id.code)) = LOWER(TRIM(sm.code))
