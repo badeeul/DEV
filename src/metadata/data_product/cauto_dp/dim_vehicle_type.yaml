@@ -23,7 +23,7 @@ query:
       with cte_lookups_vehiclesize
       as
       (
-        select lower(trim(l.vals)) as vals, lower(trim(l.descrip)) as descrip
+        select l.vals as vals, l.descrip as descrip
         from lookups l
         where lower(trim(l.programid)) = 'uwvehicles'
         and lower(trim(l.keyfield)) = 'vehiclesize'
@@ -32,7 +32,7 @@ query:
       , cte_lookups_vehicletype
       as
       (
-        select lower(trim(l.vals)) as vals, lower(trim(l.descrip)) as descrip
+        select l.vals as vals, l.descrip as descrip
         from lookups l
         where lower(trim(l.programid)) = 'uwvehicles'
         and lower(trim(l.keyfield)) = 'vehicletype'
@@ -42,7 +42,7 @@ query:
       , cte_regplate
       as
       (
-        select 'regplate' as vals, 'registration plate' as descrip
+        select 'REGPLATE' as vals, 'Registration Plate' as descrip
       )
       
       , cte_union_lookups
@@ -58,17 +58,17 @@ query:
       select
         vals as vehicle_type_bus_key
       , descrip as vehicle_type_desc
-      , (case vals 
-          when 'lighttruck' then 'light truck'
-          when 'mediumtruck' then 'medium truck'
-          when 'heavytruck' then 'heavy truck'
-          when 'extraheavytruck' then 'extra heavy truck'
-          when 'private' then 'ppt'
-          when 'trailer' then 'trailer'
-          else 'all other'
+      , (case lower(trim(vals))
+          when 'lighttruck' then 'Light Truck'
+          when 'mediumtruck' then 'Medium Truck'
+          when 'heavytruck' then 'Heavy Truck'
+          when 'extraheavytruck' then 'Extra Heavy Truck'
+          when 'private' then 'PPT'
+          when 'trailer' then 'Trailer'
+          else 'All Other'
         end) as vehicle_type_group
-      , (case when vals in ('trailer', 'regplate', 'unknown', 'not applicable') then 'n' else 'y' end) as power_unit_ind
-      , (case vals 
+      , (case when lower(trim(vals)) in ('trailer', 'regplate', 'unknown', 'not applicable') then 'N' else 'Y' end) as power_unit_ind
+      , (case lower(trim(vals))
           when 'lighttruck' then 1
           when 'mediumtruck' then 2
           when 'heavytruck' then 3

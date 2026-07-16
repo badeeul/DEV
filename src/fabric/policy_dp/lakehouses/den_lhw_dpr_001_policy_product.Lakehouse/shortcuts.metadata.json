@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Territory Manager",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_employee",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Producer Relations Advisor",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_employee",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Trans Written Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Trans Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Submission Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Issue Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Effective Start Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Effective End Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Decision Underwriter",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_employee",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Coverage Start Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Coverage End Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  {
+    "name": "Policy Cancel Date",
+    "path": "/Tables/policy",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/policy/dim_date",
+        "itemId": "00000000-0000-0000-0000-000000000000",
+        "workspaceId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  }
+]

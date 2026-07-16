@@ -16,12 +16,12 @@
 
 # MARKDOWN ********************
 
-# ## Purpose 
-# 
-# 
-# # 
-# 
-# # 
+# ## Purpose # 
+# # 
+# # 
+# # 
+# # 
+# # 
 # The purpose of this notebook is to create tables (if they don't exist) in the observability lakehouse.
 
 

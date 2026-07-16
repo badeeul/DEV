@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: policy
   table: fact_policy_transaction
-  load_strategy: merge
+  load_strategy: overwrite
   key_columns:
     - src_trans_id_type
     - src_trans_id
@@ -14,12 +14,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: True
+    incremental: False
   - name: wcpayrol
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: wcpayrol
-    incremental: True
+    incremental: False
   - name: wcinfo
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
@@ -29,7 +29,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: uwbuildings
-    incremental: True
+    incremental: False
   - name: mgextra
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
@@ -44,27 +44,27 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: archive_uwbuildings
-    incremental: True
+    incremental: False
   - name: mgtrans
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: mgtrans
-    incremental: True
+    incremental: False
   - name: mgnotrans
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: mgnotrans
-    incremental: True
+    incremental: False
   - name: polact
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: polact
-    incremental: True
+    incremental: False
   - name: pc_products
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: pc_products
-    incremental: True
+    incremental: False
   - name: dim_policy
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy

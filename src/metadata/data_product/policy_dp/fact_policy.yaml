@@ -113,12 +113,12 @@ source:
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_policy_status
-    incremental: False
+    incremental: false
   - name: dim_lob_product
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_lob_product
-    incremental: False
+    incremental: false
 
 query:
   - name: fact_policy
@@ -305,11 +305,13 @@ query:
               THEN 1
               ELSE 0
             END AS rn_issued_count,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - issued paid|%'
+          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
+                AND NOT(lower(TRIM(i.producttype)) <> 'b' AND LOWER(TRIM(i.lob)) <> 'db' AND dp.first_dwnpymnt_recd_dt IS NULL)
               THEN i.podecprem
               ELSE 0
             END AS rn_issued_dwnpymnt_recd_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - issued paid|%'
+          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
+                AND NOT(lower(TRIM(i.producttype)) <> 'b' AND LOWER(TRIM(i.lob)) <> 'db' AND dp.first_dwnpymnt_recd_dt IS NULL)
               THEN 1
               ELSE 0
             END AS rn_issued_dwnpymnt_recd_count,
@@ -359,13 +361,13 @@ query:
         LEFT OUTER JOIN pc_products pc ON wc.productid = pc.productid
         LEFT OUTER JOIN dimpolicystatuslineage dpsl ON LOWER(TRIM(dpsl.code)) = LOWER(TRIM(i.code))
         LEFT OUTER JOIN np_combined_withstatuses npcw ON LOWER(TRIM(i.code)) = LOWER(TRIM(npcw.currpol))
+        LEFT OUTER JOIN dim_policy dp ON LOWER(TRIM(dp.policy_num_bus_key)) = LOWER(TRIM(i.code)) AND dp.dl_is_current_flag = 1
         LEFT OUTER JOIN (
           SELECT i1.code AS code, SUM(amount) AS expprem 
           FROM insured i1 
           INNER JOIN mgtrans mgt1 ON LOWER(TRIM(mgt1.code)) = LOWER(TRIM(i1.code)) AND mgt1.writtenon <= i1.poexpir 
           GROUP BY i1.code
         ) prem ON LOWER(TRIM(prem.code)) = LOWER(TRIM(i.code))
-        LEFT OUTER JOIN dim_policy dp ON LOWER(TRIM(i.code)) = LOWER(TRIM(dp.policy_num_bus_key)) AND dp.dl_is_current_flag = 1
         LEFT OUTER JOIN (
           SELECT code, SUM(amount) AS inforceprem 
           FROM mgtrans 

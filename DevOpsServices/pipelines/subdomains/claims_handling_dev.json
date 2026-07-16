@@ -3,7 +3,7 @@
   "targetWorkspaceName": "Claims-ClaimsHandling-DEV",
   "targetSuperDomain": "Claims",
   "targetSubDomain": "Claims Handling",
-  "targetProject": "DnA Claims",
+  "targetProject": "DnA Claims-NG",
   "targetRepository": "DnA Claims - Claims Handling",
   "environment": "dev",
   "pep": [
@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-dev-claimshdl-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
   "contributorGroupPrincipalIds": "e0b158e6-4d51-4c52-92c0-11c323a333a5,327492ef-6d87-4172-91cb-fea969388395,50b189b1-3f2d-4b54-a3db-c97ef05534d0,c21cf7b1-c59a-4881-877e-7176b60f843b,85dab429-1f73-4a32-b74b-d387ffdaec50",
-  "viewerGroupPrincipalIds": "4e4df1ad-829d-4c07-9222-ef8209ec42de,262e8fd1-c52f-4924-9dba-66aa6e04f6ad,1d54db5b-e0ec-435c-9601-a330ef9a0ce9,a7f79446-ab6d-4cfa-80ea-0a5bbb526fe7"
+  "viewerGroupPrincipalIds": "4e4df1ad-829d-4c07-9222-ef8209ec42de,262e8fd1-c52f-4924-9dba-66aa6e04f6ad,1d54db5b-e0ec-435c-9601-a330ef9a0ce9,a7f79446-ab6d-4cfa-80ea-0a5bbb526fe7",
+  "variableGroupAdmins": "GUARD DnA - Claims Claims Handling - Data Product Arch,GUARD DnA - Claims Claims Handling - Data Eng,GUARD DnA - Claims Claims Handling - Data Eng - Consultant"
 }

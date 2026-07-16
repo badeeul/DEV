@@ -3,7 +3,7 @@
   "targetWorkspaceName": "PdtandPrc-CommPdtLyr-DnA-Analytics",
   "targetSuperDomain": "Pdt and Prc",
   "targetSubDomain": "Comm Pdt Lyr",
-  "targetProject": "DnA Pdt and Prc",
+  "targetProject": "DnA Pdt and Prc-NG",
   "targetRepository": "DnA Pdt and Prc - Comn Pdt Lyr",
   "environment": "ana",
   "pep": [
@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-prod-commpdtlyr-eus",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "04fa688f-207a-4790-9822-0ccbf912bdfe,3c2804ea-3571-418a-94c7-e393243be67e,48619855-9880-4f96-ac90-6ef67733a472,5800c66a-3ed6-4cc6-a794-a0dffbbaad1a,6f06e883-6cf8-45ec-b393-a8e9cf100776,863d6271-68fb-483d-bf17-1b8485730128,bfd646fd-78d9-4aaa-a38d-f6a8fc2babcd,e0689d34-6cd9-4e66-9c99-954d52f41088,f130b9fb-3d4d-430d-8815-b42c4393643e",
-  "viewerGroupPrincipalIds": "e5a41b7f-b259-4da1-8347-16911a3cd7f3,f3553506-25b5-48aa-8062-2af2eb8b0a3b,50b9781d-d835-4f29-8e68-2aa33256c4d6,6e10b2ab-dbaa-479e-88a1-02838f8a46fd"
+  "viewerGroupPrincipalIds": "e5a41b7f-b259-4da1-8347-16911a3cd7f3,f3553506-25b5-48aa-8062-2af2eb8b0a3b,50b9781d-d835-4f29-8e68-2aa33256c4d6,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "variableGroupAdmins": "GUARD DnA - Pdt and Prc Comm Pdt Lyr - Data Product Arch,GUARD DnA - Pdt and Prc Comm Pdt Lyr - Data Eng,GUARD DnA - Pdt and Prc Comm Pdt Lyr - Data Eng  - Consultant"
 }

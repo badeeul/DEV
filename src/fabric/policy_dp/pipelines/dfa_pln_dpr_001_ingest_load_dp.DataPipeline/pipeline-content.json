@@ -6,7 +6,9 @@
         "typeProperties": {
           "source": {
             "type": "JsonSource",
-            "formatSettings": { "type": "JsonReadSettings" },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
             "storeSettings": {
               "type": "LakehouseReadSettings",
               "recursive": false,
@@ -69,14 +71,38 @@
         "type": "InvokePipeline",
         "typeProperties": {
           "parameters": {
-            "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
-            "workspace_id": { "value": "@pipeline().parameters.workspace_id", "type": "Expression" },
-            "Feed_Name": { "value": "@pipeline().parameters.Feed_Name", "type": "Expression" },
-            "Product_Name": { "value": "@pipeline().parameters.Product_Name", "type": "Expression" },
-            "lh_raw_id": { "value": "@pipeline().parameters.lh_raw_id", "type": "Expression" },
-            "lh_observability_id": { "value": "@pipeline().parameters.lh_observability_id", "type": "Expression" },
-            "run_id": { "value": "@variables('elt_values')[0]", "type": "Expression" },
-            "elt_start_date_time": { "value": "@variables('elt_values')[1]", "type": "Expression" }
+            "lh_metadata_id": {
+              "value": "@pipeline().parameters.lh_metadata_id",
+              "type": "Expression"
+            },
+            "workspace_id": {
+              "value": "@pipeline().parameters.workspace_id",
+              "type": "Expression"
+            },
+            "Feed_Name": {
+              "value": "@pipeline().parameters.Feed_Name",
+              "type": "Expression"
+            },
+            "Product_Name": {
+              "value": "@pipeline().parameters.Product_Name",
+              "type": "Expression"
+            },
+            "lh_raw_id": {
+              "value": "@pipeline().parameters.lh_raw_id",
+              "type": "Expression"
+            },
+            "lh_observability_id": {
+              "value": "@pipeline().parameters.lh_observability_id",
+              "type": "Expression"
+            },
+            "run_id": {
+              "value": "@variables('elt_values')[0]",
+              "type": "Expression"
+            },
+            "elt_start_date_time": {
+              "value": "@variables('elt_values')[1]",
+              "type": "Expression"
+            }
           },
           "waitOnCompletion": false,
           "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -110,14 +136,38 @@
         "type": "InvokePipeline",
         "typeProperties": {
           "parameters": {
-            "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
-            "workspace_id": { "value": "@pipeline().parameters.workspace_id", "type": "Expression" },
-            "Feed_Name": { "value": "@pipeline().parameters.Feed_Name", "type": "Expression" },
-            "Product_Name": { "value": "@pipeline().parameters.Product_Name", "type": "Expression" },
-            "lh_raw_id": { "value": "@pipeline().parameters.lh_raw_id", "type": "Expression" },
-            "lh_observability_id": { "value": "@pipeline().parameters.lh_observability_id", "type": "Expression" },
-            "ELT_Id": { "value": "@variables('elt_values')[0]", "type": "Expression" },
-            "Elt_Start_Date_Time": { "value": "@variables('elt_values')[1]", "type": "Expression" }
+            "lh_metadata_id": {
+              "value": "@pipeline().parameters.lh_metadata_id",
+              "type": "Expression"
+            },
+            "workspace_id": {
+              "value": "@pipeline().parameters.workspace_id",
+              "type": "Expression"
+            },
+            "Feed_Name": {
+              "value": "@pipeline().parameters.Feed_Name",
+              "type": "Expression"
+            },
+            "Product_Name": {
+              "value": "@pipeline().parameters.Product_Name",
+              "type": "Expression"
+            },
+            "lh_raw_id": {
+              "value": "@pipeline().parameters.lh_raw_id",
+              "type": "Expression"
+            },
+            "lh_observability_id": {
+              "value": "@pipeline().parameters.lh_observability_id",
+              "type": "Expression"
+            },
+            "ELT_Id": {
+              "value": "@variables('elt_values')[0]",
+              "type": "Expression"
+            },
+            "Elt_Start_Date_Time": {
+              "value": "@variables('elt_values')[1]",
+              "type": "Expression"
+            }
           },
           "waitOnCompletion": true,
           "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -138,27 +188,51 @@
         "dependsOn": [
           {
             "activity": "Initiate Feed Run",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       }
     ],
     "parameters": {
-      "Feed_Name": { "type": "string", "defaultValue": "policy_dp" },
-      "Product_Name": { "type": "string", "defaultValue": "POLICY" },
-      "lh_metadata_id": { "type": "string", "defaultValue": "e1f7dcaf-d353-44de-ab25-c9e1891f1e69" },
-      "workspace_id": { "type": "string", "defaultValue": "58a93363-20a3-4815-898b-95f75831bf7f" },
-      "lh_raw_id": { "type": "string", "defaultValue": "9e038f68-f821-414a-bbde-5e65c2b4a8c9" },
-      "lh_observability_id": { "type": "string", "defaultValue": "890a9e00-1883-424f-84a8-99087e10aa5f" },
-      "skip_database_restore": { "type": "bool", "defaultValue": false }
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "policy_dp"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "POLICY"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "dd833297-aa05-4142-887c-1e5e01ceecc3"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "a5b83bde-449c-4623-a821-90f37a02ac15"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "890c80a0-8732-4669-ba8d-5633637feed7"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "354ed696-2caa-4049-8799-2f6dcf5c8adc"
+      }
     },
     "variables": {
-      "elt_values": { "type": "Array" },
+      "elt_values": {
+        "type": "Array"
+      },
       "database_names": {
         "type": "String",
         "defaultValue": "GIGINSDATA,PROSPECTHOLDINGARCHIVE"
       },
-      "delay_seconds": { "type": "Integer", "defaultValue": 60 }
+      "delay_seconds": {
+        "type": "Integer",
+        "defaultValue": 60
+      }
     }
   }
 }

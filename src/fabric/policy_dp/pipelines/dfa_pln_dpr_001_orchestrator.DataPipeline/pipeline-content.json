@@ -10,7 +10,10 @@
             "type": "Expression"
           }
         },
-        "policy": { "secureOutput": false, "secureInput": false },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
         "name": "Get ELT Values",
         "dependsOn": []
       },
@@ -19,7 +22,9 @@
         "typeProperties": {
           "source": {
             "type": "JsonSource",
-            "formatSettings": { "type": "JsonReadSettings" },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
             "storeSettings": {
               "type": "LakehouseReadSettings",
               "recursive": false,
@@ -75,8 +80,14 @@
               "type": "InvokePipeline",
               "typeProperties": {
                 "parameters": {
-                  "DatabaseNames": { "value": "@variables('database_names')", "type": "Expression" },
-                  "DelaySeconds": { "value": "@variables('delay_seconds')", "type": "Expression" },
+                  "DatabaseNames": {
+                    "value": "@variables('database_names')",
+                    "type": "Expression"
+                  },
+                  "DelaySeconds": {
+                    "value": "@variables('delay_seconds')",
+                    "type": "Expression"
+                  },
                   "CurrentDate": {
                     "value": "@formatDateTime(addHours(pipeline().TriggerTime, -4),'yyyy-MM-dd')",
                     "type": "Expression"
@@ -92,8 +103,8 @@
               },
               "policy": {
                 "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
+                "retry": 22,
+                "retryIntervalInSeconds": 1800,
                 "secureInput": false,
                 "secureOutput": false
               },
@@ -106,7 +117,9 @@
         "dependsOn": [
           {
             "activity": "Get ELT Values",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -126,7 +139,9 @@
         "dependsOn": [
           {
             "activity": "Get Product List",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -146,7 +161,9 @@
         "dependsOn": [
           {
             "activity": "Get Product List",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -164,7 +181,9 @@
               "typeProperties": {
                 "source": {
                   "type": "JsonSource",
-                  "formatSettings": { "type": "JsonReadSettings" },
+                  "formatSettings": {
+                    "type": "JsonReadSettings"
+                  },
                   "storeSettings": {
                     "type": "LakehouseReadSettings",
                     "recursive": false,
@@ -208,7 +227,7 @@
               },
               "name": "Get Feed Metadata",
               "dependsOn": []
-            },
+            },            
             {
               "type": "InvokePipeline",
               "typeProperties": {
@@ -218,8 +237,7 @@
                   "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
                   "workspace_id": { "value": "@pipeline().parameters.workspace_id", "type": "Expression" },
                   "lh_observability_id": { "value": "@pipeline().parameters.lh_observability_id", "type": "Expression" },
-                  "lh_raw_id": { "value": "@item().lh_raw_id", "type": "Expression" },
-                  "skip_database_restore": { "value": "@item().skip_database_restore", "type": "Expression" }
+                  "lh_raw_id": { "value": "@pipeline().parameters.lh_raw_id", "type": "Expression" }
                 },
                 "waitOnCompletion": true,
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -240,7 +258,9 @@
               "dependsOn": [
                 {
                   "activity": "Get Feed Metadata",
-                  "dependencyConditions": ["Succeeded"]
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
                 }
               ]
             },
@@ -248,10 +268,22 @@
               "type": "InvokePipeline",
               "typeProperties": {
                 "parameters": {
-                  "Feed_Name": { "value": "@item().Feed_Name", "type": "Expression" },
-                  "Product_Name": { "value": "@item().Product_Name", "type": "Expression" },
-                  "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
-                  "ELT_Id": { "value": "@variables('elt_values')[0]", "type": "Expression" },
+                  "Feed_Name": {
+                    "value": "@item().Feed_Name",
+                    "type": "Expression"
+                  },
+                  "Product_Name": {
+                    "value": "@item().Product_Name",
+                    "type": "Expression"
+                  },
+                  "lh_metadata_id": {
+                    "value": "@pipeline().parameters.lh_metadata_id",
+                    "type": "Expression"
+                  },
+                  "ELT_Id": {
+                    "value": "@variables('elt_values')[0]",
+                    "type": "Expression"
+                  },
                   "email_template_name": "dp_loopback_verification_results.json",
                   "parameter_template_name": "params_loopback_verification.json"
                 },
@@ -270,11 +302,13 @@
                 "secureInput": false,
                 "secureOutput": false
               },
-              "name": "DP Success Event (async)",
+              "name": "DP Success Event",
               "dependsOn": [
                 {
                   "activity": "Run Core Pipeline",
-                  "dependencyConditions": ["Succeeded"]
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
                 }
               ]
             },
@@ -282,7 +316,53 @@
               "type": "TridentNotebook",
               "typeProperties": {
                 "notebookId": "3c72dc57-586b-9254-40b3-f89b4e9a7cd1",
-                "workspaceId": "00000000-0000-0000-0000-000000000000"
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "elt_id": {
+                    "value": { "value": "@variables('elt_values')[0]", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "trigger_time": {
+                    "value": { "value": "@variables('elt_values')[1]", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "pipeline_name": {
+                    "value": { "value": "@pipeline().PipelineName", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "data_product": {
+                    "value": { "value": "@item().Product_Name", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "database_names": {
+                    "value": { "value": "@variables('database_names')", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "workspace_id": {
+                    "value": { "value": "@pipeline().DataFactory", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "metadata_lakehouse_id": {
+                    "value": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "pipeline_id": {
+                    "value": { "value": "@pipeline().Pipeline", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "run_id": {
+                    "value": { "value": "@pipeline().RunId", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "template_name": {
+                    "value": { "value": "dp_pipeline_failed.json", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "feed_name": {
+                    "value": { "value": "@item().Feed_Name", "type": "Expression" },
+                    "type": "string"
+                  }
+                }
               },
               "policy": {
                 "timeout": "0.12:00:00",
@@ -295,17 +375,21 @@
               "dependsOn": [
                 {
                   "activity": "Run Core Pipeline",
-                  "dependencyConditions": ["Failed"]
+                  "dependencyConditions": [
+                    "Failed"
+                  ]
                 }
               ]
             }
           ]
         },
-        "name": "ForEach Group 1 (Sequential)",
+        "name": "ForEach Group 1",
         "dependsOn": [
           {
             "activity": "If Skip Database Restore Check",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           },
           {
             "activity": "Filter Group 1",
@@ -381,8 +465,7 @@
                   "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
                   "workspace_id": { "value": "@pipeline().parameters.workspace_id", "type": "Expression" },
                   "lh_observability_id": { "value": "@pipeline().parameters.lh_observability_id", "type": "Expression" },
-                  "lh_raw_id": { "value": "@item().lh_raw_id", "type": "Expression" },
-                  "skip_database_restore": { "value": "@item().skip_database_restore", "type": "Expression" }
+                  "lh_raw_id": { "value": "@pipeline().parameters.lh_raw_id", "type": "Expression" }                  
                 },
                 "waitOnCompletion": true,
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -445,7 +528,53 @@
               "type": "TridentNotebook",
               "typeProperties": {
                 "notebookId": "3c72dc57-586b-9254-40b3-f89b4e9a7cd1",
-                "workspaceId": "00000000-0000-0000-0000-000000000000"
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "elt_id": {
+                    "value": { "value": "@variables('elt_values')[0]", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "trigger_time": {
+                    "value": { "value": "@variables('elt_values')[1]", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "pipeline_name": {
+                    "value": { "value": "@pipeline().PipelineName", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "data_product": {
+                    "value": { "value": "@item().Product_Name", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "database_names": {
+                    "value": { "value": "@variables('database_names')", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "workspace_id": {
+                    "value": { "value": "@pipeline().DataFactory", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "metadata_lakehouse_id": {
+                    "value": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "pipeline_id": {
+                    "value": { "value": "@pipeline().Pipeline", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "run_id": {
+                    "value": { "value": "@pipeline().RunId", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "template_name": {
+                    "value": { "value": "dp_pipeline_failed.json", "type": "Expression" },
+                    "type": "string"
+                  },
+                  "feed_name": {
+                    "value": { "value": "@item().Feed_Name", "type": "Expression" },
+                    "type": "string"
+                  }
+                }
               },
               "policy": {
                 "timeout": "0.12:00:00",
@@ -464,10 +593,10 @@
             }
           ]
         },
-        "name": "ForEach Group 2 (Parallel)",
+        "name": "ForEach Group 2",
         "dependsOn": [
           {
-            "activity": "ForEach Group 1 (Sequential)",
+            "activity": "ForEach Group 1",
             "dependencyConditions": ["Succeeded"]
           },
           {
@@ -480,7 +609,86 @@
         "type": "TridentNotebook",
         "typeProperties": {
           "notebookId": "3c72dc57-586b-9254-40b3-f89b4e9a7cd1",
-          "workspaceId": "00000000-0000-0000-0000-000000000000"
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "elt_id": {
+              "value": {
+                "value": "@variables('elt_values')[0]",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "trigger_time": {
+              "value": {
+                "value": "@variables('elt_values')[1]",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_name": {
+              "value": {
+                "value": "@pipeline().PipelineName",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "data_product": {
+              "value": {
+                "value": "@pipeline().parameters.Product_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "database_names": {
+              "value": {
+                "value": "@variables('database_names')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "workspace_id": {
+              "value": {
+                "value": "@pipeline().DataFactory",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "metadata_lakehouse_id": {
+              "value": {
+                "value": "@pipeline().parameters.lh_metadata_id",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_id": {
+              "value": {
+                "value": "@pipeline().Pipeline",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "template_name": {
+              "value": {
+                "value": "database_not_online.json",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "feed_name": {
+              "value": {
+                "value": "@pipeline().parameters.Feed_Name",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -493,24 +701,34 @@
         "dependsOn": [
           {
             "activity": "If Skip Database Restore Check",
-            "dependencyConditions": ["Failed"]
+            "dependencyConditions": [
+              "Failed"
+            ]
           }
         ]
       }
     ],
     "parameters": {
-      "lh_metadata_id": { "type": "string", "defaultValue": "6740d2cc-6489-41d9-af20-315d92df9c07" },
-      "workspace_id": { "type": "string", "defaultValue": "02c3d55e-485c-419b-b587-21a51aeb261e" },
-      "lh_observability_id": { "type": "string", "defaultValue": "4d28e738-2cce-4fc1-b6eb-c91f9b28b95b" },
+      "lh_metadata_id": { "type": "string", "defaultValue": "669f2667-731a-4ac6-854a-0e61f1d77a45" },
+      "workspace_id": { "type": "string", "defaultValue": "d372a400-2b4c-409b-a19b-243ee159f369" },
+      "lh_observability_id": { "type": "string", "defaultValue": "fde19505-7227-41ba-8c50-cc2cd433fefa" },
+      "Product_Name": { "type": "string", "defaultValue": "PRODUCT & PRICING" },
+      "Feed_Name": { "type": "string", "defaultValue": "PRODUCT & PRICING" },
+      "lh_raw_id": { "type": "string", "defaultValue": "c322b1e8-5644-4b4f-8fdc-2b7dab38d3cf" },
       "skip_database_restore": { "type": "bool", "defaultValue": false }
     },
     "variables": {
-      "elt_values": { "type": "Array" },
+      "elt_values": {
+        "type": "Array"
+      },
       "database_names": {
         "type": "String",
-        "defaultValue": "GIGINSDATA,PROSPECTHOLDINGARCHIVE"
+        "defaultValue": "GIGINSDATA"
       },
-      "delay_seconds": { "type": "Integer", "defaultValue": 60 }
+      "delay_seconds": {
+        "type": "Integer",
+        "defaultValue": 60
+      }
     }
   }
 }

@@ -3,7 +3,7 @@
   "targetWorkspaceName": "PdtandPrc-DataSciRnD-MTR",
   "targetSuperDomain": "Pdt and Prc",
   "targetSubDomain": "Data Sci RnD",
-  "targetProject": "DnA Pdt and Prc",
+  "targetProject": "DnA Pdt and Prc-NG",
   "targetRepository": "DnA Pdt and Prc - Data Sci RnD",
   "environment": "mtr",
   "pep": [
@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-hub-fabric01-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "6fcb0551-1a6e-4ec1-be61-66c7cca249e6,24b23f12-b53a-4a6c-a4d7-ebda2d9ff8e8",
-  "viewerGroupPrincipalIds": "8e0a27fc-e247-4ca2-be88-eb9b62c25a4f,5dd74215-37a9-4b79-a53b-7663796c7bc2,baa1c84c-219d-4805-ba76-4b61e08afb63,5e44056c-abf3-4676-8b45-7d7cf68398a9,b85a6636-25fc-49ef-bca6-44f1d12f6c6e,3cfd7d12-3ff0-4a24-aea8-58d321aa5163,9a84696c-1f5b-4769-b736-511565665d5d,8fb72864-5841-42b6-99e4-854668760646,831315a0-6197-47d6-8f3e-7999214aa273,7ed7f933-0e1e-43fc-971e-9c08d4a078de,bd6bce47-6829-4ae5-9363-7a8435b10bf1"
+  "viewerGroupPrincipalIds": "8e0a27fc-e247-4ca2-be88-eb9b62c25a4f,5dd74215-37a9-4b79-a53b-7663796c7bc2,baa1c84c-219d-4805-ba76-4b61e08afb63,5e44056c-abf3-4676-8b45-7d7cf68398a9,b85a6636-25fc-49ef-bca6-44f1d12f6c6e,3cfd7d12-3ff0-4a24-aea8-58d321aa5163,9a84696c-1f5b-4769-b736-511565665d5d,8fb72864-5841-42b6-99e4-854668760646,831315a0-6197-47d6-8f3e-7999214aa273,7ed7f933-0e1e-43fc-971e-9c08d4a078de,bd6bce47-6829-4ae5-9363-7a8435b10bf1",
+  "variableGroupAdmins": "GUARD DnA - Pdt and Prc Data Sci RnD - Data Product Arch,GUARD DnA - Pdt and Prc Data Sci RnD - Data Eng"
 }

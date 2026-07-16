@@ -1,0 +1,33 @@
+{
+  "targetVariableGroup": "PlatformServices-ClaimsHandling-PREPRD",
+  "targetWorkspaceName": "Claims-ClaimsHandling-PREPRD",
+  "targetSuperDomain": "Claims",
+  "targetSubDomain": "Claims Handling",
+  "targetProject": "DnA Claims-NG",
+  "targetRepository": "DnA Claims - Claims Handling",
+  "environment": "preprd",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Claims Claims Handling - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3E1C977E-2467-4F8A-B9CD-0FA98811FD48",
+  "keyvaultName": "bhg-prod-claimshdl-eus-k",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "e0b158e6-4d51-4c52-92c0-11c323a333a5,c21cf7b1-c59a-4881-877e-7176b60f843b,85dab429-1f73-4a32-b74b-d387ffdaec50",
+  "viewerGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "variableGroupAdmins": "GUARD DnA - Claims Claims Handling - Data Product Arch,GUARD DnA - Claims Claims Handling - Data Eng,GUARD DnA - Claims Claims Handling - Data Eng - Consultant"
+}

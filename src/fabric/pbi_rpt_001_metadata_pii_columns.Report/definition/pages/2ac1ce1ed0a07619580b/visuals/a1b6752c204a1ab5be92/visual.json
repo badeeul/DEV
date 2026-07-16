@@ -1,0 +1,228 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "a1b6752c204a1ab5be92",
+  "position": {
+    "x": 8.1612090680100753,
+    "y": 213.09823677581863,
+    "z": 0,
+    "height": 506.90176322418131,
+    "width": 1250.4785894206548,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "lakehouse"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.lakehouse",
+              "nativeQueryRef": "lakehouse"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "table"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.table",
+              "nativeQueryRef": "table"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "schema"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.schema",
+              "nativeQueryRef": "schema"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "pii_column"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.pii_column",
+              "nativeQueryRef": "pii_column"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "254.52356622426458D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "yaml_pii_columns_config.lakehouse"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "94D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "yaml_pii_columns_config.table"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "68D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "yaml_pii_columns_config.schema"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "152D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "yaml_pii_columns_config.pii_column"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'PII Columns'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "''"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "2f55bc74757a1b5c1227",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "lakehouse"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "878658426c39207058e2",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "table"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f275436ed89910090a4c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "schema"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "23e1167297758ba0c506",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "pii_column"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

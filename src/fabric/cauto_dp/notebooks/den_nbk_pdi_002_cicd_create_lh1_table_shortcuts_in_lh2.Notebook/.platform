@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "den_nbk_pdi_002_cicd_create_lh1_table_shortcuts_in_lh2",
+    "description": "New notebook"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c87e4439-33de-8a4e-4d36-ca95893244ce"
+  }
+}

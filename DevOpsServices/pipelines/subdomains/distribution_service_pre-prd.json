@@ -1,0 +1,33 @@
+{
+  "targetVariableGroup": "PlatformServices-Service-PREPRD",
+  "targetWorkspaceName": "Distribution-Service-PREPRD",
+  "targetSuperDomain": "Distribution",
+  "targetSubDomain": "Service",
+  "targetProject": "DnA Distribution-NG",
+  "targetRepository": "DnA Distro - Service",
+  "environment": "preprd",
+  "pep": [
+    {
+      "allowed": true,
+      "resourceId": "/subscriptions/54b793d9-b402-4390-9cb2-e18192123540/resourceGroups/bhg-prod-dist-service-eus-rg/providers/Microsoft.KeyVault/vaults/bhg-prod-service-eus-kv",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": true,
+      "resourceId": "/subscriptions/54b793d9-b402-4390-9cb2-e18192123540/resourceGroups/bhg-prod-dist-service-eus-rg/providers/Microsoft.Storage/storageAccounts/bhgproddistserviceeussa1",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distribution Service - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "8EC86993-48EC-4FE7-B905-A74A0A192064",
+  "keyvaultName": "bhg-prod-service-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "df63e84e-9732-4710-9132-7dbb31e667d5,0b76f7d9-c670-4b6b-b448-b1c4b71a8f8a,83a4b381-40fb-4800-964e-4ee636d7b2cf",
+  "viewerGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "variableGroupAdmins": "GUARD DnA - Distribution Service - Data Product Arch,GUARD DnA - Distribution Service - Data Eng,GUARD DnA - Distribution Service - Data Eng  - Consultant"
+}

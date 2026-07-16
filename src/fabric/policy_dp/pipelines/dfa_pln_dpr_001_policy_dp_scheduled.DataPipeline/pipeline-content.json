@@ -57,7 +57,9 @@
         "dependsOn": [
           {
             "activity": "Initiate Feed Run",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -66,7 +68,9 @@
         "typeProperties": {
           "source": {
             "type": "JsonSource",
-            "formatSettings": { "type": "JsonReadSettings" },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            },
             "storeSettings": {
               "type": "LakehouseReadSettings",
               "recursive": false,
@@ -113,7 +117,9 @@
         "dependsOn": [
           {
             "activity": "If Skip Database Restore Check",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -126,7 +132,10 @@
             "type": "Expression"
           }
         },
-        "policy": { "secureInput": false, "secureOutput": false },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
         "name": "Get ELT Values",
         "dependsOn": []
       },
@@ -134,14 +143,38 @@
         "type": "InvokePipeline",
         "typeProperties": {
           "parameters": {
-            "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
-            "workspace_id": { "value": "@pipeline().parameters.workspace_id", "type": "Expression" },
-            "Feed_Name": { "value": "@pipeline().parameters.Feed_Name", "type": "Expression" },
-            "Product_Name": { "value": "@pipeline().parameters.Product_Name", "type": "Expression" },
-            "lh_raw_id": { "value": "@pipeline().parameters.lh_raw_id", "type": "Expression" },
-            "lh_observability_id": { "value": "@pipeline().parameters.lh_observability_id", "type": "Expression" },
-            "run_id": { "value": "@variables('elt_values')[0]", "type": "Expression" },
-            "elt_start_date_time": { "value": "@variables('elt_values')[1]", "type": "Expression" }
+            "lh_metadata_id": {
+              "value": "@pipeline().parameters.lh_metadata_id",
+              "type": "Expression"
+            },
+            "workspace_id": {
+              "value": "@pipeline().parameters.workspace_id",
+              "type": "Expression"
+            },
+            "Feed_Name": {
+              "value": "@pipeline().parameters.Feed_Name",
+              "type": "Expression"
+            },
+            "Product_Name": {
+              "value": "@pipeline().parameters.Product_Name",
+              "type": "Expression"
+            },
+            "lh_raw_id": {
+              "value": "@pipeline().parameters.lh_raw_id",
+              "type": "Expression"
+            },
+            "lh_observability_id": {
+              "value": "@pipeline().parameters.lh_observability_id",
+              "type": "Expression"
+            },
+            "run_id": {
+              "value": "@variables('elt_values')[0]",
+              "type": "Expression"
+            },
+            "elt_start_date_time": {
+              "value": "@variables('elt_values')[1]",
+              "type": "Expression"
+            }
           },
           "waitOnCompletion": false,
           "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -163,7 +196,9 @@
         "dependsOn": [
           {
             "activity": "Get Feed Metadata",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -180,8 +215,14 @@
               "type": "InvokePipeline",
               "typeProperties": {
                 "parameters": {
-                  "DatabaseNames": { "value": "@variables('database_names')", "type": "Expression" },
-                  "DelaySeconds": { "value": "@variables('delay_seconds')", "type": "Expression" },
+                  "DatabaseNames": {
+                    "value": "@variables('database_names')",
+                    "type": "Expression"
+                  },
+                  "DelaySeconds": {
+                    "value": "@variables('delay_seconds')",
+                    "type": "Expression"
+                  },
                   "CurrentDate": {
                     "value": "@formatDateTime(addHours(pipeline().TriggerTime, -4), 'yyyy-MM-dd')\n",
                     "type": "Expression"
@@ -211,7 +252,9 @@
         "dependsOn": [
           {
             "activity": "Get ELT Values",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       },
@@ -222,47 +265,80 @@
           "workspaceId": "00000000-0000-0000-0000-000000000000",
           "parameters": {
             "elt_id": {
-              "value": { "value": "@variables('elt_values')[0]", "type": "Expression" },
+              "value": {
+                "value": "@variables('elt_values')[0]",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "trigger_time": {
-              "value": { "value": "@variables('elt_values')[1]", "type": "Expression" },
+              "value": {
+                "value": "@variables('elt_values')[1]",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "pipeline_name": {
-              "value": { "value": "@pipeline().PipelineName", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().PipelineName",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "data_product": {
-              "value": { "value": "@pipeline().parameters.Product_Name", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().parameters.Product_Name",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "database_names": {
-              "value": { "value": "@variables('database_names')", "type": "Expression" },
+              "value": {
+                "value": "@variables('database_names')",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "workspace_id": {
-              "value": { "value": "@pipeline().DataFactory", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().DataFactory",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "metadata_lakehouse_id": {
-              "value": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().parameters.lh_metadata_id",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "pipeline_id": {
-              "value": { "value": "@pipeline().Pipeline", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().Pipeline",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "run_id": {
-              "value": { "value": "@pipeline().RunId", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "template_name": {
-              "value": { "value": "dp_pipeline_failed.json", "type": "Expression" },
+              "value": {
+                "value": "dp_pipeline_failed.json",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "feed_name": {
-              "value": { "value": "@pipeline().parameters.Feed_Name", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().parameters.Feed_Name",
+                "type": "Expression"
+              },
               "type": "string"
             }
           }
@@ -278,7 +354,9 @@
         "dependsOn": [
           {
             "activity": "Invoke Data Product Ochestrator",
-            "dependencyConditions": ["Failed"]
+            "dependencyConditions": [
+              "Failed"
+            ]
           }
         ]
       },
@@ -289,47 +367,80 @@
           "workspaceId": "00000000-0000-0000-0000-000000000000",
           "parameters": {
             "elt_id": {
-              "value": { "value": "@variables('elt_values')[0]", "type": "Expression" },
+              "value": {
+                "value": "@variables('elt_values')[0]",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "trigger_time": {
-              "value": { "value": "@variables('elt_values')[1]", "type": "Expression" },
+              "value": {
+                "value": "@variables('elt_values')[1]",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "pipeline_name": {
-              "value": { "value": "@pipeline().PipelineName", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().PipelineName",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "data_product": {
-              "value": { "value": "@pipeline().parameters.Product_Name", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().parameters.Product_Name",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "database_names": {
-              "value": { "value": "@variables('database_names')", "type": "Expression" },
+              "value": {
+                "value": "@variables('database_names')",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "workspace_id": {
-              "value": { "value": "@pipeline().DataFactory", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().DataFactory",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "metadata_lakehouse_id": {
-              "value": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().parameters.lh_metadata_id",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "pipeline_id": {
-              "value": { "value": "@pipeline().Pipeline", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().Pipeline",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "run_id": {
-              "value": { "value": "@pipeline().RunId", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "template_name": {
-              "value": { "value": "database_not_online.json", "type": "Expression" },
+              "value": {
+                "value": "database_not_online.json",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "feed_name": {
-              "value": { "value": "@pipeline().parameters.Feed_Name", "type": "Expression" },
+              "value": {
+                "value": "@pipeline().parameters.Feed_Name",
+                "type": "Expression"
+              },
               "type": "string"
             }
           }
@@ -345,7 +456,9 @@
         "dependsOn": [
           {
             "activity": "If Skip Database Restore Check",
-            "dependencyConditions": ["Failed"]
+            "dependencyConditions": [
+              "Failed"
+            ]
           }
         ]
       },
@@ -353,10 +466,22 @@
         "type": "InvokePipeline",
         "typeProperties": {
           "parameters": {
-            "Feed_Name": { "value": "@pipeline().parameters.Feed_Name", "type": "Expression" },
-            "lh_metadata_id": { "value": "@pipeline().parameters.lh_metadata_id", "type": "Expression" },
-            "Product_Name": { "value": "@pipeline().parameters.Product_Name", "type": "Expression" },
-            "ELT_Id": { "value": "@variables('elt_values')[0]", "type": "Expression" }
+            "Feed_Name": {
+              "value": "@pipeline().parameters.Feed_Name",
+              "type": "Expression"
+            },
+            "lh_metadata_id": {
+              "value": "@pipeline().parameters.lh_metadata_id",
+              "type": "Expression"
+            },
+            "Product_Name": {
+              "value": "@pipeline().parameters.Product_Name",
+              "type": "Expression"
+            },
+            "ELT_Id": {
+              "value": "@variables('elt_values')[0]",
+              "type": "Expression"
+            }
           },
           "waitOnCompletion": true,
           "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -377,27 +502,55 @@
         "dependsOn": [
           {
             "activity": "Invoke Data Product Ochestrator",
-            "dependencyConditions": ["Succeeded"]
+            "dependencyConditions": [
+              "Succeeded"
+            ]
           }
         ]
       }
     ],
     "parameters": {
-      "Feed_Name": { "type": "string", "defaultValue": "policy_dp" },
-      "Product_Name": { "type": "string", "defaultValue": "POLICY" },
-      "lh_metadata_id": { "type": "string", "defaultValue": "6740d2cc-6489-41d9-af20-315d92df9c07" },
-      "workspace_id": { "type": "string", "defaultValue": "02c3d55e-485c-419b-b587-21a51aeb261e" },
-      "lh_raw_id": { "type": "string", "defaultValue": "1027abfc-e358-48ff-9ab7-0b099049fc72" },
-      "lh_observability_id": { "type": "string", "defaultValue": "4d28e738-2cce-4fc1-b6eb-c91f9b28b95b" },
-      "skip_database_restore": { "type": "bool", "defaultValue": false }
+      "Feed_Name": {
+        "type": "string",
+        "defaultValue": "policy_dp"
+      },
+      "Product_Name": {
+        "type": "string",
+        "defaultValue": "POLICY"
+      },
+      "lh_metadata_id": {
+        "type": "string",
+        "defaultValue": "dd833297-aa05-4142-887c-1e5e01ceecc3"
+      },
+      "workspace_id": {
+        "type": "string",
+        "defaultValue": "a5b83bde-449c-4623-a821-90f37a02ac15"
+      },
+      "lh_raw_id": {
+        "type": "string",
+        "defaultValue": "890c80a0-8732-4669-ba8d-5633637feed7"
+      },
+      "lh_observability_id": {
+        "type": "string",
+        "defaultValue": "354ed696-2caa-4049-8799-2f6dcf5c8adc"
+      },
+      "skip_database_restore": {
+        "type": "bool",
+        "defaultValue": false
+      }
     },
     "variables": {
-      "elt_values": { "type": "Array" },
+      "elt_values": {
+        "type": "Array"
+      },
       "database_names": {
         "type": "String",
         "defaultValue": "GIGINSDATA,PROSPECTHOLDINGARCHIVE"
       },
-      "delay_seconds": { "type": "Integer", "defaultValue": 60 }
+      "delay_seconds": {
+        "type": "Integer",
+        "defaultValue": 60
+      }
     }
   }
 }

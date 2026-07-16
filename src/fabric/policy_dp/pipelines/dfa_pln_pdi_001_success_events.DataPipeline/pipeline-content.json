@@ -17,7 +17,7 @@
           "scriptBlockExecutionTimeout": "02:00:00"
         },
         "externalReferences": {
-          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+          "connection": "025d8a7b-15d1-4a6d-bc68-8b2384ea4d31"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -45,7 +45,7 @@
           "scriptBlockExecutionTimeout": "02:00:00"
         },
         "externalReferences": {
-          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+          "connection": "025d8a7b-15d1-4a6d-bc68-8b2384ea4d31"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -73,7 +73,7 @@
           "scriptBlockExecutionTimeout": "02:00:00"
         },
         "externalReferences": {
-          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+          "connection": "025d8a7b-15d1-4a6d-bc68-8b2384ea4d31"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -101,7 +101,7 @@
           "scriptBlockExecutionTimeout": "02:00:00"
         },
         "externalReferences": {
-          "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+          "connection": "025d8a7b-15d1-4a6d-bc68-8b2384ea4d31"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -355,15 +355,15 @@
       },
       "Product_Name": {
         "type": "string",
-        "defaultValue": "@pipeline().parameters.Product_Name"
+        "defaultValue": "POLICY"
       },
       "lh_metadata_id": {
         "type": "string",
-        "defaultValue": "@pipeline().parameters.lh_metadata_id"
+        "defaultValue": "dd833297-aa05-4142-887c-1e5e01ceecc3"
       },
       "Feed_Name": {
         "type": "string",
-        "defaultValue": "@pipeline().parameters.Feed_Name"
+        "defaultValue": "policy_feed"
       }
     },
     "variables": {

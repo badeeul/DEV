@@ -20,8 +20,8 @@ query:
   - name: dim_trailer_type # name of the query for it to be referenced by subsequent queries
     # use lower in where clause
     sql: select 
-         lower(trim(l.vals)) as trailer_type_bus_key
-        , lower(trim(l.descrip)) as trailer_type_desc
+         l.vals as trailer_type_bus_key
+        , l.descrip as trailer_type_desc
         , (case lower(trim(l.vals)) 
             when 'semi' then 1
             when 'trailers' then 2

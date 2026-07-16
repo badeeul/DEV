@@ -1,21 +1,22 @@
 param (
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$Organization,
    
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$ProjectName,
    
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$RequiredSecurityGroup,
    
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$OptionalSecurityGroup = "",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$Environment = "INT", # Default to INT, can be overridden in pipeline
 
     [string]$LifecycleEnvironmentName = "lifecycleManagementApproval",
     [string]$FeatureEnvironmentName = "featureManagementApproval",
+    [string]$ProductionEnvironmentName = "productionManagementApproval",
     [int]$TimeoutInMinutes = 4320 # Default 3 days
 )
 
@@ -52,8 +53,8 @@ function Get-AuthorizationHeader {
     )
    
     $headers = @{
-        Authorization = "Basic $Token"
-        Accept = "application/json"
+        Authorization  = "Basic $Token"
+        Accept         = "application/json"
         "Content-Type" = "application/json"
     }
     return $headers
@@ -92,7 +93,7 @@ function Add-EnvironmentSecurity {
     # Create role assignment payload
     $roleAssignment = @(
         @{
-            userId = $userId
+            userId   = $userId
             roleName = $RoleName
         }
     )
@@ -143,7 +144,8 @@ function Get-EnvironmentSecurity {
                 Write-Host "##[debug]    Display Name: $($assignment.identity.displayName)"
                 Write-Host "##[debug]    Role: $($assignment.role.Name)"
             }
-        } else {
+        }
+        else {
             Write-Host "##[debug]No security role assignments found for environment '$($Environment.name)'"
         }
        
@@ -216,7 +218,7 @@ function Update-ProjectValidUsersRole {
     $updatedAssignments = @()
 
     $updatedAssignments += @{
-        userId = $projectValidUsersAssignment.identity.id
+        userId   = $projectValidUsersAssignment.identity.id
         roleName = $ToRole
     }  
    
@@ -226,7 +228,8 @@ function Update-ProjectValidUsersRole {
     if ($updateSuccess) {
         Write-Host "##[debug] Successfully updated Project Valid Users role from '$FromRole' to '$ToRole' in environment '$($Environment.name)'"
         return $true
-    } else {
+    }
+    else {
         Write-Error "Failed to update Project Valid Users role in environment '$($Environment.name)'"
         return $false
     }
@@ -253,11 +256,13 @@ function Set-EnvironmentSecurity {
         # Force array format for single item
         if ($PSVersionTable.PSVersion.Major -ge 7) {
             $roleAssignmentBody = $RoleAssignments | ConvertTo-Json -Depth 3 -AsArray
-        } else {
+        }
+        else {
             $singleObjectJson = $RoleAssignments[0] | ConvertTo-Json -Depth 3
             $roleAssignmentBody = "[$singleObjectJson]"
         }
-    } else {
+    }
+    else {
         # Multiple items naturally create an array
         $roleAssignmentBody = $RoleAssignments | ConvertTo-Json -Depth 3
     }
@@ -300,14 +305,14 @@ function Get-SecurityGroupWithLocalId {
    
     # Create request body for IdentityPicker API
     $requestBody = @{
-        query = $GroupName
-        identityTypes = @("user", "group")
+        query           = $GroupName
+        identityTypes   = @("user", "group")
         operationScopes = @("ims", "source")
-        options = @{
+        options         = @{
             MinResults = 1
             MaxResults = 20
         }
-        properties = @(
+        properties      = @(
             "DisplayName", "IsMru", "ScopeName", "SamAccountName", "Active",
             "SubjectDescriptor", "Department", "JobTitle", "Mail", "MailNickname",
             "PhysicalDeliveryOfficeName", "SignInAddress", "Surname", "Guest",
@@ -345,12 +350,12 @@ function Get-SecurityGroupWithLocalId {
                             Write-Host "##[debug]  SAM Account Name: $($identity.samAccountName)"
                            
                             return @{
-                                displayName = $identity.displayName
-                                localId = $identity.localId  # For approval checks
-                                originId = $identity.originId  # For entitlements lookup
+                                displayName       = $identity.displayName
+                                localId           = $identity.localId  # For approval checks
+                                originId          = $identity.originId  # For entitlements lookup
                                 subjectDescriptor = $identity.subjectDescriptor
-                                samAccountName = $identity.samAccountName
-                                entityType = $identity.entityType
+                                samAccountName    = $identity.samAccountName
+                                entityType        = $identity.entityType
                             }
                         }
                     }
@@ -418,7 +423,7 @@ function New-Environment {
     Write-Host "##[debug]API URL: $apiUrl"
    
     $environmentBody = @{
-        name = $Name
+        name        = $Name
         description = "Created via automation script"
     } | ConvertTo-Json -Depth 2
    
@@ -531,7 +536,7 @@ function Add-ApprovalCheck {
                 continue
             }
             $approvers += @{
-                id = $rg.localId
+                id          = $rg.localId
                 displayName = $rg.displayName
             }
             Write-Host "##[debug]Added required approver: $($rg.displayName) with ID: $($rg.localId)"
@@ -542,11 +547,12 @@ function Add-ApprovalCheck {
     if ($null -ne $OptionalGroup) {
         if ($null -ne $OptionalGroup.localId) {
             $approvers += @{
-                id = $OptionalGroup.localId
+                id          = $OptionalGroup.localId
                 displayName = $OptionalGroup.displayName
             }
             Write-Host "##[debug]Added optional approver: $($OptionalGroup.displayName) with ID: $($OptionalGroup.localId)"
-        } else {
+        }
+        else {
             Write-Warning "Optional group '$($OptionalGroup.displayName)' does not have a localId. Skipping."
         }
     }
@@ -559,23 +565,23 @@ function Add-ApprovalCheck {
    
     # Create check payload
     $checkPayload = @{
-        type = @{
-            id = "8C6F20A7-A545-4486-9777-F762FAFE0D4D" # ID for approval check
+        type     = @{
+            id   = "8C6F20A7-A545-4486-9777-F762FAFE0D4D" # ID for approval check
             name = "Approval"
         }
         settings = @{
-            executionOrder = 1
-            instructions = "Please review the deployment details before approving."
-            minRequiredApprovers = 1
-            approvers = $approvers
+            executionOrder            = 1
+            instructions              = "Please review the deployment details before approving."
+            minRequiredApprovers      = 1
+            approvers                 = $approvers
             requesterCannotBeApprover = $false
-            approverCount = $approvers.Count
-            approvalsRequired = 1  
+            approverCount             = $approvers.Count
+            approvalsRequired         = 1  
         }
-        timeout = $TimeoutInMinutes
+        timeout  = $TimeoutInMinutes
         resource = @{
             type = "environment"
-            id = $Environment.id.ToString()
+            id   = $Environment.id.ToString()
             name = $Environment.name
         }
     } | ConvertTo-Json -Depth 10
@@ -702,10 +708,10 @@ try {
     Write-Host "##[debug]Required Security Group: $RequiredSecurityGroup"
     Write-Host "##[debug]Optional Security Group: $OptionalSecurityGroup"
    
-    # only execute for environment with INT
-    if (-not ($Environment -match 'INT')) {
-      Write-Host "Skipping environment creation for $Environment"
-      exit 0
+    # only execute for environment with INT or PRD
+    if (-not ($Environment -eq 'INT' -or $Environment -eq 'PRD')) {
+        Write-Host "Skipping environment creation for $Environment"
+        exit 0
     }
 
     $token = Get-DevOpsAuthToken
@@ -749,7 +755,8 @@ try {
        
         if ($null -eq $optionalGroup) {
             Write-Warning "Optional security group '$OptionalSecurityGroup' not found. Continuing with only required group."
-        } else {
+        }
+        else {
             Write-Host "##[debug] Optional group validated:"
             Write-Host "##[debug]  Name: $($optionalGroup.displayName)"
             Write-Host "##[debug]  Approver ID (localId): $($optionalGroup.localId)"
@@ -757,34 +764,53 @@ try {
         }
     }
    
-    # Configure Lifecycle Environment (with both approval and security)
-    Write-Host "##[section]Step 2: Configuring Lifecycle Environment"
-    $lifecycleSuccess = Configure-Environment -EnvironmentName $LifecycleEnvironmentName -RequiredGroup $requiredGroups -OptionalGroup $optionalGroup -ProjectId $projectId -TimeoutInMinutes $TimeoutInMinutes -Headers $headers
+    if ($Environment -eq 'INT') {
+        # Configure Lifecycle Environment (with both approval and security)
+        Write-Host "##[section]Step 2: Configuring Lifecycle Environment"
+        $lifecycleSuccess = Configure-Environment -EnvironmentName $LifecycleEnvironmentName -RequiredGroup $requiredGroups -OptionalGroup $optionalGroup -ProjectId $projectId -TimeoutInMinutes $TimeoutInMinutes -Headers $headers
    
-    if (-not $lifecycleSuccess) {
-        Write-Error "Failed to configure lifecycle environment"
-        exit 1
+        if (-not $lifecycleSuccess) {
+            Write-Error "Failed to configure lifecycle environment"
+            exit 1
+        }
+
+        Update-ProjectValidUsersRole -Environment $lifecycleSuccess -ProjectId $projectId -Headers $headers -ProjectValidUserGroupName "Project Valid Users" -FromRole "Reader" -ToRole "Administrator"
+
+        # Configure Feature Environment (with approval and security, required group only)
+        Write-Host "##[section]Step 3: Configuring Feature Environment"
+        $featureSuccess = Configure-Environment -EnvironmentName $FeatureEnvironmentName -RequiredGroup $requiredGroups -OptionalGroup $null -ProjectId $projectId -TimeoutInMinutes $TimeoutInMinutes -Headers $headers
+   
+        if (-not $featureSuccess) {
+            Write-Error "Failed to configure feature environment"
+            exit 1
+        }
+   
+        Update-ProjectValidUsersRole -Environment $featureSuccess -ProjectId $projectId -Headers $headers -ProjectValidUserGroupName "Project Valid Users" -FromRole "Reader" -ToRole "Administrator"
+
+        Write-Host "##[section] All environments configured successfully with approvals AND security!" -ForegroundColor Green
+        Write-Host "##[debug]Summary:"
+        Write-Host "##[debug]   $LifecycleEnvironmentName Configured with both groups as approvers and administrators"
+        Write-Host "##[debug]   $FeatureEnvironmentName Configured with required group as approver and administrator"
+    }
+    elseif ($Environment -eq 'PRD') {
+        # Configure Production Environment (with approval and security, required group only)
+        Write-Host "##[section]Step 2: Configuring Production Environment"
+        $productionSuccess = Configure-Environment -EnvironmentName $ProductionEnvironmentName -RequiredGroup $requiredGroups -OptionalGroup $optionalGroup -ProjectId $projectId -TimeoutInMinutes $TimeoutInMinutes -Headers $headers
+   
+        if (-not $productionSuccess) {
+            Write-Error "Failed to configure production environment"
+            exit 1
+        }
+   
+        Update-ProjectValidUsersRole -Environment $productionSuccess -ProjectId $projectId -Headers $headers -ProjectValidUserGroupName "Project Valid Users" -FromRole "Reader" -ToRole "Administrator"
+
+        Write-Host "##[section] Production environment configured successfully with approvals AND security!" -ForegroundColor Green
+        Write-Host "##[debug]Summary:"
+        Write-Host "##[debug]   $ProductionEnvironmentName Configured with required group as approver and administrator"
     }
 
-    Update-ProjectValidUsersRole -Environment $lifecycleSuccess -ProjectId $projectId -Headers $headers -ProjectValidUserGroupName "Project Valid Users" -FromRole "Reader" -ToRole "Administrator"
-
-    # Configure Feature Environment (with approval and security, required group only)
-    Write-Host "##[section]Step 3: Configuring Feature Environment"
-    $featureSuccess = Configure-Environment -EnvironmentName $FeatureEnvironmentName -RequiredGroup $requiredGroups -OptionalGroup $null -ProjectId $projectId -TimeoutInMinutes $TimeoutInMinutes -Headers $headers
-   
-    if (-not $featureSuccess) {
-        Write-Error "Failed to configure feature environment"
-        exit 1
-    }
-   
-    Update-ProjectValidUsersRole -Environment $featureSuccess -ProjectId $projectId -Headers $headers -ProjectValidUserGroupName "Project Valid Users" -FromRole "Reader" -ToRole "Administrator"
-
-    Write-Host "##[section] All environments configured successfully with approvals AND security!" -ForegroundColor Green
-    Write-Host "##[debug]Summary:"
-    Write-Host "##[debug]   $LifecycleEnvironmentName Configured with both groups as approvers and administrators"
-    Write-Host "##[debug]   $FeatureEnvironmentName Configured with required group as approver and administrator"
-
-} catch {
+}
+catch {
     Write-Error "An error occurred: $_"
     Write-Error $_.ScriptStackTrace
     exit 1

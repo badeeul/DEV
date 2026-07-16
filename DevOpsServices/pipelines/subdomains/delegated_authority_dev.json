@@ -3,7 +3,7 @@
   "targetWorkspaceName": "Distribution-DelegatedAuthority-DEV",
   "targetSuperDomain": "Distribution",
   "targetSubDomain": "Delegated Authority",
-  "targetProject": "DnA Distribution",
+  "targetProject": "DnA Distribution-NG",
   "targetRepository": "DnA Distro - Del Auth",
   "environment": "dev",
   "pep": [
@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-dev-delauth-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
   "contributorGroupPrincipalIds": "bb590c50-0ce1-40ac-b1f9-fc279745fe29,48c42220-954f-4ba6-acf7-3604900ef1a2,47b068d7-58df-43d1-87ef-5d95a5ec37aa,3a8f7955-311c-46dd-b98a-c7033b16420d,4a2b760b-7a21-4b66-a313-3ddfee32ec3f",
-  "viewerGroupPrincipalIds": "d355aa26-922b-425d-a3d1-9bf0deb894bc,58afc97a-f609-4593-88c0-77d2018d637e,0908d950-3852-4576-bbff-d3653f9f44d7,2f5f9392-6978-414b-8565-ee5294ac9a9e"
+  "viewerGroupPrincipalIds": "d355aa26-922b-425d-a3d1-9bf0deb894bc,58afc97a-f609-4593-88c0-77d2018d637e,0908d950-3852-4576-bbff-d3653f9f44d7,2f5f9392-6978-414b-8565-ee5294ac9a9e",
+  "variableGroupAdmins": "GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Product Arch,GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Eng,GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Eng  - Consultant"
 }

@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-hub-fabric01-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "4925c859-cb1f-422c-b444-e8296ca6aac0,12b43cab-5540-45f3-a843-d5041465524c,bdc0603f-928d-4fae-ac7e-510c30b58226,a071f4db-7fbe-42fa-bd9d-334d4cdf4e15,8d5d032a-909d-4a26-a5ec-ea8bbdd01bf4,72b84202-1510-41c5-ac41-2bf6340f8125,720ebf5a-9f4a-46f8-82e1-c938434570b3,55333612-0ab9-4852-8af0-9f390dfaae5b,4ac6b52b-7b69-46e0-9927-fd9d7c47311d",
-  "viewerGroupPrincipalIds": "ea882c16-b17a-4020-869f-bffb7d55af9d,cbad4c80-9dee-4940-9e66-bba52e3dd27f,50b9781d-d835-4f29-8e68-2aa33256c4d6,6e10b2ab-dbaa-479e-88a1-02838f8a46fd"
+  "viewerGroupPrincipalIds": "ea882c16-b17a-4020-869f-bffb7d55af9d,cbad4c80-9dee-4940-9e66-bba52e3dd27f,50b9781d-d835-4f29-8e68-2aa33256c4d6,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "variableGroupAdmins": "GUARD DnA - Missouri Cheyenne - Data Product Arch,GUARD DnA - Missouri Cheyenne - Data Eng"
 }

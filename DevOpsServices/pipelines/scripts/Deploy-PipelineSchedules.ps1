@@ -117,7 +117,7 @@ function New-PipelineSchedule {
         $configuration.startDateTime = $schedule.recurrence.startTime
     } else {
         # Use current time in UTC as default start time
-        $configuration.startDateTime = (Get-Date).AddDays(-1).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+        $configuration.startDateTime = (Get-Date).AddDays(-2).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
     }
     
     # Add endDateTime (required) - if provided, otherwise use 10 years from now
@@ -280,7 +280,7 @@ function Update-PipelineSchedule {
         $configuration.startDateTime = $schedule.recurrence.startTime
     } else {
         # Use current time in UTC as default start time
-        $configuration.startDateTime = (Get-Date).AddDays(-1).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+        $configuration.startDateTime = (Get-Date).AddDays(-2).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
     }
     
     # Add endDateTime (required) - if provided, otherwise use 10 years from now

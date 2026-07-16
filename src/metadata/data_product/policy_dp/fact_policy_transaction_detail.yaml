@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product # keep
   schema: policy # keep
   table: fact_policy_transaction_detail # target table
-  load_strategy: merge # scd type
+  load_strategy: overwrite # scd type
   key_columns: # is merge key
     - src_trans_detail_id
   unknown_record: False # keep
@@ -13,17 +13,17 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: mgnotrans # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: insured # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: insured # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: wcpayrol # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: wcpayrol # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: wcinfo # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
@@ -33,7 +33,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: uwbuildings # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: mgextra # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
@@ -48,12 +48,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: archive_uwbuildings # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: pc_products
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: pc_products
-    incremental: True
+    incremental: False
   - name: dim_policy # source table names
     lakehouse: den_lhw_dpr_001_policy_product # keep
     schema: policy # keep
@@ -191,7 +191,6 @@ query:
         , case when lower(trim(dlob.lob_cd_bus_key)) in ('wc', 'ca', 'db', 'pl', 'um', 'up', 'cx', 'cp') and lower(trim(dmkt.mkt_type_desc)) = 'e&s' then 0 else 1 end as dq_trans_detail_lob_key_mkt_type_desc_check
         , case when lower(trim(dcar.carrier_cd_bus_key)) = 'paazgu10' and lower(trim(dmkt.mkt_type_desc)) <> 'e&s' then 0 else 1 end as dq_trans_detail_cr_key_mkt_type_desc_check
         , case when lower(trim(dlob.lob_cd_bus_key)) not in ('wc', 'bp') and lower(trim(dbc.bus_class_cd_bus_key)) is not null then 0 else 1 end as dq_trans_detail_gov_bus_class_key_check
-        
 
         from mgnotrans a
         LEFT OUTER JOIN insured i on lower(trim(i.code)) = lower(trim(a.code))

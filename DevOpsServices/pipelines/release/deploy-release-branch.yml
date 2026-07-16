@@ -103,6 +103,11 @@ parameters:
   default: ''
   displayName: 'Lake House Default Readers'
 
+- name: variableGroupAdmins
+  type: string
+  default: 'Enter variable group admins'
+  displayName: 'Variable Group Admins'
+
 steps:
  
 - checkout: self
@@ -217,6 +222,23 @@ steps:
       -PepFilePath "$(pepJsonFilePath)"
       -ViewerGroupPrincipalIds "${{ parameters.viewerGroupPrincipalIds }}"
       -LakeHouseDefaultReadersFilePath "$(lakeHouseDefaultReadersJsonFilePath)"
+  env:
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    ARM_TENANT_ID: $(ARM_TENANT_ID)
+    ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+- task: PowerShell@2
+  displayName: 'Set Variable Group Permissions'
+  name: setVariableGroupPermissions
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Set-Variable-Group-Permissions.ps1'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    arguments: >
+      -VariableGroupName "${{ parameters.targetVariableGroup }}"
+      -ProjectName "${{ parameters.targetProject }}"
+      -VariableGroupAdmins "${{ parameters.variableGroupAdmins }}"
   env:
     ARM_CLIENT_ID: $(ARM_CLIENT_ID)
     ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)

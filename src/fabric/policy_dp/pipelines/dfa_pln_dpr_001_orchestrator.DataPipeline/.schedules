@@ -12,13 +12,15 @@
             "Tuesday",
             "Wednesday",
             "Thursday",
-            "Friday"
+            "Friday",
+            "Saturday",
+            "Sunday"
           ],
           "hours": [
-            11
+            6
           ],
           "minutes": [
-            45
+            30
           ]
         },
         "timeZone": "Eastern Standard Time"

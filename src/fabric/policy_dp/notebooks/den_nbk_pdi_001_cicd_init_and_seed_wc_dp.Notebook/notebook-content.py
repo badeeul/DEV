@@ -8,14 +8,9 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "ba6ff98b-55c6-41d2-b003-6d0e5e9ab772",
+# META       "default_lakehouse": "b6adb647-6f2d-4cc8-b9e2-9a1201642b6a",
 # META       "default_lakehouse_name": "den_lhw_dpr_001_policy_product",
-# META       "default_lakehouse_workspace_id": "576daab2-755c-48e5-9567-7583c3efb1b0",
-# META       "known_lakehouses": [
-# META         {
-# META           "id": "ba6ff98b-55c6-41d2-b003-6d0e5e9ab772"
-# META         }
-# META       ]
+# META       "default_lakehouse_workspace_id": "a5b83bde-449c-4623-a821-90f37a02ac15"
 # META     },
 # META     "environment": {
 # META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
@@ -26,9 +21,10 @@
 
 # MARKDOWN ********************
 
-# ## Notebook Overview
-# 
+# ## Notebook Overview# 
+# # 
 # Please refer to the [README file](https://dev.azure.com/BHGDataAndAnalytics/DnA%20Pdt%20and%20Prc/_git/DnA%20Pdt%20and%20Prc%20-%20Comn%20Pdt%20Lyr?path=%2Fdocs%2Fpolicy_dp%2Ffabric%2Fcicd_init_and_seed_policy_dp.md&version=GBmain&_a=contents) for detailed instructions and information
+
 
 # CELL ********************
 
@@ -245,7 +241,7 @@ def create_and_seed_dim_wc_carrier_placement_points_rule(schema_name: str):
 
     except Exception as e:
         logger.error(f"Error creating dim_wc_carrier_placement_points_rule: {str(e)}")
-        raise        
+        raise
 
 # METADATA ********************
 
@@ -376,7 +372,7 @@ def create_and_seed_segmentation_experience_mod(schema_name: str):
 
     except Exception as e:
         logger.error(f"Error creating segmentation_experience_mod: {str(e)}")
-        raise        
+        raise
 
 # METADATA ********************
 
@@ -504,7 +500,7 @@ def create_and_seed_segmentation_dnb_score(schema_name: str):
 
     except Exception as e:
         logger.error(f"Error creating segmentation_dnb_score: {str(e)}")
-        raise        
+        raise
 
 # METADATA ********************
 
@@ -633,7 +629,7 @@ def create_and_seed_segmentation_prior_wc_years(schema_name: str):
 
     except Exception as e:
         logger.error(f"Error creating segmentation_prior_wc_years: {str(e)}")
-        raise        
+        raise
 
 # METADATA ********************
 

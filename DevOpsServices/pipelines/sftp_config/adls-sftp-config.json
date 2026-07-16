@@ -1,0 +1,61 @@
+{
+  "folders": [
+    {
+      "partner": "Partner1",
+      "subFolders": [
+        {
+          "name": "ES_HO_PD",
+          "subFolders": [
+            {
+              "name": "Incoming_Files"
+            },
+            {
+              "name": "Rejected_Files"
+            },
+            {
+              "name": "Processed_Files"
+            },
+            {
+              "name": "Quarantine_Records"
+            },
+            {
+              "name": "Reference_Files"
+            }
+          ]
+        },
+        {
+          "name": "ES_CPROP_PD",
+          "subFolders": [
+            {
+              "name": "Incoming_Files"
+            },
+            {
+              "name": "Rejected_Files"
+            },
+            {
+              "name": "Processed_Files"
+            },
+            {
+              "name": "Quarantine_Records"
+            },
+            {
+              "name": "Reference_Files"
+            }
+          ]
+        }
+      ],
+      "users": [
+        {
+          "username": "partner1user",
+          "homeDirectory": "Partner1/ES_HO_PD",
+          "permissions": [
+            {
+              "folder": "Partner1/ES_HO_PD/Incoming_Files",
+              "permission": "rwx"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

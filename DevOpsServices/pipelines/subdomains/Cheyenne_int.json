@@ -22,11 +22,12 @@
     "lakehouse_1_name": "",
     "lakehouse_1_readerMembers": ""
   },
-  "requiredSecurityGroup": "GUARD DnA - Missouri Cheyenne - Data Product Arch",
+  "requiredSecurityGroup": "GUARD DnA - Missouri Cheyenne - Data Product Arch,GUARD DnA - Missouri Cheyenne - Data Eng,GUARD DnA - Missouri Cheyenne - Analytics Eng,GUARD DnA - Missouri Big Sioux - Data Product Arch,GUARD DnA - Missouri Big Sioux - Data Eng,GUARD DnA - Missouri Big Sioux - Analytics Eng",
   "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
   "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
   "keyvaultName": "bhg-hub-fabric01-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "12b43cab-5540-45f3-a843-d5041465524c,b8631a3c-9e45-4008-8311-dd4d7130c2d4",
-  "viewerGroupPrincipalIds": "4925c859-cb1f-422c-b444-e8296ca6aac0,72b84202-1510-41c5-ac41-2bf6340f8125,a071f4db-7fbe-42fa-bd9d-334d4cdf4e15"
+  "viewerGroupPrincipalIds": "4925c859-cb1f-422c-b444-e8296ca6aac0,72b84202-1510-41c5-ac41-2bf6340f8125,a071f4db-7fbe-42fa-bd9d-334d4cdf4e15",
+  "variableGroupAdmins": "GUARD DnA - Missouri Cheyenne - Data Product Arch,GUARD DnA - Missouri Cheyenne - Data Eng"
 }

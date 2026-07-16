@@ -1,0 +1,44 @@
+{
+    "loadGroupDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_aslob",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_coverage",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_geographic_location",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_insurable_object_building",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_bop_policy_coverage",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupSummary": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_bop_policy_summary",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ]
+}

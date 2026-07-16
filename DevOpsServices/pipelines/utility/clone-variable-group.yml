@@ -1,0 +1,51 @@
+trigger: none
+
+parameters:
+  - name: copyFromVariableGroupName
+    type: string
+    default: ''
+    displayName: 'Variable Group to Clone'
+  - name: userName
+    type: string
+    default: ''
+    displayName: 'Engineer Name e.g. jdoe'
+
+variables:
+  - group: ${{ parameters.copyFromVariableGroupName }}
+
+  - name: agentPool
+    value: GDAP-Fluidity-PlatformServices_Self-hosted-AgentPool
+
+pool:
+  name: $(agentPool)
+  vmImage: windows-latest
+
+stages:
+  - stage: CloneVariableGroup
+    displayName: Clone variable group stage
+    jobs:
+      - job: Clone
+        displayName: Clone variable group job
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          - template: ../templates/auth-setup.yml
+
+          - task: PowerShell@2
+            displayName: Clone variable group
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Clone-Variable-Group.ps1'
+              arguments: "-CopyFromVariableGroupName '${{ parameters.copyFromVariableGroupName }}' -userName '${{ parameters.userName }}'"
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
+              TEAMS_CHANNEL_WEB_URL: $(TEAMS_CHANNEL_WEB_URL)
+              TEAMS_NOTIFICATION_USERNAME: $(TEAMS_NOTIFICATION_USERNAME)
+              TEAMS_NOTIFICATION_PASSWORD: $(TEAMS_NOTIFICATION_PASSWORD)
+              TEAMS_CLIENT_ID: $(TEAMS_CLIENT_ID)
+              TEAMS_CLIENT_SECRET: $(TEAMS_CLIENT_SECRET)
+              TEAMS_TAGS: $(TEAMS_TAGS)

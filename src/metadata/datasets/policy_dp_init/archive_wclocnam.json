@@ -11,6 +11,7 @@
             "*"
         ],
         "ingestType": "full",
+        "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
         "isDynamicQuery": true
     },
     "rawProperties": {

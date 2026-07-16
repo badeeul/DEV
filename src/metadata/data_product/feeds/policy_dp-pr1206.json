@@ -1,0 +1,21 @@
+{
+    "loadGroupSnowflakeDims": [
+        {
+            "files": [
+
+            ]
+        }
+    ],
+    "loadGroupDims": [
+        {
+            "files": [
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                
+            ]
+        }
+    ]

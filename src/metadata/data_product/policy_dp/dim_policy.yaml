@@ -379,17 +379,8 @@ query:
             WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n'
             AND COALESCE(LOWER(TRIM(i.flags33)), '') = 'p' THEN 'NB - Open Submission'
             WHEN COALESCE(LOWER(TRIM(i.flags14)), '') = 'n' THEN 'NB - Other Exception'
-            WHEN LOWER(TRIM(i.flags14)) = 'r'
-            AND LOWER(TRIM(i.stat2)) = 'i'
-            AND COALESCE(LOWER(TRIM(i.stat5)), '') <> 'c'
-            AND b.firstpaid IS NOT NULL THEN 'RN - Issued Paid'
-            WHEN LOWER(TRIM(i.flags14)) = 'r'
-            AND LOWER(TRIM(i.stat2)) = 'i'
-            AND COALESCE(LOWER(TRIM(i.stat5)), '') <> 'c'
-            AND b.firstpaid IS NULL THEN 'RN - Issued Not Paid'
-            WHEN LOWER(TRIM(i.flags14)) = 'r'
-            AND LOWER(TRIM(i.stat2)) = 'i'
-            AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
+            WHEN LOWER(TRIM(i.flags14)) = 'r' AND LOWER(TRIM(i.stat2)) = 'i' AND COALESCE(LOWER(TRIM(i.stat5)), '') <> 'c' THEN 'RN - Issued'
+            WHEN LOWER(TRIM(i.flags14)) = 'r' AND LOWER(TRIM(i.stat2)) = 'i' AND COALESCE(LOWER(TRIM(i.stat5)), '') = 'c'
             AND COALESCE(LOWER(TRIM(i.typcancel)), '') = 's' THEN 'RN - Canceled Short Rate'
             WHEN LOWER(TRIM(i.flags14)) = 'r'
             AND LOWER(TRIM(i.stat2)) = 'i'
@@ -569,11 +560,10 @@ query:
         TRUE AS dl_is_current_flag,
         CAST('1901-01-01' AS DATE) AS dl_row_effective_date,
         CAST('9999-12-31' AS DATE) AS dl_row_expiration_date,
-        FALSE AS dl_is_deleted_flag 
+        FALSE AS dl_is_deleted_flag
         , case when CAST(policy_effec_start_dt AS DATE) > CAST(policy_effec_end_dt AS DATE) then 0 else 1 end as dq_effec_st_dt_check
         , case when CAST(policy_coverage_start_dt AS DATE) < CAST(policy_effec_start_dt AS DATE) then 0 else 1 end as dq_coverage_st_dt_check
         , case when CAST(policy_coverage_end_dt AS DATE) > CAST(policy_effec_end_dt AS DATE) then 0 else 1 end as dq_coverage_end_dt_check
-
       FROM
         insured i
         LEFT OUTER JOIN billings b ON LOWER(TRIM(b.code)) = LOWER(TRIM(i.code))

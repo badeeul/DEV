@@ -1,0 +1,487 @@
+table dim_policy
+	lineageTag: a867f02b-c2e7-4781-9c95-b603f4f78816
+	sourceLineageTag: [cauto].[dim_policy]
+
+	column policy_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 42505934-33d9-4261-a115-387e135134e2
+		sourceLineageTag: policy_key
+		summarizeBy: none
+		sourceColumn: policy_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column policy_num_bus_key
+		dataType: string
+		lineageTag: 5bf1e3d9-b198-4022-a109-4413c751afc4
+		sourceLineageTag: policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_bus_type
+		dataType: string
+		lineageTag: d471e39d-14de-4efa-ba9b-32bc99da6aad
+		sourceLineageTag: policy_bus_type
+		summarizeBy: none
+		sourceColumn: policy_bus_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column gov_state
+		dataType: string
+		lineageTag: 18eaffc9-4cad-44ac-92fd-15490c93e472
+		sourceLineageTag: gov_state
+		summarizeBy: none
+		sourceColumn: gov_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_start_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 17016f68-9adb-4900-bf40-0ef2ecf393b5
+		sourceLineageTag: policy_effec_start_dt
+		summarizeBy: none
+		sourceColumn: policy_effec_start_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_effec_end_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3ef1d6d4-f0f2-4850-8fb6-01b0a77cb08f
+		sourceLineageTag: policy_effec_end_dt
+		summarizeBy: none
+		sourceColumn: policy_effec_end_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_coverage_start_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b576da0d-3ad8-49ac-a10f-4bd2cd2290ae
+		sourceLineageTag: policy_coverage_start_dt
+		summarizeBy: none
+		sourceColumn: policy_coverage_start_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_coverage_end_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9ff4e9c7-65e8-4a0a-a1f5-c3825738ba3e
+		sourceLineageTag: policy_coverage_end_dt
+		summarizeBy: none
+		sourceColumn: policy_coverage_end_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_cancel_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2044f9ec-f0ef-48b1-a86e-6e704bc93d59
+		sourceLineageTag: policy_cancel_dt
+		summarizeBy: none
+		sourceColumn: policy_cancel_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_cancel_trans_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fafee2e1-9a5d-48a3-aa1f-febfa4be0b4f
+		sourceLineageTag: policy_cancel_trans_dt
+		summarizeBy: none
+		sourceColumn: policy_cancel_trans_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_audit_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f74a73b6-4592-4aa3-a50d-00b34ee8cf98
+		sourceLineageTag: policy_audit_dt
+		summarizeBy: none
+		sourceColumn: policy_audit_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_sub_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ea32dc35-940f-4d2a-9edc-6529644b6543
+		sourceLineageTag: policy_sub_dt
+		summarizeBy: none
+		sourceColumn: policy_sub_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_issue_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d6e5c80d-d1ef-4287-a192-88ff1975db34
+		sourceLineageTag: policy_issue_dt
+		summarizeBy: none
+		sourceColumn: policy_issue_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_inforce_start_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7fe04e84-724c-4f1e-bc46-209c356de979
+		sourceLineageTag: policy_inforce_start_date
+		summarizeBy: none
+		sourceColumn: policy_inforce_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_inforce_end_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 73aff738-0184-4939-863c-ce0fb988416b
+		sourceLineageTag: policy_inforce_end_date
+		summarizeBy: none
+		sourceColumn: policy_inforce_end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_inforce_policy_ind
+		dataType: string
+		lineageTag: 266c9ca9-7096-413c-ac37-74a20a0720ed
+		sourceLineageTag: current_inforce_policy_ind
+		summarizeBy: none
+		sourceColumn: current_inforce_policy_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_rn
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bed129f-14ba-4de4-8381-a463acfa16ce
+		sourceLineageTag: offer_rn
+		summarizeBy: sum
+		sourceColumn: offer_rn
+
+		annotation SummarizationSetBy = Automatic
+
+	column previous_policy_num_bus_key
+		dataType: string
+		lineageTag: f5c29c49-abee-48e8-ae3b-4c0cbfd69b6c
+		sourceLineageTag: previous_policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: previous_policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column next_policy_num_bus_key
+		dataType: string
+		lineageTag: df1a73b3-34ed-459e-a9ec-83efc40d13f1
+		sourceLineageTag: next_policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: next_policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column chain_id
+		dataType: string
+		lineageTag: c93323c4-b4b2-48ab-98db-87a924e9a7d0
+		sourceLineageTag: chain_id
+		summarizeBy: none
+		sourceColumn: chain_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_dwnpymnt_recd_dt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7a332f6d-4b47-42ed-a241-91a08067c37f
+		sourceLineageTag: first_dwnpymnt_recd_dt
+		summarizeBy: none
+		sourceColumn: first_dwnpymnt_recd_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column rewritten_reissued_ind
+		dataType: string
+		lineageTag: 7e923bc0-b508-48cb-bbf6-3a3554f42004
+		sourceLineageTag: rewritten_reissued_ind
+		summarizeBy: none
+		sourceColumn: rewritten_reissued_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	column rewrite_reissue_ind
+		dataType: string
+		lineageTag: f5ca1e0e-d03c-47d0-aefa-316a84b9709e
+		sourceLineageTag: rewrite_reissue_ind
+		summarizeBy: none
+		sourceColumn: rewrite_reissue_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_expiring_flag
+		dataType: int64
+		formatString: 0
+		lineageTag: 0536b34b-4469-4d8a-95af-e8646221c071
+		sourceLineageTag: is_expiring_flag
+		summarizeBy: sum
+		sourceColumn: is_expiring_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_renewable_flag
+		dataType: string
+		lineageTag: f401d5bc-d1d7-4359-97c5-150c20969d02
+		sourceLineageTag: is_renewable_flag
+		summarizeBy: none
+		sourceColumn: is_renewable_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_prev_policy_ubetag_flag
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b58ebb8-938d-46f7-bdc3-4e3b9a582059
+		sourceLineageTag: is_prev_policy_ubetag_flag
+		summarizeBy: sum
+		sourceColumn: is_prev_policy_ubetag_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_cloned_flag
+		dataType: int64
+		formatString: 0
+		lineageTag: 440c46d1-4a86-401d-8592-34d88b401c38
+		sourceLineageTag: is_cloned_flag
+		summarizeBy: sum
+		sourceColumn: is_cloned_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column src_policy_status_descrip
+		dataType: string
+		lineageTag: 5aace35e-55ea-4ce0-96a2-f262058f1938
+		sourceLineageTag: src_policy_status_descrip
+		summarizeBy: none
+		sourceColumn: src_policy_status_descrip
+
+		annotation SummarizationSetBy = Automatic
+
+	column latest_policy_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 4cf87ee5-c678-464b-ab4c-c6ee66c6cb33
+		sourceLineageTag: latest_policy_status_key
+		summarizeBy: none
+		sourceColumn: latest_policy_status_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column digital_decision_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 58e8607f-31bc-497d-b9a6-b82eba971da6
+		sourceLineageTag: digital_decision_status_key
+		summarizeBy: sum
+		sourceColumn: digital_decision_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column autouw_status_desc
+		dataType: string
+		lineageTag: 194dda7f-56fe-49dc-b4d7-e41583766596
+		sourceLineageTag: autouw_status_desc
+		summarizeBy: none
+		sourceColumn: autouw_status_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column sub_point_of_origin_desc
+		dataType: string
+		lineageTag: 83bd24f2-2eca-492b-8879-d78411dcb548
+		sourceLineageTag: sub_point_of_origin_desc
+		summarizeBy: none
+		sourceColumn: sub_point_of_origin_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 56d053ad-8e46-4104-911c-e1591beb20ad
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 81bc156c-4849-4b70-802c-4b378d6ccd43
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 28b04cc6-5098-494b-81aa-56076d062812
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 73144b98-bf0d-4b00-a0ed-ee8c8720af14
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_effec_st_dt_check
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8fed451d-d6ad-4973-b535-d98703102bb0
+		sourceLineageTag: dq_effec_st_dt_check
+		summarizeBy: sum
+		sourceColumn: dq_effec_st_dt_check
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_coverage_st_dt_check
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5af0b49f-410c-4c6c-832e-6db022c23516
+		sourceLineageTag: dq_coverage_st_dt_check
+		summarizeBy: sum
+		sourceColumn: dq_coverage_st_dt_check
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_coverage_end_dt_check
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: becd0a74-d9b1-4c3f-874f-1f5e271f69d2
+		sourceLineageTag: dq_coverage_end_dt_check
+		summarizeBy: sum
+		sourceColumn: dq_coverage_end_dt_check
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: fe51bb78-c1cc-44d2-a48f-834c1e231248
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: ee453669-4be4-49d8-9f55-a98ebfb18fc7
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: a197c459-b306-4986-a2a9-b8f06bb73ca2
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 7375e868-f31b-4de5-b129-315aced27fef
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 5eb794f5-f0e5-48a5-a65b-da8426bdce13
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 816718f1-57c8-4ee3-b4f3-80be264c4a17
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_policy = entity
+		mode: directLake
+		source
+			entityName: dim_policy
+			schemaName: cauto
+			expressionSource: 'DirectLake - den_lhw_dpr_001_cauto_product'
+

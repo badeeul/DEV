@@ -1,0 +1,167 @@
+table dim_insured_legal_entity_type
+	lineageTag: e06f2331-cd06-42bf-9b31-3cc7ca56b388
+	sourceLineageTag: [cauto].[dim_insured_legal_entity_type]
+
+	column insd_leg_ent_type_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a7c2329-9988-46d7-bd3b-cf0af7ab2ee6
+		sourceLineageTag: insd_leg_ent_type_key
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column insd_leg_ent_type_cd_bus_key
+		dataType: string
+		lineageTag: 813b17e1-171a-4ee0-b7ce-8c2e23048b94
+		sourceLineageTag: insd_leg_ent_type_cd_bus_key
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column insd_leg_ent_type_desc
+		dataType: string
+		lineageTag: ee0e3af7-aabd-4812-8ed5-d5fb7dbaf3bf
+		sourceLineageTag: insd_leg_ent_type_desc
+		summarizeBy: none
+		sourceColumn: insd_leg_ent_type_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 2b5d747a-a97e-4d32-be30-8baa2af9b20e
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: f0cab51f-6016-42db-bfe0-fcc982d6a67a
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 4e9d4b69-e6d9-46e0-9cdc-379b84109ba6
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 7927fd38-e996-40ee-8eb8-2f78f8a79c10
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 81b74f38-03ec-46ee-91b0-5a37359676c1
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: a816d06a-5883-474e-84ec-f1bd0559427d
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 2810886a-74c4-42a2-ae11-c06f92d704ec
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 95e251a2-f194-4655-8753-59698dce142c
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: b0279eab-52de-4471-885c-9864dd47e615
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 590ba97e-a6ef-4d99-971e-34fb358579e8
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_insured_legal_entity_type = entity
+		mode: directLake
+		source
+			entityName: dim_insured_legal_entity_type
+			schemaName: cauto
+			expressionSource: 'DirectLake - den_lhw_dpr_001_cauto_product'
+

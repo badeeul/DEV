@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_cauto_product # keep
   schema: cauto # keep
   table: dim_vehicle # target table
-  load_strategy: merge # scd type
+  load_strategy: overwrite # scd type
   key_columns: # is merge key
     - policy_num_bus_key
     - vehicle_bus_key
@@ -15,12 +15,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: cauto # keep
     table: uwvehicles # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: insured # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: insured # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: dim_vehicle_type # source table names
     lakehouse: den_lhw_dpr_001_cauto_product # keep
     schema: cauto # keep
@@ -38,12 +38,12 @@ query:
     sql: select 
          coalesce(dvt.vehicle_type_surrogate_key, -1) as vehicle_type_surrogate_key
         , coalesce(dtt.trailer_type_surrogate_key, -1) as trailer_type_surrogate_key
-        , lower(trim(i.code)) as policy_num_bus_key
-        , lower(trim(cast(v.vehicleid as string))) as vehicle_bus_key
-        , lower(trim(v.vehiclenum)) as vehicle_number
-        , lower(trim(v.vin)) as vin
-        , lower(trim(v.make)) as vehicle_make
-        , lower(trim(v.model)) as vehicle_model
+        , i.code as policy_num_bus_key
+        , cast(v.vehicleid as string) as vehicle_bus_key
+        , v.vehiclenum as vehicle_number
+        , v.vin as vin
+        , v.make as vehicle_make
+        , v.model as vehicle_model
         , v.modelyear as vehicle_model_year
         , coalesce(v.startdate, i.pobegin) as vehicle_start_date
         , coalesce(v.enddate, i.poexpir) as vehicle_end_date

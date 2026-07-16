@@ -44,6 +44,11 @@ parameters:
     displayName: 'Update Semantic Models And Reports'
     default: true
 
+  - name: isSetScheduler
+    type: boolean
+    displayName: 'Set Job Scheduler'
+    default: false
+
   - name: variableGroup
     displayName: 'Variable Group'
     type: string
@@ -72,6 +77,8 @@ variables:
     value: ${{ parameters.isUpdateMonitoringAndMetadataFiles }}
   - name: isUpdateSemanticModelsAndReports
     value: ${{ parameters.isUpdateSemanticModelsAndReports }}
+  - name: isSetScheduler
+    value: ${{ parameters.isSetScheduler }}  
 
 pool:
   name: $(agentPool)
@@ -173,6 +180,7 @@ stages:
             Write-Host "##vso[task.setvariable variable=isRunCicdNotebooks]$(isRunCicdNotebooks)"
             Write-Host "##vso[task.setvariable variable=isUpdateMonitoringAndMetadataFiles]$(isUpdateMonitoringAndMetadataFiles)"
             Write-Host "##vso[task.setvariable variable=isUpdateSemanticModelsAndReports]$(isUpdateSemanticModelsAndReports)"
+            Write-Host "##vso[task.setvariable variable=isSetScheduler]$(isSetScheduler)"
 
 
     - task: PowerShell@2
@@ -216,7 +224,8 @@ stages:
           $env:FABRIC_TOKEN = $fabricToken
           Write-Host "##vso[task.setvariable variable=FABRIC_TOKEN]$fabricToken"
 
-      displayName: 'Configure Azure Authentication and Get Fabric Token'    
+      displayName: 'Configure Azure Authentication and Get Fabric Token'
+          
 
     - task: PowerShell@2
       inputs:
@@ -2640,7 +2649,26 @@ stages:
         FABRIC_TOKEN: $env:FABRIC_TOKEN
         ELLIE_NOTEBOOK_IDS: $env:ELLIE_NOTEBOOK_IDS
         WORKSPACE_IDS: $env:WORKSPACE_IDS
-    
+
+    - task: PowerShell@2
+      displayName: 'Set Job Schedulers'
+      condition: eq(variables['isSetScheduler'], 'true')
+      inputs:
+        targetType: 'inline'
+        script: |
+          #Get workspace ID
+          $workspaceIds = ConvertFrom-Json -InputObject $env:WORKSPACE_IDS
+          $workspaceId = $workspaceIds.PSObject.Properties.Value
+          Write-Host "Using workspace ID: $workspaceId"
+
+          $srcFabricPath = "$(System.DefaultWorkingDirectory)/src/fabric"
+
+          $scriptPath = '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts/Invoke-SchedulesManagment.ps1'
+          & $scriptPath -WorkspaceId $workspaceId -FabricSourcePath $srcFabricPath
+        workingDirectory: '$(System.DefaultWorkingDirectory)/DevOpsServices/pipelines/scripts'
+      env:
+        FABRIC_TOKEN: $env:FABRIC_TOKEN
+
     - task: PowerShell@2
       displayName: 'Remove temporary files'
       inputs:

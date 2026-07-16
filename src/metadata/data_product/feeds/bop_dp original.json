@@ -1,0 +1,70 @@
+{
+    "loadViews": [
+        {
+            "files": [
+                {
+                    "fileName": "view_uwcoverage",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_aslob",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_coverage",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_geographic_location",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_insurable_object_building",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_deductible",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "dim_limit",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_bop_policy_coverage",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "fact_bop_policy_deductible",
+                    "modelConfigFolderName": "bop_dp"
+                },
+                {
+                    "fileName": "fact_bop_policy_coverage_limit",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupSummary": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_bop_policy_summary",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ]
+}

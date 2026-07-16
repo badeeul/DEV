@@ -184,6 +184,74 @@ function Update-ParameterAzureStorage {
     return $fileContent
 }
 
+function Update-ParameterSqlServerAndDatabase {
+    param (
+        [string]$fileContent,
+        [string]$DisplayName,
+        [string]$fileName
+    )
+    if ($fileName -ne "expressions.tmdl") {
+        Write-Host "`t  Skipping update for file '$fileName' as it is not 'expressions.tmdl'" -ForegroundColor Yellow
+        return $fileContent
+    }
+
+    Write-Host "`t[DEBUG] Updating import connection parameters for: $DisplayName"
+
+    # Find the connection name mapping for this semantic model from variable group details
+    Write-Host "`t[DEBUG] Looking up connection mapping for semantic model '$DisplayName' in variable group details"
+    $connectionName = $null
+    foreach ($semanticModel in $SemanticModelsDetail) {
+        if ($semanticModel.name -eq $DisplayName) {
+            $connectionName = $semanticModel.connectionName
+            break
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($connectionName)) {
+        Write-Host "`t  No connectionName mapping found for semantic model '$DisplayName'" -ForegroundColor Yellow
+        return $fileContent
+    }
+
+    # Lookup the existing connection from the fabric connections payload
+    $existingConnection = $fabricConnections | Where-Object { $_.displayName -eq $connectionName } | Select-Object -First 1
+
+    if ($null -eq $existingConnection) {
+        Write-Host "`t  No existing connection found with displayName '$connectionName'" -ForegroundColor Yellow
+        return $fileContent
+    }
+
+    # Extract server and database from connection path (expected format: server;database)
+    $path = $existingConnection.connectionDetails.path
+    $parts = $path -split ";"
+    $server = $parts[0]
+    $database = if ($parts.Count -gt 1) { $parts[1] } else { $null }
+
+    Write-Host "`t  Found connection '$connectionName' -> Path: $path" -ForegroundColor Cyan
+    Write-Host "`t  Server: $server" -ForegroundColor Cyan
+    Write-Host "`t  Database: $database" -ForegroundColor Cyan
+
+    # Patterns to replace: SqlServer = "..." and Database = "..."
+    $serverPattern = 'SqlServer\s*=\s*"([^"]*)"'
+    $dbPattern = 'Database\s*=\s*"([^"]*)"'
+
+    if ($server) {
+        $replacement = "SqlServer = `"$server`""
+        $fileContent = [regex]::Replace($fileContent, $serverPattern, $replacement)
+        Write-Host "`t  Replaced SqlServer value with: $server" -ForegroundColor Green
+    }
+
+    if ($database) {
+        $replacementDb = "Database = `"$database`""
+        $fileContent = [regex]::Replace($fileContent, $dbPattern, $replacementDb)
+        Write-Host "`t  Replaced Database value with: $database" -ForegroundColor Green
+    }
+
+    Write-Host "`tUpdated file content preview (first 500 chars):" -ForegroundColor Cyan
+    Write-Host "`t$($fileContent.Substring(0, [Math]::Min(500, $fileContent.Length)))" -ForegroundColor Cyan
+
+    return $fileContent
+}
+
 function Update-Connection {
     param (
         [string]$fileContent,
@@ -295,7 +363,10 @@ function Get-ContentPayload {
         $fileContent = Update-ParameterSourceSQLDatabase -fileContent $fileContent -fileName $fileName
 
         # Update AzureStorage.DataLake parameters (workspace ID and lakehouse ID)
-        $fileContent = Update-ParameterAzureStorage -fileContent $fileContent -WorkspaceId $WorkspaceId -DisplayName $DisplayName        
+        $fileContent = Update-ParameterAzureStorage -fileContent $fileContent -WorkspaceId $WorkspaceId -DisplayName $DisplayName    
+        
+        # Update SQL Server and Database parameters
+        $fileContent = Update-ParameterSqlServerAndDatabase -fileContent $fileContent -DisplayName $DisplayName -fileName $fileName
     }
 
     # Replace the search string with the update string
@@ -646,6 +717,137 @@ function Get-LakehouseSQLEndpointConnection {
         Write-Error "Failed to get SQL Endpoint connection for Lakehouse '$LakehouseId': $_"
         return $null
     }
+}
+
+function Get-ConnectionByDisplayName {
+    param(
+        [string]$DisplayName
+    )
+
+
+    Write-Host "##[debug]Looking up gateway object ID for semantic model display name: $DisplayName" -ForegroundColor Cyan
+    # Find the connection name mapping for this semantic model from variable group details
+    $connectionName = $null
+    foreach ($semanticModel in $SemanticModelsDetail) {
+        if ($semanticModel.name -eq $DisplayName) {
+            $connectionName = $semanticModel.connectionName
+            break
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($connectionName)) {
+        Write-Host "`t  No connectionName mapping found for semantic model '$DisplayName'" -ForegroundColor Yellow
+        return $null
+    }
+
+    # Lookup the existing connection from the fabric connections payload
+    $existingConnection = $fabricConnections | Where-Object { $_.displayName -eq $connectionName } | Select-Object -First 1
+
+    if ($null -eq $existingConnection) {
+        Write-Host "`t  No existing connection found with displayName '$connectionName'" -ForegroundColor Yellow
+        return $null
+    }
+
+    Write-Host "`t  Found existing connection: $($existingConnection.displayName) (ID: $($existingConnection.id))" -ForegroundColor Green
+
+    return $existingConnection
+}
+
+function Refresh-SemanticModel {
+    param(
+        [string]$WorkspaceId,
+        [string]$SemanticModelId,
+        [string]$Token
+    )
+    try {
+        Write-Host "Refreshing semantic model ID: $SemanticModelId in workspace ID: $WorkspaceId"
+        $apiUrl = "https://api.powerbi.com/v1.0/myorg/groups/$WorkspaceId/datasets/$SemanticModelId/refreshes"
+        Write-Host "Using API URL: $apiUrl"
+
+        $headers = @{
+            "Authorization" = "Bearer $Token"
+            "Content-Type"  = "application/json"
+        }
+
+        Write-Host "Invoking refresh API for semantic model..."
+        Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method POST
+        Write-Host "Refresh request sent successfully for semantic model ID: $SemanticModelId" -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Failed to refresh semantic model: $_"
+        if ($_.Exception.Response) {
+            $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+            $responseBody = $reader.ReadToEnd()
+            Write-Error "Response body: $responseBody"
+        }
+        Write-Host "Continuing without refresh due to error, please manually refresh and check the semantic model refresh status." -ForegroundColor Yellow
+    }
+}
+
+Function Bind-ImportModeConnection{
+
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$WorkspaceId,
+       
+        [Parameter(Mandatory=$true)]
+        [string]$SemanticModelId,
+       
+        [Parameter(Mandatory=$true)]
+        [PSObject]$Connection,
+       
+        [Parameter(Mandatory=$true)]
+        [string]$Token
+    )
+
+    try {
+        Write-Host "##[section]========================================" -ForegroundColor Cyan
+        Write-Host "##[section]Binding Semantic Model Connection" -ForegroundColor Cyan
+        Write-Host "##[section]========================================" -ForegroundColor Cyan
+        Write-Host "##[debug]Semantic Model: $DisplayName (ID: $SemanticModelId)" -ForegroundColor Cyan
+        Write-Host "##[debug]Connection: $($Connection.displayName) (ID: $($Connection.id))" -ForegroundColor Cyan
+        Write-Host "##[debug]Binding semantic model ID: $SemanticModelId in workspace ID: $WorkspaceId to connection ID: $($Connection.id)" -ForegroundColor Cyan
+       
+        $apiUrl = "https://api.fabric.microsoft.com/v1/workspaces/$WorkspaceId/semanticModels/$SemanticModelId/bindConnection"
+        Write-Host "##[debug]API URL: $apiUrl"
+       
+        $headers = @{
+            "Authorization" = "Bearer $Token"
+            "Content-Type"  = "application/json"
+        }
+       
+       $bindingBody = @{
+                connectionBinding = @{
+                    id = $Connection.id
+                    connectivityType = "ShareableCloud"  # For lakehouse connections
+                    connectionDetails = @{
+                        type = "SQL"
+                        path = $Connection.connectionDetails.path
+                    }
+                }
+            } | ConvertTo-Json -Depth 10
+            
+        Write-Host "##[debug]Binding semantic model to connection with body: $bindingBody"
+       
+        $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method POST -Body $bindingBody
+       
+        Write-Host "##[section] Successfully bound semantic model to connection" -ForegroundColor Green
+       
+        return $response
+       
+    }
+    catch {
+        Write-Error "Failed to bind semantic model to connection: $_"
+       
+        if ($_.Exception.Response) {
+            $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+            $responseBody = $reader.ReadToEnd()
+            Write-Error "Response body: $responseBody"
+        }
+       
+        throw
+    }
+
 }
 
 function Bind-SemanticModelConnection {
@@ -1002,7 +1204,23 @@ $itemPlatformFiles | ForEach-Object {
             # Store the existing item ID for connection binding
             $semanticModelId = $itemLookup.id
         }
-
+        
+        $isImportModeSemanticModel = $false
+        Write-Host "`t  Checking tables folder for 'mode: import'" -ForegroundColor Cyan
+        if (-not $isImportModeSemanticModel) {
+            $tableFiles = $ItemDefinitionPart | Where-Object { $_.path -like "definition/tables/*" }
+            
+            foreach ($tableFile in $tableFiles) {
+                $tableContent = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($tableFile.payload))
+            
+                if ($tableContent -match 'mode\s*:\s*import') {
+                    $isImportModeSemanticModel = $true
+                    Write-Host "`t  Found 'mode: import' in table file: $($tableFile.path)" -ForegroundColor Yellow
+                    break
+                }
+            }
+        }
+        
         # ========================================================================
         # Bind semantic model connections after creation or update
         # ========================================================================
@@ -1014,16 +1232,48 @@ $itemPlatformFiles | ForEach-Object {
         Write-Host "`tBinding semantic model connections..." -ForegroundColor Cyan
        
         if (-not [string]::IsNullOrEmpty($semanticModelId)) {
-            $bindingResult = Bind-SemanticModelConnection `
-                -WorkspaceId $WorkspaceId `
-                -SemanticModelId $semanticModelId `
-                -DisplayName $displayName `
-                -Token $FabricToken
+            if ($isImportModeSemanticModel) {
+                Write-Host "`t  Semantic model is in import mode, checking expressions.tmdl for SqlServer and Database parameters" -ForegroundColor Cyan
+                $result = $ItemDefinitionPart | Where-Object { $_.path -eq "definition/expressions.tmdl" }
+                if ($result) {
+                    $expressionContent = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($result.payload))
+                    Write-Host "`t  expressions.tmdl content:`n$expressionContent" -ForegroundColor Cyan
+                    # Check if the file content contains SqlServer and Database parameters
+                    if ($expressionContent -match 'SqlServer\s*=\s*"([^"]*)"' -and $expressionContent -match 'Database\s*=\s*"([^"]*)"') {
+                        Write-Host "`t  File contains SqlServer and Database parameters, will bind to gateway" -ForegroundColor Yellow
+                        $connection = Get-ConnectionByDisplayName -WorkspaceId $WorkspaceId -DisplayName $displayName -Token $FabricToken
+                        if (-not $connection) {
+                            Write-Host "`t  Could not find gateway object ID for semantic model display name: $displayName" -ForegroundColor Red
+                            Write-Host "`t  Skipping gateway binding for semantic model display name: $displayName" -ForegroundColor Yellow
+                        }
+                        else {
+                            # Bind the connection and refresh the semantic model
+                            Bind-ImportModeConnection -WorkspaceId $WorkspaceId -SemanticModelId $semanticModelId -Connection $connection -Token $FabricToken
+                            # Refresh the semantic model after binding the connection
+                            Refresh-SemanticModel -WorkspaceId $WorkspaceId -SemanticModelId $semanticModelId -Token $FabricToken
+                        }
+                    }
+                    else {
+                        Write-Error "`t  File does not contain SqlServer and Database parameters, cannot bind to gateway for semantic model display name: $displayName"
+                    }
+                } 
+                else {
+                    Write-Error "`t  expressions.tmdl not found, skipping connection binding for semantic model display name: $displayName"
+                }
+            }
+            else {
+                $bindingResult = Bind-SemanticModelConnection `
+                    -WorkspaceId $WorkspaceId `
+                    -SemanticModelId $semanticModelId `
+                    -DisplayName $displayName `
+                    -Token $FabricToken
            
-            if ($bindingResult) {
-                Write-Host "`t Connection binding completed successfully" -ForegroundColor Green
-            } else {
-                Write-Host "`t Connection binding completed with warnings or was skipped" -ForegroundColor Yellow
+                if ($bindingResult) {
+                    Write-Host "`t Connection binding completed successfully" -ForegroundColor Green
+                }
+                else {
+                    Write-Host "`t Connection binding completed with warnings or was skipped" -ForegroundColor Yellow
+                }
             }
         } else {
             Write-Host "`t Could not determine semantic model ID for connection binding" -ForegroundColor Yellow

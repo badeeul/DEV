@@ -3,16 +3,8 @@
     "activities": [
       {
         "name": "LN Call",
-        "description": "",
+        "description": "LexisNexis post-bind NAICS enrichment (notebook: den_nbk_pd_001_gl_post_bind). Endpoint: open the notebook's PARAMETERS cell and set proxy_env = 'prod' (live /api/proxy/call) or 'test' (/api/proxy/call-test); any non-'prod' value routes to test. The follow-on 'LN NAICS Response Emails' activity (den_nbk_001_gl_ln_naics_response_notification) sends the notification email and must stay active so it runs under the pipeline service account — running it manually submits under your user and fails the send. Edit email content in src/metadata/templates/emails/gl_ln_naics_response.json.",
         "type": "TridentNotebook",
-        "dependsOn": [],
-        "policy": {
-          "timeout": "0.12:00:00",
-          "retry": 0,
-          "retryIntervalInSeconds": 30,
-          "secureOutput": false,
-          "secureInput": false
-        },
         "typeProperties": {
           "notebookId": "0db7f3e8-3036-4997-b7c4-8ad0c22c296b",
           "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -46,26 +38,20 @@
               "type": "string"
             }
           }
-        }
-      },
-      {
-        "name": "LN NAICS Response Emails",
-        "type": "TridentNotebook",
-        "dependsOn": [
-          {
-            "activity": "LN Call",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ],
+        },
         "policy": {
           "timeout": "0.12:00:00",
           "retry": 0,
           "retryIntervalInSeconds": 30,
-          "secureOutput": false,
-          "secureInput": false
+          "secureInput": false,
+          "secureOutput": false
         },
+        "name": "LN Call",
+        "description": "",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
         "typeProperties": {
           "notebookId": "7f1fec31-c029-4807-912e-b75e643e8815",
           "workspaceId": "00000000-0000-0000-0000-000000000000",
@@ -99,7 +85,23 @@
               "type": "string"
             }
           }
-        }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LN NAICS Response Emails",
+        "dependsOn": [
+          {
+            "activity": "LN Call",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       }
     ]
   }

@@ -1,0 +1,33 @@
+{
+  "targetVariableGroup": "PlatformServices-PartnerPerfMgmt-PREPRD",
+  "targetWorkspaceName": "Distribution-PartnerPerfMgmt-PREPRD",
+  "targetSuperDomain": "Distribution",
+  "targetSubDomain": "PartnerPerfMgmt",
+  "targetProject": "DnA Distribution-NG",
+  "targetRepository": "DnA Distro - Partner Perf Mgmt",
+  "environment": "preprd",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "8EC86993-48EC-4FE7-B905-A74A0A192064",
+  "keyvaultName": "bhg-prod-ppm-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "0e987248-3011-4299-9d32-35891e4b387d,65ab93ae-6ba9-499a-b600-917d34df13a0,934c3117-81d6-4851-b024-0a1175385271",
+  "viewerGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "variableGroupAdmins": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch,GUARD DnA - Distro Partner Perf Mgmt - Data Eng,GUARD DnA - Distro Partner Perf Mgmt - Data Eng  - Consultant"
+}

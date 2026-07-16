@@ -141,13 +141,13 @@ CREATE TABLE IF NOT EXISTS `dim_digital_decision_status` (
 
 
 CREATE TABLE IF NOT EXISTS `dim_dist_chnl` (
-  `dist_chnl_key` LONG,
+  `dist_chnl_key` INT,
   `agcy_cd_bus_key` STRING,
   `agcy_desc` STRING,
   `super_agcy_cd` STRING,
   `super_agcy_desc` STRING,
-  `terr_mngr_emp_key` LONG,
-  `prod_rel_adv_emp_key` LONG,
+  `terr_mngr_emp_key` INT,
+  `prod_rel_adv_emp_key` INT,
   `agcy_status` STRING,
   `agcy_closed_date` DATE,
   `dl_eltid` STRING,
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `dim_dist_chnl` (
 
 
 CREATE TABLE IF NOT EXISTS `dim_employee` (
-  `emp_key` LONG,
+  `emp_key` INT,
   `emp_cd_bus_key` STRING,
   `emp_nm` STRING,
   `job_title` STRING,
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `dim_naics` (
 
 
 CREATE TABLE IF NOT EXISTS `dim_policy` (
-  `policy_key` LONG,
+  `policy_key` BIGINT,
   `policy_num_bus_key` STRING,
   `policy_bus_type` STRING,
   `gov_state` STRING,
@@ -323,17 +323,17 @@ CREATE TABLE IF NOT EXISTS `dim_policy` (
   `policy_inforce_start_date` DATE,
   `policy_inforce_end_date` DATE,
   `current_inforce_policy_ind` STRING,
-  `offer_rn` BOOLEAN,
+  `offer_rn` INT,
   `previous_policy_num_bus_key` STRING,
   `next_policy_num_bus_key` STRING,
   `chain_id` STRING,
   `first_dwnpymnt_recd_dt` DATE,
   `rewritten_reissued_ind` STRING,
   `rewrite_reissue_ind` STRING,
-  `is_expiring_flag` BOOLEAN,
+  `is_expiring_flag` INT,
   `is_renewable_flag` STRING,
-  `is_prev_policy_ubetag_flag` BOOLEAN,
-  `is_cloned_flag` BOOLEAN,
+  `is_prev_policy_ubetag_flag` INT,
+  `is_cloned_flag` INT,
   `src_policy_status_descrip` STRING,
   `latest_policy_status_key` INT,
   `digital_decision_status_key` INT,
@@ -449,7 +449,7 @@ CREATE TABLE IF NOT EXISTS `dim_prod_src` (
 
 
 CREATE TABLE IF NOT EXISTS `fact_policy` (
-  `policy_key` LONG,
+  `policy_key` BIGINT,
   `policy_effec_start_dt_key` INT,
   `policy_effec_end_dt_key` INT,
   `policy_cancel_dt_key` INT,
@@ -459,15 +459,15 @@ CREATE TABLE IF NOT EXISTS `fact_policy` (
   `policy_issue_dt_key` INT,
   `policy_audit_dt_key` INT,
   `lob_key` INT,
-  `dist_chnl_key` LONG,
+  `dist_chnl_key` INT,
   `naics_key` INT,
-  `dec_uw_emp_key` LONG,
+  `dec_uw_emp_key` INT,
   `mkt_type_key` INT,
   `prod_src_key` INT,
   `carrier_key` INT,
   `dec_prem` DECIMAL(19, 4),
   `dw_prem` DECIMAL(19, 4),
-  `entered_by_emp_key` LONG,
+  `entered_by_emp_key` INT,
   `insd_key` INT,
   `gov_bus_class_key` INT,
   `lob_product_key` INT,
@@ -489,7 +489,7 @@ CREATE TABLE IF NOT EXISTS `fact_policy` (
   `expiring_renewable_count` TINYINT,
   `next_policy_quoted_prem` DECIMAL(19, 4),
   `next_policy_quoted_count` TINYINT,
-  `current_inforce_policy_prem` DECIMAL(19, 4),
+  `inforce_policy_prem` DECIMAL(19, 4),
   `dl_eltid` STRING,
   `dl_runid` STRING,
   `dl_row_insert_agent` STRING,
@@ -500,20 +500,20 @@ CREATE TABLE IF NOT EXISTS `fact_policy` (
   `dl_row_update_timestamp` TIMESTAMP,
   `dl_row_insert_timestamp` TIMESTAMP,
   `dl_is_deleted_flag` BOOLEAN
-) USING DELTA COMMENT "Policy Fact";
+) USING DELTA COMMENT "Policy dimension";
 
 
 CREATE TABLE IF NOT EXISTS `fact_policy_transaction` (
-  `policy_key` LONG,
+  `policy_key` BIGINT,
   `policy_effec_start_dt_key` INT,
   `policy_effec_end_dt_key` INT,
   `policy_coverage_start_dt_key` INT,
   `policy_coverage_end_dt_key` INT,
   `lob_key` INT,
-  `dist_chnl_key` LONG,
+  `dist_chnl_key` INT,
   `insd_key` INT,
   `naics_key` INT,
-  `dec_uw_emp_key` LONG,
+  `dec_uw_emp_key` INT,
   `mkt_type_key` INT,
   `prod_src_key` INT,
   `carrier_key` INT,
@@ -551,16 +551,16 @@ CREATE TABLE IF NOT EXISTS `fact_policy_transaction` (
 
 
 CREATE TABLE IF NOT EXISTS `fact_policy_transaction_detail` (
-  `policy_key` LONG,
+  `policy_key` BIGINT,
   `policy_effec_start_dt_key` INT,
   `policy_effec_end_dt_key` INT,
   `policy_coverage_start_dt_key` INT,
   `policy_coverage_end_dt_key` INT,
   `lob_key` INT,
-  `dist_chnl_key` LONG,
+  `dist_chnl_key` INT,
   `insd_key` INT,
   `naics_key` INT,
-  `dec_uw_emp_key` LONG,
+  `dec_uw_emp_key` INT,
   `mkt_type_key` INT,
   `prod_src_key` INT,
   `carrier_key` INT,

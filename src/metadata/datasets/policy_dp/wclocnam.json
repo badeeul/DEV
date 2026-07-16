@@ -10,8 +10,8 @@
         "includeSpecificColumns": [
             "*"
         ],
-        "ingestType": "cdc",
-        "isDynamicQuery": true
+        "ingestType": "full",
+        "isDynamicQuery": false
     },
     "rawProperties": {
         "lakehouseName": "den_lhw_dpr_001_raw_files",
@@ -28,19 +28,16 @@
             "multiline": true,
             "delimiter": ",",
             "escape": "\"",
-            "timestampFormat": "dd/mm/yyyy"
+            "timestampFormat": "dd/MM/yyyy"
         },
-        "columnList": [
-            "*"
-        ],
+        "columnList": ["*"],
         "primaryKeyList": [
             "code",
             "loctypenum",
             "uselocnum"
-        ],
+        ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }
-

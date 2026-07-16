@@ -1,0 +1,33 @@
+{
+  "targetVariableGroup": "PlatformServices-RefDataProducts-PREPRD",
+  "targetWorkspaceName": "Fluidity-RefDataProducts-PREPRD",
+  "targetSuperDomain": "Fluidity",
+  "targetSubDomain": "Ref Data Products",
+  "targetProject": "DnA Fluidity",
+  "targetRepository": "DnA Fluidity - Ref Data Products",
+  "environment": "preprd",
+  "pep": [
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "vault"
+    },
+    {
+      "allowed": false,
+      "resourceId": "",
+      "subresourceType": "blob"
+    }
+  ],
+  "lakeHouseDefaultReaders": {
+    "lakehouse_1_name": "",
+    "lakehouse_1_readerMembers": ""
+  },
+  "requiredSecurityGroup": "GUARD DnA - Fluidity Ref Data Products - Data Product Arch",
+  "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
+  "capacityId": "3BD3E327-F283-4CC5-9627-268EB4B78369",
+  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
+  "contributorGroupPrincipalIds": "132071e2-a13c-434b-833a-a0a7985b81e9,f286e369-4268-46c1-906a-0efa7f130f26,94c014b5-3511-403d-a1a0-aa89e4a3ec87",
+  "viewerGroupPrincipalIds": "6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
+  "variableGroupAdmins": "GUARD DnA - Fluidity Ref Data Products - Data Product Arch,GUARD DnA - Fluidity Ref Data Products - Data Eng"
+}

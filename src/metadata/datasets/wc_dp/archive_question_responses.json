@@ -53,6 +53,6 @@
         ],
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }

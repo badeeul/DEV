@@ -6,77 +6,84 @@
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
 # META   },
-# META   "dependencies": {}
+# META   "dependencies": {
+# META     "environment": {
+# META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
+# META       "workspaceId": "00000000-0000-0000-0000-000000000000"
+# META     }
+# META   }
 # META }
 
 # MARKDOWN ********************
 
-# # 🧱 Semantic Model Service — Automated Semantic Model Generation
-#  
-# This notebook generates and configures a Fabric Semantic Model using a 5-step pipeline:
-#  
-# 1. Generate Direct Lake model (optionally convert to Import mode)  
-# 2. Create a "Metrics" measure table (calculated table)  
-# 3. Hide technical/admin columns (_key, dl_, dq_, etc.)  
-# 4. Apply business metadata from Excel mapping file  
+# # 🧱 Semantic Model Service — Automated Semantic Model Generation# 
+#  # 
+# This notebook generates and configures a Fabric Semantic Model using a 5-step pipeline:# 
+#  # 
+# 1. Generate Direct Lake model (optionally convert to Import mode)  # 
+# 2. Create a "Metrics" measure table (calculated table)  # 
+# 3. Hide technical/admin columns (_key, dl_, dq_, etc.)  # 
+# 4. Apply business metadata from Excel mapping file  # 
 # 5. (Future) Apply relationships, create shortcut tables for role-playing dimensions, rebind connections.
 
-# MARKDOWN ********************
-
-# # 🧭 Sub-Domain User Instructions (READ FIRST)
-#  
-# This notebook is designed so that **each sub-domain** can run it independently to build and enrich its own semantic models.
-#  
-# Follow the steps below.
-#  
-# ---
-#  
-# ## 1. Attach Your Metadata Lakehouse (Required)
-# This notebook **does not require attaching the source lakehouse** where your data lives, as you will specify that in the **CONFIG** section.
-#  
-# But **you must attach the lakehouse that contains the Excel metadata mapping file**. In a future release, we will try to move away from the Excel file. For now, ensure your mapping file exists in the attached metadata lakehouse and update the **mapping_path** variable to point to your mapping file. This file is the one that stores the Business Table Names, Business Column/Field names and descriptions.
-#  
-# ### Steps:
-# 1. Open the notebook  
-# 2. In the left panel → **"Lakehouses" → "Add Lakehouse"**  
-# 3. Choose your **metadata lakehouse**  
-#    - Example: `den_lhw_pdi_001_metadata`
-# 
-#  
-# ### 3. Usage
-# Cells must be run **top to bottom**. Do NOT skip the `%pip install` cell. The install only needs to happen once per session. If your session ends, you'll need to run the install again. Alternatively, if you want to run a single step or cell block to ONLY perform a specific step, Ensure you run Steps 1 & 2 to install pre-requisites, then run the individual cells/steps you want to run.
-# 
-# For example, if you only need to rename fields/columns from the metadata file, you can run the first 2 cells to install the pre-requisites and set up variables, then run the cell/step you need. 
-# 
-# In some cases, automatic direct lake model generation can fail or not include all tables, as metadata can get out of sync with the API. If you encounter this, simply create the direct lake semantic model manually, then run cells after "Generate Direct Lake Semantic Model" to create the empty measure table, process renaming/hiding of columns.
-#  
-# ---
-#  
-# ### 4. Access Requirements
-#  
-# To run this notebook, you need:
-#  
-# ### **On Fabric Workspace**
-# ✔ Build permission for the workspace  
-# ✔ Permission to create semantic models  
-# ✔ Permission to modify semantic models  
-# ✔ Access to the source lakehouse (read only)  
-# ✔ Access to the metadata lakehouse (read & write if updating mapping file)  
-#  
-#  
-# - **Contributor** or **Admin** role on the workspace  
-# - NOT Viewer  
-# - NOT Member-only
-#  
-# ---
-#  
-#  
-
 
 # MARKDOWN ********************
 
-# #### Library Installation 
+# # 🧭 Sub-Domain User Instructions (READ FIRST)
+#  
+# This notebook is designed so that **each sub-domain** can run it independently to build and enrich its own semantic models.
+#  
+# Follow the steps below.
+#  
+# ---
+#  
+# ## 1. Attach Your Metadata Lakehouse (Required)
+# This notebook **does not require attaching the source lakehouse** where your data lives, as you will specify that in the **CONFIG** section.
+#  
+# But **you must attach the lakehouse that contains the Excel metadata mapping file**. In a future release, we will try to move away from the Excel file. For now, ensure your mapping file exists in the attached metadata lakehouse and update the **mapping_path** variable to point to your mapping file. This file is the one that stores the Business Table Names, Business Column/Field names and descriptions.
+#  
+# ### Steps:
+# 1. Open the notebook  
+# 2. In the left panel → **"Lakehouses" → "Add Lakehouse"**  
+# 3. Choose your **metadata lakehouse**  
+#    - Example: `den_lhw_pdi_001_metadata`
+# 
+#  
+# ### 3. Usage
+# Cells must be run **top to bottom**. Do NOT skip the `%pip install` cell. The install only needs to happen once per session. If your session ends, you'll need to run the install again. Alternatively, if you want to run a single step or cell block to ONLY perform a specific step, Ensure you run Steps 1 & 2 to install pre-requisites, then run the individual cells/steps you want to run.
+# 
+# For example, if you only need to rename fields/columns from the metadata file, you can run the first 2 cells to install the pre-requisites and set up variables, then run the cell/step you need. 
+# 
+# In some cases, automatic direct lake model generation can fail or not include all tables, as metadata can get out of sync with the API. If you encounter this, simply create the direct lake semantic model manually, then run cells after "Generate Direct Lake Semantic Model" to create the empty measure table, process renaming/hiding of columns.
+#  
+# ---
+#  
+# ### 4. Access Requirements
+#  
+# To run this notebook, you need:
+#  
+# ### **On Fabric Workspace**
+# ✔ Build permission for the workspace  
+# ✔ Permission to create semantic models  
+# ✔ Permission to modify semantic models  
+# ✔ Access to the source lakehouse (read only)  
+# ✔ Access to the metadata lakehouse (read & write if updating mapping file)  
+#  
+#  
+# - **Contributor** or **Admin** role on the workspace  
+# - NOT Viewer  
+# - NOT Member-only
+#  
+# ---
+#  
+# #
+
+
+# MARKDOWN ********************
+
+# #### Library Installation # 
 # If you only need to run an individual step below (i.e. you already have a semantic model created, but just want to hide some fields in bulk, you must run the below cell first to install the required libraries, then proceed to the Step/Cell you wish to execute)
+
 
 # CELL ********************
 
@@ -104,6 +111,7 @@ import time
 # MARKDOWN ********************
 
 # ### CONFIG: UPDATE AS NEEDED
+
 
 # CELL ********************
 
@@ -137,7 +145,6 @@ hide_prefixes = ["dq_", "dl_"]
 hide_suffixes = ["_key", "sort_order"]
 exceptions = {"dl_row_effective_date", "dl_row_expiration_date", "dl_is_current_flag"} #These are SCD Type 2 columns, which may be  useful for reporting or data validation in some scenarios.
 
-
 # METADATA ********************
 
 # META {
@@ -148,6 +155,7 @@ exceptions = {"dl_row_effective_date", "dl_row_expiration_date", "dl_is_current_
 # MARKDOWN ********************
 
 # #### Generated Semantic Model Object
+
 
 # CELL ********************
 
@@ -310,6 +318,7 @@ else:
 
 # #### Check Desired Storage Mode (Direct Lake by Default)
 
+
 # CELL ********************
 
 if storage_mode and storage_mode.lower() == "import":
@@ -332,6 +341,7 @@ else:
 # MARKDOWN ********************
 
 # #### Create Empty Metrics Table in Semantic Model to store future Measures
+
 
 # CELL ********************
 
@@ -368,10 +378,9 @@ with connect_semantic_model(dataset=dataset, workspace=workspace, readonly=False
 
 # #### Hide Non-Essential Columns from Model (surrogate keys, data quality, sort-by and data engineering fields)
 
+
 # CELL ********************
 
-
- 
 # Connect to the semantic model
 with connect_semantic_model(dataset=dataset, workspace=workspace, readonly=False) as tom: #Set readonly=False only when ready to execute changes to model. 
     for table in tom.model.Tables:
@@ -403,8 +412,9 @@ with connect_semantic_model(dataset=dataset, workspace=workspace, readonly=False
 
 # MARKDOWN ********************
 
-# #### Load Mapping File to Rename Tables, Columns with Business-Friendly names and Add Descriptions
+# #### Load Mapping File to Rename Tables, Columns with Business-Friendly names and Add Descriptions# 
 # Note that mapping path variable is defined at the beginning of the notebook. Ensure the file path and name is correct and that the file only contains 1 sheet with the correct column names.
+
 
 # CELL ********************
 

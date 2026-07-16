@@ -6,14 +6,20 @@
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
 # META   },
-# META   "dependencies": {}
+# META   "dependencies": {
+# META     "environment": {
+# META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
+# META       "workspaceId": "00000000-0000-0000-0000-000000000000"
+# META     }
+# META   }
 # META }
 
 # MARKDOWN ********************
 
-# ## Module Overview
-# 
+# ## Module Overview# 
+# # 
 # Please refer to the [README file](https://dev.azure.com/BHGDataAndAnalytics/DnA%20Pdt%20and%20Prc/_git/DnA%20Pdt%20and%20Prc%20-%20Comn%20Pdt%20Lyr?path=%2Fdocs%2Fpolicy_dp%2Ffabric%2Fcommon_fabric_interface.md&version=GBmain&_a=contents) for detailed instructions and information
+
 
 # CELL ********************
 
@@ -202,7 +208,6 @@ def get_credentials(
         client_id=service_principal_client_id,
         client_secret=service_principal_secret
     )
-
 
 # METADATA ********************
 

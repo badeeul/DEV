@@ -1,0 +1,167 @@
+table dim_lob
+	lineageTag: 008bf690-c02a-4518-af0d-778a3b27a9d5
+	sourceLineageTag: [cauto].[dim_lob]
+
+	column lob_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 5c282474-a576-4d3a-8416-21b6c4ffd693
+		sourceLineageTag: lob_key
+		summarizeBy: none
+		sourceColumn: lob_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column lob_cd_bus_key
+		dataType: string
+		lineageTag: f8a48f7a-5d9d-4406-bcdd-420d9e353383
+		sourceLineageTag: lob_cd_bus_key
+		summarizeBy: none
+		sourceColumn: lob_cd_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column lob_desc
+		dataType: string
+		lineageTag: a09484e7-3cf3-45fb-b9b0-34b793086ab5
+		sourceLineageTag: lob_desc
+		summarizeBy: none
+		sourceColumn: lob_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: b3586c15-b73c-4241-8e61-ec33e03e1647
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 76383a95-686f-4c1f-80ed-a8cce78aae48
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 61ae0247-c2f0-4e76-80b6-70eb618bb78a
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: ed3f1598-7a9d-4565-910f-6e5626e8afb0
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5705c99c-b72d-40b9-9871-399c46ab8f08
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c9285401-f63a-481a-82b7-32b09c87c1b2
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: d2f3bb81-bb49-404e-8396-9c63a7d1b0fb
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 58642a78-71a3-48db-98ab-8fb5d368eefc
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 6024add5-6be7-491b-bf6f-5a3ea8bfc139
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6018f242-0828-472c-a129-db628b2000c5
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_lob = entity
+		mode: directLake
+		source
+			entityName: dim_lob
+			schemaName: cauto
+			expressionSource: 'DirectLake - den_lhw_dpr_001_cauto_product'
+

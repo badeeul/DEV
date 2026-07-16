@@ -254,7 +254,7 @@
                 }
               },
               "externalReferences": {
-                "connection": "d6059c04-ed15-4977-91ac-7d45cf71c964"
+                "connection": "025d8a7b-15d1-4a6d-bc68-8b2384ea4d31"
               }
             }
           },
@@ -479,15 +479,15 @@
       },
       "lh_metadata_id": {
         "type": "string",
-        "defaultValue": "7c6d771a-3b6f-4042-8a89-1a885973a93c"
+        "defaultValue": "dd833297-aa05-4142-887c-1e5e01ceecc3"
       },
       "workspace_id": {
         "type": "string",
-        "defaultValue": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+        "defaultValue": "a5b83bde-449c-4623-a821-90f37a02ac15"
       },
       "lh_raw_id": {
         "type": "string",
-        "defaultValue": "fb48654f-171e-424a-8d53-8220b2da94e1"
+        "defaultValue": "890c80a0-8732-4669-ba8d-5633637feed7"
       },
       "source_config_folder_name": {
         "type": "string",
@@ -503,7 +503,7 @@
       },
       "lh_observability_id": {
         "type": "string",
-        "defaultValue": "61a6df22-f73b-48bc-855f-55f41065eb20"
+        "defaultValue": "354ed696-2caa-4049-8799-2f6dcf5c8adc"
       }
     },
     "variables": {

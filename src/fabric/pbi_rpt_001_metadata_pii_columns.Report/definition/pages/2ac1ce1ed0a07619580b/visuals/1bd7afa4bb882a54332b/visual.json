@@ -1,0 +1,102 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "1bd7afa4bb882a54332b",
+  "position": {
+    "x": 19.949622166246851,
+    "y": 92.493702770780857,
+    "z": 3000,
+    "height": 103.37531486146095,
+    "width": 601.2090680100755,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "# PII Cols"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.# PII Cols",
+              "nativeQueryRef": "# PII Cols"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "# Tables with PII"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.# Tables with PII",
+              "nativeQueryRef": "# Tables with PII"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "yaml_pii_columns_config"
+                  }
+                },
+                "Property": "# PII Cols"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4243601223e65c0c4664",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "# PII Cols"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "fe3fc280e5b808be7042",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "# Tables with PII"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

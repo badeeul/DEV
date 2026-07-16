@@ -1,0 +1,56 @@
+{
+    "datasetName": "mgtrans_coverages",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "mc_id",
+            "mgtrans_transno",
+            "trancnt",
+            "state",
+            "coverageid",
+            "itemid",
+            "aslob_code",
+            "premium",
+            "enteredon",
+            "enteredby"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "cauto",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "mgtrans_transno",
+            "tranCnt",
+            "state",
+            "coverageID",
+            "itemID"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

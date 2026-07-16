@@ -1,0 +1,32 @@
+{
+    "loadGroupSnowflakeDims": [
+        {
+            "files": [
+            ]
+        }
+    ],
+    "loadGroupDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_policy",
+                    "modelConfigFolderName": "policy_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_policy_transaction",
+                    "modelConfigFolderName": "policy_dp"
+                },
+                                {
+                    "fileName": "fact_policy_transaction_detail",
+                    "modelConfigFolderName": "policy_dp"
+                }
+            ]
+        }
+    ]
+}

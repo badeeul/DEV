@@ -8,14 +8,9 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "3d3d4259-522f-4c70-aa00-a81e087a277c",
+# META       "default_lakehouse": "b6adb647-6f2d-4cc8-b9e2-9a1201642b6a",
 # META       "default_lakehouse_name": "den_lhw_dpr_001_policy_product",
-# META       "default_lakehouse_workspace_id": "576daab2-755c-48e5-9567-7583c3efb1b0",
-# META       "known_lakehouses": [
-# META         {
-# META           "id": "3d3d4259-522f-4c70-aa00-a81e087a277c"
-# META         }
-# META       ]
+# META       "default_lakehouse_workspace_id": "a5b83bde-449c-4623-a821-90f37a02ac15"
 # META     },
 # META     "environment": {
 # META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
@@ -192,7 +187,6 @@ for col_name in numeric_columns:
 
 prem_fee_comm_diff_df = premium_fees_commission_joined_df.select(summary_cols)
 
-
 # METADATA ********************
 
 # META {
@@ -213,7 +207,6 @@ for col_name in numeric_columns:
     ])
 
 prem_fee_comm_diff_match_pct_df = premium_fees_commission_joined_df.select(summary_cols)
-
 
 # METADATA ********************
 
@@ -292,7 +285,6 @@ for col_name in numeric_columns:
 
 new_renewal_bind_premium_summary_df = new_renewal_bind_joined_df.select(summary_cols)
 
-
 # METADATA ********************
 
 # META {
@@ -369,8 +361,6 @@ for col_name in numeric_columns:
 
 new_renewal_policy_count_summary_df = new_renewal_policy_count_joined_df.select(summary_cols)
 
-
-
 # METADATA ********************
 
 # META {
@@ -446,7 +436,6 @@ for col_name in numeric_columns:
     ])
 
 dec_premium_summary_df = dec_premium_joined_df.select(summary_cols)
-
 
 # METADATA ********************
 
@@ -610,7 +599,6 @@ if sql:
         col("table_name"),
         when(col("status") == "Has Duplicates", 0).otherwise(1)
     )
-
 
 # METADATA ********************
 

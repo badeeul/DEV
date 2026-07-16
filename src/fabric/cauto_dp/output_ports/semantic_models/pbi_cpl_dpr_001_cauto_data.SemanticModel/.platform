@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "pbi_cpl_dpr_001_cauto_data"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9944d66e-8932-99e4-4a9c-be40f3c0b02d"
+  }
+}

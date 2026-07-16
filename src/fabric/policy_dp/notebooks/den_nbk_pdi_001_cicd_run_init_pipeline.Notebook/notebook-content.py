@@ -16,9 +16,10 @@
 
 # MARKDOWN ********************
 
-# ## Notebook Overview
-# 
+# ## Notebook Overview# 
+# # 
 # Please refer to the [README file](https://dev.azure.com/BHGDataAndAnalytics/DnA%20Pdt%20and%20Prc/_git/DnA%20Pdt%20and%20Prc%20-%20Comn%20Pdt%20Lyr?path=%2Fdocs%2Fpolicy_dp%2Ffabric%2Fcicd_run_init_pipeline.md&version=GBmain&_a=contents) for detailed instructions and information
+
 
 # CELL ********************
 
@@ -64,7 +65,7 @@ logger = logging.getLogger(__name__)
 
 # CELL ********************
 
-def check_whl_published(whl_name: str = 'spark_engine-0.1.0-py3-none-any.whl', 
+def check_whl_published(whl_name: str = 'spark_engine-0.1.1-py3-none-any.whl', 
                         max_attempts: int = 10, 
                         sleep_interval_seconds: int = 60) -> bool:
     """
@@ -172,9 +173,9 @@ def get_lakehouse_info(lakehouse_name: str) -> Dict[str, str]:
 
 # CELL ********************
 
-def create_pipeline_run(pipeline_name: str = 'dfa_pln_dpr_001_policy_dp_scheduled', 
-                        feed_name: str = 'policy_dp_init', 
-                        product_name: str = 'POLICY') -> str:
+def create_pipeline_run(pipeline_name: str = 'dfa_pln_dpr_001_orchestrator', 
+                        feed_name: str = 'PRODUCT & PRICING', 
+                        product_name: str = 'PRODUCT & PRICING') -> str:
     """
     Create and trigger a data pipeline run with specified parameters.
     
@@ -239,7 +240,7 @@ def create_pipeline_run(pipeline_name: str = 'dfa_pln_dpr_001_policy_dp_schedule
 
 # CELL ********************
 
-def main(run_me: bool = True, whl_name: str = 'spark_engine-0.1.0-py3-none-any.whl'):
+def main(run_me: bool = True, whl_name: str = 'spark_engine-0.1.1-py3-none-any.whl'):
     """
     Main function to orchestrate the script execution.
     
@@ -260,9 +261,9 @@ def main(run_me: bool = True, whl_name: str = 'spark_engine-0.1.0-py3-none-any.w
         logger.info(f'{whl_name} is published. Proceeding with pipeline run.')
         
         # Create and run the pipeline
-        pipeline_name = 'dfa_pln_dpr_001_policy_dp_scheduled'
-        feed_name = 'policy_dp_init'
-        product_name = 'POLICY'
+        pipeline_name = 'dfa_pln_dpr_001_orchestrator'
+        feed_name = 'PRODUCT & PRICING'
+        product_name = 'PRODUCT & PRICING'
         
         logger.info(f'Starting pipeline run for {pipeline_name} with feed: {feed_name}, product: {product_name}')
         run_id = create_pipeline_run(pipeline_name, feed_name, product_name)
@@ -272,7 +273,6 @@ def main(run_me: bool = True, whl_name: str = 'spark_engine-0.1.0-py3-none-any.w
     
     end_time = datetime.now()
     logger.info(f"Script execution completed at {end_time}. Duration: {end_time - start_time}")
-
 
 # METADATA ********************
 

@@ -3,7 +3,7 @@
   "targetWorkspaceName": "Distribution-Service-MTR",
   "targetSuperDomain": "Distribution",
   "targetSubDomain": "Service",
-  "targetProject": "DnA Distribution",
+  "targetProject": "DnA Distribution-NG",
   "targetRepository": "DnA Distro - Service",
   "environment": "mtr",
   "pep": [
@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-prod-service-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "df63e84e-9732-4710-9132-7dbb31e667d5",
-  "viewerGroupPrincipalIds": "8d56d87d-8d1a-400a-890c-a94ff63229e7,ff93df97-dc5c-4c78-a031-e476065404a9,4b6e4fbe-4a09-434b-963f-95e91f4164b1,6ea08cec-366d-4da7-ab00-2688a13529e7,e6e261d0-204f-47f3-8e5d-68fc7bca8cf9,4b924e3b-9a15-48b1-b3fd-434ce33e4423,fb785c6b-7695-4545-9f44-545717196a66,dac9dfcd-554c-449d-a518-f145919cbb21,0b76f7d9-c670-4b6b-b448-b1c4b71a8f8a,83a4b381-40fb-4800-964e-4ee636d7b2cf,e50cfd05-293f-42ac-ad31-6d21c6b7729e"
+  "viewerGroupPrincipalIds": "8d56d87d-8d1a-400a-890c-a94ff63229e7,ff93df97-dc5c-4c78-a031-e476065404a9,4b6e4fbe-4a09-434b-963f-95e91f4164b1,6ea08cec-366d-4da7-ab00-2688a13529e7,e6e261d0-204f-47f3-8e5d-68fc7bca8cf9,4b924e3b-9a15-48b1-b3fd-434ce33e4423,fb785c6b-7695-4545-9f44-545717196a66,dac9dfcd-554c-449d-a518-f145919cbb21,0b76f7d9-c670-4b6b-b448-b1c4b71a8f8a,83a4b381-40fb-4800-964e-4ee636d7b2cf,e50cfd05-293f-42ac-ad31-6d21c6b7729e",
+  "variableGroupAdmins": "GUARD DnA - Distribution Service - Data Product Arch,GUARD DnA - Distribution Service - Data Eng,GUARD DnA - Distribution Service - Data Eng  - Consultant"
 }

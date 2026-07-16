@@ -30,7 +30,7 @@
                 },
                 {
                     "fileName": "dim_insured",
-                    "modelConfigFolderName": "policy_dp_init"
+                    "modelConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "dim_mkt_type",
@@ -76,15 +76,15 @@
             "files": [
                 {
                     "fileName": "fact_policy_transaction_detail",
-                    "modelConfigFolderName": "policy_dp_init"
+                    "modelConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "fact_policy_transaction",
-                    "modelConfigFolderName": "policy_dp_init"
+                    "modelConfigFolderName": "policy_dp"
                 },
                 {
                     "fileName": "fact_policy",
-                    "modelConfigFolderName": "policy_dp_init"
+                    "modelConfigFolderName": "policy_dp"
                 }
             ]
         }

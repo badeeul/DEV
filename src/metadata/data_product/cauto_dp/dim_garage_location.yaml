@@ -15,12 +15,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: wclocnam # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: insured # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: insured # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: fips # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
@@ -31,16 +31,16 @@ query:
   - name: dim_garage_location # name of the query for it to be referenced by subsequent queries
     # use lower in where clause
     sql: select 
-         lower(trim(l.code)) as policy_num_bus_key
-        , lower(trim(l.loctypenum)) as garage_loc_bus_key
-        , left(lower(trim(l.locnum)),3) as garage_loc_number
-        , lower(trim(l.address1)) as garage_loc_address1
-        , lower(trim(l.address2)) as garage_loc_address2
-        , lower(trim(l.city)) as garage_loc_city
-        , lower(trim(l.state)) as garage_loc_state
-        , left(lower(trim(l.zipcode)),5) as garage_loc_zipcode
-        , lower(trim(l.zipcode)) as garage_loc_zipcode_plus_extension
-        , lower(trim(f.name)) as garage_loc_county
+         l.code as policy_num_bus_key
+        , l.loctypenum as garage_loc_bus_key
+        , left(l.locnum,3) as garage_loc_number
+        , l.address1 as garage_loc_address1
+        , l.address2 as garage_loc_address2
+        , l.city as garage_loc_city
+        , l.state as garage_loc_state
+        , left(l.zipcode,5) as garage_loc_zipcode
+        , l.zipcode as garage_loc_zipcode_plus_extension
+        , f.name as garage_loc_county
         , l.latitude as garage_loc_latitude
         , l.longitude as garage_loc_longitude
         , True as dl_is_current_flag

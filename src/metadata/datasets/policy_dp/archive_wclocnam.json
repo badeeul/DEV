@@ -10,8 +10,7 @@
         "includeSpecificColumns": [
             "*"
         ],
-        "ingestType": "watermark",
-        "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+        "ingestType": "full",
         "isDynamicQuery": true
     },
     "rawProperties": {
@@ -33,12 +32,12 @@
         },
         "columnList": ["*"],
         "primaryKeyList": [
-            "code",
-            "loctypenum",
-            "uselocnum"
+            "CODE",
+            "LOCTYPENUM",
+            "USELOCNUM"
         ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }

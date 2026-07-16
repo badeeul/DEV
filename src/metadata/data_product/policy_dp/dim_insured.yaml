@@ -14,7 +14,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: insured # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: fips # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
@@ -29,17 +29,17 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: wclocnam # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: archive_wclocnam # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: archive_wclocnam # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: archive_insured # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: archive_insured # source tables
-    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: dim_insured_legal_entity_type # source table names
     lakehouse: den_lhw_dpr_001_policy_product # keep
     schema: policy # keep

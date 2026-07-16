@@ -1,0 +1,630 @@
+table dim_vehicle_deleted_on_date
+	lineageTag: 8d1baabb-b108-4a34-a3c2-3a49cc6fa847
+	sourceLineageTag: [cauto].[dim_vehicle_deleted_on_date]
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 28cf1ac1-f387-4dd5-988f-453020691b4c
+		sourceLineageTag: date_key
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 39451900-24c2-4171-a74a-b57d511b08d8
+		sourceLineageTag: date
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+	column day
+		dataType: int64
+		formatString: 0
+		lineageTag: f76c2817-d946-4f13-acf9-0379cdf7f946
+		sourceLineageTag: day
+		summarizeBy: none
+		sourceColumn: day
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_suffix
+		dataType: string
+		lineageTag: b7da2447-a8b5-4877-9bef-cbccaa646b79
+		sourceLineageTag: day_suffix
+		summarizeBy: none
+		sourceColumn: day_suffix
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: 86a7ccdf-6f4f-40f7-b954-c910f1efa5fa
+		sourceLineageTag: day_name
+		summarizeBy: none
+		sourceColumn: day_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: d112819c-d45b-48ac-9688-a2db65cf812c
+		sourceLineageTag: day_of_week
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week_in_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 06a8f0e8-465f-45af-ac99-404582eb5b72
+		sourceLineageTag: day_of_week_in_month
+		summarizeBy: none
+		sourceColumn: day_of_week_in_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 203d53f0-9cc4-48e0-803e-3c40c5054d19
+		sourceLineageTag: day_of_year
+		summarizeBy: none
+		sourceColumn: day_of_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ef3b5eb-e2d7-4898-b7ca-2b02740796d1
+		sourceLineageTag: is_weekend
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	column week
+		dataType: int64
+		formatString: 0
+		lineageTag: 29369038-8ff7-4f99-a4a5-2333fc589214
+		sourceLineageTag: week
+		summarizeBy: none
+		sourceColumn: week
+
+		annotation SummarizationSetBy = Automatic
+
+	column iso_week
+		dataType: int64
+		formatString: 0
+		lineageTag: 07b3a731-bb70-4159-bb6b-7e49090a2d60
+		sourceLineageTag: iso_week
+		summarizeBy: none
+		sourceColumn: iso_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_of_week
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0d04eeda-c3bf-4ff5-b0f2-fa44df91ad8e
+		sourceLineageTag: first_of_week
+		summarizeBy: none
+		sourceColumn: first_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_of_week
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 22fcccb9-90db-43c4-bd08-eebdfb3d5eba
+		sourceLineageTag: last_of_week
+		summarizeBy: none
+		sourceColumn: last_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 5396a9fb-fc34-492a-8361-6d377dbf9c0c
+		sourceLineageTag: week_of_month
+		summarizeBy: none
+		sourceColumn: week_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e3819cf-dba3-42f4-bbed-1f42c682246e
+		sourceLineageTag: month
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 6ce3a2c5-fff1-496e-84fa-13641cad5205
+		sourceLineageTag: month_name
+		summarizeBy: none
+		sourceColumn: month_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_of_month
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9ef0e048-57c6-4711-8570-bb71f5674c22
+		sourceLineageTag: first_of_month
+		summarizeBy: none
+		sourceColumn: first_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_of_month
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6b3ee448-0250-4cd5-8e74-fe6ec14f9fb5
+		sourceLineageTag: last_of_month
+		summarizeBy: none
+		sourceColumn: last_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_of_next_month
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 478f34bb-e6de-4760-9127-ae8a1a19e0b1
+		sourceLineageTag: first_of_next_month
+		summarizeBy: none
+		sourceColumn: first_of_next_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_of_next_month
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ad3461da-722d-4178-816d-e2bdf2268e2c
+		sourceLineageTag: last_of_next_month
+		summarizeBy: none
+		sourceColumn: last_of_next_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: e5173aec-34aa-4b5d-a05f-e25cedc8d508
+		sourceLineageTag: quarter
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_quarter
+		dataType: string
+		lineageTag: 724ea90f-b6e0-405a-a562-4e33c135359d
+		sourceLineageTag: year_quarter
+		summarizeBy: none
+		sourceColumn: year_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_of_quarter
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3987f336-dcb4-451d-a5fa-94a55c7303d5
+		sourceLineageTag: first_of_quarter
+		summarizeBy: none
+		sourceColumn: first_of_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_of_quarter
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f2b3164a-19c8-4b29-a48a-8de679080038
+		sourceLineageTag: last_of_quarter
+		summarizeBy: none
+		sourceColumn: last_of_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 9162e1db-2079-4c12-b675-7505bde121a0
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column iso_year
+		dataType: int64
+		formatString: 0
+		lineageTag: d63ac19b-8a2b-4f0f-81e5-e1ded390a1e5
+		sourceLineageTag: iso_year
+		summarizeBy: none
+		sourceColumn: iso_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_of_year
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 36c52685-a806-4b65-85aa-02b716082f05
+		sourceLineageTag: first_of_year
+		summarizeBy: none
+		sourceColumn: first_of_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_of_year
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8867db30-e92a-474f-a5f6-4033d9dc35dc
+		sourceLineageTag: last_of_year
+		summarizeBy: none
+		sourceColumn: last_of_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_leap_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 6737a109-0b88-45ef-8c7f-1abc97c26c8b
+		sourceLineageTag: is_leap_year
+		summarizeBy: none
+		sourceColumn: is_leap_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_53_weeks
+		dataType: int64
+		formatString: 0
+		lineageTag: 69582658-7adb-4a76-b0f4-90ea71a05227
+		sourceLineageTag: has_53_weeks
+		summarizeBy: none
+		sourceColumn: has_53_weeks
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_53_iso_weeks
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d2afec9-2c87-432c-8e44-7cfa22484489
+		sourceLineageTag: has_53_iso_weeks
+		summarizeBy: none
+		sourceColumn: has_53_iso_weeks
+
+		annotation SummarizationSetBy = Automatic
+
+	column mmyyyy
+		dataType: string
+		lineageTag: 9dc99388-43c1-4a05-bc4b-cd4f39c49df9
+		sourceLineageTag: mmyyyy
+		summarizeBy: none
+		sourceColumn: mmyyyy
+
+		annotation SummarizationSetBy = Automatic
+
+	column style101
+		dataType: string
+		lineageTag: 4c05a903-7c7a-4248-86fa-f02445190805
+		sourceLineageTag: style101
+		summarizeBy: none
+		sourceColumn: style101
+
+		annotation SummarizationSetBy = Automatic
+
+	column style103
+		dataType: string
+		lineageTag: f2a994bf-5ff9-4f1a-ad3f-4932f6a3aa62
+		sourceLineageTag: style103
+		summarizeBy: none
+		sourceColumn: style103
+
+		annotation SummarizationSetBy = Automatic
+
+	column style112
+		dataType: string
+		lineageTag: b1f5e849-56ac-4124-9c01-b7cab69af632
+		sourceLineageTag: style112
+		summarizeBy: none
+		sourceColumn: style112
+
+		annotation SummarizationSetBy = Automatic
+
+	column style120
+		dataType: string
+		lineageTag: f6f65bbb-1372-431e-86c4-fc0d3e52ba32
+		sourceLineageTag: style120
+		summarizeBy: none
+		sourceColumn: style120
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_to_date
+		dataType: int64
+		formatString: 0
+		lineageTag: ae5e3938-bf4f-4b89-a6f7-3adbd84341d5
+		sourceLineageTag: year_to_date
+		summarizeBy: none
+		sourceColumn: year_to_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_year_to_date
+		dataType: int64
+		formatString: 0
+		lineageTag: 0528b912-8c21-4904-b3d7-3ab389439c4c
+		sourceLineageTag: prior_year_to_date
+		summarizeBy: none
+		sourceColumn: prior_year_to_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_year
+		dataType: int64
+		formatString: 0
+		lineageTag: b8f72485-7cfa-458e-88af-1d008bfbe618
+		sourceLineageTag: prior_year
+		summarizeBy: none
+		sourceColumn: prior_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_2_years
+		dataType: int64
+		formatString: 0
+		lineageTag: 152143e2-83d4-4c27-a017-f04ee6a32c78
+		sourceLineageTag: prior_2_years
+		summarizeBy: none
+		sourceColumn: prior_2_years
+
+		annotation SummarizationSetBy = Automatic
+
+	column trailing_12_months
+		dataType: int64
+		formatString: 0
+		lineageTag: 9cf38035-825f-45ed-9d67-137e0e482255
+		sourceLineageTag: trailing_12_months
+		summarizeBy: none
+		sourceColumn: trailing_12_months
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_month_ytd
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d488cea-1ef4-43aa-a351-d1a852314cac
+		sourceLineageTag: prior_month_ytd
+		summarizeBy: none
+		sourceColumn: prior_month_ytd
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_month_pytd
+		dataType: int64
+		formatString: 0
+		lineageTag: c3e34660-4ac0-4fad-8671-abd9505e068e
+		sourceLineageTag: prior_month_pytd
+		summarizeBy: none
+		sourceColumn: prior_month_pytd
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_month_ttm
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b3d68d1-b09f-4aa7-abaa-2a8375b2fe6f
+		sourceLineageTag: prior_month_ttm
+		summarizeBy: none
+		sourceColumn: prior_month_ttm
+
+		annotation SummarizationSetBy = Automatic
+
+	column inforce_date_ytd
+		dataType: int64
+		formatString: 0
+		lineageTag: 1fc78499-6dc1-41bb-9b98-f0ca10e7577a
+		sourceLineageTag: inforce_date_ytd
+		summarizeBy: none
+		sourceColumn: inforce_date_ytd
+
+		annotation SummarizationSetBy = Automatic
+
+	column inforce_date_pytd
+		dataType: int64
+		formatString: 0
+		lineageTag: 0d718238-42f2-407b-9b78-2a3558cd8f17
+		sourceLineageTag: inforce_date_pytd
+		summarizeBy: none
+		sourceColumn: inforce_date_pytd
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_month_py_ttm
+		dataType: int64
+		formatString: 0
+		lineageTag: 968554a5-0099-4c23-bf21-2ab0d50312b7
+		sourceLineageTag: prior_month_py_ttm
+		summarizeBy: none
+		sourceColumn: prior_month_py_ttm
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: a90d9cd7-2010-4848-8d56-93e542a83ef5
+		sourceLineageTag: current_quarter
+		summarizeBy: none
+		sourceColumn: current_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_year_quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 554925ee-79f0-46d2-9b87-6589bfa389fa
+		sourceLineageTag: prior_year_quarter
+		summarizeBy: none
+		sourceColumn: prior_year_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column prior_trailing_4_quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: d97c0ee2-48f5-438a-a801-889c746d0009
+		sourceLineageTag: prior_trailing_4_quarter
+		summarizeBy: none
+		sourceColumn: prior_trailing_4_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 9b44e0a2-9129-41d5-99fb-0bc999932607
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: 36dcc332-7d3f-4ac0-9a22-46d104bc28a6
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 9b120e1c-1dae-4df4-a293-4b04d1513c48
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 2e0e0410-ca23-489e-a229-5b44debec2ba
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5eb722a7-b272-40ee-845e-e95160df90c0
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: dd57d46c-cdca-48dd-8a99-06c4b0cadeef
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c06ad093-a12c-4edc-8dca-96a1a6fcecfb
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: b811de15-63e6-4a43-905b-888006e447c3
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 092ed4e1-70b4-42d6-89b1-26d0a2c58996
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 47bce3ad-ccc2-48a9-aa96-c6d321c168c8
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_vehicle_deleted_on_date = entity
+		mode: directLake
+		source
+			entityName: dim_vehicle_deleted_on_date
+			schemaName: cauto
+			expressionSource: 'DirectLake - den_lhw_dpr_001_cauto_product'
+

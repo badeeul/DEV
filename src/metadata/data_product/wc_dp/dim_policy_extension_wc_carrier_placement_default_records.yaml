@@ -33,8 +33,8 @@ query:
         , CURRENT_TIMESTAMP() dl_row_insert_timestamp
         , CURRENT_TIMESTAMP() dl_row_update_timestamp
         , 'ELT' as dl_row_insert_agent
-        , 1 as dl_eltid
-        , 1 as dl_runid
+        , sha2(concat_ws('|||', -1, 'unknown'), 256) as dl_eltid
+        , sha2(concat_ws('||||', -1, 'unknown'), 256) as dl_runid
         , NULL as dl_row_expiration_date
         , CURRENT_DATE() as dl_row_effective_date
         , false as dl_is_deleted_flag
@@ -62,8 +62,8 @@ query:
         , CURRENT_TIMESTAMP() dl_row_insert_timestamp
         , CURRENT_TIMESTAMP() dl_row_update_timestamp
         , 'ELT' as dl_row_insert_agent
-        , 1 as dl_eltid
-        , 1 as dl_runid
+        , sha2(concat_ws('|||', -2, 'not applicable'), 256) as dl_eltid
+        , sha2(concat_ws('||||', -2, 'not applicable'), 256) as dl_runid
         , NULL as dl_row_expiration_date
         , CURRENT_DATE() as dl_row_effective_date
         , false as dl_is_deleted_flag

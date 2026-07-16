@@ -20,8 +20,8 @@ query:
   - name: dim_vehicle_radius_of_operation # name of the query for it to be referenced by subsequent queries
     # use lower in where clause
     sql: select 
-         lower(trim(l.vals)) as vehicle_radius_of_operation_bus_key
-        , lower(trim(l.descrip)) as vehicle_radius_of_operation_desc
+         l.vals as vehicle_radius_of_operation_bus_key
+        , l.descrip as vehicle_radius_of_operation_desc
         , (case lower(trim(l.vals)) 
             when 'local' then 1
             when 'intermediate' then 2

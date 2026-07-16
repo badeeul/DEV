@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "den_lhw_dpr_001_cauto_product"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "eb0ce6dc-1fdd-a54e-4d2a-be390693055c"
+  }
+}

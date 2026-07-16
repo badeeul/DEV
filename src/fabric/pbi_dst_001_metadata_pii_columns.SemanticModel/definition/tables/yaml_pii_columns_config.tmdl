@@ -1,0 +1,96 @@
+table yaml_pii_columns_config
+	lineageTag: 8411e621-f407-47b7-a531-39c8590ad3ca
+	sourceLineageTag: [audit].[yaml_pii_columns_config]
+
+	measure '# PII Cols' = COUNTROWS(yaml_pii_columns_config)
+		formatString: 0
+		lineageTag: 3847e16f-ec6c-4a73-a371-862b9cb39564
+
+		changedProperty = Name
+
+	measure '# Tables with PII' = DISTINCTCOUNT(yaml_pii_columns_config[table])
+		formatString: 0
+		lineageTag: b2746e19-091c-4a86-bc63-d5bd0db36db7
+
+		changedProperty = Name
+
+	column workspace
+		dataType: string
+		lineageTag: 68b0ea9e-9ded-456d-b778-fbcc0f352c2a
+		sourceLineageTag: workspace
+		summarizeBy: none
+		sourceColumn: workspace
+
+		annotation SummarizationSetBy = Automatic
+
+	column lakehouse
+		dataType: string
+		lineageTag: af067a4c-61d0-4dbc-b35b-dfedc7140bae
+		sourceLineageTag: lakehouse
+		summarizeBy: none
+		sourceColumn: lakehouse
+
+		annotation SummarizationSetBy = Automatic
+
+	column schema
+		dataType: string
+		lineageTag: fd80d4d1-65eb-43d6-8597-f4143811a6da
+		sourceLineageTag: schema
+		summarizeBy: none
+		sourceColumn: schema
+
+		annotation SummarizationSetBy = Automatic
+
+	column table
+		dataType: string
+		lineageTag: 6b5762e3-014f-49e4-af33-77f471ed6963
+		sourceLineageTag: table
+		summarizeBy: none
+		sourceColumn: table
+
+		annotation SummarizationSetBy = Automatic
+
+	column pii_column
+		dataType: string
+		lineageTag: 9b8c3a88-9b7a-4dcc-bf66-0ca5268bd89c
+		sourceLineageTag: pii_column
+		summarizeBy: none
+		sourceColumn: pii_column
+
+		annotation SummarizationSetBy = Automatic
+
+	column yaml_file_path
+		dataType: string
+		lineageTag: 51aa4737-bca9-4be5-896f-09485b6dd507
+		sourceLineageTag: yaml_file_path
+		summarizeBy: none
+		sourceColumn: yaml_file_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column yaml_file_name
+		dataType: string
+		lineageTag: 084e8df4-5b34-4d2d-990b-8ad80dc1c04e
+		sourceLineageTag: yaml_file_name
+		summarizeBy: none
+		sourceColumn: yaml_file_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column loaded_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a2d2c9a0-5cd9-4062-be8b-71727bc9f711
+		sourceLineageTag: loaded_timestamp
+		summarizeBy: none
+		sourceColumn: loaded_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition yaml_pii_columns_config = entity
+		mode: directLake
+		source
+			entityName: yaml_pii_columns_config
+			schemaName: audit
+			expressionSource: 'DirectLake - den_lhw_pdi_001_observability'
+

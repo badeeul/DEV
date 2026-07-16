@@ -8,14 +8,9 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "aec951bf-ac04-42c4-8f46-d7871ba38b3e",
+# META       "default_lakehouse": "354ed696-2caa-4049-8799-2f6dcf5c8adc",
 # META       "default_lakehouse_name": "den_lhw_pdi_001_observability",
-# META       "default_lakehouse_workspace_id": "576daab2-755c-48e5-9567-7583c3efb1b0",
-# META       "known_lakehouses": [
-# META         {
-# META           "id": "aec951bf-ac04-42c4-8f46-d7871ba38b3e"
-# META         }
-# META       ]
+# META       "default_lakehouse_workspace_id": "a5b83bde-449c-4623-a821-90f37a02ac15"
 # META     },
 # META     "environment": {
 # META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
@@ -95,7 +90,6 @@ email_template_name_location = get_template_location_url(file_name=email_templat
 email_value = read_json_file(email_template_name_location)
 email_dict = replace_tokens_in_json_object(email_value, replacement_tokens)
 
-
 # METADATA ********************
 
 # META {
@@ -109,7 +103,6 @@ email_dict = replace_tokens_in_json_object(email_value, replacement_tokens)
 sql_template_location = get_template_location_url(file_name=sql_query_name,notification_type='sqls')
 sql_query = read_sql_template(sql_template_location)
 
-
 # METADATA ********************
 
 # META {
@@ -121,7 +114,6 @@ sql_query = read_sql_template(sql_template_location)
 
 # Execute the DQ Error Report SQL Query using template
 dq_error_report_df = spark.sql(sql_query)
-
 
 # METADATA ********************
 
@@ -309,7 +301,6 @@ html_body = create_html_table(
     table1_title="DPR DQ Rules Failures"
     )
 
-
 # METADATA ********************
 
 # META {
@@ -330,7 +321,6 @@ input_params = {
 }
 
 send_email(**input_params)
-
 
 # METADATA ********************
 

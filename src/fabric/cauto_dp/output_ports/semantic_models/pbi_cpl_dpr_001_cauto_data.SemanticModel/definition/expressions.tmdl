@@ -1,0 +1,9 @@
+expression 'DirectLake - den_lhw_dpr_001_cauto_product' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/d858ebfa-a08f-46d5-b980-65ac335dd855/e42df5fc-70d3-4772-9adf-68da1c7884a4", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: ba4fd1ac-ac26-407c-b925-ab3e620f0d6c
+
+	annotation PBI_IncludeFutureArtifacts = False
+

@@ -10,8 +10,7 @@
         "includeSpecificColumns": [
             "*"
         ],
-        "ingestType": "watermark",
-        "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
+        "ingestType": "full",
         "isDynamicQuery": true
     },
     "rawProperties": {
@@ -37,6 +36,6 @@
         ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }

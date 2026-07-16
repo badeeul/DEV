@@ -20,6 +20,20 @@
             ]
         }
     ],
+    "loadGroupDimsDefaultRecords": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_policy_extension_wc_carrier_placement_default_records",
+                    "modelConfigFolderName": "wc_dp"
+                },
+                {
+                    "fileName": "dim_policy_extension_wc_default_records",
+                    "modelConfigFolderName": "wc_dp"
+                }
+            ]
+        }
+    ],
     "loadGroupFacts": [
         {
             "files": [

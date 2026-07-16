@@ -1,0 +1,37 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DirectLake - den_lhw_dpr_001_cauto_product"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["RemoteModeling","DirectLakeOnOneLakeCreatedInDesktop","DirectLakeOnOneLakeInWeb","WebModelingEdit"]
+
+ref table dim_naics
+ref table dim_vehicle_type
+ref table dim_trailer_type
+ref table dim_garage_location
+ref table dim_vehicle_radius_of_operation
+ref table dim_vehicle
+ref table fact_vehicle
+ref table dim_vehicle_start_date
+ref table dim_insured_legal_entity_type
+ref table 'Policy Submitted Date'
+ref table dim_vehicle_end_date
+ref table dim_insured
+ref table dim_lob_product
+ref table dim_policy_status
+ref table fact_policy
+ref table dim_policy
+ref table dim_vehicle_deleted_on_date
+ref table dim_date
+ref table 'Policy Effective End Date'
+ref table 'Policy Effective Start Date'
+ref table _Metrics
+ref table dim_lob
+

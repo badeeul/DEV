@@ -1,0 +1,269 @@
+table dim_garage_location
+	lineageTag: 0bfffdeb-9c29-49eb-8075-5ce4723dfdd5
+	sourceLineageTag: [cauto].[dim_garage_location]
+
+	column garage_loc_surrogate_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 4cfdb10b-2054-49b9-b5fc-f0e97075d187
+		sourceLineageTag: garage_loc_surrogate_key
+		summarizeBy: none
+		sourceColumn: garage_loc_surrogate_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column policy_num_bus_key
+		dataType: string
+		lineageTag: 62692a73-043e-403e-9bbc-8e83f964ff06
+		sourceLineageTag: policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_bus_key
+		dataType: string
+		lineageTag: f41d98b5-941c-4b3e-85a6-f11f68ae554d
+		sourceLineageTag: garage_loc_bus_key
+		summarizeBy: none
+		sourceColumn: garage_loc_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_number
+		dataType: string
+		lineageTag: 59637e22-f6fa-41fa-849f-9f8a6c99fd2b
+		sourceLineageTag: garage_loc_number
+		summarizeBy: none
+		sourceColumn: garage_loc_number
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column garage_loc_address1
+		dataType: string
+		lineageTag: e9259532-0a6f-45e7-a57e-594c8dc7981e
+		sourceLineageTag: garage_loc_address1
+		summarizeBy: none
+		sourceColumn: garage_loc_address1
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_address2
+		dataType: string
+		lineageTag: 32dc9e32-c043-4f10-94eb-d8dcd9a83d2e
+		sourceLineageTag: garage_loc_address2
+		summarizeBy: none
+		sourceColumn: garage_loc_address2
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_city
+		dataType: string
+		lineageTag: 828873d7-de9b-4ed3-9c46-4b46c308da47
+		sourceLineageTag: garage_loc_city
+		summarizeBy: none
+		sourceColumn: garage_loc_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_state
+		dataType: string
+		lineageTag: 6a98a490-b26a-4d3c-914a-1b08d919cd69
+		sourceLineageTag: garage_loc_state
+		summarizeBy: none
+		sourceColumn: garage_loc_state
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column garage_loc_zipcode
+		dataType: string
+		lineageTag: e97a2af2-e1ad-4794-8bfa-8f7d825cab46
+		sourceLineageTag: garage_loc_zipcode
+		summarizeBy: none
+		sourceColumn: garage_loc_zipcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_zipcode_plus_extension
+		dataType: string
+		lineageTag: 29995293-0dbb-4692-9e90-3d76ca4cc6ce
+		sourceLineageTag: garage_loc_zipcode_plus_extension
+		summarizeBy: none
+		sourceColumn: garage_loc_zipcode_plus_extension
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_county
+		dataType: string
+		lineageTag: 63638069-d2a6-4fbd-99ab-7191ac014557
+		sourceLineageTag: garage_loc_county
+		summarizeBy: none
+		sourceColumn: garage_loc_county
+
+		annotation SummarizationSetBy = Automatic
+
+	column garage_loc_latitude
+		dataType: double
+		lineageTag: f8ff45f2-83b4-487b-b368-68e04f939b93
+		sourceLineageTag: garage_loc_latitude
+		summarizeBy: none
+		sourceColumn: garage_loc_latitude
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column garage_loc_longitude
+		dataType: double
+		lineageTag: aefacec7-e531-486d-821c-7b1b922e9477
+		sourceLineageTag: garage_loc_longitude
+		summarizeBy: none
+		sourceColumn: garage_loc_longitude
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5d5c44a3-c9cb-442a-b886-67c4089631bd
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: a89e1732-7f49-4443-a386-4826825b6de4
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 7115b486-9ff9-4a4c-8ff2-146b6d053ab3
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: dadee76b-f5ea-4ffa-a4d7-d494feae9f27
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 3842b95a-649b-4a8a-a89d-3b26e6315486
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 15567c60-958a-4f86-bbac-775d4e47ca04
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: ad5a6e7c-e677-464b-b648-57d65084bc6f
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 74886fc3-4e3b-4309-9cc4-4d2ddc497105
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: d078f9ab-3e9d-4c22-b12e-01beceed59d4
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: f1039f4b-5ca2-46dd-a59e-779905f4d468
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_garage_location = entity
+		mode: directLake
+		source
+			entityName: dim_garage_location
+			schemaName: cauto
+			expressionSource: 'DirectLake - den_lhw_dpr_001_cauto_product'
+

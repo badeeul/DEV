@@ -3,7 +3,7 @@
   "targetWorkspaceName": "Distribution-PartnerPerfMgmt-MTR",
   "targetSuperDomain": "Distribution",
   "targetSubDomain": "PartnerPerfMgmt",
-  "targetProject": "DnA Distribution",
+  "targetProject": "DnA Distribution-NG",
   "targetRepository": "DnA Distro - Partner Perf Mgmt",
   "environment": "mtr",
   "pep": [
@@ -25,10 +25,9 @@
   "requiredSecurityGroup": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch",
   "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
   "capacityId": "433E9E3E-1E1D-45E4-B1F3-46AE09DD3E92",
-  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "keyvaultName": "bhg-dev-ppm-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "0e987248-3011-4299-9d32-35891e4b387d,f7b74a8f-0401-4227-a98a-43be7f7a87c4",
-  "viewerGroupPrincipalIds": "0b37fc2b-82f8-4a61-837a-d09c07d19908,a2f60ff3-1b62-4dea-9b05-95351d4b9ceb,65ab93ae-6ba9-499a-b600-917d34df13a0,934c3117-81d6-4851-b024-0a1175385271,cddf8b07-2318-4246-9385-43fb6dc8cd1a,8105b04f-b16f-4733-99f4-c4a02e28dfa6,b999e7bf-259a-44f9-bf96-ee0e28fe9d61,a5338172-6f30-4976-8612-ad2254142c03,63ccdf9e-8541-465f-9755-dd19f38719e1,98929f7f-65a7-47cb-800d-eb15b4c26db8,e41d812e-5945-44b9-9dc3-bf8f8ccb45cc"
-
-
+  "viewerGroupPrincipalIds": "0b37fc2b-82f8-4a61-837a-d09c07d19908,a2f60ff3-1b62-4dea-9b05-95351d4b9ceb,65ab93ae-6ba9-499a-b600-917d34df13a0,934c3117-81d6-4851-b024-0a1175385271,cddf8b07-2318-4246-9385-43fb6dc8cd1a,8105b04f-b16f-4733-99f4-c4a02e28dfa6,b999e7bf-259a-44f9-bf96-ee0e28fe9d61,a5338172-6f30-4976-8612-ad2254142c03,63ccdf9e-8541-465f-9755-dd19f38719e1,98929f7f-65a7-47cb-800d-eb15b4c26db8,e41d812e-5945-44b9-9dc3-bf8f8ccb45cc",
+  "variableGroupAdmins": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch,GUARD DnA - Distro Partner Perf Mgmt - Data Eng,GUARD DnA - Distro Partner Perf Mgmt - Data Eng  - Consultant"
 }

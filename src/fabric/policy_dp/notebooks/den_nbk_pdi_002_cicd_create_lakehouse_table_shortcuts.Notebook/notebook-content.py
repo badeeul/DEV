@@ -5,6 +5,12 @@
 # META {
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "environment": {
+# META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
+# META       "workspaceId": "00000000-0000-0000-0000-000000000000"
+# META     }
 # META   }
 # META }
 
@@ -16,7 +22,6 @@ def get_workspace_info(lakehouse_name):
     # Get the id of the same lakehouse in the new workspace
     LakehouseID = notebookutils.lakehouse.get(lakehouse_name, WorkspaceID)["id"]
     return {"WorkspaceID": WorkspaceID, "LakehouseID": LakehouseID}
-    
 
 # METADATA ********************
 
@@ -27,16 +32,10 @@ def get_workspace_info(lakehouse_name):
 
 # CELL ********************
 
-# Target lakehouse where shortcuts will be created
-target_lakehouse_name = 'den_lhw_dpr_001_cauto_product'
+lakehouse_name = 'den_lhw_dpr_001_policy_product'
 
-TARGET_WORKSPACE_ID = get_workspace_info(target_lakehouse_name)['WorkspaceID']
-TARGET_ITEM_ID = get_workspace_info(target_lakehouse_name)['LakehouseID']
-
-# Source lakehouse where actual tables exist
-source_lakehouse_name = 'den_lhw_dpr_001_policy_product'
-SOURCE_WORKSPACE_ID = get_workspace_info(source_lakehouse_name)['WorkspaceID']
-SOURCE_ITEM_ID = get_workspace_info(source_lakehouse_name)['LakehouseID']
+TARGET_WORKSPACE_ID = get_workspace_info(lakehouse_name)['WorkspaceID']
+TARGET_ITEM_ID = get_workspace_info(lakehouse_name)['LakehouseID']
 
 base_url = f"https://api.fabric.microsoft.com/v1/workspaces/{TARGET_WORKSPACE_ID}/items/{TARGET_ITEM_ID}/shortcuts"
 
@@ -269,8 +268,8 @@ failed = []
 
 for shortcut in shortcuts:
 
-    shortcut["target"]["oneLake"]["itemId"] = SOURCE_ITEM_ID
-    shortcut["target"]["oneLake"]["workspaceId"] = SOURCE_WORKSPACE_ID
+    shortcut["target"]["oneLake"]["itemId"] = TARGET_ITEM_ID
+    shortcut["target"]["oneLake"]["workspaceId"] = TARGET_WORKSPACE_ID
 
     name = shortcut["name"]
     if name in existing_shortcuts:

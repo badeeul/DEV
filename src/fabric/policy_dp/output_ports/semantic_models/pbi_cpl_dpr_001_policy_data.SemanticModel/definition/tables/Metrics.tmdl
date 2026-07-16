@@ -19,12 +19,265 @@ table Metrics
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
+	measure 'Completed Digital Decision Journey' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Completed Digital Decisioned Journey"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: aebfbca7-bd1e-4402-b3cc-9b3eb757f42f
+
 	measure 'Data As Of Date' = MAX(Policy[dl_row_insert_timestamp]) - 1
 		formatString: mm/dd/yyyy
 		displayFolder: For Report Displays\Report Dates
 		lineageTag: aad38175-926d-4219-b3b5-6ec93659416c
 
 		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Digitally Assisted' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Digitally Assisted"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: e0f3f666-1271-4fee-8921-5679a4c941ab
+
+	measure 'Assisted-or-Incomplete Ratio' =
+			
+			DIVIDE(
+			    ([Mitigating Circumstances] + [Digitally Assisted] + [Incomplete]),
+			    [Applicable to Digital Decisioning]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Ratios
+		lineageTag: 799132b6-986f-4a98-947b-d956af5e6c74
+
+	measure 'Digitally Decisioned' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Digitally Decisioned"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 480ab921-8d31-42fa-a41b-fa2193bfc3b1
+
+	measure 'Digitally Decisioned Ratio' =
+			
+			DIVIDE(
+			    [Digitally Decisioned],
+			    [Applicable to Digital Decisioning]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Ratios
+		lineageTag: 18be836e-01b2-4d6f-83f3-bfd4e981e3b3
+
+	measure 'Excluded From Digital Decisioning' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Excluded From Digital Decisioning"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 93f04a20-e910-4920-8017-fe41dd00cc40
+
+	measure 'Expiring Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[Expiring Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 8c92b781-8caa-46d7-97e6-f7c4b32a9313
+
+	measure 'Expiring Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[Expiring Premium] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective End Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: a747a4d1-72ba-4934-a150-854d1426a4c7
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Incomplete =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l0_level] =
+			            "Incomplete"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 79e5c699-60ff-47f1-95d2-d99c016371b8
+
+	measure Manual/Supplemental =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Manual / Supplemental"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: b82d6231-c3da-4741-8c1b-240c87de17a0
+
+	measure 'Manual-or-Supplemental Ratio' =
+			
+			DIVIDE(
+			    [Manual/Supplemental],
+			    [Applicable to Digital Decisioning]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Policy Measures\Digital Decisioning\Ratios
+		lineageTag: 655aa511-85c9-4233-b370-9db666ecb1b2
+
+	measure 'Mitigating Circumstances' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l2_level] =
+			            "Mitigating Circumstances"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 5b45c130-f09f-4ac4-aa44-3566dde06fbc
 
 	/// New business hit ratio. Calculated as:
 	/// new business total issued count / new business total quoted count
@@ -69,6 +322,27 @@ table Metrics
 
 		changedProperty = FormatString
 
+	measure 'NB Issued Premium' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Issued Premium] ),
+			
+			    KEEPFILTERS (
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 86f22da7-552a-4fc1-b29e-6a52dc95891e
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
 	/// New business quote ratio. Calculated as:
 	/// new business quoted count / new business submitted count
 	measure 'NB Quote Ratio' = DIVIDE([NB Quoted Count], [NB Submitted Count])
@@ -111,6 +385,27 @@ table Metrics
 		changedProperty = Description
 
 		changedProperty = FormatString
+
+	measure 'NB Quoted Premium' =
+			
+			CALCULATE (
+			    SUM ( 'Policy Measures'[NB Quoted Premium] ),
+			
+			    KEEPFILTERS (
+			        FILTER(
+			            VALUES('Date'[Date]),
+			            [Is Date In Scope] = 1
+			            )
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
+			    REMOVEFILTERS ( 'Policy Submission Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 3989eb9d-b901-48b8-98e5-de00dc5af53b
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	/// New business submitted count
 	measure 'NB Submitted Count' =
@@ -827,6 +1122,54 @@ table Metrics
 
 		changedProperty = FormatString
 
+	measure 'RN Issued Count' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Issued Count] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Counts
+		lineageTag: 16cdcf2a-2c88-492e-b534-dbd322243c4e
+
+	measure 'RN Issued Premium' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( 'Policy Measures'[RN Issued Premium] ),
+			
+			    TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    ),
+			
+			    REMOVEFILTERS ( 'Policy Effective End Date' )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Policy Measures\Premium
+		lineageTag: 22e7095b-7949-4162-b983-e9dd0b353fb8
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
 	/// State Fees
 	measure 'State Fees' = SUM('Policy Transactions'[Fresh Start Fee]) + SUM('Policy Transactions'[Policy Assessment Fee]) + SUM('Policy Transactions'[State Fee 3]) + SUM('Policy Transactions'[State Fee 4]) + SUM('Policy Transactions'[State Fee 5]) + SUM('Policy Transactions'[State Fee 6]) + SUM('Policy Transactions'[State Fee 7])
 		formatString: \$#,0;(\$#,0);\$#,0
@@ -843,6 +1186,54 @@ table Metrics
 		changedProperty = FormatString
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'System Can Make First Decision (Qualifies)' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l1_level] = "System Can Make First Decision (Qualifies For Digital Decision)"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 379a995d-4287-4786-a52e-fbf8f9d213a0
+
+	measure 'UW Is Required For First Decision (Not Qualified)' =
+			
+			VAR DatesInScope =
+			    FILTER (
+			        VALUES ( 'Date'[Date] ),
+			        [Is Date In Scope] = 1
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
+			    FILTER (
+			        'Digital Decision Status',
+			        'Digital Decision Status'[dd_l1_level] = "UW Is Required For First Decision (Not Qualified For Digital Decision)"
+			    ),
+			        TREATAS (
+			        DatesInScope,
+			        'Policy Effective Start Date'[Date]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Policy Measures\Digital Decisioning\Counts
+		lineageTag: 6ab0bfb4-3a59-41dd-bb4f-6a268fdf9732
 
 	measure 'Percent_Applicable to Digital Decisioning' =
 			
@@ -1202,52 +1593,6 @@ table Metrics
 		displayFolder: For Report Displays\NB Efficiencies
 		lineageTag: b703f5aa-b6ae-44fd-a05a-029ca04002d2
 
-	measure 'RN Issued Count' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE (
-			    SUM ( 'Policy Measures'[RN Issued Count] ),
-			
-			    TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    ),
-			
-			    REMOVEFILTERS ( 'Policy Effective End Date' )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Counts
-		lineageTag: 16cdcf2a-2c88-492e-b534-dbd322243c4e
-
-	measure 'Expiring Count' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE (
-			    SUM ( 'Policy Measures'[Expiring Count] ),
-			
-			    TREATAS (
-			        DatesInScope,
-			        'Policy Effective End Date'[Date]
-			    ),
-			
-			    REMOVEFILTERS ( 'Policy Effective Start Date' )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Counts
-		lineageTag: 8c92b781-8caa-46d7-97e6-f7c4b32a9313
-
 	measure 'Renewable Count' =
 			
 			VAR DatesInScope =
@@ -1447,56 +1792,6 @@ table Metrics
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
-	measure 'Expiring Premium' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE (
-			    SUM ( 'Policy Measures'[Expiring Premium] ),
-			
-			    TREATAS (
-			        DatesInScope,
-			        'Policy Effective End Date'[Date]
-			    ),
-			
-			    REMOVEFILTERS ( 'Policy Effective Start Date' )
-			)
-		formatString: \$#,0;(\$#,0);\$#,0
-		displayFolder: Policy Measures\Premium
-		lineageTag: a747a4d1-72ba-4934-a150-854d1426a4c7
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
-
-	measure 'RN Issued Premium' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE (
-			    SUM ( 'Policy Measures'[RN Issued Premium] ),
-			
-			    TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    ),
-			
-			    REMOVEFILTERS ( 'Policy Effective End Date' )
-			)
-		formatString: \$#,0;(\$#,0);\$#,0
-		displayFolder: Policy Measures\Premium
-		lineageTag: 22e7095b-7949-4162-b983-e9dd0b353fb8
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
-
 	measure 'Renewable to Expiring Premium Ratio' = DIVIDE([Renewable Premium], [Expiring Premium])
 		formatString: 0.0%;-0.0%;0.0%
 		displayFolder: Policy Measures\Ratios
@@ -1579,81 +1874,6 @@ table Metrics
 		displayFolder: Policy Measures\Digital Decisioning\Counts
 		lineageTag: 1f7cbce8-dfb1-40f7-921c-72edd0bc92a3
 
-	measure 'Completed Digital Decision Journey' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l0_level] =
-			            "Completed Digital Decisioned Journey"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: aebfbca7-bd1e-4402-b3cc-9b3eb757f42f
-
-	measure 'Excluded From Digital Decisioning' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l0_level] =
-			            "Excluded From Digital Decisioning"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: 93f04a20-e910-4920-8017-fe41dd00cc40
-
-	measure Incomplete =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l0_level] =
-			            "Incomplete"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: 79e5c699-60ff-47f1-95d2-d99c016371b8
-
 	measure 'Incomplete with Premium Indication' =
 			
 			VAR DatesInScope =
@@ -1712,184 +1932,6 @@ table Metrics
 		displayFolder: Policy Measures\Digital Decisioning\Counts
 		lineageTag: e0e922c7-ebac-4041-b9ee-73a35dd7ce43
 
-	measure 'System Can Make First Decision (Qualifies)' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l1_level] = "System Can Make First Decision (Qualifies For Digital Decision)"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: 379a995d-4287-4786-a52e-fbf8f9d213a0
-
-	measure 'UW Is Required For First Decision (Not Qualified)' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l1_level] = "UW Is Required For First Decision (Not Qualified For Digital Decision)"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: 6ab0bfb4-3a59-41dd-bb4f-6a268fdf9732
-
-	measure 'Digitally Decisioned' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l2_level] =
-			            "Digitally Decisioned"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: 480ab921-8d31-42fa-a41b-fa2193bfc3b1
-
-	measure 'Digitally Assisted' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l2_level] =
-			            "Digitally Assisted"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: e0f3f666-1271-4fee-8921-5679a4c941ab
-
-	measure 'Mitigating Circumstances' =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l2_level] =
-			            "Mitigating Circumstances"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: 5b45c130-f09f-4ac4-aa44-3566dde06fbc
-
-	measure Manual/Supplemental =
-			
-			VAR DatesInScope =
-			    FILTER (
-			        VALUES ( 'Date'[Date] ),
-			        [Is Date In Scope] = 1
-			    )
-			
-			RETURN
-			CALCULATE(
-			    SUM ( 'Policy Measures'[NB Submitted Count] ) + 0,
-			    FILTER (
-			        'Digital Decision Status',
-			        'Digital Decision Status'[dd_l2_level] =
-			            "Manual / Supplemental"
-			    ),
-			        TREATAS (
-			        DatesInScope,
-			        'Policy Effective Start Date'[Date]
-			    )
-			)
-		formatString: #,0
-		displayFolder: Policy Measures\Digital Decisioning\Counts
-		lineageTag: b82d6231-c3da-4741-8c1b-240c87de17a0
-
-	measure 'Assisted-or-Incomplete Ratio' =
-			
-			DIVIDE(
-			    ([Mitigating Circumstances] + [Digitally Assisted] + [Incomplete]),
-			    [Applicable to Digital Decisioning]
-			    )
-		formatString: 0.0%;-0.0%;0.0%
-		displayFolder: Policy Measures\Digital Decisioning\Ratios
-		lineageTag: 799132b6-986f-4a98-947b-d956af5e6c74
-
-	measure 'Digitally Decisioned Ratio' =
-			
-			DIVIDE(
-			    [Digitally Decisioned],
-			    [Applicable to Digital Decisioning]
-			    )
-		formatString: 0.0%;-0.0%;0.0%
-		displayFolder: Policy Measures\Digital Decisioning\Ratios
-		lineageTag: 18be836e-01b2-4d6f-83f3-bfd4e981e3b3
-
-	measure 'Manual-or-Supplemental Ratio' =
-			
-			DIVIDE(
-			    [Manual/Supplemental],
-			    [Applicable to Digital Decisioning]
-			    )
-		formatString: 0.0%;-0.0%;0.0%
-		displayFolder: Policy Measures\Digital Decisioning\Ratios
-		lineageTag: 655aa511-85c9-4233-b370-9db666ecb1b2
-
 	measure 'Retention of Renewable Premium' = DIVIDE([RN Issued Premium], [Renewable Premium])
 		formatString: 0.0%;-0.0%;0.0%
 		displayFolder: Policy Measures\Ratios
@@ -1901,48 +1943,6 @@ table Metrics
 		lineageTag: 70f3c4c9-e0a8-42a2-9b1f-c6f76dfcacf3
 
 		changedProperty = Name
-
-	measure 'NB Quoted Premium' =
-			
-			CALCULATE (
-			    SUM ( 'Policy Measures'[NB Quoted Premium] ),
-			
-			    KEEPFILTERS (
-			        FILTER(
-			            VALUES('Date'[Date]),
-			            [Is Date In Scope] = 1
-			            )
-			    ),
-			
-			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
-			    REMOVEFILTERS ( 'Policy Submission Date' )
-			)
-		formatString: \$#,0;(\$#,0);\$#,0
-		displayFolder: Policy Measures\Premium
-		lineageTag: 3989eb9d-b901-48b8-98e5-de00dc5af53b
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
-
-	measure 'NB Issued Premium' =
-			
-			CALCULATE (
-			    SUM ( 'Policy Measures'[NB Issued Premium] ),
-			
-			    KEEPFILTERS (
-			        FILTER(
-			            VALUES('Date'[Date]),
-			            [Is Date In Scope] = 1
-			            )
-			    ),
-			
-			    REMOVEFILTERS ( 'Policy Effective Start Date' ),
-			    REMOVEFILTERS ( 'Policy Submission Date' )
-			)
-		formatString: \$#,0;(\$#,0);\$#,0
-		displayFolder: Policy Measures\Premium
-		lineageTag: 86f22da7-552a-4fc1-b29e-6a52dc95891e
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	measure 'RN Quoted Premium' =
 			

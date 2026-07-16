@@ -1,0 +1,267 @@
+table dim_vehicle
+	lineageTag: 8f2eb430-5dc7-472e-aa84-acc0d071a6a2
+	sourceLineageTag: [cauto].[dim_vehicle]
+
+	column vehicle_surrogate_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b4d01493-0ed9-4968-84bd-dd84c7efdf81
+		sourceLineageTag: vehicle_surrogate_key
+		summarizeBy: none
+		sourceColumn: vehicle_surrogate_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column vehicle_type_surrogate_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 89482712-d33c-4511-bf18-bbdfb09ad7ba
+		sourceLineageTag: vehicle_type_surrogate_key
+		summarizeBy: none
+		sourceColumn: vehicle_type_surrogate_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column trailer_type_surrogate_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f35a8e73-0c41-4b66-81bb-4c7f25dfa4d4
+		sourceLineageTag: trailer_type_surrogate_key
+		summarizeBy: none
+		sourceColumn: trailer_type_surrogate_key
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column policy_num_bus_key
+		dataType: string
+		lineageTag: 8f54a51c-1ff6-4ae0-9482-e4889cd7f1e2
+		sourceLineageTag: policy_num_bus_key
+		summarizeBy: none
+		sourceColumn: policy_num_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_bus_key
+		dataType: string
+		lineageTag: 12452f44-744c-470c-919f-b89840505e43
+		sourceLineageTag: vehicle_bus_key
+		summarizeBy: none
+		sourceColumn: vehicle_bus_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_number
+		dataType: int64
+		formatString: 0
+		lineageTag: f3b10306-ab79-4383-980b-d6607737d808
+		sourceLineageTag: vehicle_number
+		summarizeBy: sum
+		sourceColumn: vehicle_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column vin
+		dataType: string
+		lineageTag: 475527e3-8370-446d-849a-aa8888556c00
+		sourceLineageTag: vin
+		summarizeBy: none
+		sourceColumn: vin
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_make
+		dataType: string
+		lineageTag: c4348801-bc5d-4fa8-b5d0-57545cb75f10
+		sourceLineageTag: vehicle_make
+		summarizeBy: none
+		sourceColumn: vehicle_make
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_model
+		dataType: string
+		lineageTag: 0e762b8f-7912-473f-96bb-82b07f1f4bf5
+		sourceLineageTag: vehicle_model
+		summarizeBy: none
+		sourceColumn: vehicle_model
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_model_year
+		dataType: string
+		lineageTag: dd662198-fcf0-4ad1-889d-1cc3d2ce09a8
+		sourceLineageTag: vehicle_model_year
+		summarizeBy: none
+		sourceColumn: vehicle_model_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_start_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9afc74a9-775d-4f26-8fca-69da9f16a5f6
+		sourceLineageTag: vehicle_start_date
+		summarizeBy: none
+		sourceColumn: vehicle_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_end_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fce8a4f6-2c1a-448c-8f84-3b9cc87c4451
+		sourceLineageTag: vehicle_end_date
+		summarizeBy: none
+		sourceColumn: vehicle_end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_deleted_on_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 02388b20-7d35-4e89-ab6f-c4409cdda314
+		sourceLineageTag: vehicle_deleted_on_date
+		summarizeBy: none
+		sourceColumn: vehicle_deleted_on_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_current_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2e0f38a9-5c7f-4c4b-b61b-e30b57b7e684
+		sourceLineageTag: dl_is_current_flag
+		summarizeBy: none
+		sourceColumn: dl_is_current_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_effective_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 601772c9-8442-46d1-b1b4-13e9212ddd89
+		sourceLineageTag: dl_row_effective_date
+		summarizeBy: none
+		sourceColumn: dl_row_effective_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_expiration_date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c0212025-c480-4ea3-bfc9-6c712256e926
+		sourceLineageTag: dl_row_expiration_date
+		summarizeBy: none
+		sourceColumn: dl_row_expiration_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_is_deleted_flag
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d583a6c2-6d39-4ae8-a3f7-4f732210b814
+		sourceLineageTag: dl_is_deleted_flag
+		summarizeBy: none
+		sourceColumn: dl_is_deleted_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_hash
+		dataType: string
+		isHidden
+		lineageTag: 51db38ff-2672-4fa4-b519-13f08dfdea54
+		sourceLineageTag: dl_row_hash
+		summarizeBy: none
+		sourceColumn: dl_row_hash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 5420f3e3-9865-45b8-9171-ff6e3a1d67e6
+		sourceLineageTag: dl_row_insert_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_insert_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_update_timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 488ae3e3-23cf-4374-ba11-ecc2bcf43d82
+		sourceLineageTag: dl_row_update_timestamp
+		summarizeBy: none
+		sourceColumn: dl_row_update_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_row_insert_agent
+		dataType: string
+		isHidden
+		lineageTag: 870bd153-7a6d-405b-aa8a-7d1e142221be
+		sourceLineageTag: dl_row_insert_agent
+		summarizeBy: none
+		sourceColumn: dl_row_insert_agent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_eltid
+		dataType: string
+		isHidden
+		lineageTag: 03fb6c01-5a7a-4780-b22a-0f69c9abcdd5
+		sourceLineageTag: dl_eltid
+		summarizeBy: none
+		sourceColumn: dl_eltid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column dl_runid
+		dataType: string
+		isHidden
+		lineageTag: f15b8d11-274a-4d4a-b54d-5f3fc7094d1d
+		sourceLineageTag: dl_runid
+		summarizeBy: none
+		sourceColumn: dl_runid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_vehicle = entity
+		mode: directLake
+		source
+			entityName: dim_vehicle
+			schemaName: cauto
+			expressionSource: 'DirectLake - den_lhw_dpr_001_cauto_product'
+

@@ -31,8 +31,8 @@ cte2 AS (
         ON ee.dq_error_event_key = ed.dq_error_event_key
     JOIN cte c ON c.dp_processing_batch_key = ee.dp_processing_batch_key
     GROUP BY
-        r.data_product_name,
         r.dq_rule_master_key,
+        r.data_product_name,
         r.dq_rule_id,
         r.dq_rule_description,
         r.dq_rule_constraint,

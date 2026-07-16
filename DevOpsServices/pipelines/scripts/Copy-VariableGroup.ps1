@@ -384,9 +384,15 @@ function Copy-AzDevOpsVariableGroup {
             {
                 $value = $Environment
             }
+
+            if ($key -eq "PIPELINE_ENVIRONMENT_APPROVAL" -and $Environment -eq "prd") {
+                $value = "productionManagementApproval"  
+            }
+
             if ($key -eq "CAPACITY_ID") {
                 $value = $CapacityId
             }
+
             if ($key -eq "KEYVAULT_NAME") {
                 $value = $KeyvaultName
             }

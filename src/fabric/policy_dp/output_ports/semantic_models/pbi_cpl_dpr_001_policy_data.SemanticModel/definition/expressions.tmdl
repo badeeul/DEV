@@ -1,6 +1,6 @@
 expression 'DirectLake - den_lhw_dpr_001_policy_product' =
 		let
-		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/d858ebfa-a08f-46d5-b980-65ac335dd855/c700a23c-6b77-4100-b4c3-a10dc55c792e", [HierarchicalNavigation=true])
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/a5b83bde-449c-4623-a821-90f37a02ac15/b6adb647-6f2d-4cc8-b9e2-9a1201642b6a", [HierarchicalNavigation=true])
 		in
 		    Source
 	lineageTag: 5949f837-e1d5-4903-aec8-6c0298b60370

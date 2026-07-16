@@ -1,0 +1,77 @@
+relationship b4a5324a-b7e6-baa4-6c33-9373376332db
+	fromColumn: fact_vehicle.vehicle_surrogate_key
+	toColumn: dim_vehicle.vehicle_surrogate_key
+
+relationship d292bbfd-9666-053b-5f30-f1614315bfb8
+	fromColumn: fact_vehicle.garage_loc_surrogate_key
+	toColumn: dim_garage_location.garage_loc_surrogate_key
+
+relationship cbac3bd5-c9d9-3c0b-c58f-e64fac5e6974
+	fromColumn: dim_vehicle.vehicle_type_surrogate_key
+	toColumn: dim_vehicle_type.vehicle_type_surrogate_key
+
+relationship 15b89935-38d1-43e3-aa33-95a8393ff076
+	fromColumn: dim_vehicle.trailer_type_surrogate_key
+	toColumn: dim_trailer_type.trailer_type_surrogate_key
+
+relationship c2a9c4bd-f170-e181-7b9e-01a50e6fce36
+	fromColumn: fact_vehicle.vehicle_radius_of_operation_surrogate_key
+	toColumn: dim_vehicle_radius_of_operation.vehicle_radius_of_operation_surrogate_key
+
+relationship 6c6815d1-d092-dcc0-758e-a1173c6662a5
+	fromColumn: fact_vehicle.vehicle_start_date_surrogate_key
+	toColumn: dim_vehicle_start_date.date_key
+
+relationship a92a5afa-21de-f18e-db11-cc7bae3b7707
+	fromColumn: fact_vehicle.vehicle_end_date_surrogate_key
+	toColumn: dim_vehicle_end_date.date_key
+
+relationship f6f6f115-89ae-8ca5-53d1-ba23243e4a2e
+	fromColumn: fact_vehicle.vehicle_deleted_on_date_surrogate_key
+	toColumn: dim_vehicle_deleted_on_date.date_key
+
+relationship b40dd87f-8d14-462e-be96-dbcecc7ddcc4
+	crossFilteringBehavior: bothDirections
+	fromColumn: fact_vehicle.policy_surrogate_key
+	toColumn: dim_policy.policy_key
+
+relationship 9aa3ca74-13dd-7e8e-3756-2aa382c9c11c
+	fromColumn: fact_policy.policy_key
+	toColumn: dim_policy.policy_key
+
+relationship 03998530-93ad-46ea-41a1-e0692cc09938
+	fromColumn: fact_policy.insd_key
+	toColumn: dim_insured.insd_key
+
+relationship 11bd5b57-5053-621b-31a7-ff24e5963bae
+	fromColumn: dim_policy.latest_policy_status_key
+	toColumn: dim_policy_status.policy_status_key
+
+relationship c0bf50d5-3717-50e5-ece1-9b6de0fd434d
+	fromColumn: dim_insured.legal_ent_type_key
+	toColumn: dim_insured_legal_entity_type.insd_leg_ent_type_key
+
+relationship 26e8893d-a5c4-2c29-8eb4-044ddb481c71
+	fromColumn: fact_policy.naics_key
+	toColumn: dim_naics.naics_key
+
+relationship 4a463d0e-f9ce-80e3-7829-26c6a06a6ca8
+	fromColumn: fact_policy.lob_product_key
+	toColumn: dim_lob_product.lob_product_key
+
+relationship fab55687-f663-13d0-9e4d-7b33f59a8d7c
+	fromColumn: fact_policy.policy_effec_start_dt_key
+	toColumn: 'Policy Effective Start Date'.date_key
+
+relationship 81e4ab3c-177e-8fbc-9819-fbb9af573cef
+	fromColumn: fact_policy.policy_effec_end_dt_key
+	toColumn: 'Policy Effective End Date'.date_key
+
+relationship 7bb53e57-477b-3198-c22a-c05dc3cba5d9
+	fromColumn: fact_policy.policy_sub_dt_key
+	toColumn: 'Policy Submitted Date'.date_key
+
+relationship 7c280158-0484-35f2-13ab-969040d26f61
+	fromColumn: fact_policy.lob_key
+	toColumn: dim_lob.lob_key
+

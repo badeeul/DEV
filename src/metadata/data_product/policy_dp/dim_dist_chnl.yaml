@@ -45,8 +45,8 @@ query:
           True as dl_is_current_flag,
           CAST('1901-01-01' AS DATE) as dl_row_effective_date,
           CAST('9999-12-31' AS DATE) as dl_row_expiration_date,
-          False as dl_is_deleted_flag,
-          case
+          False as dl_is_deleted_flag
+          ,case
               when lower(trim(a.agyrate)) = 's2' and lower(trim(agcy_status)) <> 'active' then 0
               when lower(trim(a.agyrate)) = 'c4' and lower(trim(agcy_status)) <> 'closed' then 0
               when lower(trim(a.agyrate)) = 'i5' and lower(trim(agcy_status)) <> 'inactive' then 0

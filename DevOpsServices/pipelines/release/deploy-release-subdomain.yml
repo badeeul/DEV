@@ -107,6 +107,7 @@ stages:
                 "optionalSecurityGroup" = $parameters.optionalSecurityGroup
                 "viewerGroupPrincipalIds" = $parameters.viewerGroupPrincipalIds                
                 "lakeHouseDefaultReaders" = $lakeHouseDefaultReadersJson
+                "variableGroupAdmins" = $parameters.variableGroupAdmins
               }
             )
           }
@@ -156,6 +157,7 @@ stages:
           optionalSecurityGroup: $(optionalSecurityGroup)
           viewerGroupPrincipalIds: $(viewerGroupPrincipalIds)
           lakeHouseDefaultReaders: $(lakeHouseDefaultReaders)
+          variableGroupAdmins: $(variableGroupAdmins)
 
       - checkout: self
         persistCredentials: true

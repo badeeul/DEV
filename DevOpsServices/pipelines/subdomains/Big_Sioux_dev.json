@@ -1,3 +1,4 @@
+
 {
   "targetVariableGroup": "PlatformServices-BigSioux-DEV",
   "targetWorkspaceName": "Missouri-BigSioux-DEV",
@@ -28,5 +29,6 @@
   "keyvaultName": "bhg-hub-fabric01-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
   "contributorGroupPrincipalIds": "07579193-f8c7-4e06-ab01-1b6405eb912f,0c5a1569-3808-4c6c-a428-c46f116ae2d5,385dbc87-6c68-4091-bc5a-a5e7968e589c,04d4e8a3-0f2d-4cc3-a40e-f51b8e9bbca1,7ec92606-a6c9-422b-8ae0-dad4758d38c5",
-  "viewerGroupPrincipalIds": "8f09a04a-c1e3-4022-8f77-18be960cd71e,65a74584-ec74-4d29-8e05-5677622f9b60,6c796733-9fad-481f-9d68-1648e014e932,23584b53-4752-49c6-abf8-0b2d8299e721"
+  "viewerGroupPrincipalIds": "8f09a04a-c1e3-4022-8f77-18be960cd71e,65a74584-ec74-4d29-8e05-5677622f9b60,6c796733-9fad-481f-9d68-1648e014e932,23584b53-4752-49c6-abf8-0b2d8299e721",
+  "variableGroupAdmins": "GUARD DnA - Missouri Big Sioux - Data Product Arch,GUARD DnA - Missouri Big Sioux - Data Eng"
 }

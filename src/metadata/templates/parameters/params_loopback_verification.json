@@ -26,6 +26,10 @@
         {
             "table_name": "dim_lob",
             "primary_key": "lob_cd_bus_key"
+        },
+        {
+            "table_name": "fact_policy",
+            "primary_key": "policy_key"
         }
     ]
 }

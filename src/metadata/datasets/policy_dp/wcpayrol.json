@@ -4,37 +4,14 @@
     "datasetTypeName": "database",
     "databaseName": "GIGINSDATA",
     "datasetSchema": "dbo",
+    "skipProductLoad": true,
     "sourceSystemProperties": {
         "sourceSystemName": "IIS",
         "includeSpecificColumns": [
-            "code",
-            "primeseq",
-            "state",
-            "effdate",
-            "classcode",
-            "seqcode",
-            "territory",
-            "exmod",
-            "minprem",
-            "exposure",
-            "premium",
-            "rate",
-            "xcluamt",
-            "losscons",
-            "form",
-            "paragraph",
-            "volcomp",
-            "hazard",
-            "cvrg",
-            "disctype",
-            "classuffix",
-            "diffprem",
-            "diffrate",
-            "rateeffdate",
-            "losscost"
+            "*"
         ],
-        "ingestType": "cdc",
-        "isDynamicQuery": true
+        "ingestType": "full",
+        "isDynamicQuery": false
     },
     "rawProperties": {
         "lakehouseName": "den_lhw_dpr_001_raw_files",
@@ -51,25 +28,22 @@
             "multiline": true,
             "delimiter": ",",
             "escape": "\"",
-            "timestampFormat": "dd/mm/yyyy"
+            "timestampFormat": "dd/MM/yyyy"
         },
-        "columnList": [
-            "*"
-        ],
+        "columnList": ["*"],
         "primaryKeyList": [
-            "code",
-            "primeseq",
-            "state",
-            "effdate",
             "classcode",
-            "seqcode",
-            "territory",
+            "code",
+            "effdate",
+            "primeseq",
             "rateeffdate",
+            "seqcode",
+            "state",
+            "territory",
             "volcomp"
-        ],
+        ], 
         "duplicateCheckEnabled": false,
         "targetFileFormat": "delta",
-        "targetLoadType": "merge"
+        "targetLoadType": "overwrite"
     }
 }
-

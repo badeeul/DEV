@@ -1,0 +1,175 @@
+table _Metrics
+	lineageTag: 77e20c42-c710-4bbd-aa22-7f5554c01c43
+
+	measure 'Average Power Unit Count' =
+			
+			DIVIDE(
+			    [Power Unit Count],
+			    [Policy Count]
+			)
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 36c2e04c-8906-4a05-bac0-b1b71e79d7c6
+
+		changedProperty = Name
+
+	measure 'Average Vehicle Count' =
+			
+			DIVIDE(
+			    [Vehicle Count],
+			    [Policy Count]
+			)
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 832d851a-8f02-46a8-a734-610315326103
+
+		changedProperty = Name
+
+	measure 'Current Inforce Vehicle Premium' =
+			
+			CALCULATE(
+			    SUM(fact_vehicle[current_inforce_vehicle_prem]),
+			    TREATAS(
+			        VALUES(fact_policy[policy_key]),
+			        fact_vehicle[policy_surrogate_key]
+			    )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Premium
+		lineageTag: 97ea57c5-63f1-432d-8ad3-54806883b988
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Data As Of Date' = MAX(fact_vehicle[dl_row_insert_timestamp])-1
+		formatString: mm/dd/yyyy
+		displayFolder: For Report Displays\Report Dates
+		lineageTag: 2495db91-2c14-40c6-b6a5-20b18dcb093b
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Latest Vehicle Premium' =
+			
+			CALCULATE(
+			    SUM(fact_vehicle[latest_vehicle_prem]),
+			    TREATAS(
+			        VALUES(fact_policy[policy_key]),
+			        fact_vehicle[policy_surrogate_key]
+			    )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Premium
+		lineageTag: 087f2755-3826-4164-b9cb-508477c14554
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Power Unit Count' =
+			
+			CALCULATE(
+			    SUM(fact_vehicle[count_as_power_unit_flag]),
+			    TREATAS(
+			        VALUES(fact_policy[policy_key]),
+			        fact_vehicle[policy_surrogate_key]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: f4bcaeec-3516-4150-8023-ea0d378de884
+
+		changedProperty = Name
+
+	measure 'Vehicle Count' =
+			
+			CALCULATE(
+			    SUM(fact_vehicle[count_as_vehicle_flag]),
+			    TREATAS(
+			        VALUES(fact_policy[policy_key]),
+			        fact_vehicle[policy_surrogate_key]
+			    )
+			)
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 3a6b4dc9-ee7e-4343-8516-6606309c1037
+
+		changedProperty = Name
+
+	measure 'Average Current Inforce Vehicle Premium' =
+			
+			CALCULATE(
+			    AVERAGE(fact_vehicle[current_inforce_vehicle_prem]),
+			    TREATAS(
+			        VALUES(fact_policy[policy_key]),
+			        fact_vehicle[policy_surrogate_key]
+			    ),
+			    dim_policy[current_inforce_policy_ind] = "Y"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Premium
+		lineageTag: cbb4a132-24f4-431c-b853-efd5ef6f58ad
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Average Latest Vehicle Premium' =
+			
+			CALCULATE(
+			    AVERAGE(fact_vehicle[latest_vehicle_prem]),
+			    fact_vehicle[count_as_vehicle_flag] = 1,
+			    TREATAS(
+			        VALUES(fact_policy[policy_key]),
+			        fact_vehicle[policy_surrogate_key]
+			    )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Premium
+		lineageTag: ec7af271-fbf4-467d-8505-6e2b7a4f6497
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Policy Count' =
+			
+			CALCULATE(
+			    COUNTROWS(fact_policy),
+			    dim_lob[lob_cd_bus_key]="CA"
+			)
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 02113b89-1808-47ff-a234-41ba05a75a66
+
+		changedProperty = Name
+
+	measure 'Current Inforce Policy Premium' =
+			
+			CALCULATE(
+			    SUM(fact_policy[current_inforce_policy_prem]),
+			    dim_lob[lob_cd_bus_key]="CA"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Premium
+		lineageTag: 6cb08884-e8ba-438a-b04f-b41664e9ad4a
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column _key
+		isHidden
+		lineageTag: 0c24d2ca-31e6-49f4-9be9-55a558a077ca
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [_key]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Metrics = calculated
+		mode: import
+		source = DATATABLE("_key", STRING, {{"Placeholder"}})
+
+	annotation PBI_Id = 5ecbe0045ff346e4b577b56d5595867d
+

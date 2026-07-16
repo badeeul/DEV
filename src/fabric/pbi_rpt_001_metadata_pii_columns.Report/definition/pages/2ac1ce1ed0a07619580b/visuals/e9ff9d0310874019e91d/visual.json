@@ -1,0 +1,63 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "e9ff9d0310874019e91d",
+  "position": {
+    "x": 693.70277078085633,
+    "y": 9.9748110831234253,
+    "z": 4000,
+    "height": 82.51889168765743,
+    "width": 355.4659949622166,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "textSlicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "yaml_pii_columns_config"
+                    }
+                  },
+                  "Property": "pii_column"
+                }
+              },
+              "queryRef": "yaml_pii_columns_config.pii_column",
+              "nativeQueryRef": "pii_column"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bbbdf20e530075b1a61e",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "yaml_pii_columns_config"
+              }
+            },
+            "Property": "pii_column"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

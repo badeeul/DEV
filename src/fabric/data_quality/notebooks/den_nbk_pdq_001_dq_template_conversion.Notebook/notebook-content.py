@@ -8,8 +8,8 @@
 # META   },
 # META   "dependencies": {
 # META     "environment": {
-# META       "environmentId": "",
-# META       "workspaceId": "ab08da5e-0f71-423b-a811-bd0af21f182b"
+# META       "environmentId": "eccb61a4-306f-40f8-a7e1-53e1b34b5b1a",
+# META       "workspaceId": "00000000-0000-0000-0000-000000000000"
 # META     }
 # META   }
 # META }

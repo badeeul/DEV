@@ -1,0 +1,8 @@
+expression 'DirectLake - den_lhw_pdi_001_observability' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/bc0e4841-d1ff-4d07-86bb-f9af6eeb4bba/ef7168cb-e832-4c05-865b-b44ba342e86d", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: 52324faa-deae-4c66-91fb-ac1aa17aaa4f
+
+	annotation PBI_IncludeFutureArtifacts = False

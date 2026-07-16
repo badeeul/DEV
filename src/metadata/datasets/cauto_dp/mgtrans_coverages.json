@@ -19,8 +19,7 @@
             "enteredon",
             "enteredby"
         ],
-        "ingestType": "watermark",
-        "sourceWatermarkIdentifier": "enteredon",
+        "ingestType": "cdc",
         "isDynamicQuery": true
     },
     "rawProperties": {

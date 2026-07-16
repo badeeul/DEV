@@ -1,0 +1,22 @@
+{
+    "loadGroupDims": [
+        {
+            "files": [
+                {
+                    "fileName": "dim_coverage",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ],
+    "loadGroupFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "fact_bop_policy_coverage",
+                    "modelConfigFolderName": "bop_dp"
+                }
+            ]
+        }
+    ]
+}

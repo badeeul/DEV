@@ -178,6 +178,22 @@ table 'Policy Transaction Detail'
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Cancellation Reason Code
+	column 'Cancellation Reason Code'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 64e31dda-d549-42f1-8236-b347d757867b
+		sourceLineageTag: cancel_reason_key
+		summarizeBy: count
+		sourceColumn: cancel_reason_key
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
 	column dl_eltid
 		dataType: string
 		isHidden
@@ -391,22 +407,6 @@ table 'Policy Transaction Detail'
 		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = User
-
-	/// Cancellation Reason Code
-	column 'Cancellation Reason Code'
-		dataType: int64
-		isHidden
-		formatString: 0
-		lineageTag: 64e31dda-d549-42f1-8236-b347d757867b
-		sourceLineageTag: cancel_reason_key
-		summarizeBy: count
-		sourceColumn: cancel_reason_key
-
-		changedProperty = Name
-
-		changedProperty = IsHidden
-
-		annotation SummarizationSetBy = Automatic
 
 	partition fact_policy_transaction_detail = entity
 		mode: directLake

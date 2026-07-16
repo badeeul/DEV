@@ -28,5 +28,6 @@
   "keyvaultName": "bhg-hub-fabric01-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9,6e10b2ab-dbaa-479e-88a1-02838f8a46fd",
   "contributorGroupPrincipalIds": "6ebb0f2b-604e-488b-9f17-f51d2cc3bccf,a8dd6935-9d70-488c-b90b-34e2f437a39a,8139f54f-40ea-420a-9467-4f8a663e55e9,243d087a-255f-46bd-afec-cee6ce57e5bd,227f078b-f954-4a47-8947-112ddcfe2eeb",
-  "viewerGroupPrincipalIds": "51bc80e5-3473-482a-8538-8cb70732721f,71f03ba3-4373-4ae5-b0c6-bda2234c5693,aa9d02ad-d473-4af7-8fe4-b2b98e31970b,85811188-deae-42f5-b106-ccef262599fc"
+  "viewerGroupPrincipalIds": "51bc80e5-3473-482a-8538-8cb70732721f,71f03ba3-4373-4ae5-b0c6-bda2234c5693,aa9d02ad-d473-4af7-8fe4-b2b98e31970b,85811188-deae-42f5-b106-ccef262599fc",
+  "variableGroupAdmins": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch,GUARD DnA - Distro Partner Perf Mgmt - Data Eng"
 }

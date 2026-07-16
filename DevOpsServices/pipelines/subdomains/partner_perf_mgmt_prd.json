@@ -3,7 +3,7 @@
   "targetWorkspaceName": "Distribution-PartnerPerfMgmt-PRD",
   "targetSuperDomain": "Distribution",
   "targetSubDomain": "PartnerPerfMgmt",
-  "targetProject": "DnA Distribution",
+  "targetProject": "DnA Distribution-NG",
   "targetRepository": "DnA Distro - Partner Perf Mgmt",
   "environment": "prd",
   "pep": [
@@ -22,11 +22,12 @@
     "lakehouse_1_name": "",
     "lakehouse_1_readerMembers": ""
   },
-  "requiredSecurityGroup": "GUARD DnA - Distro Partner Perf Mgmt - Data Product Arch",
+  "requiredSecurityGroup": "GUARD DnA - Distro Partner Perf Mgmt - Data Analyst,GUARD DnA - Distro Partner Perf Mgmt - Data Eng,GUARD DnA - Distro Partner Perf Mgmt - Data Product Mgr,GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Analyst,GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Eng,GUARD DnA - Distro Del Auth - Non-adm Prgs - Data Product Mgr,GUARD DnA - Distribution Service - Data Analyst,GUARD DnA - Distribution Service - Data Eng,GUARD DnA - Distribution Service - Data Product Mgr",
   "optionalSecurityGroup": "GUARD DnA - Fluidity - PlatSvc DevOps",
   "capacityId": "8EC86993-48EC-4FE7-B905-A74A0A192064",
-  "keyvaultName": "bhg-hub-fabric01-eus-kv",
+  "keyvaultName": "bhg-prod-ppm-eus-kv",
   "adminGroupPrincipalIds": "5f7fd7ae-ebba-4eb8-b004-2fc8676fe5a9",
   "contributorGroupPrincipalIds": "0e987248-3011-4299-9d32-35891e4b387d",
-  "viewerGroupPrincipalIds": "0b37fc2b-82f8-4a61-837a-d09c07d19908,a2f60ff3-1b62-4dea-9b05-95351d4b9ceb,65ab93ae-6ba9-499a-b600-917d34df13a0,934c3117-81d6-4851-b024-0a1175385271,cddf8b07-2318-4246-9385-43fb6dc8cd1a,8105b04f-b16f-4733-99f4-c4a02e28dfa6,b999e7bf-259a-44f9-bf96-ee0e28fe9d61,a5338172-6f30-4976-8612-ad2254142c03,6e10b2ab-dbaa-479e-88a1-02838f8a46fd,f7b74a8f-0401-4227-a98a-43be7f7a87c4"
+  "viewerGroupPrincipalIds": "0b37fc2b-82f8-4a61-837a-d09c07d19908,a2f60ff3-1b62-4dea-9b05-95351d4b9ceb,65ab93ae-6ba9-499a-b600-917d34df13a0,934c3117-81d6-4851-b024-0a1175385271,cddf8b07-2318-4246-9385-43fb6dc8cd1a,8105b04f-b16f-4733-99f4-c4a02e28dfa6,b999e7bf-259a-44f9-bf96-ee0e28fe9d61,a5338172-6f30-4976-8612-ad2254142c03,6e10b2ab-dbaa-479e-88a1-02838f8a46fd,f7b74a8f-0401-4227-a98a-43be7f7a87c4",
+  "variableGroupAdmins": "GUARD DnA - Distro Partner Perf Mgmt - Data Eng"
 }

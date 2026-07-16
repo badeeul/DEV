@@ -70,18 +70,18 @@ query:
     sql: |
       with cte_latest_premium as (
         select 
-          lower(trim(m.code)) as code
-        , lower(trim(mc.itemid)) as itemid
+          m.code as code
+        , mc.itemid as itemid
         , sum(mc.premium) as latestpremium
         from mgtrans_coverages mc
         inner join mgtrans m on lower(trim(mc.mgtrans_transno)) = lower(trim(m.transno))
-        group by lower(trim(m.code)), lower(trim(mc.itemid))
+        group by m.code, mc.itemid
       )
       
       , cte_current_inforce_premium as (
         select 
-          lower(trim(m.code)) as code
-        , lower(trim(mc.itemid)) as itemid
+          m.code as code
+        , mc.itemid as itemid
         , sum(mc.premium) as currentinforcepremium
         from insured i
         inner join mgtrans m on lower(trim(i.code)) = lower(trim(m.code))
@@ -89,7 +89,7 @@ query:
         inner join dim_policy dp on lower(trim(i.code)) = lower(trim(dp.policy_num_bus_key)) and dp.dl_is_current_flag = 1
         where lower(trim(dp.current_inforce_policy_ind)) = 'y'
         and m.writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
-        group by lower(trim(m.code)), lower(trim(mc.itemid))
+        group by m.code, mc.itemid
       )
       
       select
@@ -122,7 +122,7 @@ query:
       left outer join dim_garage_location dgl on lower(trim(v.code)) = lower(trim(dgl.policy_num_bus_key)) and lower(trim(cast(v.locnum as string))) = lower(trim(dgl.garage_loc_bus_key))
       left outer join fact_policy fp on dp.policy_key = fp.policy_key
       left outer join cte_latest_premium vp on lower(trim(v.code)) = lower(trim(vp.code)) and lower(trim(cast(v.vehicleid as string))) = lower(trim(vp.itemid))
-      left outer join dim_vehicle_radius_of_operation dro on (case when lower(trim(coalesce(v.radiusofoperation,''))) <> '' then lower(trim(v.radiusofoperation)) end) = dro.vehicle_radius_of_operation_bus_key
+      left outer join dim_vehicle_radius_of_operation dro on (case when lower(trim(coalesce(v.radiusofoperation,''))) <> '' then lower(trim(v.radiusofoperation)) end) = lower(trim(dro.vehicle_radius_of_operation_bus_key))
       left outer join dim_date ddp on ddp.date = cast(coalesce(v.startdate, i.pobegin) as date)
       left outer join dim_date dde on dde.date = cast(coalesce(v.enddate, i.poexpir) as date)
       left outer join dim_date ddd on ddd.date = cast(v.deletedon as date)
