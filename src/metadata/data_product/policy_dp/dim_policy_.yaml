@@ -8,6 +8,8 @@ target:
   unknown_record: True # keep
   identity: True # keep
   identity_column_name: policy_key # sharepoint first row
+  partition_by:
+    - policy_year
 
 source:
   - name: insured
@@ -185,6 +187,7 @@ query:
         , case when CAST(policy_effec_start_dt AS DATE) > CAST(policy_effec_end_dt AS DATE) then 0 else 1 end as dq_effec_st_dt_check
         , case when CAST(policy_coverage_start_dt AS DATE) < CAST(policy_effec_start_dt AS DATE) then 0 else 1 end as dq_coverage_st_dt_check
         , case when CAST(policy_coverage_end_dt AS DATE) > CAST(policy_effec_end_dt AS DATE) then 0 else 1 end as dq_coverage_end_dt_check
+        , YEAR(CAST(pb.policy_effec_start_dt AS DATE)) AS policy_year
       FROM
         insured i
         LEFT OUTER JOIN billings b ON LOWER(TRIM(b.code)) = LOWER(TRIM(i.code))
