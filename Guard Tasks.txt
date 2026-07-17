@@ -581,9 +581,15 @@ Tasks 07-01-2026 - 07-03-2026
 55865 - Bug || Data mismatch from source and target for dim_policy table
 55866 - Bug || DQ Rule failing for dim_policy table for column 'current_inforce_policy_ind'
 
-Tasks 07-06-2026 - 07-10-2026	
+Tasks 07-06-2026 - 07-08-2026	
 	55863 - Renewal Issued Paid Discrepancy
 	51684 - Policy DP V1.4 - Implement
 		51688 - Implement or enhance data quality rules
 		51689 - Implement or enhance source loop-back verification
+
+Tasks 07-14-2026 - 07-17-2026
+	57142 - QA - Bug Resolution
+	57144 - PREPRD Deployment - Policy DP 1.4 and COMM Auto and Data Ingestion	
+	57145 - Optimize dim and fact ingestion for fast ingestion
+	
 	
