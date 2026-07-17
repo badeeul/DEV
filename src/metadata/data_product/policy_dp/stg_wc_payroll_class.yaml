@@ -1,0 +1,62 @@
+target:
+  lakehouse: den_lhw_scu_001_policy_curated
+  schema: stg_policy
+  table: stg_wc_payroll_class
+  load_strategy: overwrite
+  key_columns:
+    - code
+  unknown_record: False
+  identity: False
+
+source:
+  - name: wcpayrol
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: wcpayrol
+    incremental: False
+
+  - name: archive_wcpayrol
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: archive_wcpayrol
+    incremental: False
+
+  - name: wcinfo
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: wcinfo
+    incremental: False
+
+query:
+  - name: stg_wc_payroll_class
+    sql: |
+      WITH wcpayrollbase AS (
+        SELECT 
+          a.code, 
+          classcode, 
+          classuffix, 
+          state, 
+          SUM(premium) AS prem, 
+          SUM(exposure) AS exposure,
+          ROW_NUMBER() OVER (PARTITION BY a.code ORDER BY SUM(exposure) DESC, SUM(premium) DESC, state ASC) AS rn
+        FROM (
+          SELECT code, classcode, classuffix, state, premium, exposure, primeseq, seqcode 
+          FROM wcpayrol 
+          UNION ALL 
+          SELECT code, classcode, classuffix, state, premium, exposure, primeseq, seqcode 
+          FROM archive_wcpayrol
+        ) a
+        INNER JOIN wcinfo b 
+          ON LOWER(TRIM(a.code)) = LOWER(TRIM(b.code)) 
+          AND LOWER(TRIM(a.classcode)) = LOWER(TRIM(b.govclass))
+        WHERE LOWER(TRIM(a.primeseq)) = '1' 
+          AND LOWER(TRIM(a.seqcode)) = '000'
+        GROUP BY a.code, classcode, classuffix, state
+      )
+      SELECT 
+        code, 
+        classcode, 
+        classuffix, 
+        state 
+      FROM wcpayrollbase 
+      WHERE rn = 1

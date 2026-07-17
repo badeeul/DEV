@@ -1,0 +1,48 @@
+target:
+  lakehouse: den_lhw_scu_001_policy_curated
+  schema: stg_policy
+  table: stg_uw_buildings_class
+  load_strategy: overwrite
+  key_columns:
+    - code
+  unknown_record: False
+  identity: False
+
+source:
+  - name: uwbuildings
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: uwbuildings
+    incremental: False
+
+  - name: archive_uwbuildings
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: archive_uwbuildings
+    incremental: False
+
+query:
+  - name: stg_uw_buildings_class
+    sql: |
+      WITH uwbuildingsbase AS (
+        SELECT 
+          code, 
+          class, 
+          classsuffix, 
+          bpclass_id,
+          ROW_NUMBER() OVER (PARTITION BY code ORDER BY premium DESC, tiv DESC) AS rn
+        FROM (
+          SELECT code, class, classsuffix, bpclass_id, premium, tiv 
+          FROM uwbuildings
+          UNION ALL
+          SELECT code, class, classsuffix, bpclass_id, premium, tiv 
+          FROM archive_uwbuildings
+        ) b
+      )
+      SELECT 
+        code, 
+        class, 
+        classsuffix, 
+        bpclass_id 
+      FROM uwbuildingsbase 
+      WHERE rn = 1

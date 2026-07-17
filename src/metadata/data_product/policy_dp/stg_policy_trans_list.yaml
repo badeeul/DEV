@@ -1,0 +1,32 @@
+target:
+  lakehouse: den_lhw_scu_001_policy_curated
+  schema: stg_policy
+  table: stg_policy_trans_list
+  load_strategy: overwrite
+  key_columns:
+    - code
+    - trancnt
+  unknown_record: False
+  identity: False
+
+source:
+  - name: mgtrans
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: mgtrans
+    incremental: False
+
+  - name: mgnotrans
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: mgnotrans
+    incremental: False
+
+query:
+  - name: stg_policy_trans_list
+    sql: |
+      SELECT DISTINCT code, trancnt 
+      FROM mgtrans
+      UNION
+      SELECT DISTINCT code, trancnt 
+      FROM mgnotrans
