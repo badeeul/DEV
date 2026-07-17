@@ -1,0 +1,35 @@
+target:
+  lakehouse: den_lhw_scu_001_policy_curated
+  schema: stg_policy
+  table: stg_mgtrans_totals
+  load_strategy: overwrite
+  key_columns:
+    - code
+  unknown_record: False
+  identity: False
+
+source:
+  - name: mgtrans
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: mgtrans
+    incremental: False
+
+query:
+  - name: stg_mgtrans_totals
+    sql: |
+      SELECT 
+        code,
+        LOWER(TRIM(code)) AS code_lower,
+        COALESCE(SUM(amount), 0.0000) AS total_prem_amt,
+        COALESCE(SUM(fsamount), 0.0000) AS total_fsa_amt,
+        COALESCE(SUM(paamount), 0.0000) AS total_paa_amt,
+        COALESCE(SUM(sf3amount), 0.0000) AS total_sf3_amt,
+        COALESCE(SUM(sf4amount), 0.0000) AS total_sf4_amt,
+        COALESCE(SUM(sf5amount), 0.0000) AS total_sf5_amt,
+        COALESCE(SUM(sf6amount), 0.0000) AS total_sf6_amt,
+        COALESCE(SUM(sf7amount), 0.0000) AS total_sf7_amt,
+        COALESCE(SUM(commisamt), 0.0000) AS total_comm_amt,
+        COALESCE(SUM(nocommprem), 0.0000) AS total_non_comm_prem_amt
+      FROM mgtrans
+      GROUP BY code

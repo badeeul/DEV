@@ -135,6 +135,11 @@ source:
     schema: policy
     table: dim_lob_product
     incremental: False
+  - name: stg_mgtrans_totals
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: stg_policy
+    table: stg_mgtrans_totals
+    incremental: False
 
 query:
   - name: fact_policy_transaction
@@ -254,48 +259,19 @@ query:
         ,False as dl_is_deleted_flag
         , case when lower(trim(dlob.lob_cd_bus_key)) in ('wc', 'ca', 'db', 'pl', 'um', 'up', 'cx', 'cp') and lower(trim(dmkt.mkt_type_desc)) = 'e&s' then 0 else 1 end as dq_trans_lob_key_mkt_type_desc_check
         , case when lower(trim(dcar.carrier_cd_bus_key)) = 'paazgu10' and lower(trim(dmkt.mkt_type_desc)) <> 'e&s' then 0 else 1 end as dq_trans_cr_key_mkt_type_desc_check
-        , case when SUM(fd.prem_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.amount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_prem_amt_src_tgt_check
-        , case when SUM(fd.fsa_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.fsamount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_fsa_amt_src_tgt_check
-        , case when SUM(fd.paa_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.paamount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_paa_amt_src_tgt_check
-        , case when SUM(fd.sf3_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.sf3amount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_sf3_amt_src_tgt_check
-        , case when SUM(fd.sf4_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.sf4amount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_sf4_amt_src_tgt_check
-        , case when SUM(fd.sf5_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.sf5amount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_sf5_amt_src_tgt_check
-        , case when SUM(fd.sf6_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.sf6amount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_sf6_amt_src_tgt_check
-        , case when SUM(fd.sf7_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.sf7amount), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_sf7_amt_src_tgt_check
-        , case when SUM(fd.comm_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.commisamt), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_comm_amt_src_tgt_check
-        , case when SUM(fd.non_comm_prem_amt) OVER (PARTITION BY lower(trim(fd.code))) = ( 
-              select coalesce(sum(m4dq.nocommprem), 0.0000) from mgtrans m4dq where lower(trim(m4dq.code)) = lower(trim(fd.code)) 
-            ) then 1 else 0
-          end as dq_trans_non_comm_prem_amt_src_tgt_check
+        , case when SUM(fd.prem_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_prem_amt then 1 else 0 end as dq_trans_prem_amt_src_tgt_check
+        , case when SUM(fd.fsa_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_fsa_amt then 1 else 0 end as dq_trans_fsa_amt_src_tgt_check
+        , case when SUM(fd.paa_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_paa_amt then 1 else 0 end as dq_trans_paa_amt_src_tgt_check
+        , case when SUM(fd.sf3_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_sf3_amt then 1 else 0 end as dq_trans_sf3_amt_src_tgt_check
+        , case when SUM(fd.sf4_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_sf4_amt then 1 else 0 end as dq_trans_sf4_amt_src_tgt_check
+        , case when SUM(fd.sf5_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_sf5_amt then 1 else 0 end as dq_trans_sf5_amt_src_tgt_check
+        , case when SUM(fd.sf6_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_sf6_amt then 1 else 0 end as dq_trans_sf6_amt_src_tgt_check
+        , case when SUM(fd.sf7_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_sf7_amt then 1 else 0 end as dq_trans_sf7_amt_src_tgt_check
+        , case when SUM(fd.comm_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_comm_amt then 1 else 0 end as dq_trans_comm_amt_src_tgt_check
+        , case when SUM(fd.non_comm_prem_amt) OVER (PARTITION BY lower(trim(fd.code))) = mgt.total_non_comm_prem_amt then 1 else 0 end as dq_trans_non_comm_prem_amt_src_tgt_check
         , case when lower(trim(dlob.lob_cd_bus_key)) not in ('wc', 'bp') and lower(trim(dbc.bus_class_cd_bus_key)) is not null then 0 else 1 end as dq_trans_gov_bus_class_key_check
       FROM fact_policy_transaction_data fd
+      LEFT OUTER JOIN stg_mgtrans_totals mgt ON lower(trim(fd.code)) = mgt.code_lower
       LEFT OUTER JOIN dim_policy dpol ON lower(trim(fd.policy_num_bus_key)) = lower(trim(dpol.policy_num_bus_key)) and dpol.dl_is_current_flag = 1
       LEFT OUTER JOIN dim_date dd_eff_start ON CAST(fd.policy_effec_start_date AS DATE) = dd_eff_start.date
       LEFT OUTER JOIN dim_date dd_eff_end ON CAST(fd.policy_effec_end_date AS DATE) = dd_eff_end.date
