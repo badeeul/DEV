@@ -125,3 +125,21 @@ metrics - {
   "recordDeletes": 0,
   "outputBytes": 1715448247
 }
+
+
+
+
+-- Check for multiple class records per policy
+SELECT code, COUNT(*) as cnt 
+FROM stg_wc_payroll_class 
+GROUP BY code 
+HAVING COUNT(*) > 1
+ORDER BY cnt DESC
+LIMIT 10;
+
+SELECT code, COUNT(*) as cnt 
+FROM stg_uw_buildings_class 
+GROUP BY code 
+HAVING COUNT(*) > 1
+ORDER BY cnt DESC
+LIMIT 10;
