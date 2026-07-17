@@ -4,7 +4,7 @@ target:
   table: stg_mgtrans_totals
   load_strategy: overwrite
   key_columns:
-    - code
+    - code_lower
   unknown_record: False
   identity: False
 
@@ -19,7 +19,6 @@ query:
   - name: stg_mgtrans_totals
     sql: |
       SELECT 
-        code,
         LOWER(TRIM(code)) AS code_lower,
         COALESCE(SUM(amount), 0.0000) AS total_prem_amt,
         COALESCE(SUM(fsamount), 0.0000) AS total_fsa_amt,
@@ -32,4 +31,4 @@ query:
         COALESCE(SUM(commisamt), 0.0000) AS total_comm_amt,
         COALESCE(SUM(nocommprem), 0.0000) AS total_non_comm_prem_amt
       FROM mgtrans
-      GROUP BY code
+      GROUP BY LOWER(TRIM(code))
