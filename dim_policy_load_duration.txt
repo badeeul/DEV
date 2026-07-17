@@ -143,3 +143,11 @@ GROUP BY code
 HAVING COUNT(*) > 1
 ORDER BY cnt DESC
 LIMIT 10;
+
+
+SELECT src_trans_id_type, src_trans_id, COUNT(*) as cnt
+FROM policy.fact_policy_transaction
+GROUP BY src_trans_id_type, src_trans_id
+HAVING COUNT(*) > 1
+ORDER BY cnt DESC
+LIMIT 10;
