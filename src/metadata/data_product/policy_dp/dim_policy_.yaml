@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product # keep
   schema: policy # keep
   table: dim_policy # target table
-  load_strategy: overwrite # scd type
+  load_strategy: merge # scd type
   key_columns: # is merge key
     - policy_num_bus_key
   unknown_record: True # keep

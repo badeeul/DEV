@@ -71,3 +71,57 @@ metrics - {
   "recordDeletes": 0,
   "outputBytes": 1789427038
 }
+
+---------------------------------------------------------------------------------------
+Overwrite
+---------------
+Start 2026-07-17 09:05:56.321619
+abfss://58a93363-20a3-4815-898b-95f75831bf7f@onelake.dfs.fabric.microsoft.com/e1f7dcaf-d353-44de-ab25-c9e1891f1e69/Files/data_product/policy_dp/dim_policy_v1.yaml
+Reading dim_policy_v1.yaml Completed in 0:00:00.840532
+Generate source views Completed in 0:00:21.280008
+Transforming Yaml Queries to Dataframe Completed in 0:00:05.569825
+Writing Dataframe to Table..... 2026-07-17 09:06:24.012076
+Writing Dataframe to Table Completed in 0:10:16.619360
+Total Duaration 0:10:44.309817
+metrics - {
+  "success": true,
+  "eltId": "0f623406-4149-4bff-95c8-2f6aa7954d39",
+  "runId": "d09c7ca3-6a45-4595-86d9-a497bfb83e25",
+  "startTime": "2026-07-17T09:05:56.321665+00:00",
+  "endTime": "2026-07-17T09:16:40.631240+00:00",
+  "lakehouse": "den_lhw_scu_001_policy_curated",
+  "deltaSchema": "stg_policy",
+  "deltaObject": "stg_dim_policy",
+  "error": null,
+  "recordInserts": 17091742,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 1627865146
+}
+
+
+Start 2026-07-17 09:16:40.631591
+abfss://58a93363-20a3-4815-898b-95f75831bf7f@onelake.dfs.fabric.microsoft.com/e1f7dcaf-d353-44de-ab25-c9e1891f1e69/Files/data_product/policy_dp/dim_policy.yaml
+Reading dim_policy.yaml Completed in 0:00:00.190604
+Generate source views Completed in 0:00:00.431075
+Transforming Yaml Queries to Dataframe Completed in 0:00:00.038012
+Writing Dataframe to Table..... 2026-07-17 09:16:41.291322
+Calculating Metrics: 100%
+94/94 [02:07<00:00, 1.00s/it]
+Writing Dataframe to Table Completed in 0:06:58.542025
+Total Duaration 0:06:59.201756
+metrics - {
+  "success": true,
+  "eltId": "1aa52b4b-ce24-48c3-86d1-a2e7cad75aef",
+  "runId": "88cf0fde-c75a-4a41-a03c-ef1bd2c2ca19",
+  "startTime": "2026-07-17T09:16:40.631614+00:00",
+  "endTime": "2026-07-17T09:23:39.832296+00:00",
+  "lakehouse": "den_lhw_dpr_001_policy_product",
+  "deltaSchema": "policy",
+  "deltaObject": "dim_policy",
+  "error": null,
+  "recordInserts": 17091744,
+  "recordUpdates": 0,
+  "recordDeletes": 0,
+  "outputBytes": 1715448247
+}
