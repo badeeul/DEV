@@ -1,0 +1,103 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product
+  schema: policy
+  table: fact_policy
+  load_strategy: merge
+  key_columns:
+    - policy_key
+  unknown_record: False
+  identity: False
+
+source:
+  - name: fact_policy_current
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: fact_policy
+    incremental: False
+
+  - name: dim_policy
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_policy
+    incremental: False
+
+  - name: mgtrans
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: mgtrans
+    incremental: False
+
+query:
+  - name: fact_policy
+    sql: |
+      WITH inf_prem AS (
+        SELECT 
+          code, 
+          SUM(amount) AS inforceprem 
+        FROM mgtrans 
+        WHERE writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
+        GROUP BY code
+      )
+      SELECT
+        fp.policy_key,
+        fp.policy_effec_start_dt_key,
+        fp.policy_effec_end_dt_key,
+        fp.policy_cancel_dt_key,
+        fp.policy_sub_dt_key,
+        fp.policy_coverage_start_dt_key,
+        fp.policy_coverage_end_dt_key,
+        fp.policy_issue_dt_key,
+        fp.policy_audit_dt_key,
+        fp.lob_key,
+        fp.dist_chnl_key,
+        fp.naics_key,
+        fp.dec_uw_emp_key,
+        fp.mkt_type_key,
+        fp.prod_src_key,
+        fp.carrier_key,
+        fp.dec_prem,
+        fp.dw_prem,
+        fp.entered_by_emp_key,
+        fp.insd_key,
+        fp.gov_bus_class_key,
+        fp.lob_product_key,
+        fp.nb_submitted_prem,
+        fp.nb_submitted_count,
+        fp.nb_quoted_prem,
+        fp.nb_quoted_count,
+        fp.nb_issued_prem,
+        fp.nb_issued_count,
+        fp.rn_quoted_prem,
+        fp.rn_quoted_count,
+        fp.rn_issued_prem,
+        fp.rn_issued_count,
+        fp.rn_issued_dwnpymnt_recd_prem,
+        fp.rn_issued_dwnpymnt_recd_count,
+        fp.expiring_prem,
+        fp.expiring_count,
+        fp.expiring_renewable_prem,
+        fp.expiring_renewable_count,
+        fp.next_policy_quoted_prem,
+        fp.next_policy_quoted_count,
+        -- Recalculate current_inforce_policy_prem based on updated dim_policy flag
+        CAST(
+          CASE 
+            WHEN dp.current_inforce_policy_ind = 'Y' 
+            THEN COALESCE(inf_prem.inforceprem, 0)
+            ELSE 0 
+          END AS DECIMAL(19,4)
+        ) AS current_inforce_policy_prem,
+        fp.dl_is_current_flag,
+        fp.dl_row_effective_date,
+        fp.dl_row_expiration_date,
+        fp.dl_is_deleted_flag,
+        fp.dq_fp_lob_key_mkt_type_desc_check,
+        fp.dq_fp_cr_key_mkt_type_desc_check,
+        fp.dq_fp_gov_bus_class_key_check
+      FROM
+        fact_policy_current fp
+        INNER JOIN dim_policy dp 
+          ON fp.policy_key = dp.policy_key 
+          AND dp.dl_is_current_flag = 1
+        LEFT OUTER JOIN inf_prem 
+          ON LOWER(TRIM(dp.policy_num_bus_key)) = LOWER(TRIM(inf_prem.code))
