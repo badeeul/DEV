@@ -41,7 +41,7 @@ metrics - {
   "deltaSchema": "stg_policy",
   "deltaObject": "stg_policy_derived",
   "error": null,
-  "recordInserts": 5577478,
+  "recordInserts": 5478577,
   "recordUpdates": 0,
   "recordDeletes": 0,
   "outputBytes": 423599514

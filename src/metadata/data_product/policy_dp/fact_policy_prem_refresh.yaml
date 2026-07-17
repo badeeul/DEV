@@ -9,10 +9,10 @@ target:
   identity: False
 
 source:
-  - name: fact_policy_current
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: fact_policy
+  - name: stg_fact_policy
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: stg_policy
+    table: stg_fact_policy
     incremental: False
 
   - name: dim_policy
@@ -95,7 +95,7 @@ query:
         fp.dq_fp_cr_key_mkt_type_desc_check,
         fp.dq_fp_gov_bus_class_key_check
       FROM
-        fact_policy_current fp
+        stg_fact_policy fp
         INNER JOIN dim_policy dp 
           ON fp.policy_key = dp.policy_key 
           AND dp.dl_is_current_flag = 1
