@@ -151,3 +151,13 @@ GROUP BY src_trans_id_type, src_trans_id
 HAVING COUNT(*) > 1
 ORDER BY cnt DESC
 LIMIT 10;
+
+SELECT 
+  policy_num_bus_key,
+  COUNT(*) as transaction_count,
+  SUM(prem_amt) as fact_total_prem,
+  MAX(dq_trans_prem_amt_src_tgt_check) as dq_check_result
+FROM policy.fact_policy_transaction
+GROUP BY policy_num_bus_key
+HAVING MAX(dq_trans_prem_amt_src_tgt_check) = 0  -- Failed checks
+LIMIT 10;
