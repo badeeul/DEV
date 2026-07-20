@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product # keep
   schema: policy # keep
   table: fact_policy_transaction_detail # target table
-  load_strategy: overwrite # scd type
+  load_strategy: merge # scd type
   key_columns: # is merge key
     - src_trans_detail_id
   unknown_record: False # keep
@@ -13,12 +13,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: mgnotrans # source tables
-    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: insured # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: insured # source tables
-    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: wcpayrol # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep

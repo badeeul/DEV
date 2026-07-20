@@ -13,6 +13,16 @@
             ]
         }
     ],
+    "loadGroupStgDims": [
+        {
+            "files": [
+                {
+                    "fileName": "stg_dim_policy",
+                    "modelConfigFolderName": "policy_dp"
+                }
+            ]
+        }
+    ],
     "loadGroupDims": [
         {
             "files": [
@@ -71,11 +81,11 @@
             ]
         }
     ],
-    "loadGroupDimsDefaultRecords": [
+    "loadGroupStgFacts": [
         {
             "files": [
                 {
-                    "fileName": "dim_policy_default_records",
+                    "fileName": "stg_fact_policy",
                     "modelConfigFolderName": "policy_dp"
                 }
             ]

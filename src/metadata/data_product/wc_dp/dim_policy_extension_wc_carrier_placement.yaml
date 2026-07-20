@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: wc
   table: dim_policy_extension_wc_carrier_placement
-  load_strategy: overwrite
+  load_strategy: merge
   key_columns:
     - policy_num_bus_key
   unknown_record: False
@@ -13,13 +13,13 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: policydatapoints
-    incremental: False
+    incremental: True
 
   - name: insured
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: False
+    incremental: True
 
   - name: wcinfo
     lakehouse: den_lhw_scu_001_policy_curated

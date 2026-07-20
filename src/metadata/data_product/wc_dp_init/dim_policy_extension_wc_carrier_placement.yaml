@@ -1,0 +1,168 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product
+  schema: wc
+  table: dim_policy_extension_wc_carrier_placement
+  load_strategy: merge
+  key_columns:
+    - policy_num_bus_key
+  unknown_record: False
+  identity: False
+
+source:
+  - name: policydatapoints
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: policydatapoints
+    incremental: False
+
+  - name: insured
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: insured
+    incremental: False
+
+  - name: wcinfo
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: wcinfo
+    incremental: False
+
+  - name: uwrating
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: uwrating
+    incremental: False
+
+  - name: archive_uwrating
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: wc
+    table: archive_uwrating
+    incremental: False
+
+  - name: dim_policy
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_policy
+    incremental: False
+
+query:
+  - name: datapointvals_filtered
+    sql: |
+      SELECT
+          code,
+          datapoint,
+          enteredon,
+          extendeddatapointtype,
+          datapointvals,
+          ROW_NUMBER() OVER (PARTITION BY code ORDER BY enteredon DESC) AS rcount
+      FROM policydatapoints
+      WHERE lower(trim(datapointtype)) = 'carrierselectscore'
+
+  - name: datapointvals_latest
+    sql: |
+      SELECT *
+      FROM datapointvals_filtered
+      WHERE rcount = 1
+
+  - name: datapoints_breakout
+    sql: |
+      SELECT
+          code,
+
+          xpath_string(datapointvals, '/Metrics/Metric[Key="GOV_HAZARD"]/Value')
+              AS guardtech_hazard_group,
+
+          CAST(xpath_string(datapointvals, '/Metrics/Metric[Key="GOV_HAZARD"]/Points') AS INT)
+              AS guardtech_hazard_group_points,
+
+          xpath_string(datapointvals, '/Metrics/Metric[Key="EXPERIENCE_MOD"]/Value')
+              AS guardtech_experience_mod,
+
+          CAST(xpath_string(datapointvals, '/Metrics/Metric[Key="EXPERIENCE_MOD"]/Points') AS INT)
+              AS guardtech_experience_mod_points,
+
+          CAST(xpath_string(datapointvals, '/Metrics/Metric[Key="DNB_SCORE"]/Value') AS INT)
+              AS guardtech_dnb_score,
+
+          CAST(xpath_string(datapointvals, '/Metrics/Metric[Key="DNB_SCORE"]/Points') AS INT)
+              AS guardtech_dnb_score_points,
+
+          CAST(xpath_string(datapointvals, '/Metrics/Metric[Key="WC_EXPERIENCE_YEARS"]/Value') AS INT)
+              AS guardtech_prior_wc_years_count,
+
+          CAST(xpath_string(datapointvals, '/Metrics/Metric[Key="WC_EXPERIENCE_YEARS"]/Points') AS INT)
+              AS guardtech_prior_wc_years_count_points,
+
+          CAST(datapoint AS INT) AS guardtech_total_points,
+          enteredon AS guardtech_enteredon,
+          extendeddatapointtype AS guardtech_carrier_select_group
+
+      FROM datapointvals_latest
+
+  - name: dim_policy_extension_wc_carirer
+    sql: |
+      SELECT
+          dp.policy_key as policy_key,
+          i.code AS policy_num_bus_key,
+
+          CAST(COALESCE(uwr.rate, auwr.rate) AS DECIMAL(8,4)) AS experience_mod,
+
+          dpb.guardtech_hazard_group,
+          dpb.guardtech_hazard_group_points,
+
+          CASE
+            WHEN lower(trim(dpb.guardtech_experience_mod)) = 'null' THEN NULL
+            ELSE CAST(dpb.guardtech_experience_mod AS DECIMAL(8,4))
+          END AS guardtech_experience_mod,
+
+          dpb.guardtech_experience_mod_points,
+          dpb.guardtech_dnb_score,
+          dpb.guardtech_dnb_score_points,
+          dpb.guardtech_prior_wc_years_count,
+          dpb.guardtech_prior_wc_years_count_points,
+
+          dpb.guardtech_total_points,
+          dpb.guardtech_enteredon,
+          dpb.guardtech_carrier_select_group,
+          True as dl_is_current_flag,
+          CAST('1901-01-01' AS DATE) as dl_row_effective_date,
+          CAST('9999-12-31' AS DATE) as dl_row_expiration_date,
+          False as dl_is_deleted_flag
+
+      FROM insured i
+
+      INNER JOIN wcinfo w
+        ON lower(trim(i.code)) = lower(trim(w.code))
+
+      LEFT JOIN datapoints_breakout dpb
+        ON lower(trim(i.code)) = lower(trim(dpb.code))
+
+      LEFT JOIN (
+          SELECT code, state, MAX(rate) AS rate
+          FROM uwrating
+          WHERE lower(trim(primeseq)) = '1'
+            AND lower(trim(seqcode)) = '400'
+          GROUP BY code, state
+      ) uwr
+        ON lower(trim(i.code)) = lower(trim(uwr.code))
+       AND uwr.state = w.govstate
+       AND lower(trim(i.name)) <> 'redacted'
+
+      LEFT JOIN (
+          SELECT code, state, MAX(rate) AS rate
+          FROM archive_uwrating
+          WHERE lower(trim(primeseq)) = '1'
+            AND lower(trim(seqcode)) = '400'
+          GROUP BY code, state
+      ) auwr
+        ON lower(trim(i.code)) = lower(trim(auwr.code))
+       AND auwr.state = w.govstate
+       AND lower(trim(i.name)) = 'redacted'
+      
+      INNER JOIN dim_policy dp
+        ON lower(trim(i.code)) = lower(trim(dp.policy_num_bus_key))
+        AND dp.dl_is_current_flag = 1
+
+      WHERE lower(trim(i.lob)) = 'wc'
+        AND lower(trim(i.agency)) <> 'pafake10'
+        AND lower(trim(i.code)) = lower(trim(i.basemgacode))

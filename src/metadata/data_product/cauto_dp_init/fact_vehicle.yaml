@@ -1,0 +1,134 @@
+target:
+  lakehouse: den_lhw_dpr_001_cauto_product
+  schema: cauto
+  table: fact_vehicle
+  load_strategy: merge
+  key_columns:
+    - vehicle_surrogate_key
+  unknown_record: false
+  identity: false
+
+source:
+  - name: insured
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: insured
+    incremental: False
+  - name: uwvehicles
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: cauto
+    table: uwvehicles
+    incremental: False
+  - name: mgtrans
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: policy
+    table: mgtrans
+    incremental: False
+  - name: mgtrans_coverages
+    lakehouse: den_lhw_scu_001_policy_curated
+    schema: cauto
+    table: mgtrans_coverages
+    incremental: False
+  - name: dim_policy
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_policy
+    incremental: False
+  - name: dim_vehicle
+    lakehouse: den_lhw_dpr_001_cauto_product
+    schema: cauto
+    table: dim_vehicle
+    incremental: False
+  - name: dim_vehicle_type
+    lakehouse: den_lhw_dpr_001_cauto_product
+    schema: cauto
+    table: dim_vehicle_type
+    incremental: False
+  - name: dim_garage_location
+    lakehouse: den_lhw_dpr_001_cauto_product
+    schema: cauto
+    table: dim_garage_location
+    incremental: False
+  - name: dim_vehicle_radius_of_operation
+    lakehouse: den_lhw_dpr_001_cauto_product
+    schema: cauto
+    table: dim_vehicle_radius_of_operation
+    incremental: False
+  - name: fact_policy
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: fact_policy
+    incremental: False
+  - name: dim_date
+    lakehouse: den_lhw_dpr_001_policy_product
+    schema: policy
+    table: dim_date
+    incremental: False
+
+query:
+  - name: fact_vehicle
+    sql: |
+      with cte_latest_premium as (
+        select 
+          m.code as code
+        , mc.itemid as itemid
+        , sum(mc.premium) as latestpremium
+        from mgtrans_coverages mc
+        inner join mgtrans m on lower(trim(mc.mgtrans_transno)) = lower(trim(m.transno))
+        group by m.code, mc.itemid
+      )
+      
+      , cte_current_inforce_premium as (
+        select 
+          m.code as code
+        , mc.itemid as itemid
+        , sum(mc.premium) as currentinforcepremium
+        from insured i
+        inner join mgtrans m on lower(trim(i.code)) = lower(trim(m.code))
+        inner join mgtrans_coverages mc on lower(trim(m.transno)) = lower(trim(mc.mgtrans_transno))
+        inner join dim_policy dp on lower(trim(i.code)) = lower(trim(dp.policy_num_bus_key)) and dp.dl_is_current_flag = 1
+        where lower(trim(dp.current_inforce_policy_ind)) = 'y'
+        and m.writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
+        group by m.code, mc.itemid
+      )
+      
+      select
+        coalesce(dv.vehicle_surrogate_key, -1) as vehicle_surrogate_key
+      , coalesce(dp.policy_key, -1) as policy_surrogate_key
+      , coalesce(dgl.garage_loc_surrogate_key, -1) as garage_loc_surrogate_key
+      , coalesce(dro.vehicle_radius_of_operation_surrogate_key, -1) as vehicle_radius_of_operation_surrogate_key
+      , coalesce(ddp.date_key, -1) as vehicle_start_date_surrogate_key
+      , coalesce(dde.date_key, -1) as vehicle_end_date_surrogate_key
+      , coalesce(ddd.date_key, -1) as vehicle_deleted_on_date_surrogate_key
+      , (case when cast(coalesce(v.startdate, i.pobegin) as date) = cast(i.pobegin as date) and cast(coalesce(v.enddate, i.poexpir) as date) = cast(i.poexpir as date) then 1 else 0 end) as full_term_vehicle_flag
+      , (case when cast(coalesce(v.startdate, i.pobegin) as date) <> cast(i.pobegin as date) then 1 else 0 end) as mid_term_vehicle_flag
+      , (case when cast(coalesce(v.startdate, i.pobegin) as date) = cast(coalesce(v.enddate, i.poexpir) as date) then 1 else 0 end) as voided_vehicle_flag
+      , (case when v.deletedon is not null then 1 else 0 end) as deleted_vehicle_flag
+      , 1 as count_as_vehicle_flag
+      , (case when lower(trim(dvt.power_unit_ind)) = 'y' then 1 else 0 end) as count_as_power_unit_flag
+      , coalesce(vp.latestpremium, 0) as latest_vehicle_prem
+      , coalesce(vip.currentinforcepremium, 0) as current_inforce_vehicle_prem
+      , v.msrp as vehicle_msrp
+      , True as dl_is_current_flag
+      , cast('1901-01-01' AS date) as dl_row_effective_date
+      , cast('9999-12-31' AS date) as dl_row_expiration_date
+      , False as dl_is_deleted_flag
+      
+      from insured i
+      inner join uwvehicles v on lower(trim(i.code)) = lower(trim(v.code))
+      left outer join dim_policy dp on lower(trim(v.code)) = lower(trim(dp.policy_num_bus_key))
+      left outer join dim_vehicle dv on lower(trim(v.code)) = lower(trim(dv.policy_num_bus_key)) and lower(trim(cast(v.vehicleid as string))) = lower(trim(dv.vehicle_bus_key))
+      left outer join dim_vehicle_type dvt on dv.vehicle_type_surrogate_key = dvt.vehicle_type_surrogate_key
+      left outer join dim_garage_location dgl on lower(trim(v.code)) = lower(trim(dgl.policy_num_bus_key)) and lower(trim(cast(v.locnum as string))) = lower(trim(dgl.garage_loc_bus_key))
+      left outer join fact_policy fp on dp.policy_key = fp.policy_key
+      left outer join cte_latest_premium vp on lower(trim(v.code)) = lower(trim(vp.code)) and lower(trim(cast(v.vehicleid as string))) = lower(trim(vp.itemid))
+      left outer join dim_vehicle_radius_of_operation dro on (case when lower(trim(coalesce(v.radiusofoperation,''))) <> '' then lower(trim(v.radiusofoperation)) end) = lower(trim(dro.vehicle_radius_of_operation_bus_key))
+      left outer join dim_date ddp on ddp.date = cast(coalesce(v.startdate, i.pobegin) as date)
+      left outer join dim_date dde on dde.date = cast(coalesce(v.enddate, i.poexpir) as date)
+      left outer join dim_date ddd on ddd.date = cast(v.deletedon as date)
+      left outer join cte_current_inforce_premium vip on lower(trim(v.code)) = lower(trim(vip.code)) and lower(trim(cast(v.vehicleid as string))) = lower(trim(cast(vip.itemid as string)))
+      
+      where lower(trim(i.lob)) = 'ca'
+      and lower(trim(i.code)) = lower(trim(i.basemgacode))
+      and lower(trim(i.agency)) <> 'pafake10'
+      and lower(trim(i.stat2)) = 'i'

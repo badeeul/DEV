@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: policy
   table: fact_policy_transaction
-  load_strategy: overwrite
+  load_strategy: merge
   key_columns:
     - src_trans_id_type
     - src_trans_id
@@ -14,7 +14,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: False
+    incremental: True
   - name: wcpayrol
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
@@ -54,12 +54,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: mgnotrans
-    incremental: False
+    incremental: True
   - name: polact
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: polact
-    incremental: False
+    incremental: True
   - name: pc_products
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy

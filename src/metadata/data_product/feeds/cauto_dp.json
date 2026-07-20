@@ -31,16 +31,6 @@
             ]
         }
     ],
-    "loadGroupDimsDefaultRecords": [
-        {
-            "files": [
-                {
-                    "fileName": "dim_vehicle_default_records",
-                    "modelConfigFolderName": "cauto_dp"
-                }
-            ]
-        }
-    ],
     "loadGroupFacts": [
         {
             "files": [

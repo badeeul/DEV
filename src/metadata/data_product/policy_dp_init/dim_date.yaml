@@ -1,0 +1,219 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_date # target table
+  load_strategy: type_two # scd type
+  key_columns: # is merge key
+    - date
+  unknown_record: True # keep
+  identity: False # keep
+  # identity_column_name: date_key # sharepoint first row
+
+query:
+  - name: seq # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: 
+        SELECT id AS n
+        FROM RANGE(
+          0,
+          DATEDIFF(DATE('2040-01-01'), DATE('1983-01-01'))
+        )
+
+  - name: d
+    sql: 
+      SELECT DATE_ADD(DATE('1983-01-01'), CAST(n AS INT)) AS d
+      FROM seq
+  
+  - name: src
+    sql:
+      SELECT
+        CAST(d AS DATE) AS TheDate,
+        DAY(d) AS TheDay,
+        DATE_FORMAT(d, 'EEEE') AS TheDayName,
+        FLOOR(DATEDIFF(d, DATE_TRUNC('YEAR', d)) / 7) + 1 AS TheWeek,
+        WEEKOFYEAR(d) AS TheISOWeek,
+        DAYOFWEEK(d) AS TheDayOfWeek,
+        MONTH(d) AS TheMonth,
+        DATE_FORMAT(d, 'MMMM') AS TheMonthName,
+        QUARTER(d) AS TheQuarter,
+        YEAR(d) AS TheYear,
+        MAKE_DATE(YEAR(d), MONTH(d), 1) AS TheFirstOfMonth,
+        MAKE_DATE(YEAR(d), 12, 31) AS TheLastOfYear,
+        DAYOFYEAR(d) AS TheDayOfYear
+      FROM d
+
+  - name: dim
+    sql:
+      SELECT
+        TheDate, 
+        TheDay,
+        CASE 
+            WHEN floor(day(TheDate) / 10) = 1 THEN 'th'
+            ELSE CASE substring(cast(day(TheDate) AS STRING), -1)
+                WHEN '1' THEN 'st'
+                WHEN '2' THEN 'nd'
+                WHEN '3' THEN 'rd'
+                ELSE 'th'
+            END
+        END AS TheDaySuffix,
+        TheDayName,
+        TheDayOfWeek,
+        ROW_NUMBER() OVER (PARTITION BY date_trunc('month', TheDate), dayofweek(TheDate) ORDER BY TheDate) AS TheDayOfWeekInMonth,
+        TheDayOfYear,
+        CASE 
+            WHEN dayofweek(TheDate) IN (1, 7) THEN 1 ELSE 0 
+        END AS IsWeekend,
+        TheWeek,
+        TheISOweek,
+        date_add(TheDate, 1 - TheDayOfWeek) AS TheFirstOfWeek,
+        date_add(date_add(TheDate, 1 - TheDayOfWeek), 6) AS TheLastOfWeek,
+        DENSE_RANK() OVER (PARTITION BY TheYear, TheMonth ORDER BY TheWeek) AS TheWeekOfMonth,
+        TheMonth,
+        TheMonthName,
+        TheFirstOfMonth,
+        MAX(TheDate) OVER (PARTITION BY TheYear, TheMonth) AS TheLastOfMonth,
+        ADD_MONTHS(TheFirstOfMonth, 1) AS TheFirstOfNextMonth,
+        date_add(ADD_MONTHS(TheFirstOfMonth, 2), -1) AS TheLastOfNextMonth,
+        TheQuarter,
+        CONCAT_WS('-Q', CAST(TheYear AS STRING), CAST(TheQuarter AS STRING)) AS TheYearQuarter,
+        MIN(TheDate) OVER (PARTITION BY TheYear, TheQuarter) AS TheFirstOfQuarter,
+        MAX(TheDate) OVER (PARTITION BY TheYear, TheQuarter) AS TheLastOfQuarter,
+        TheYear,
+        (TheYear - CASE WHEN TheMonth = 1 AND TheISOWeek > 51 THEN 1 
+                        WHEN TheMonth = 12 AND TheISOWeek = 1 THEN -1 ELSE 0 END) AS TheISOYear,
+        MAKE_DATE(TheYear, 1, 1) AS TheFirstOfYear,
+        TheLastOfYear,
+        CASE WHEN (TheYear % 400 = 0) 
+            OR (TheYear % 4 = 0 AND TheYear % 100 <> 0) 
+            THEN 1 ELSE 0 END AS IsLeapYear,
+        CASE 
+          WHEN FLOOR(DATEDIFF(TheLastOfYear, DATE_TRUNC('YEAR', TheLastOfYear)) / 7) + 1 = 53 
+          THEN 1 ELSE 0 
+        END AS Has53Weeks,
+        CASE WHEN WEEKOFYEAR(TheLastOfYear) = 53 THEN 1 ELSE 0 END AS Has53ISOWeeks,
+        DATE_FORMAT(TheDate, 'MMyyyy') AS MMYYYY,
+        DATE_FORMAT(TheDate, 'MM/dd/yyyy') AS Style101,
+        DATE_FORMAT(TheDate, 'dd/MM/yyyy') AS Style103,
+        DATE_FORMAT(TheDate, 'yyyyMMdd') AS Style112,
+        DATE_FORMAT(TheDate, 'yyyy-MM-dd') AS Style120,
+
+        CASE 
+          WHEN YEAR(CURRENT_DATE()) = YEAR(TheDate) AND TheDate < CURRENT_DATE() 
+          THEN 1 ELSE 0 
+        END AS YeartoDate,
+        CASE
+          WHEN YEAR(DATE_SUB(CURRENT_DATE(), 365)) = YEAR(TheDate) 
+              AND TheDate < DATE_SUB(CURRENT_DATE(), 365) 
+          THEN 1 ELSE 0 
+        END AS PriorYeartoDate,
+        CASE
+          WHEN YEAR(DATE_SUB(CURRENT_DATE(), 365)) = YEAR(TheDate) 
+          THEN 1 ELSE 0 
+        END AS PriorYear,
+        CASE
+          WHEN YEAR(DATE_SUB(CURRENT_DATE(), 730)) = YEAR(TheDate) 
+          THEN 1 ELSE 0 
+        END AS Prior2Years,
+        CASE
+          WHEN TheDate > DATE_SUB(CURRENT_DATE(), 365) AND TheDate <= CURRENT_DATE() 
+          THEN 1 ELSE 0 
+        END AS Trailing12Months,
+        CASE
+          WHEN YEAR(LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -1))) = YEAR(TheDate) 
+              AND TheDate <= LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -1)) 
+          THEN 1 ELSE 0 
+        END AS PriorMonthYTD,
+        CASE
+          WHEN YEAR(DATE_SUB(LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -1)), 365)) = YEAR(TheDate) 
+              AND TheDate <= DATE_SUB(LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -1)), 365) 
+          THEN 1 ELSE 0 
+        END AS PriorMonthPYTD,
+        CASE
+          WHEN TheDate > DATE_SUB(LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -1)), 365) 
+              AND TheDate <= LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -1)) 
+          THEN 1 ELSE 0 
+        END AS PriorMonthTTM,
+        CASE
+          WHEN TheDate = DATE_SUB(MAKE_DATE(YEAR(CURRENT_DATE()), MONTH(CURRENT_DATE()), 1), 1) 
+          THEN 1 ELSE 0 
+        END AS InforceDateYTD,
+        CASE
+          WHEN TheDate = DATE_SUB(MAKE_DATE(YEAR(CURRENT_DATE()) - 1, MONTH(CURRENT_DATE()), 1), 1) 
+          THEN 1 ELSE 0 
+        END AS InforceDatePYTD,
+        CASE
+          WHEN TheDate > LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -25)) 
+              AND TheDate <= LAST_DAY(ADD_MONTHS(CURRENT_DATE(), -13)) 
+          THEN 1 ELSE 0 
+        END AS PriorMonthPYTTM,
+        CASE
+          WHEN TheQuarter = QUARTER(CURRENT_DATE()) AND TheYear = YEAR(CURRENT_DATE()) 
+          THEN 1 ELSE 0 
+        END AS CurrentQuarter,
+        CASE
+          WHEN TheDate >= TRUNC(DATE_SUB(CURRENT_DATE(), 365), 'QUARTER') 
+              AND TheDate < ADD_MONTHS(TRUNC(DATE_SUB(CURRENT_DATE(), 365), 'QUARTER'), 3) 
+          THEN 1 ELSE 0 
+        END AS PriorYearQuarter,
+        CASE
+          WHEN TheDate >= TRUNC(DATE_SUB(CURRENT_DATE(), 365), 'QUARTER') 
+              AND TheDate < TRUNC(CURRENT_DATE(), 'QUARTER') 
+          THEN 1 ELSE 0 
+        END AS PriorTrailing4Quarter
+
+        FROM src
+
+  - name: generate_dim_date_table
+    sql:
+      SELECT
+        CAST(Style112 AS INT) AS date_key,
+        TheDate AS date,
+        TheDay AS day,
+        TheDaySuffix AS day_suffix,
+        TheDayName AS day_name,
+        TheDayOfWeek AS day_of_week,
+        TheDayOfWeekInMonth AS day_of_week_in_month,
+        TheDayOfYear AS day_of_year,
+        IsWeekend AS is_weekend,
+        TheWeek AS week,
+        TheISOweek AS iso_week,
+        TheFirstOfWeek AS first_of_week,
+        TheLastOfWeek AS last_of_week,
+        TheWeekOfMonth AS week_of_month,
+        TheMonth AS month,
+        TheMonthName AS month_name,
+        TheFirstOfMonth AS first_of_month,
+        TheLastOfMonth AS last_of_month,
+        TheFirstOfNextMonth AS first_of_next_month,
+        TheLastOfNextMonth AS last_of_next_month,
+        TheQuarter AS quarter,
+        TheYearQuarter AS year_quarter,
+        TheFirstOfQuarter AS first_of_quarter,
+        TheLastOfQuarter AS last_of_quarter,
+        TheYear AS year,
+        TheISOYear AS iso_year,
+        TheFirstOfYear AS first_of_year,
+        TheLastOfYear AS last_of_year,
+        IsLeapYear AS is_leap_year,
+        Has53Weeks AS has_53_weeks,
+        Has53ISOWeeks AS has_53_iso_weeks,
+        MMYYYY AS mmyyyy,
+        Style101 AS style101,
+        Style103 AS style103,
+        Style112 AS style112,
+        Style120 AS style120,
+        YeartoDate AS year_to_date,
+        PriorYeartoDate AS prior_year_to_date,
+        PriorYear AS prior_year,
+        Prior2Years AS prior_2_years,
+        Trailing12Months AS trailing_12_months,
+        PriorMonthYTD AS prior_month_ytd,
+        PriorMonthPYTD AS prior_month_pytd,
+        PriorMonthTTM AS prior_month_ttm,
+        InforceDateYTD AS inforce_date_ytd,
+        InforceDatePYTD AS inforce_date_pytd,
+        PriorMonthPYTTM AS prior_month_py_ttm,
+        CurrentQuarter AS current_quarter,
+        PriorYearQuarter AS prior_year_quarter
+      FROM dim
+      ORDER BY TheDate;

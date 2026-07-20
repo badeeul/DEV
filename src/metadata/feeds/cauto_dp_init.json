@@ -1,5 +1,5 @@
 {
-    "feedName": "cauto_dp",
+    "feedName": "cauto_dp_init",
     "feedDescription": "This is a feed for CAuto DP",
     "workLoadType": "dp-spark",
     "skipProductLoad": false,

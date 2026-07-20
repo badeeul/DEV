@@ -4,11 +4,11 @@
             "files": [
                 {
                     "fileName": "dim_vehicle_type",
-                    "modelConfigFolderName": "cauto_dp"
+                    "modelConfigFolderName": "cauto_dp_init"
                 },
                 {
                     "fileName": "dim_trailer_type",
-                    "modelConfigFolderName": "cauto_dp"
+                    "modelConfigFolderName": "cauto_dp_init"
                 }
             ]
         }
@@ -18,25 +18,15 @@
             "files": [
                 {
                     "fileName": "dim_garage_location",
-                    "modelConfigFolderName": "cauto_dp"
+                    "modelConfigFolderName": "cauto_dp_init"
                 },
                 {
                     "fileName": "dim_vehicle_radius_of_operation",
-                    "modelConfigFolderName": "cauto_dp"
+                    "modelConfigFolderName": "cauto_dp_init"
                 },
                 {
                     "fileName": "dim_vehicle",
-                    "modelConfigFolderName": "cauto_dp"
-                }
-            ]
-        }
-    ],
-    "loadGroupDimsDefaultRecords": [
-        {
-            "files": [
-                {
-                    "fileName": "dim_vehicle_default_records",
-                    "modelConfigFolderName": "cauto_dp"
+                    "modelConfigFolderName": "cauto_dp_init"
                 }
             ]
         }
@@ -46,7 +36,7 @@
             "files": [
                 {
                     "fileName": "fact_vehicle",
-                    "modelConfigFolderName": "cauto_dp"
+                    "modelConfigFolderName": "cauto_dp_init"
                 }
             ]
         }

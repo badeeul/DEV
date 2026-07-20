@@ -39,11 +39,11 @@
                 },
                 {
                     "fileName": "billings",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "bpclass",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "businesstype",
@@ -63,7 +63,7 @@
                 },
                 {
                     "fileName": "insured",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "lookups",
@@ -71,11 +71,11 @@
                 },
                 {
                     "fileName": "mgextra",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "mgnotrans",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "mgnotrans_types",
@@ -83,7 +83,7 @@
                 },
                 {
                     "fileName": "mgtrans",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "naics",
@@ -95,7 +95,7 @@
                 },
                 {
                     "fileName": "polact",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "programrules",
@@ -107,31 +107,31 @@
                 },
                 {
                     "fileName": "transaction_classcode",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "transaction_wclocnam_locationextra",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "uwbuildings",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "wcclass",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "wcinfo",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "wclocnam",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "wcpayrol",
-                    "sourceConfigFolderName": "policy_dp"
+                    "sourceConfigFolderName": "policy_dp_init"
                 }
             ]
         }

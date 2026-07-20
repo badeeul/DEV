@@ -1,0 +1,33 @@
+target:
+  lakehouse: den_lhw_dpr_001_policy_product # keep
+  schema: policy # keep
+  table: dim_employee # target table
+  load_strategy: merge # scd type
+  key_columns: # is merge key
+    - emp_cd_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: emp_key # sharepoint first row
+
+source:
+  - name: employee # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: employee # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_employee # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: select
+          empcode as emp_cd_bus_key
+        , name as emp_nm
+        , (case when dateterm is null then 1 else 0 end) as active
+        , dateterm as term_dt
+        , title as job_title
+        , userid as user_id
+        , True as dl_is_current_flag
+        , CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        , CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        , False as dl_is_deleted_flag
+        from employee

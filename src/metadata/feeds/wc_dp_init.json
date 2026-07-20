@@ -2,7 +2,7 @@
     "feedName": "wc_dp_init",
     "feedDescription": "This is a feed for WC DP",
     "workLoadType": "dp-spark",
-    "skipProductLoad": true,
+    "skipProductLoad": false,
     "dataDeduplicationAlert": false,
     "deduplicationAlertTemplate": "deduplication_msg",
     "datasetsConfig": [
@@ -15,39 +15,39 @@
                 },
                 {
                     "fileName": "archive_transaction_wcpayrol",
-                    "sourceConfigFolderName": "wc_dp_init"
+                    "sourceConfigFolderName": "wc_dp"
                 },
                 {
                     "fileName": "archive_uwrating",
-                    "sourceConfigFolderName": "wc_dp_init"
+                    "sourceConfigFolderName": "wc_dp"
                 },
                 {
                     "fileName": "archive_uwstates",
-                    "sourceConfigFolderName": "wc_dp_init"
+                    "sourceConfigFolderName": "wc_dp"
                 },
                 {
                     "fileName": "autouw_currentcarrierpricing",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "autouw_proposals",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "dnb_policylookups",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "dnb_transactions",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "mgtrans_wcpayrol",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "policydatapoints",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "question_questions",
@@ -55,7 +55,7 @@
                 },
                 {
                     "fileName": "question_responses",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "transaction_wcpayrol",
@@ -71,11 +71,11 @@
                 },
                 {
                     "fileName": "wcautopricing",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "wcrating",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 }
             ]
         }

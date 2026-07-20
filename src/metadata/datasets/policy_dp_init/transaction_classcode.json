@@ -1,0 +1,89 @@
+{
+    "datasetName": "transaction_classcode",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "code",
+            "transaction_classcodeid",
+            "trancnt",
+            "before",
+            "after",
+            "classid",
+            "transaction_source_id",
+            "renewal_source_id",
+            "bpclass_id",
+            "sic",
+            "naics",
+            "state",
+            "revision",
+            "loctypenum",
+            "occupancy",
+            "description",
+            "class",
+            "classsuffix",
+            "basis",
+            "ratetype",
+            "ratemodifier",
+            "ratemodifier2",
+            "industry",
+            "basetiv",
+            "ezrate_industry",
+            "territory",
+            "startdate",
+            "enddate",
+            "lob",
+            "premium",
+            "classgroup",
+            "exposure",
+            "deletedon",
+            "enteredon",
+            "enteredby",
+            "updateon",
+            "updateby",
+            "descripofoperations",
+            "terror_territory",
+            "officermembercount",
+            "partnercount",
+            "payrollcorp"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "policy",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "code",
+            "transaction_classcodeid",
+            "trancnt",
+            "after",
+            "classid",
+            "startdate"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

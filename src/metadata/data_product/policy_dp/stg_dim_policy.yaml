@@ -5,7 +5,7 @@ target:
   load_strategy: merge # scd type
   key_columns: # is merge key
     - policy_num_bus_key
-  unknown_record: True # keep
+  unknown_record: False # keep
   identity: False # keep
   partition_by:
     - policy_year
@@ -15,7 +15,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: insured # source tables
-    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: wcinfo # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
@@ -40,12 +40,12 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: mgnotrans # source tables
-    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: autouw_results # source table names
     lakehouse: den_lhw_scu_001_policy_curated # keep
     schema: policy # keep
     table: autouw_results # source tables
-    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+    incremental: True # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
   - name: dim_policy_status # source table names
     lakehouse: den_lhw_dpr_001_policy_product # keep
     schema: policy # keep

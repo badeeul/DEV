@@ -5,450 +5,98 @@ target:
   load_strategy: overwrite
   key_columns:
     - policy_key
-  unknown_record: false
-  identity: false
+  unknown_record: False
+  identity: False
 
 source:
-  - name: insured
+  - name: stg_fact_policy
     lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: insured
+    schema: stg_policy
+    table: stg_fact_policy
     incremental: False
-  - name: wcpayrol
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: wcpayrol
-    incremental: False
-  - name: wcinfo
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: wcinfo
-    incremental: False
-  - name: uwbuildings
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: uwbuildings
-    incremental: False
-  - name: mgextra
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: mgextra
-    incremental: False
-  - name: archive_wcpayrol
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: archive_wcpayrol
-    incremental: False
-  - name: archive_uwbuildings
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: archive_uwbuildings
-    incremental: False
-  - name: mgtrans
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: mgtrans
-    incremental: False
-  - name: pc_products
-    lakehouse: den_lhw_scu_001_policy_curated
-    schema: policy
-    table: pc_products
-    incremental: False
+
   - name: dim_policy
     lakehouse: den_lhw_dpr_001_policy_product
     schema: policy
     table: dim_policy
     incremental: False
-  - name: dim_date
-    lakehouse: den_lhw_dpr_001_policy_product
+
+  - name: mgtrans
+    lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
-    table: dim_date
+    table: mgtrans
     incremental: False
-  - name: dim_lob
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_lob
-    incremental: False
-  - name: dim_dist_chnl
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_dist_chnl
-    incremental: False
-  - name: dim_insured
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_insured
-    incremental: False
-  - name: dim_naics
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_naics
-    incremental: False
-  - name: dim_mkt_type
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_mkt_type
-    incremental: False
-  - name: dim_prod_src
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_prod_src
-    incremental: False
-  - name: dim_carrier
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_carrier
-    incremental: False
-  - name: dim_employee
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_employee
-    incremental: False
-  - name: dim_business_class
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_business_class
-    incremental: False
-  - name: dim_policy_status
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_policy_status
-    incremental: false
-  - name: dim_lob_product
-    lakehouse: den_lhw_dpr_001_policy_product
-    schema: policy
-    table: dim_lob_product
-    incremental: false
 
 query:
   - name: fact_policy
     sql: |
-      WITH wcpayrollbase AS (
+      WITH inf_prem AS (
         SELECT 
-          a.code,
-          classcode,
-          classuffix,
-          state,
-          SUM(premium) AS prem,
-          SUM(exposure) AS exposure,
-          ROW_NUMBER() OVER (PARTITION BY a.code ORDER BY SUM(exposure) DESC, SUM(premium) DESC, state ASC) AS rn
-        FROM (
-          SELECT code, classcode, classuffix, state, premium, exposure, primeseq, seqcode 
-          FROM wcpayrol 
-          UNION ALL 
-          SELECT code, classcode, classuffix, state, premium, exposure, primeseq, seqcode 
-          FROM archive_wcpayrol
-        ) a 
-        INNER JOIN wcinfo b ON a.code = b.code AND a.classcode = b.govclass
-        WHERE a.primeseq = '1' AND a.seqcode = '000'
-        GROUP BY a.code, classcode, classuffix, state
-      )
-      , wcprl AS (
-        SELECT code, classcode, classuffix, state 
-        FROM wcpayrollbase 
-        WHERE rn = 1
-      )
-      , uwbuildingsbase AS (
-        SELECT 
-          code,
-          class,
-          classsuffix,
-          bpclass_id,
-          ROW_NUMBER() OVER (PARTITION BY code ORDER BY premium DESC, tiv DESC) AS rn
-        FROM (
-          SELECT code, class, classsuffix, bpclass_id, premium, tiv 
-          FROM uwbuildings
-          UNION ALL
-          SELECT code, class, classsuffix, bpclass_id, premium, tiv 
-          FROM archive_uwbuildings
-        ) b
-      )
-      , uwb AS (
-        SELECT code, class, classsuffix, bpclass_id  
-        FROM uwbuildingsbase 
-        WHERE rn = 1
-      )
-      , dimpolicystatuslineage AS (  
-        SELECT 
-          dp.policy_num_bus_key AS code,
-          dp.is_expiring_flag AS is_expiring,
-          dp.is_renewable_flag AS is_renewable,
-          CONCAT('|' , COALESCE(dps.l0_level,'') , '|' , COALESCE(dps.l1_level,'') , '|' , COALESCE(dps.l2_level,'') , '|' , COALESCE(dps.l3_level,'') , '|' , COALESCE(dps.l4_level,'') , '|' , COALESCE(dps.l5_level,'') , '|') AS status_lineage
-        FROM dim_policy dp
-        LEFT OUTER JOIN dim_policy_status dps ON dps.policy_status_key = dp.latest_policy_status_key 
-        WHERE dp.dl_is_current_flag = 1
-      )
-      , nextpolicycheck1 AS (
-        SELECT  
-          code,
-          renewedbycode
-        FROM insured 
-        WHERE code = basemgacode
-          AND LOWER(TRIM(agency)) <> 'pafake10'
-      )
-      , nxtpolchk2base AS (
-        SELECT  
-          npc2.code AS code,
-          npc2.renewof AS renewof,
-          npc2.enteredon AS enteredon,
-          ROW_NUMBER() OVER (PARTITION BY npc2.renewof ORDER BY npc2.enteredon DESC) AS npc2rn
-        FROM insured npc2
-        WHERE COALESCE(npc2.flags04,'') = ''
-          AND LOWER(TRIM(npc2.code)) = LOWER(TRIM(npc2.basemgacode))
-      )
-      , nxtpolchk2 AS (
-        SELECT code, renewof FROM nxtpolchk2base WHERE npc2rn = 1
-      )
-      , combine AS (
-        SELECT  
-          n1.code AS code,
-          (CASE WHEN n1.renewedbycode IS NOT NULL THEN n1.renewedbycode ELSE n2.code END) AS nextpolicy
-        FROM nextpolicycheck1 n1
-        LEFT OUTER JOIN nxtpolchk2 n2 ON LOWER(TRIM(n2.renewof)) = LOWER(TRIM(n1.code))
-      )
-      , np_combined_withstatuses AS (
-        SELECT  
-          c.code AS currpol,
-          c.nextpolicy AS nextpol,
-          i.stat2 AS nextpolstat2,
-          i.podecprem AS nextpol_bind_prem,
-          i.poytdprem AS nextpol_gwp_prem
-        FROM combine c
-        JOIN insured i ON LOWER(TRIM(c.nextpolicy)) = LOWER(TRIM(i.code))
-      )
-      , fact_data AS (
-        SELECT
-          i.code AS policy_num_bus_key,
-          i.enteredon AS submission_date,
-          i.pobegin AS pol_effec_start_dt_key,
-          i.poexpir AS pol_effec_end_dt_key,
-          CASE WHEN LOWER(TRIM(i.stat5)) = 'c' THEN i.pocancel ELSE NULL END AS policy_cancel_dt_key,
-          i.pobegin AS policy_coverage_start_date,
-          CASE WHEN LOWER(TRIM(i.stat5)) = 'c' THEN i.pocancel ELSE i.poexpir END AS policy_coverage_end_date,
-          i.poissue,
-          i.poaudit,
-          i.lob,
-          i.agency,
-          me.naics,
-          CASE WHEN i.decsbr IS NOT NULL THEN i.decsbr ELSE i.decuw END AS dec_uw_emp_key,
-          i.markettype,
-          i.productionsrc,
-          i.carrier,
-          i.podecprem AS dec_prem,
-          CASE WHEN LOWER(TRIM(i.stat2)) <> 'i' THEN 0 ELSE i.poytdprem END AS dw_prem,
-          i.enteredby,
-          i.code AS insured_code,
-          CASE WHEN LOWER(TRIM(i.lob)) = 'wc' THEN CONCAT(wcprl.classcode , wcprl.state)
-              WHEN LOWER(TRIM(i.lob)) = 'bp' THEN CAST(uwb.class AS STRING)
-              ELSE 'not applicable'
-            END AS class_cd_bus_key,
-          CASE WHEN LOWER(TRIM(i.lob)) = 'wc' THEN CAST(wcprl.classuffix AS STRING)
-              WHEN LOWER(TRIM(i.lob)) = 'bp' THEN CAST(uwb.classsuffix AS STRING)
-              ELSE 'not applicable'
-            END AS class_suffix_bus_key,
-          CASE WHEN LOWER(TRIM(i.lob)) = 'wc' THEN '0'
-              WHEN LOWER(TRIM(i.lob)) = 'bp' THEN CAST(uwb.bpclass_id AS STRING)
-              ELSE 'not applicable'
-            END AS class_src_id_bus_key,
-
-          CASE WHEN wc.productid IS NULL THEN -2
-              WHEN pc.productid IS NULL THEN -1
-              ELSE pc.productid
-          END AS lob_product_id_bus_key,
-
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - new submission|%'
-              THEN CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - total written|%'
-                          THEN i.podecprem
-                          ELSE i.poytdprem
-                      END
-              ELSE 0
-            END AS nb_submitted_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - new submission|%'
-              THEN 1
-              ELSE 0
-            END AS nb_submitted_count,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - new submission|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - quoted|%'
-              THEN CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - total written|%'
-                          THEN i.podecprem
-                          ELSE i.poytdprem
-                      END
-              ELSE 0
-            END AS nb_quoted_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - new submission|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - quoted|%'
-              THEN 1
-              ELSE 0
-            END AS nb_quoted_count,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - new submission|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - total written|%'
-              THEN i.podecprem
-              ELSE 0
-            END AS nb_issued_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - new submission|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|nb - total written|%'
-              THEN 1
-              ELSE 0
-            END AS nb_issued_count,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - quoted|%'
-              THEN CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
-                 THEN i.podecprem
-                 ELSE i.poytdprem
-              END
-                ELSE 0
-            END AS rn_quoted_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - quoted|%'
-            THEN 1
-              ELSE 0
-            END AS rn_quoted_count,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
-              THEN i.podecprem
-              ELSE 0
-            END AS rn_issued_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
-              THEN 1
-              ELSE 0
-            END AS rn_issued_count,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
-                AND NOT(lower(TRIM(i.producttype)) <> 'b' AND LOWER(TRIM(i.lob)) <> 'db' AND dp.first_dwnpymnt_recd_dt IS NULL)
-              THEN i.podecprem
-              ELSE 0
-            END AS rn_issued_dwnpymnt_recd_prem,
-          CASE WHEN LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - renewal|%' AND LOWER(TRIM(dpsl.status_lineage)) LIKE '%|rn - total written|%'
-                AND NOT(lower(TRIM(i.producttype)) <> 'b' AND LOWER(TRIM(i.lob)) <> 'db' AND dp.first_dwnpymnt_recd_dt IS NULL)
-              THEN 1
-              ELSE 0
-            END AS rn_issued_dwnpymnt_recd_count,
-          CASE WHEN dpsl.is_expiring = 1
-              THEN prem.expprem
-              ELSE 0
-            END AS expiring_prem,
-          CASE WHEN dpsl.is_expiring = 1
-              THEN 1
-              ELSE 0
-            END AS expiring_count,
-          CASE WHEN dpsl.is_expiring = 1 AND dpsl.is_renewable = 'Y'
-              THEN prem.expprem
-              ELSE 0
-            END AS expiring_renewable_prem,
-          CASE WHEN dpsl.is_expiring = 1 AND dpsl.is_renewable = 'Y'
-              THEN 1
-              ELSE 0
-            END AS expiring_renewable_count,
-          CASE WHEN dpsl.is_renewable = 'Y'
-              THEN CASE WHEN npcw.nextpol IS NOT NULL
-                          THEN CASE WHEN LOWER(TRIM(npcw.nextpolstat2)) = 'i'
-                                  THEN npcw.nextpol_bind_prem
-                                  ELSE npcw.nextpol_gwp_prem
-                              END
-                          ELSE NULL
-                      END
-              ELSE 0
-            END AS next_policy_quoted_prem, 
-          CASE WHEN dpsl.is_renewable = 'Y' and npcw.nextpol IS NOT NULL
-              THEN 1
-              ELSE 0
-            END AS next_policy_quoted_count,
-          (
-            CASE 
-              WHEN dp.current_inforce_policy_ind = 'Y' 
-              THEN inf_prem.inforceprem 
-              ELSE 0 
-            END
-          ) AS current_inforce_policy_prem
-          
-        FROM insured i 
-        LEFT OUTER JOIN mgextra me ON LOWER(TRIM(me.code)) = LOWER(TRIM(i.code))
-        LEFT OUTER JOIN wcprl ON LOWER(TRIM(wcprl.code)) = LOWER(TRIM(i.code))
-        LEFT OUTER JOIN uwb ON LOWER(TRIM(uwb.code)) = LOWER(TRIM(i.code))
-        LEFT OUTER JOIN wcinfo wc ON i.code = wc.code
-        LEFT OUTER JOIN pc_products pc ON wc.productid = pc.productid
-        LEFT OUTER JOIN dimpolicystatuslineage dpsl ON LOWER(TRIM(dpsl.code)) = LOWER(TRIM(i.code))
-        LEFT OUTER JOIN np_combined_withstatuses npcw ON LOWER(TRIM(i.code)) = LOWER(TRIM(npcw.currpol))
-        LEFT OUTER JOIN dim_policy dp ON LOWER(TRIM(dp.policy_num_bus_key)) = LOWER(TRIM(i.code)) AND dp.dl_is_current_flag = 1
-        LEFT OUTER JOIN (
-          SELECT i1.code AS code, SUM(amount) AS expprem 
-          FROM insured i1 
-          INNER JOIN mgtrans mgt1 ON LOWER(TRIM(mgt1.code)) = LOWER(TRIM(i1.code)) AND mgt1.writtenon <= i1.poexpir 
-          GROUP BY i1.code
-        ) prem ON LOWER(TRIM(prem.code)) = LOWER(TRIM(i.code))
-        LEFT OUTER JOIN (
-          SELECT code, SUM(amount) AS inforceprem 
-          FROM mgtrans 
-          WHERE writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
-          GROUP BY code
-        ) inf_prem ON LOWER(TRIM(i.code)) = LOWER(TRIM(inf_prem.code))
-        WHERE LOWER(TRIM(i.code)) = LOWER(TRIM(i.basemgacode))
-          AND LOWER(TRIM(i.agency)) <> 'pafake10'
+          lower(trim(code)) as code, 
+          SUM(amount) AS inforceprem 
+        FROM mgtrans 
+        WHERE writtenon <= CAST(DATE_ADD(CURRENT_DATE(), -1) AS DATE)
+        GROUP BY lower(trim(code))
       )
       SELECT
-        COALESCE(dpol.policy_key, -1) AS policy_key,        
-        COALESCE(dd_eff_start.date_key, -1) AS policy_effec_start_dt_key,
-        COALESCE(dd_eff_end.date_key, -1) AS policy_effec_end_dt_key,
-        COALESCE(dd_cancel.date_key, -1) AS policy_cancel_dt_key,
-        COALESCE(dd_sub.date_key, -1) AS policy_sub_dt_key,
-        COALESCE(dd_cov_start.date_key, -1) AS policy_coverage_start_dt_key,
-        COALESCE(dd_cov_end.date_key, -1) AS policy_coverage_end_dt_key,
-        COALESCE(dd_issue.date_key, -1) AS policy_issue_dt_key,
-        COALESCE(dd_audit.date_key, -1) AS policy_audit_dt_key,
-        COALESCE(dlob.lob_key, -1) AS lob_key,
-        COALESCE(ddc.dist_chnl_key, -1) AS dist_chnl_key,
-        COALESCE(dnai.naics_key, -1) AS naics_key,
-        COALESCE(demp_dec.emp_key, -1) AS dec_uw_emp_key,
-        COALESCE(dmkt.mkt_type_key, -1) AS mkt_type_key,
-        COALESCE(dpro.prod_src_key, -1) AS prod_src_key,
-        COALESCE(dcar.carrier_key, -1) AS carrier_key,
-        CAST(COALESCE(fd.dec_prem, 0) AS DECIMAL(19,4)) AS dec_prem,
-        CAST(COALESCE(fd.dw_prem, 0) AS DECIMAL(19,4)) AS dw_prem,
-        COALESCE(demp_entered.emp_key, -1) AS entered_by_emp_key,
-        COALESCE(dins.insd_key, -1) AS insd_key,
-        COALESCE(dbc.bus_class_key, -1) AS gov_bus_class_key,
-        COALESCE(dlp.lob_product_key, -1) AS lob_product_key,
-        CAST(COALESCE(fd.nb_submitted_prem, 0) AS DECIMAL(19,4)) AS nb_submitted_prem,
-        COALESCE(fd.nb_submitted_count, 0) AS nb_submitted_count,
-        CAST(COALESCE(fd.nb_quoted_prem, 0) AS DECIMAL(19,4)) AS nb_quoted_prem,
-        COALESCE(fd.nb_quoted_count, 0) AS nb_quoted_count,
-        CAST(COALESCE(fd.nb_issued_prem, 0) AS DECIMAL(19,4)) AS nb_issued_prem,
-        COALESCE(fd.nb_issued_count, 0) AS nb_issued_count,
-        CAST(COALESCE(fd.rn_quoted_prem, 0) AS DECIMAL(19,4)) AS rn_quoted_prem,
-        COALESCE(fd.rn_quoted_count, 0) AS rn_quoted_count,
-        CAST(COALESCE(fd.rn_issued_prem, 0) AS DECIMAL(19,4)) AS rn_issued_prem,
-        COALESCE(fd.rn_issued_count, 0) AS rn_issued_count,
-        CAST(COALESCE(fd.rn_issued_dwnpymnt_recd_prem, 0) AS DECIMAL(19,4)) AS rn_issued_dwnpymnt_recd_prem,
-        COALESCE(fd.rn_issued_dwnpymnt_recd_count, 0) AS rn_issued_dwnpymnt_recd_count,
-        CAST(COALESCE(fd.expiring_prem, 0) AS DECIMAL(19,4)) AS expiring_prem,
-        COALESCE(fd.expiring_count, 0) AS expiring_count,
-        CAST(COALESCE(fd.expiring_renewable_prem, 0) AS DECIMAL(19,4)) AS expiring_renewable_prem,
-        COALESCE(fd.expiring_renewable_count, 0) AS expiring_renewable_count,
-        CAST(COALESCE(fd.next_policy_quoted_prem, 0) AS DECIMAL(19,4)) AS next_policy_quoted_prem,
-        COALESCE(fd.next_policy_quoted_count, 0) AS next_policy_quoted_count,
-        CAST(COALESCE(fd.current_inforce_policy_prem, 0) AS DECIMAL(19,4)) AS current_inforce_policy_prem,
-        TRUE AS dl_is_current_flag,
-        CAST('1901-01-01' AS DATE) AS dl_row_effective_date,
-        CAST('9999-12-31' AS DATE) AS dl_row_expiration_date,
-        FALSE AS dl_is_deleted_flag,
-        CASE WHEN LOWER(TRIM(dlob.lob_cd_bus_key)) IN ('wc', 'ca', 'db', 'pl', 'um', 'up', 'cx', 'cp') AND LOWER(TRIM(dmkt.mkt_type_desc)) = 'e&s' THEN 0 ELSE 1 END AS dq_fp_lob_key_mkt_type_desc_check,
-        CASE WHEN LOWER(TRIM(dcar.carrier_cd_bus_key)) = 'paazgu10' AND LOWER(TRIM(dmkt.mkt_type_desc)) <> 'e&s' THEN 0 ELSE 1 END AS dq_fp_cr_key_mkt_type_desc_check,
-        CASE WHEN LOWER(TRIM(dlob.lob_cd_bus_key)) NOT IN ('wc', 'bp') AND LOWER(TRIM(dbc.bus_class_cd_bus_key)) IS NOT NULL THEN 0 ELSE 1 END AS dq_fp_gov_bus_class_key_check
-        
-      FROM fact_data fd
-      LEFT OUTER JOIN dim_policy dpol ON LOWER(TRIM(fd.policy_num_bus_key)) = LOWER(TRIM(dpol.policy_num_bus_key)) AND dpol.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_date dd_sub ON CAST(fd.submission_date AS DATE) = dd_sub.date
-      LEFT OUTER JOIN dim_date dd_eff_start ON CAST(fd.pol_effec_start_dt_key AS DATE) = dd_eff_start.date
-      LEFT OUTER JOIN dim_date dd_eff_end ON CAST(fd.pol_effec_end_dt_key AS DATE) = dd_eff_end.date
-      LEFT OUTER JOIN dim_date dd_cancel ON CAST(fd.policy_cancel_dt_key AS DATE) = dd_cancel.date
-      LEFT OUTER JOIN dim_date dd_cov_start ON CAST(fd.policy_coverage_start_date AS DATE) = dd_cov_start.date
-      LEFT OUTER JOIN dim_date dd_cov_end ON CAST(fd.policy_coverage_end_date AS DATE) = dd_cov_end.date
-      LEFT OUTER JOIN dim_date dd_issue ON CAST(fd.poissue AS DATE) = dd_issue.date
-      LEFT OUTER JOIN dim_date dd_audit ON CAST(fd.poaudit AS DATE) = dd_audit.date
-      LEFT OUTER JOIN dim_lob dlob ON LOWER(TRIM(fd.lob)) = LOWER(TRIM(dlob.lob_cd_bus_key)) and dlob.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_dist_chnl ddc ON LOWER(TRIM(fd.agency)) = LOWER(TRIM(ddc.agcy_cd_bus_key)) and ddc.dl_is_current_flag = 1 
-      LEFT OUTER JOIN dim_naics dnai ON LOWER(TRIM(fd.naics)) = LOWER(TRIM(dnai.naics_bus_key)) and dnai.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_employee demp_dec ON LOWER(TRIM(fd.dec_uw_emp_key)) = LOWER(TRIM(demp_dec.emp_cd_bus_key)) and demp_dec.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_mkt_type dmkt ON LOWER(TRIM(fd.markettype)) = LOWER(TRIM(dmkt.mkt_type_cd_bus_key)) and dmkt.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_prod_src dpro ON LOWER(TRIM(fd.productionsrc)) = LOWER(TRIM(dpro.prod_src_cd_bus_key)) and dpro.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_carrier dcar ON LOWER(TRIM(fd.carrier)) = LOWER(TRIM(dcar.carrier_cd_bus_key)) and dcar.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_employee demp_entered ON LOWER(TRIM(fd.enteredby)) = LOWER(TRIM(demp_entered.emp_cd_bus_key)) and demp_entered.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_insured dins ON LOWER(TRIM(fd.policy_num_bus_key)) = LOWER(TRIM(dins.policy_num_bus_key)) and dins.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_lob_product dlp ON LOWER(TRIM(fd.lob_product_id_bus_key)) = LOWER(TRIM(dlp.lob_product_id_bus_key)) and dlp.dl_is_current_flag = 1
-      LEFT OUTER JOIN dim_business_class dbc ON 
-          LOWER(TRIM(dbc.bus_class_cd_bus_key)) = LOWER(TRIM(fd.class_cd_bus_key))
-          AND LOWER(TRIM(dbc.bus_class_suffix_bus_key)) = LOWER(TRIM(fd.class_suffix_bus_key))
-          AND LOWER(TRIM(dbc.bus_class_src_id_bus_key)) = LOWER(TRIM(fd.class_src_id_bus_key))
-          AND dbc.dl_is_current_flag = 1
+        fp.policy_key,
+        fp.policy_effec_start_dt_key,
+        fp.policy_effec_end_dt_key,
+        fp.policy_cancel_dt_key,
+        fp.policy_sub_dt_key,
+        fp.policy_coverage_start_dt_key,
+        fp.policy_coverage_end_dt_key,
+        fp.policy_issue_dt_key,
+        fp.policy_audit_dt_key,
+        fp.lob_key,
+        fp.dist_chnl_key,
+        fp.naics_key,
+        fp.dec_uw_emp_key,
+        fp.mkt_type_key,
+        fp.prod_src_key,
+        fp.carrier_key,
+        fp.dec_prem,
+        fp.dw_prem,
+        fp.entered_by_emp_key,
+        fp.insd_key,
+        fp.gov_bus_class_key,
+        fp.lob_product_key,
+        fp.nb_submitted_prem,
+        fp.nb_submitted_count,
+        fp.nb_quoted_prem,
+        fp.nb_quoted_count,
+        fp.nb_issued_prem,
+        fp.nb_issued_count,
+        fp.rn_quoted_prem,
+        fp.rn_quoted_count,
+        fp.rn_issued_prem,
+        fp.rn_issued_count,
+        fp.rn_issued_dwnpymnt_recd_prem,
+        fp.rn_issued_dwnpymnt_recd_count,
+        fp.expiring_prem,
+        fp.expiring_count,
+        fp.expiring_renewable_prem,
+        fp.expiring_renewable_count,
+        fp.next_policy_quoted_prem,
+        fp.next_policy_quoted_count,
+        CAST(
+          CASE 
+            WHEN dp.current_inforce_policy_ind = 'Y' 
+            THEN COALESCE(inf_prem.inforceprem, 0)
+            ELSE 0 
+          END AS DECIMAL(19,4)
+        ) AS current_inforce_policy_prem,
+        fp.dl_is_current_flag,
+        fp.dl_row_effective_date,
+        fp.dl_row_expiration_date,
+        fp.dl_is_deleted_flag,
+        fp.dq_fp_lob_key_mkt_type_desc_check,
+        fp.dq_fp_cr_key_mkt_type_desc_check,
+        fp.dq_fp_gov_bus_class_key_check
+      FROM
+        stg_fact_policy fp
+        INNER JOIN dim_policy dp 
+          ON fp.policy_key = dp.policy_key 
+          AND dp.dl_is_current_flag = 1
+        LEFT OUTER JOIN inf_prem 
+          ON LOWER(TRIM(dp.policy_num_bus_key)) = inf_prem.code

@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_cauto_product
   schema: cauto
   table: fact_vehicle
-  load_strategy: overwrite
+  load_strategy: merge
   key_columns:
     - vehicle_surrogate_key
   unknown_record: false
@@ -13,7 +13,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: False
+    incremental: True
   - name: uwvehicles
     lakehouse: den_lhw_scu_001_policy_curated
     schema: cauto

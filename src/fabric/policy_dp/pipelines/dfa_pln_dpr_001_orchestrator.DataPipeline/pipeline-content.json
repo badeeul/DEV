@@ -103,8 +103,8 @@
               },
               "policy": {
                 "timeout": "0.12:00:00",
-                "retry": 22,
-                "retryIntervalInSeconds": 1800,
+                "retry": 1,
+                "retryIntervalInSeconds": 900,
                 "secureInput": false,
                 "secureOutput": false
               },
@@ -715,7 +715,7 @@
       "Product_Name": { "type": "string", "defaultValue": "PRODUCT & PRICING" },
       "Feed_Name": { "type": "string", "defaultValue": "PRODUCT & PRICING" },
       "lh_raw_id": { "type": "string", "defaultValue": "c322b1e8-5644-4b4f-8fdc-2b7dab38d3cf" },
-      "skip_database_restore": { "type": "bool", "defaultValue": false }
+      "skip_database_restore": { "type": "bool", "defaultValue": true }
     },
     "variables": {
       "elt_values": {

@@ -1,0 +1,64 @@
+target:
+  lakehouse: den_lhw_dpr_001_cauto_product # keep
+  schema: cauto # keep
+  table: dim_vehicle # target table
+  load_strategy: merge # scd type
+  key_columns: # is merge key
+    - policy_num_bus_key
+    - vehicle_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: vehicle_surrogate_key # sharepoint first row
+
+source:
+  - name: uwvehicles # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: cauto # keep
+    table: uwvehicles # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+  - name: insured # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: insured # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+  - name: dim_vehicle_type # source table names
+    lakehouse: den_lhw_dpr_001_cauto_product # keep
+    schema: cauto # keep
+    table: dim_vehicle_type # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+  - name: dim_trailer_type # source table names
+    lakehouse: den_lhw_dpr_001_cauto_product # keep
+    schema: cauto # keep
+    table: dim_trailer_type # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_vehicle # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: select 
+         coalesce(dvt.vehicle_type_surrogate_key, -1) as vehicle_type_surrogate_key
+        , coalesce(dtt.trailer_type_surrogate_key, -1) as trailer_type_surrogate_key
+        , i.code as policy_num_bus_key
+        , cast(v.vehicleid as string) as vehicle_bus_key
+        , v.vehiclenum as vehicle_number
+        , v.vin as vin
+        , v.make as vehicle_make
+        , v.model as vehicle_model
+        , v.modelyear as vehicle_model_year
+        , coalesce(v.startdate, i.pobegin) as vehicle_start_date
+        , coalesce(v.enddate, i.poexpir) as vehicle_end_date
+        , v.deletedon as vehicle_deleted_on_date
+        , True as dl_is_current_flag
+        , CAST('1901-01-01' AS DATE) as dl_row_effective_date
+        , CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+        , False as dl_is_deleted_flag
+
+        from uwvehicles v
+        inner join insured i on lower(trim(v.code)) = lower(trim(i.code))
+        left outer join dim_vehicle_type dvt on lower(trim((case when lower(trim(coalesce(v.vehiclesize,''))) = '' then lower(trim(v.vehicletype)) else lower(trim(v.vehiclesize)) end))) = lower(trim(dvt.vehicle_type_bus_key))
+        left outer join dim_trailer_type dtt on lower(trim(v.trailertype)) = lower(trim(dtt.trailer_type_bus_key))
+
+        where lower(trim(i.lob)) = 'ca'
+        and lower(trim(i.code)) = lower(trim(i.basemgacode))
+        and lower(trim(i.agency)) <> 'pafake10'
+        and lower(trim(i.stat2)) = 'i'

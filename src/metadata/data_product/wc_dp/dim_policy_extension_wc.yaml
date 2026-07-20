@@ -2,7 +2,7 @@ target:
   lakehouse: den_lhw_dpr_001_policy_product
   schema: wc
   table: dim_policy_extension_wc
-  load_strategy: overwrite
+  load_strategy: merge
   key_columns:
     - policy_num_bus_key
   unknown_record: True
@@ -13,7 +13,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: policy
     table: insured
-    incremental: False
+    incremental: True
 
   - name: wcinfo
     lakehouse: den_lhw_scu_001_policy_curated
@@ -55,7 +55,7 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: archive_question_responses
-    incremental: False
+    incremental: True
 
   - name: question_questions
     lakehouse: den_lhw_scu_001_policy_curated
@@ -67,13 +67,13 @@ source:
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: dnb_transactions
-    incremental: False
+    incremental: True
 
   - name: dnb_policylookups
     lakehouse: den_lhw_scu_001_policy_curated
     schema: wc
     table: dnb_policylookups
-    incremental: False
+    incremental: True
   
   - name: dim_policy
     lakehouse: den_lhw_dpr_001_policy_product

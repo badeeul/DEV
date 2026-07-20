@@ -4,11 +4,21 @@
             "files": [
                 {
                     "fileName": "dim_employee",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_insured_legal_entity_type",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
+                }
+            ]
+        }
+    ],
+    "loadGroupStgDims": [
+        {
+            "files": [
+                {
+                    "fileName": "stg_dim_policy",
+                    "modelConfigFolderName": "policy_dp_init"
                 }
             ]
         }
@@ -18,55 +28,65 @@
             "files": [
                 {
                     "fileName": "dim_lob",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_carrier",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_dist_chnl",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_insured",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_mkt_type",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_prod_src",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_policy_trans_type",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_policy",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_policy_trans_subtype",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_naics",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_business_class",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_lob_product",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "dim_cancellation_reasons",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
+                }
+            ]
+        }
+    ],
+    "loadGroupStgFacts": [
+        {
+            "files": [
+                {
+                    "fileName": "stg_fact_policy",
+                    "modelConfigFolderName": "policy_dp_init"
                 }
             ]
         }
@@ -76,15 +96,15 @@
             "files": [
                 {
                     "fileName": "fact_policy_transaction_detail",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "fact_policy_transaction",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 },
                 {
                     "fileName": "fact_policy",
-                    "modelConfigFolderName": "policy_dp"
+                    "modelConfigFolderName": "policy_dp_init"
                 }
             ]
         }

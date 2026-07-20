@@ -1,0 +1,62 @@
+{
+    "datasetName": "policydatapoints",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "policydatapointsid",
+            "code",
+            "itemid",
+            "datapointtype",
+            "extendeddatapointtype",
+            "datapoint",
+            "datapointsource",
+            "datapointvals",
+            "active",
+            "deletedon",
+            "deletedby",
+            "enteredon",
+            "enteredby"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "wc",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "policyDataPointsID",
+            "code",
+            "itemid",
+            "DataPointType",
+            "extendedDataPointType",
+            "DataPoint",
+            "Active",
+            "deletedOn"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

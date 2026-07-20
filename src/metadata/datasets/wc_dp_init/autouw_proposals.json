@@ -1,0 +1,61 @@
+{
+    "datasetName": "autouw_proposals",
+    "enable": true,
+    "datasetTypeName": "database",
+    "databaseName": "GIGINSDATA",
+    "datasetSchema": "dbo",
+    "skipProductLoad": false,
+    "sourceSystemProperties": {
+        "sourceSystemName": "IIS",
+        "includeSpecificColumns": [
+            "autouw_proposalid",
+            "mgacode",
+            "source",
+            "proposalnumber",
+            "totalemployeepayroll",
+            "totalofficerownerpayroll",
+            "govstate",
+            "govclass",
+            "reruncarriers",
+            "enteredby",
+            "enteredon",
+            "updateby",
+            "updateon",
+            "autouweligible",
+            "pobegin",
+            "initflags19",
+            "pilotprogram"
+        ],
+        "ingestType": "full",
+        "isDynamicQuery": true
+    },
+    "rawProperties": {
+        "lakehouseName": "den_lhw_dpr_001_raw_files",
+        "fileType": "parquet",
+        "directoryName": "IIS_GIGINSDATA"
+    },
+    "curatedProperties": {
+        "lakehouseName": "den_lhw_scu_001_policy_curated",
+        "schemaName": "wc",
+        "fileOptions": {
+            "encoding": "ISO-8859-1",
+            "header": true,
+            "inferColumnTypes": true,
+            "multiline": true,
+            "delimiter": ",",
+            "escape": "\"",
+            "timestampFormat": "dd/MM/yyyy"
+        },
+        "columnList": [
+            "*"
+        ],
+        "primaryKeyList": [
+            "AutoUW_ProposalID",
+            "MgaCode",
+            "Source"
+        ],
+        "duplicateCheckEnabled": false,
+        "targetFileFormat": "delta",
+        "targetLoadType": "overwrite"
+    }
+}

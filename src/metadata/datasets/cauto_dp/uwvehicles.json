@@ -78,7 +78,8 @@
             "yearsowned",
             "nonsevereaccidents"
         ],
-        "ingestType": "cdc",
+        "ingestType": "watermark",
+        "sourceWatermarkIdentifier": "isnull(updateon, enteredon)",
         "isDynamicQuery": true
     },
     "rawProperties": {

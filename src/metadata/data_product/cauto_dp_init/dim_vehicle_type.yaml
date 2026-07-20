@@ -1,0 +1,87 @@
+target:
+  lakehouse: den_lhw_dpr_001_cauto_product # keep
+  schema: cauto # keep
+  table: dim_vehicle_type # target table
+  load_strategy: merge # scd type
+  key_columns: # is merge key
+    - vehicle_type_bus_key
+  unknown_record: True # keep
+  identity: True # keep
+  identity_column_name: vehicle_type_surrogate_key # sharepoint first row
+
+source:
+  - name: lookups # source table names
+    lakehouse: den_lhw_scu_001_policy_curated # keep
+    schema: policy # keep
+    table: lookups # source tables
+    incremental: False # if data is not ingested incrementally, it doesn't make sense to load incrementally here.
+
+query:
+  - name: dim_vehicle_type # name of the query for it to be referenced by subsequent queries
+    # use lower in where clause
+    sql: |
+      with cte_lookups_vehiclesize
+      as
+      (
+        select l.vals as vals, l.descrip as descrip
+        from lookups l
+        where lower(trim(l.programid)) = 'uwvehicles'
+        and lower(trim(l.keyfield)) = 'vehiclesize'
+      )
+      
+      , cte_lookups_vehicletype
+      as
+      (
+        select l.vals as vals, l.descrip as descrip
+        from lookups l
+        where lower(trim(l.programid)) = 'uwvehicles'
+        and lower(trim(l.keyfield)) = 'vehicletype'
+        and lower(trim(l.vals)) <> 'truck'
+      )
+      
+      , cte_regplate
+      as
+      (
+        select 'REGPLATE' as vals, 'Registration Plate' as descrip
+      )
+      
+      , cte_union_lookups
+      as
+      (
+        select vals, descrip from cte_lookups_vehiclesize
+        UNION ALL
+        select vals, descrip from cte_lookups_vehicletype
+        UNION ALL
+        select vals, descrip from cte_regplate
+      )
+      
+      select
+        vals as vehicle_type_bus_key
+      , descrip as vehicle_type_desc
+      , (case lower(trim(vals))
+          when 'lighttruck' then 'Light Truck'
+          when 'mediumtruck' then 'Medium Truck'
+          when 'heavytruck' then 'Heavy Truck'
+          when 'extraheavytruck' then 'Extra Heavy Truck'
+          when 'private' then 'PPT'
+          when 'trailer' then 'Trailer'
+          else 'All Other'
+        end) as vehicle_type_group
+      , (case when lower(trim(vals)) in ('trailer', 'regplate', 'unknown', 'not applicable') then 'N' else 'Y' end) as power_unit_ind
+      , (case lower(trim(vals))
+          when 'lighttruck' then 1
+          when 'mediumtruck' then 2
+          when 'heavytruck' then 3
+          when 'extraheavytruck' then 4
+          when 'private' then 5
+          when 'trailer' then 6
+          when 'unknown' then 8
+          when 'not applicable' then 9
+          else 7
+        end) as vehicle_type_sort_order
+      , True as dl_is_current_flag
+      , CAST('1901-01-01' AS DATE) as dl_row_effective_date
+      , CAST('9999-12-31' AS DATE) as dl_row_expiration_date
+      , False as dl_is_deleted_flag
+      
+      from cte_union_lookups

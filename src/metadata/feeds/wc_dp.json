@@ -11,7 +11,7 @@
             "datasets": [
                 {
                     "fileName": "archive_question_responses",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "archive_transaction_wcpayrol",
@@ -27,27 +27,27 @@
                 },
                 {
                     "fileName": "autouw_currentcarrierpricing",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "autouw_proposals",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "dnb_policylookups",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "dnb_transactions",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "mgtrans_wcpayrol",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "policydatapoints",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "question_questions",
@@ -55,11 +55,11 @@
                 },
                 {
                     "fileName": "question_responses",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "transaction_wcpayrol",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "uwrating",
@@ -67,15 +67,15 @@
                 },
                 {
                     "fileName": "uwstates",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "wcautopricing",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 },
                 {
                     "fileName": "wcrating",
-                    "sourceConfigFolderName": "wc_dp"
+                    "sourceConfigFolderName": "wc_dp_init"
                 }
             ]
         }

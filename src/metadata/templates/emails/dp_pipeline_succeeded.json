@@ -1,5 +1,5 @@
 {
-  "subject": "Pipeline Notification: Data Product Pipeline Succeeded - {workspace_name} - {data_product}",
+  "subject": "Pipeline Notification: {data_product} Pipeline Succeeded - {workspace_name}",
   "body": {
     "contentType": "text/html",
     "content": "<div style=\"font-family:Segoe UI, sans-serif; padding:16px; border-left:5px solid #d9534f; background-color:#f9f2f4;\">\n  <p><strong>✅ Pipeline Notification:</strong> The Data Product {data_product} pipeline executed successfully. </p>\n  <p><strong>🕒 Timestamp:</strong> {trigger_time}</p>\n  <p><strong>📁 Fabric Workspace Name:</strong> {workspace_name}</p>\n  <p><strong>📄 Pipeline Name:</strong> <code>{pipeline_name}</code></p>\n  <p><strong>📦 Data Product:</strong> {data_product}</p>\n  <p><strong>✅ Success:</strong> The daily pipeline for <code>{feed_name}</code> feed has been completed without errors.</p>\n  <h3>🔍 Details & Links:</h3>\n  <ul>\n    <li>🔗 <a href=\"https://app.fabric.microsoft.com/workloads/data-pipeline/monitoring/workspaces/{workspace_id}/pipelines/{pipeline_id}/{run_id}\">Pipeline Run</a></li>\n    <li>📊 <a href=\"https://#\">Operational Dashboard - Not Implemented</a></li>\n  </ul>\n</div>"
